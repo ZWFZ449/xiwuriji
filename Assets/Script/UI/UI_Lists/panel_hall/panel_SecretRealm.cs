@@ -89,7 +89,7 @@ public class panel_SecretRealm : Base_Mono
         List<string> options = new List<string>();
         for (int i = 0; i < Enum.GetNames(typeof(enum_equip_quality_list)).Length; i++)
         {
-            options.Add(Enum.GetNames(typeof(enum_equip_quality_list))[i]);
+            options.Add(Enum.GetNames(typeof(enum_equip_quality_list))[i]); 
         }
         // 添加新选项
         dropdown.AddOptions(options);
@@ -195,8 +195,8 @@ public class panel_SecretRealm : Base_Mono
 
         if (item.index.need_Required != "")
         {
-            NeedConsumables(item.index.need_Required, 1);
-            if (RefreshConsumables())
+            NeedConsumablesold(item.index.need_Required, 1);
+            if (RefreshConsumables_old())
             {
                 Open_Map(item);
                 base_Show();
@@ -231,7 +231,7 @@ public class panel_SecretRealm : Base_Mono
         //transform.gameObject.SetActive(false);
         //Alert_Dec.Show("秘境即将开放");
         //return;
-        if (SumSave.crt_MaxHero.Lv < 30 && SumSave.ios_account_number != "admin001")
+        if (SumSave.crt_MaxHero_okd.Lv < 30 && SumSave.ios_account_number != "admin001")
         {
             Alert_Dec.Show("秘境开启等级为30级");
             gameObject.SetActive(false);
@@ -248,14 +248,14 @@ public class panel_SecretRealm : Base_Mono
         ClearObject(pos_crtmap);
         List<(string, int)> list = SumSave.crt_needlist.SetMap();
         
-        for (int i = SumSave.db_maps.Count - 1; i > 0; i--)
+        for (int i = SumSave.read_lose_map.Count - 1; i > 0; i--)
         {
-            if (SumSave.db_maps[i].map_type == 8 && SumSave.crt_hero.hero_Lv >= SumSave.db_maps[i].need_lv)
+            if (SumSave.read_lose_map[i].map_type == 8 && SumSave.old_crt_hero.hero_Lv >= SumSave.read_lose_map[i].need_lv)
             {
                 int number = 0;
                 for (int j = 0; j < list.Count; j++)
                 {
-                    if (list[j].Item1 == SumSave.db_maps[i].map_name)
+                    if (list[j].Item1 == SumSave.read_lose_map[i].map_name)
                     {
                         number = list[j].Item2;
                         break;
@@ -266,12 +266,12 @@ public class panel_SecretRealm : Base_Mono
                 int num = 0;
                  for (int j = 0; j < _list.Count; j++)
                 {
-                    if (_list[j].Item1 == SumSave.db_maps[i].need_Required)
+                    if (_list[j].Item1 == SumSave.read_lose_map[i].need_Required)
                     {
                         num= _list[j].Item2;
                     }
                 }
-                item.InitSecretRealm(SumSave.db_maps[i],num);
+                item.InitSecretRealm(SumSave.read_lose_map[i],num);
                 item.GetComponent<Button>().onClick.AddListener(() => { OnClick(item); });
             }
         }

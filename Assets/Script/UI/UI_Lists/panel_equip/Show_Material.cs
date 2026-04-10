@@ -90,7 +90,7 @@ public class Show_Material : Base_Mono
                 case EquipConfigTypeList.秘笈:
                 case EquipConfigTypeList.战斗技能:
                 case EquipConfigTypeList.特殊技能:
-                    foreach (var item in SumSave.crt_skills)
+                    foreach (var item in SumSave.oldcrt_skills)
                     {
                         if (item.skillname == bag.Name)
                         { 
@@ -99,8 +99,8 @@ public class Show_Material : Base_Mono
                             return;
                         }
                     }
-                    SumSave.crt_skills.Add(tool_Categoryt.crate_skill(data.Item1));//添加技能
-                    Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.skill_value, SumSave.crt_skills);
+                    SumSave.oldcrt_skills.Add(tool_Categoryt.crate_skill(data.Item1));//添加技能
+                    Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.skill_value, SumSave.oldcrt_skills);
                     Alert_Dec.Show("获得技能 " + data.Item1);
                     break;
                 case EquipConfigTypeList.宠物技能:

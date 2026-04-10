@@ -31,4 +31,17 @@ public enum  Panel_List
     panel_email,//邮件面板
     Panel_Accumulatedrewards,//累计奖励面板
     Panel_Screensaver,//屏保面板
+
+
+
+
+
+
+
+
+
+    Dream_Panel_Bag,//背包面板
+    Dream_Panel_Hero,//角色面板
+    Dream_Panel_Skill,//技能面板
+    Dream_Panel_Setting,//设置面板
 }

@@ -11,7 +11,7 @@ public class player_battle_attck : BattleAttack
     /// 初始化战斗装备
     /// </summary>
     /// <param name="skills"></param>
-    public override void Refresh_Skill(List<skill_offect_item> skills)
+    public override void Refresh_Skill(List<oldskill_offect_item> skills)
     {
         base.Refresh_Skill(skills);
         battle_skills = skills;
@@ -32,7 +32,7 @@ public class player_battle_attck : BattleAttack
                 int mp = (int)(battle_skills[i].Data.skill_spell * target.maxMP / 100);
                 if (target.MP >= mp)
                 {
-                    skill_offect_item skill = battle_skills[i];
+                    oldskill_offect_item skill = battle_skills[i];
                     target.MP -= mp;
                     //释放技能
                     BaseAttack(battle_skills[i].Data);
@@ -54,7 +54,7 @@ public class player_battle_attck : BattleAttack
     private void BaseAttack(base_skill_vo data)
     {
         //释放技能
-        if (SumSave.crt_setting.user_setting[5] == 0) AttackStateMachine.Skill(data);
+        if (SumSave.crt_settingold.user_setting[5] == 0) AttackStateMachine.Skill(data);
         else skill_damage(data);
     }
 

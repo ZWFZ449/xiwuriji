@@ -195,8 +195,8 @@ public class panel_fatePalace : Panel_Base
             Alert_Dec.Show("网络连接失败");
             return;
         }
-        NeedConsumables("命运金币", 10);
-        if (!RefreshConsumables())
+        NeedConsumablesold("命运金币", 10);
+        if (!RefreshConsumables_old())
         {
             Alert_Dec.Show("命运金币不足");
             return;
@@ -266,8 +266,8 @@ public class panel_fatePalace : Panel_Base
             Alert_Dec.Show("网络连接失败");
             return;
         }
-        NeedConsumables("命运金币", 1);
-        if (!RefreshConsumables())
+        NeedConsumablesold("命运金币", 1);
+        if (!RefreshConsumables_old())
         {
             Alert_Dec.Show("命运金币不足");
             return;
@@ -372,15 +372,15 @@ public class panel_fatePalace : Panel_Base
                 break;
             case 3:
                 //获得皮肤
-                SumSave.crt_hero.hero_value += (SumSave.crt_hero.hero_value == "" ? "" : ",") + CurrentItems[rand].Item1;
-                Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_hero, new string[] { Battle_Tool.GetStr(SumSave.crt_hero.hero_value) },
+                SumSave.old_crt_hero.hero_value += (SumSave.old_crt_hero.hero_value == "" ? "" : ",") + CurrentItems[rand].Item1;
+                Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_hero, new string[] { Battle_Tool.GetStr(SumSave.old_crt_hero.hero_value) },
                     new string[] { "hero_value" });
                 break;
         }
 
         if(CurrentItems[rand].Item5<=100)
         {
-            string vale="恭喜玩家 "+SumSave.crt_MaxHero.show_name+" 获得"+CurrentItems[rand].Item1+"x"+CurrentItems[rand].Item3;
+            string vale="恭喜玩家 "+SumSave.crt_MaxHero_okd.show_name+" 获得"+CurrentItems[rand].Item1+"x"+CurrentItems[rand].Item3;
             SendNotification(NotiList.Read_Huser_MessageWindow, vale);
         }
         Game_Omphalos.i.archive();

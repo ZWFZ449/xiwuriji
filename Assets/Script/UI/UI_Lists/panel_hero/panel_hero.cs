@@ -109,13 +109,13 @@ public class panel_hero : Panel_Base
             item.Show((enum_attribute_list)i, UnityEngine.Random.Range(1, 1000));
             info_item_dic.Add((enum_attribute_list)i, item);
         }
-        for (int i = 0; i < SumSave.db_heros.Count; i++)
+        for (int i = 0; i < SumSave.old_db_heros.Count; i++)
         {
             hero_item item = Instantiate(hero_item_prefabs, crt_pos_hero);
-            item.Data = SumSave.db_heros[i];
+            item.Data = SumSave.old_db_heros[i];
             item.GetComponent<Button>().onClick.AddListener(delegate { Select_Hero(item); });
-            if(!hero_item_dic.ContainsKey(SumSave.db_heros[i].hero_name))
-                hero_item_dic.Add(SumSave.db_heros[i].hero_name, item);
+            if(!hero_item_dic.ContainsKey(SumSave.old_db_heros[i].hero_name))
+                hero_item_dic.Add(SumSave.old_db_heros[i].hero_name, item);
         }
         select_hero.gameObject.SetActive(false);
     }
@@ -125,7 +125,7 @@ public class panel_hero : Panel_Base
     /// </summary>
     private void SwitchRoles()
     {
-        string[] herolists = SumSave.crt_hero.hero_value.Split(',');
+        string[] herolists = SumSave.old_crt_hero.hero_value.Split(',');
         foreach (var item in herolists)
         {
             //if (crt_hero.SetData().hero_name == item)
@@ -138,20 +138,20 @@ public class panel_hero : Panel_Base
 
             if (crt_hero.SetData().hero_name == hero[0])
             {
-                SumSave.crt_hero.Merge_hero_value();
+                SumSave.old_crt_hero.Merge_hero_value();
 
                 if (hero.Length<2)
                 {
-                    SumSave.crt_hero.Uptianming_Platform();
+                    SumSave.old_crt_hero.Uptianming_Platform();
                     switch_Hero(hero[0]);
                 }
                 else
                 {
                     string[] tianming = hero[1].Split(' ');
-                    SumSave.crt_hero.tianming_Platform= new int[5];
+                    SumSave.old_crt_hero.tianming_Platform= new int[5];
                     for (int i = 0; i < tianming.Length; i++)
                     {
-                        SumSave.crt_hero.tianming_Platform[i] = int.Parse(tianming[i]);
+                        SumSave.old_crt_hero.tianming_Platform[i] = int.Parse(tianming[i]);
                     }
                     switch_Hero(hero[0]);
                 }
@@ -163,9 +163,9 @@ public class panel_hero : Panel_Base
         {
             if (crt_hero.SetData().hero_name == "昭月"|| crt_hero.SetData().hero_name == "琉璃")
             {
-                SumSave.crt_hero.Merge_hero_value();
+                SumSave.old_crt_hero.Merge_hero_value();
                 switch_Hero(crt_hero.SetData().hero_name);
-                SumSave.crt_hero.AddSkin(crt_hero.SetData().hero_name);
+                SumSave.old_crt_hero.AddSkin(crt_hero.SetData().hero_name);
                 return;
            }
         }
@@ -175,9 +175,9 @@ public class panel_hero : Panel_Base
     private void switch_Hero(string item)
     {
        
-        SumSave.crt_hero.hero_pos = item;
+        SumSave.old_crt_hero.hero_pos = item;
         Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_hero,
-            SumSave.crt_hero.Set_Uptade_String(), SumSave.crt_hero.Get_Update_Character());
+            SumSave.old_crt_hero.Set_Uptade_String(), SumSave.old_crt_hero.Get_Update_Character());
         Alert_Dec.Show("切换角色 " + item + " 成功");
 
         SendNotification(NotiList.Refresh_Max_Hero_Attribute);
@@ -189,7 +189,7 @@ public class panel_hero : Panel_Base
     /// </summary>
     private void CharacterRefresh()
     {
-        skin_prefabs = Resources.Load<GameObject>("Prefabs/Skins/within_" + SumSave.crt_hero.hero_pos);
+        skin_prefabs = Resources.Load<GameObject>("Prefabs/Skins/within_" + SumSave.old_crt_hero.hero_pos);
         ClearObject(panel_role_health);
         Instantiate(skin_prefabs, panel_role_health);
     }
@@ -237,13 +237,13 @@ public class panel_hero : Panel_Base
         {
             dic_equips[item].Init();
 
-            foreach (Bag_Base_VO equip in SumSave.crt_euqip)
-            {
-                if (equip.StdMode == item.ToString())
-                {
-                    dic_equips[item].Data = equip;
-                }
-            }
+            //foreach (Bag_Base_VO equip in SumSave.crt_euqip)
+            //{
+            //    if (equip.StdMode == item.ToString())
+            //    {
+            //        dic_equips[item].Data = equip;
+            //    }
+            //}
         }
     }
     #region 显示天命光环
@@ -274,7 +274,7 @@ public class panel_hero : Panel_Base
     private void Show_Info_life()
     {
 
-        tianming_Platform = (int[])SumSave.crt_hero.tianming_Platform.Clone();
+        tianming_Platform = (int[])SumSave.old_crt_hero.tianming_Platform.Clone();
 
         for (int i = show_tianming_Platform.childCount - 1; i >= 0; i--)//清空区域内按钮
         {
@@ -286,22 +286,22 @@ public class panel_hero : Panel_Base
 
 
 
-        for (int i = 0; i < SumSave.crt_hero.tianming_Platform.Length; i++)
+        for (int i = 0; i < SumSave.old_crt_hero.tianming_Platform.Length; i++)
         {
-            if (tianming_num.ContainsKey(SumSave.crt_hero.tianming_Platform[i]))
+            if (tianming_num.ContainsKey(SumSave.old_crt_hero.tianming_Platform[i]))
             {
-                tianming_num[SumSave.crt_hero.tianming_Platform[i]]++;
+                tianming_num[SumSave.old_crt_hero.tianming_Platform[i]]++;
             }
             else
             {
-                tianming_num.Add(SumSave.crt_hero.tianming_Platform[i], 1);
+                tianming_num.Add(SumSave.old_crt_hero.tianming_Platform[i], 1);
             }
         }
 
 
-        for (int i = 0; i < SumSave.crt_hero.tianming_Platform.Length; i++)
+        for (int i = 0; i < SumSave.old_crt_hero.tianming_Platform.Length; i++)
         {
-            GameObject game = Resources.Load<GameObject>("Prefabs/halo/halo_" + (SumSave.crt_hero.tianming_Platform[i] + 1));
+            GameObject game = Resources.Load<GameObject>("Prefabs/halo/halo_" + (SumSave.old_crt_hero.tianming_Platform[i] + 1));
             GameObject tianming = Instantiate(game, show_tianming_Platform);
 
             tianming.transform.Rotate(new Vector3(0, 0, 15 * i));
@@ -311,7 +311,7 @@ public class panel_hero : Panel_Base
             tianming.GetComponent<RectTransform>().sizeDelta = tianming_size;
 
             Color currentColor = tianming.GetComponentInChildren<Image>().color;
-            currentColor.a = tianming_num[SumSave.crt_hero.tianming_Platform[i]] * 0.2f;
+            currentColor.a = tianming_num[SumSave.old_crt_hero.tianming_Platform[i]] * 0.2f;
             tianming.GetComponentInChildren<Image>().color = currentColor;
         }
     }
@@ -326,7 +326,7 @@ public class panel_hero : Panel_Base
         base_show();
         Base_Show();
 
-        if (tianming_Platform == null || !tianming_Platform.SequenceEqual(SumSave.crt_hero.tianming_Platform))
+        if (tianming_Platform == null || !tianming_Platform.SequenceEqual(SumSave.old_crt_hero.tianming_Platform))
         {
             Show_Info_life();
         }
@@ -341,94 +341,94 @@ public class panel_hero : Panel_Base
             switch (item)
             {
                 case enum_attribute_list.生命值:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.MaxHP+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.MaxHP+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.法力值:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.MaxMp+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.MaxMp+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.内力值:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.internalforceMP+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.internalforceMP+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.蓄力值:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.EnergyMp+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.EnergyMp+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.物理防御:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.DefMin+" - "+SumSave.crt_MaxHero.DefMax+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.DefMin+" - "+SumSave.crt_MaxHero_okd.DefMax+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.魔法防御:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.MagicDefMin + " - " + SumSave.crt_MaxHero.MagicDefMax+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.MagicDefMin + " - " + SumSave.crt_MaxHero_okd.MagicDefMax+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.物理攻击:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.damageMin + " - " + SumSave.crt_MaxHero.damageMax+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.damageMin + " - " + SumSave.crt_MaxHero_okd.damageMax+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.魔法攻击:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.MagicdamageMin + " - " + SumSave.crt_MaxHero.MagicdamageMax+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.MagicdamageMin + " - " + SumSave.crt_MaxHero_okd.MagicdamageMax+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.命中:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.hit+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.hit+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.躲避:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.dodge+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.dodge+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.穿透:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.penetrate+tool_Categoryt.Obtain_unit((int)item)); 
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.penetrate+tool_Categoryt.Obtain_unit((int)item)); 
                     break;
                 case enum_attribute_list.格挡:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.block+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.block+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.暴击:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.crit_rate+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.crit_rate+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.幸运:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.Lucky+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.Lucky+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.暴击伤害:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.crit_damage+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.crit_damage+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.伤害加成:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.double_damage+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.double_damage+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.真实伤害:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.Real_harm+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.Real_harm+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.伤害减免:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.Damage_Reduction+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.Damage_Reduction+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.伤害吸收:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.Damage_absorption+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.Damage_absorption+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.异常抗性:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.resistance+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.resistance+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.攻击速度:
-                    info_item_dic[item].Show(item, (SumSave.crt_MaxHero.attack_speed / 60F).ToString("F2") + "s");
+                    info_item_dic[item].Show(item, (SumSave.crt_MaxHero_okd.attack_speed / 60F).ToString("F2") + "s");
                     break;
                 case enum_attribute_list.移动速度:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.move_speed+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.move_speed+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.生命加成:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.bonus_Hp+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.bonus_Hp+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.法力加成:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.bonus_Mp+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.bonus_Mp+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.生命回复:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.Heal_Hp+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.Heal_Hp+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.法力回复:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.Heal_Mp+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.Heal_Mp+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.物攻加成: 
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.bonus_Damage+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.bonus_Damage+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.魔攻加成:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.bonus_MagicDamage+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.bonus_MagicDamage+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.物防加成:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.bonus_Def+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.bonus_Def+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 case enum_attribute_list.魔防加成:
-                    info_item_dic[item].Show(item, SumSave.crt_MaxHero.bonus_MagicDef+tool_Categoryt.Obtain_unit((int)item));
+                    info_item_dic[item].Show(item, SumSave.crt_MaxHero_okd.bonus_MagicDef+tool_Categoryt.Obtain_unit((int)item));
                     break;
                 default:
                     break;

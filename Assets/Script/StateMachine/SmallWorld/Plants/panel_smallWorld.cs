@@ -43,7 +43,7 @@ public class panel_smallWorld : Panel_Base
     /// <summary>
     /// 上阵探索的宠物
     /// </summary>
-    private List<db_pet_vo> pet_expedition_list=new List<db_pet_vo>();
+    private List<db_pet_vo_old> pet_expedition_list=new List<db_pet_vo_old>();
     /// <summary>
     /// 探索宠物位置
     /// </summary>
@@ -214,17 +214,17 @@ public class panel_smallWorld : Panel_Base
     /// </summary>
     private void uplv()
     {
-        if (SumSave.crt_world.World_Lv >= SumSave.db_lvs.world_lv_list_dic.Count)
+        if (SumSave.crt_world.World_Lv >= SumSave.db_lvs_old.world_lv_list_dic.Count)
         { 
             Alert_Dec.Show("已达最高等级");
             return;
         }
-        List<(string,int)> dec = SumSave.db_lvs.world_lv_list_dic[SumSave.crt_world.World_Lv];
+        List<(string,int)> dec = SumSave.db_lvs_old.world_lv_list_dic[SumSave.crt_world.World_Lv];
         for (int i = 0; i < dec.Count; i++)
         {
-            NeedConsumables(dec[i].Item1, dec[i].Item2);
+            NeedConsumablesold(dec[i].Item1, dec[i].Item2);
         }
-        if (RefreshConsumables())
+        if (RefreshConsumables_old())
         {
             SumSave.crt_world.World_Lv++;
             Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_world, SumSave.crt_world.Set_Uptade_String(), SumSave.crt_world.Get_Update_Character());
@@ -296,7 +296,7 @@ public class panel_smallWorld : Panel_Base
         int time = Battle_Tool.SettlementTransport(list[0]);
         string dec = "界灵：Lv." + SumSave.crt_world.World_Lv + "\n";
         dec += "灵气 ：" + Obtain_Init(1) + "(Max" + Obtain_Init(2) + ")\n";
-        dec += "每分钟可获得 ：" + SumSave.db_lvs.world_offect_list[SumSave.crt_world.World_Lv]+  "灵气\n";
+        dec += "每分钟可获得 ：" + SumSave.db_lvs_old.world_offect_list[SumSave.crt_world.World_Lv]+  "灵气\n";
         dec += "历练获得 :" + (SumSave.crt_world.World_Lv * 10) + "%\n";
         dec += "最大种植数量 :" + (SumSave.crt_world.World_Lv / 5 +3) + "个\n";
         dec += "最大宠物数量 :" + (SumSave.crt_world.World_Lv / 10 + 1) + "个\n";
@@ -305,13 +305,13 @@ public class panel_smallWorld : Panel_Base
         dec += "宠物属性继承 :" + (SumSave.crt_world.World_Lv / 10 + 5) + "%\n";
         dec += "宠物孵化最高品质 :" + (SumSave.crt_world.World_Lv / 10 + 1) + "\n";
         dec += "宠物属性继承 :" + (SumSave.crt_world.World_Lv / 10 + 5) + "%\n";
-        if (SumSave.crt_world.World_Lv >= SumSave.db_lvs.world_lv_list_dic.Count)
+        if (SumSave.crt_world.World_Lv >= SumSave.db_lvs_old.world_lv_list_dic.Count)
         {
             dec += "已达最高等级";
         }
         else
         {
-            List<(string, int)> item = SumSave.db_lvs.world_lv_list_dic[SumSave.crt_world.World_Lv];
+            List<(string, int)> item = SumSave.db_lvs_old.world_lv_list_dic[SumSave.crt_world.World_Lv];
             for (int i = 0; i < item.Count; i++)
             {
                 dec += Show_Color.Yellow((i == 0 ? "升级需求 1." : "\n" + (i + 1) + ".") + item[i].Item1 + " * " + item[i].Item2);
@@ -333,7 +333,7 @@ public class panel_smallWorld : Panel_Base
                 value = (int)list[(int)currency_unit.灵气];
                 break;
             case 2:
-                value = SumSave.db_lvs.word_lv_max_value[SumSave.crt_world.World_Lv];
+                value = SumSave.db_lvs_old.word_lv_max_value[SumSave.crt_world.World_Lv];
                 value += Tool_State.Value_playerprobabilit(enum_skill_attribute_list.灵气上限);
                 break;
             default:

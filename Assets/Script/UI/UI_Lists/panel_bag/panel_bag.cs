@@ -66,7 +66,7 @@ public class panel_bag : Panel_Base
         panel_equip = UI_Manager.I.GetPanel<panel_equip>();
 
        
-        skin_prefabs = Resources.Load<GameObject>("Prefabs/Skins/within_" + SumSave.crt_hero.hero_pos);
+        skin_prefabs = Resources.Load<GameObject>("Prefabs/Skins/within_" + SumSave.old_crt_hero.hero_pos);
         panel_role_health = Find<Transform>("bg_main/bag_equips/panel_role_health");
         Instantiate(skin_prefabs, panel_role_health);
         show_tianming_Platform= Find<Transform>("bg_main/bag_equips/tianming_Platform");
@@ -118,7 +118,8 @@ public class panel_bag : Panel_Base
     private void break_down()
     {
         List<Bag_Base_VO> sell_list = new List<Bag_Base_VO>();
-        foreach (Bag_Base_VO item in SumSave.crt_bag)
+
+        foreach (Bag_Base_VO item in sell_list)//SumSave.crt_bag
         {
             if (item.user_value != null)
             {
@@ -136,14 +137,14 @@ public class panel_bag : Panel_Base
         {
             foreach (Bag_Base_VO item in sell_list)
             {
-                SumSave.crt_bag.Remove(item);
+                //SumSave.crt_bag.Remove(item);
             }
             int random = Random.Range(1, 100);
             int number = sell_list.Count * 2;
             int maxnumber = number + Random.Range(1, 100);
             Battle_Tool.Obtain_Resources(Obtain_Int.Add(1, "绝世碎片", new int[] { number + random, random }), maxnumber);
             //Battle_Tool.Obtain_Resources("绝世碎片", sell_list.Count * 2);
-            Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
+            //Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
             Show_Bag();
             Alert.Show("分解成功", "获得" + Show_Color.Red("绝世碎片") + " * " + (sell_list.Count * 2));
 
@@ -177,58 +178,58 @@ public class panel_bag : Panel_Base
                 value= list[i].Item2;
             }
         }
-        foreach (Bag_Base_VO item in SumSave.crt_bag)
-        {
-            if (item.user_value != null)
-            {
-                string[] info_str = item.user_value.Split(' ');
-                if (info_str.Length >= 6)
-                {
-                    if (info_str[5] == "0")
-                    {
-                        if (info_str[2] == "7")
-                        {
-                            if (number + (item.need_lv / 2 + 1) < 50)
-                            {
-                                number += (item.need_lv / 2 + 1);
-                                sell_list.Add(item);
-                                moeny += item.price;
-                            }
-                            else
-                            {
-                                if (number < 50)
-                                {
-                                    number = 50;
-                                    sell_list.Add(item);
-                                    moeny += item.price;
+        //foreach (Bag_Base_VO item in SumSave.crt_bag)
+        //{
+        //    if (item.user_value != null)
+        //    {
+        //        string[] info_str = item.user_value.Split(' ');
+        //        if (info_str.Length >= 6)
+        //        {
+        //            if (info_str[5] == "0")
+        //            {
+        //                if (info_str[2] == "7")
+        //                {
+        //                    if (number + (item.need_lv / 2 + 1) < 50)
+        //                    {
+        //                        number += (item.need_lv / 2 + 1);
+        //                        sell_list.Add(item);
+        //                        moeny += item.price;
+        //                    }
+        //                    else
+        //                    {
+        //                        if (number < 50)
+        //                        {
+        //                            number = 50;
+        //                            sell_list.Add(item);
+        //                            moeny += item.price;
 
-                                }
-                            }
-                        }
-                        else
-                        {
-                            sell_list.Add(item);
-                            moeny += item.price;
-                        }
-                    }
-                }
-                else
-                {
-                    sell_list.Add(item);
-                    moeny += item.price;
-                }
-            }
-        }
-        if (sell_list.Count > 0)
-        {
-            foreach (Bag_Base_VO item in sell_list)
-            { 
-                SumSave.crt_bag.Remove(item);
-            }
-        }
+        //                        }
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    sell_list.Add(item);
+        //                    moeny += item.price;
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            sell_list.Add(item);
+        //            moeny += item.price;
+        //        }
+        //    }
+        //}
+        //if (sell_list.Count > 0)
+        //{
+        //    foreach (Bag_Base_VO item in sell_list)
+        //    { 
+        //        SumSave.crt_bag.Remove(item);
+        //    }
+        //}
         if (value < number)
         {
-            SumSave.crt_user_unit.verify_data(currency_unit.魔丸, number - value);
+            SumSave.crt_user_unit.verify_data(currency_unit.Boss积分, number - value);
             string dec = "出售奖励\n" + "本次出售获得魔丸 " + (number - value) + "\n今日剩余获取魔丸" + (50 - number);
             Alert.Show("出售奖励", dec);
             SumSave.crt_needlist.SetMap((MapStateList.背包回收魔丸.ToString(), number));
@@ -242,8 +243,8 @@ public class panel_bag : Panel_Base
         }
         Alert_Dec.Show("出售成功，获得灵珠 " + moeny);
         SellingSellingEquipmentTask();
-        Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
-        SumSave.crt_user_unit.verify_data(currency_unit.灵珠, moeny);
+        //Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
+        SumSave.crt_user_unit.verify_data(currency_unit.金币, moeny);
         Show_Bag();
     }
 
@@ -284,7 +285,7 @@ public class panel_bag : Panel_Base
         //Base_Show();
         base_Equip();
         ObtainEquipmentTasks();
-        if (tianming_Platform == null || !tianming_Platform.SequenceEqual(SumSave.crt_hero.tianming_Platform))
+        if (tianming_Platform == null || !tianming_Platform.SequenceEqual(SumSave.old_crt_hero.tianming_Platform))
         {
             Show_Info_life();
         }
@@ -325,14 +326,14 @@ public class panel_bag : Panel_Base
         foreach (EquipTypeList item in dic_equips.Keys)
         {
             dic_equips[item].Init();
-            foreach (Bag_Base_VO equip in SumSave.crt_euqip)
-            {
-                if (equip.StdMode == item.ToString())
-                {
+            //foreach (Bag_Base_VO equip in SumSave.crt_euqip)
+            //{
+            //    if (equip.StdMode == item.ToString())
+            //    {
                     
-                    dic_equips[item].Data = equip;
-                }
-            }
+            //        dic_equips[item].Data = equip;
+            //    }
+            //}
         }
     }
 
@@ -367,7 +368,7 @@ public class panel_bag : Panel_Base
     private void Show_Info_life()
     {
 
-        tianming_Platform = (int[])SumSave.crt_hero.tianming_Platform.Clone();
+        tianming_Platform = (int[])SumSave.old_crt_hero.tianming_Platform.Clone();
 
         for (int i = show_tianming_Platform.childCount - 1; i >= 0; i--)//清空区域内按钮
         {
@@ -379,22 +380,22 @@ public class panel_bag : Panel_Base
 
 
 
-        for (int i = 0; i < SumSave.crt_hero.tianming_Platform.Length; i++)
+        for (int i = 0; i < SumSave.old_crt_hero.tianming_Platform.Length; i++)
         {
-            if (tianming_num.ContainsKey(SumSave.crt_hero.tianming_Platform[i]))
+            if (tianming_num.ContainsKey(SumSave.old_crt_hero.tianming_Platform[i]))
             {
-                tianming_num[SumSave.crt_hero.tianming_Platform[i]]++;
+                tianming_num[SumSave.old_crt_hero.tianming_Platform[i]]++;
             }
             else
             {
-                tianming_num.Add(SumSave.crt_hero.tianming_Platform[i], 1);
+                tianming_num.Add(SumSave.old_crt_hero.tianming_Platform[i], 1);
             }
         }
 
 
-        for (int i = 0; i < SumSave.crt_hero.tianming_Platform.Length; i++)
+        for (int i = 0; i < SumSave.old_crt_hero.tianming_Platform.Length; i++)
         {
-            GameObject game = Resources.Load<GameObject>("Prefabs/halo/halo_" + (SumSave.crt_hero.tianming_Platform[i] + 1));
+            GameObject game = Resources.Load<GameObject>("Prefabs/halo/halo_" + (SumSave.old_crt_hero.tianming_Platform[i] + 1));
             GameObject tianming = Instantiate(game, show_tianming_Platform);
 
             tianming.transform.Rotate(new Vector3(0, 0, 15 * i));
@@ -404,7 +405,7 @@ public class panel_bag : Panel_Base
             tianming.GetComponent<RectTransform>().sizeDelta = tianming_size;
 
             Color currentColor = tianming.GetComponentInChildren<Image>().color;
-            currentColor.a = tianming_num[SumSave.crt_hero.tianming_Platform[i]] * 0.2f;
+            currentColor.a = tianming_num[SumSave.old_crt_hero.tianming_Platform[i]] * 0.2f;
             tianming.GetComponentInChildren<Image>().color = currentColor;
         }
     }
@@ -421,28 +422,28 @@ public class panel_bag : Panel_Base
         switch (crt_select_btn)
         {
             case bag_btn_list.装备:
-                ArrayHelper.OrderDescding(SumSave.crt_bag,e=>int.Parse( e.user_value.Split(' ')[2]));
-                for (int i = 0; i < SumSave.crt_bag.Count; i++)
-                {
-                    bag_item item = Instantiate(bag_item_Prefabs, crt_bag);
-                    item.Data = SumSave.crt_bag[i];
-                    item.GetComponent<Button>().onClick.AddListener(delegate { Select_Bag(item); });
-                }
-                page_info.text= SumSave.crt_bag.Count+"/"+ SumSave.crt_resources.pages[0];
+                //ArrayHelper.OrderDescding(SumSave.crt_bag,e=>int.Parse( e.user_value.Split(' ')[2]));
+                //for (int i = 0; i < SumSave.crt_bag.Count; i++)
+                //{
+                //    bag_item item = Instantiate(bag_item_Prefabs, crt_bag);
+                //    item.Data = SumSave.crt_bag[i];
+                //    item.GetComponent<Button>().onClick.AddListener(delegate { Select_Bag(item); });
+                //}
+                //page_info.text= SumSave.crt_bag.Count+"/"+ SumSave.crt_resources.pages[0];
                 break;
             case bag_btn_list.材料:
-                List<(string, int)> lists = SumSave.crt_bag_resources.Set();
-                for (int i = 0; i < lists.Count; i++)
-                {
-                    (string,int) data = lists[i];
-                    if (data.Item2 > 0)
-                    {
-                        material_item item = Instantiate(material_item_Prefabs, crt_bag);
-                        item.Init(data);
-                        item.GetComponent<Button>().onClick.AddListener(delegate { Select_Material(item); });
-                    }
-                }
-                page_info.text = lists.Count + "/" + SumSave.crt_resources.pages[0];
+                //List<(string, int)> lists = SumSave.crt_bag_resources.Set();
+                //for (int i = 0; i < lists.Count; i++)
+                //{
+                //    (string,int) data = lists[i];
+                //    if (data.Item2 > 0)
+                //    {
+                //        material_item item = Instantiate(material_item_Prefabs, crt_bag);
+                //        item.Init(data);
+                //        item.GetComponent<Button>().onClick.AddListener(delegate { Select_Material(item); });
+                //    }
+                //}
+                //page_info.text = lists.Count + "/" + SumSave.crt_resources.pages[0];
 
                 break;   
                case bag_btn_list.丹囊:

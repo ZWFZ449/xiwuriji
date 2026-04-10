@@ -139,8 +139,8 @@ public class show_Plant : Base_Mono
         if (item.state())
         {
             if (currentPlant == null) { Alert_Dec.Show("请选择种子");return; }
-            NeedConsumables(currentPlant, 1);
-            if (RefreshConsumables())
+            NeedConsumablesold(currentPlant, 1);
+            if (RefreshConsumables_old())
             {
                 List<(string, DateTime)> Set = SumSave.crt_plant.Set();
                 Set[item.index] = (currentPlant, SumSave.nowtime);
@@ -162,7 +162,7 @@ public class show_Plant : Base_Mono
     /// </summary>
     public void pet_Init()
     {
-        List<db_pet_vo> crt_pet_list = SumSave.crt_pet.Set();
+        List<db_pet_vo_old> crt_pet_list = SumSave.crt_pet_Old.Set();
         if(crt_pet_list.Count==0)
         {
             pet_guardImage.sprite = transparent;
@@ -236,8 +236,8 @@ public class show_Plant : Base_Mono
         {
             num = 0;
         }
-        NeedConsumables(currency_unit.灵气, need_list[num]);
-        if (RefreshConsumables())
+        NeedConsumablesold(currency_unit.灵气, need_list[num]);
+        if (RefreshConsumables_old())
         {
             List<(string, DateTime)> Set = SumSave.crt_plant.Set();
             Set.Add(("0", SumSave.nowtime));
@@ -278,8 +278,8 @@ public class show_Plant : Base_Mono
     private void ConfigWatering(object arg0)
     {
         int number = (int)arg0;
-        NeedConsumables(currency_unit.灵气, number * 200);
-        if (RefreshConsumables())
+        NeedConsumablesold(currency_unit.灵气, number * 200);
+        if (RefreshConsumables_old())
         {
             List<(string, DateTime)> Set = SumSave.crt_plant.Set();
             for (int i = 0; i < panltList.Count; i++)
@@ -357,13 +357,13 @@ public class show_Plant : Base_Mono
         }
         int number = numbers.Count;//空土地的数量
 
-        NeedConsumables(currentPlant, number);
-        while (!RefreshConsumables())
+        NeedConsumablesold(currentPlant, number);
+        while (!RefreshConsumables_old())
         {
             if (number > 0)
             {
                 number--;
-                NeedConsumables(currentPlant, number);
+                NeedConsumablesold(currentPlant, number);
             }
             else
             {

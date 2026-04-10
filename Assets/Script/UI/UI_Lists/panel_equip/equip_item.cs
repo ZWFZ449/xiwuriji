@@ -5,6 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+/// <summary>
+/// 装备显示图标
+/// </summary>
 
 public class equip_item : Base_Mono
 {
@@ -58,6 +61,11 @@ public class equip_item : Base_Mono
     }
 
     private void base_init()
+    { 
+    
+    }
+
+    private void base_init1()
     {
         //生成物品显示
         if (bag_item_Prefabs == null || crt_bag == null)
@@ -71,9 +79,9 @@ public class equip_item : Base_Mono
         string[] info = data.user_value.Split(' ');
         int strengthenlv = int.Parse(info[1]);
         int quilty = int.Parse(info[2]);
-        show_base_need.text = "品质:" + (enum_equip_quality_list)int.Parse(info[2]) + "\n" +
-            "类型:" + data.StdMode + "\n" +
-            "需求:" + data.equip_lv + "级";
+        //show_base_need.text = "品质:" + (enum_equip_quality_list)int.Parse(info[2]) + "\n" +
+        //    "类型:" + data.StdMode + "\n" +
+        //    "需求:" + data.equip_lv + "级";
         string dec = Show_Color.Yellow("[基础属性]");
 
         if (data.damgemin > 0 || data.damagemax > 0)
@@ -204,9 +212,10 @@ public class equip_item : Base_Mono
         //  List<(int, int, int,int)> crt_euqips = new List<(int, int, int, int)>() { (1,18,0,100),(2,7,0,100)};
         (int, int, int, int, int) crt_euqip = (0, 18, 7, 100, 0);
         //添加装备效果
-        for (int i = 0; i < SumSave.crt_euqip.Count; i++)
+        List<Bag_Base_VO> crt_euqips = SumSave.crt_equips.Get(Dream_User_Equip_Type.装备);
+        for (int i = 0; i < crt_euqips.Count; i++)
         {
-            Bag_Base_VO datas = SumSave.crt_euqip[i];
+            Bag_Base_VO datas = crt_euqips[i];
             string[] info = datas.user_value.Split(' ');
             int strengthenlv = int.Parse(info[1]);
             int quilty = int.Parse(info[2]);
@@ -305,19 +314,19 @@ public class equip_item : Base_Mono
         if(exist)
         {
             db_suit_vo suit = SumSave.db_suits.Find(x => x.suit_type == Data.suit);
-            foreach (Bag_Base_VO item in SumSave.crt_euqip)
-            {
-                if (item.suit == data.suit)
-                {
-                    foreach (var value in SumSave.db_suits)
-                    {
-                        if (item.suit == value.suit_type)
-                        {
-                            number++;
-                        }
-                    }
-                }
-            }
+            //foreach (Bag_Base_VO item in SumSave.crt_euqip)
+            //{
+            //    if (item.suit == data.suit)
+            //    {
+            //        foreach (var value in SumSave.db_suits)
+            //        {
+            //            if (item.suit == value.suit_type)
+            //            {
+            //                number++;
+            //            }
+            //        }
+            //    }
+            //}
             dec += "\n" + Show_Color.Yellow("[套装] " + suit.suit_name) + "(" + number + "/" + suit.suit_number + ")";
             for (int i = 0; i < suit.suit_list.Count; i++)
             {

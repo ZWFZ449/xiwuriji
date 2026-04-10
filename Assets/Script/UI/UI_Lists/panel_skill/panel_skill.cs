@@ -16,11 +16,11 @@ public class panel_skill : Panel_Base
     /// </summary>
     private btn_item btn_item_Prefabs;
 
-    private skill_item skill_item_Prefabs;
+    private oldskill_item skill_item_Prefabs;
     /// <summary>
     /// 技能效果
     /// </summary>
-    private skill_offect_item skill_item_parfabs;
+    private oldskill_offect_item skill_item_parfabs;
     /// <summary>
     /// 按钮位置
     /// </summary>
@@ -28,7 +28,7 @@ public class panel_skill : Panel_Base
     /// <summary>
     /// 当前选中的技能
     /// </summary>
-    private skill_offect_item user_skill;
+    private oldskill_offect_item user_skill;
     /// <summary>
     /// 存储功能组件
     /// </summary>
@@ -72,14 +72,14 @@ public class panel_skill : Panel_Base
         //crt_skill = Find<Transform>("bg_main/skills/Scroll View/Viewport/Content");
         crt_offect_btn=Find<Transform>("bg_main/show_skill/btn_list");
         btn_item_Prefabs = Battle_Tool.Find_Prefabs<btn_item>("btn_item");// Resources.Load<btn_item>("Prefabs/base_tool/btn_item");
-        skill_item_Prefabs = Battle_Tool.Find_Prefabs<skill_item>("skill_item"); //Resources.Load<skill_item>("Prefabs/panel_skill/skill_item");
+        skill_item_Prefabs = Battle_Tool.Find_Prefabs<oldskill_item>("skill_item"); //Resources.Load<skill_item>("Prefabs/panel_skill/skill_item");
         base_info = Find<Text>("bg_main/show_skill/bg_info/Viewport/base_info");
         offect_skill = Find<offect_up_skill>("bg_main/offect_up_skill");
         allocation_skill_damage = Find<allocation_skill_damage>("bg_main/allocation_skill_damage");
         page_info = Find<Text>("bg_main/skills/item_list/page_info");
         page_info.GetComponent<Button>().onClick.AddListener(delegate { Page_Change(); });
         pos_skill = Find<Transform>("bg_main/skills/item_list/list");
-        skill_item_parfabs = Battle_Tool.Find_Prefabs<skill_offect_item>("skill_offect_item");
+        skill_item_parfabs = Battle_Tool.Find_Prefabs<oldskill_offect_item>("skill_offect_item");
         for (int i = 0; i < Enum.GetNames(typeof(skill_btn_list)).Length; i++)
         {
             btn_item btn_item = Instantiate(btn_item_Prefabs, crt_btn);
@@ -113,7 +113,7 @@ public class panel_skill : Panel_Base
     {
         int value = 0;
         int number = 0;
-        foreach (var item in SumSave.crt_skills)
+        foreach (var item in SumSave.oldcrt_skills)
         {
 
             if (item.skill_type == user_skill.Data.skill_type)
@@ -185,7 +185,7 @@ public class panel_skill : Panel_Base
         {
             int lv = int.Parse(user_skill.Data.user_values[1]);
             int number = 0;///当前技能类型的总等级
-            foreach (var item in SumSave.crt_skills)
+            foreach (var item in SumSave.oldcrt_skills)
             {
                 if (item.skill_type == user_skill.Data.skill_type)
                 {
@@ -208,7 +208,7 @@ public class panel_skill : Panel_Base
             Reset_num= (int)(Reset_num * 0.7f);
             ResetSkill_lv();
             Alert_Dec.Show("重置获得：" + Reset_num + "*历练");
-            Battle_Tool.Obtain_Unit(currency_unit.历练, Reset_num);
+            Battle_Tool.Obtain_Unit(currency_unit.元宝, Reset_num);
             Show_skill();
         }
         else
@@ -223,7 +223,7 @@ public class panel_skill : Panel_Base
     {
         user_skill.Data.user_values[1] = "1";
         user_skill.Data.user_value = ArrayHelper.Data_Encryption(user_skill.Data.user_values);
-        Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.skill_value, SumSave.crt_skills);
+        Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.skill_value, SumSave.oldcrt_skills);
         SendNotification(NotiList.Refresh_Max_Hero_Attribute);
         Select_skill(user_skill);
         Alert_Dec.Show("重置成功");
@@ -235,7 +235,7 @@ public class panel_skill : Panel_Base
     {
         user_skill.Data.user_values[2] = "0";
         user_skill.Data.user_value = ArrayHelper.Data_Encryption(user_skill.Data.user_values);
-        Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.skill_value, SumSave.crt_skills);
+        Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.skill_value, SumSave.oldcrt_skills);
         SendNotification(NotiList.Refresh_Max_Hero_Attribute);
         Select_skill(user_skill);
         Alert_Dec.Show("下阵成功");
@@ -248,8 +248,8 @@ public class panel_skill : Panel_Base
     {
         if (user_skill.Data.skill_max_lv > int.Parse(user_skill.Data.user_values[1]))
         {
-            NeedConsumables(currency_unit.历练, need_exp);
-            if (RefreshConsumables())
+            NeedConsumablesold(currency_unit.元宝, need_exp);
+            if (RefreshConsumables_old())
             {
                 Alert_Dec.Show("升级消耗  " + need_exp + user_skill.Data.skillname + "等级提升");
                 int lv = int.Parse(user_skill.Data.user_values[1]);
@@ -263,14 +263,14 @@ public class panel_skill : Panel_Base
                             if (lv == item.Item1)//当秘籍技能达到特定等级获得新技能
                             {
                                 Alert_Dec.Show("获得技能 " + item.Item2);
-                                SumSave.crt_skills.Add(tool_Categoryt.crate_skill(item.Item2));//添加技能
+                                SumSave.oldcrt_skills.Add(tool_Categoryt.crate_skill(item.Item2));//添加技能
                             }
                         }
                     }
                 }
                 user_skill.Data.user_values[1] = lv.ToString();
                 user_skill.Data.user_value = ArrayHelper.Data_Encryption(user_skill.Data.user_values);
-                Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.skill_value, SumSave.crt_skills);
+                Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.skill_value, SumSave.oldcrt_skills);
                 SendNotification(NotiList.Refresh_Max_Hero_Attribute);
                 user_skill.Refresh();
                 Select_skill(user_skill);
@@ -330,7 +330,7 @@ public class panel_skill : Panel_Base
         }
 
         //SumSave.crt_skills.Add(tool_Categoryt.crate_skill(SumSave.db_skills[Random.Range(0, SumSave.db_skills.Count)].skillname));//添加技能
-        List<base_skill_vo> lists = ArrayHelper.FindAll(SumSave.crt_skills, e => (skill_btn_list)e.skill_type == select_btn_type);
+        List<base_skill_vo> lists = ArrayHelper.FindAll(SumSave.oldcrt_skills, e => (skill_btn_list)e.skill_type == select_btn_type);
         crt_skill_number = lists.Count;
         if (crt_skill_number == 0) page_info.text = "";
         else
@@ -338,7 +338,7 @@ public class panel_skill : Panel_Base
         int max = Mathf.Min(lists.Count, (page_index + 1) * 12);
         for (int i = page_index * 12; i < max; i++)
         {
-            skill_offect_item item = Instantiate(skill_item_parfabs, pos_skill);
+            oldskill_offect_item item = Instantiate(skill_item_parfabs, pos_skill);
             item.Data = lists[i];
             item.GetComponent<Button>().onClick.AddListener(delegate { Select_skill(item); });
             if (user_skill == null) Select_skill(item);
@@ -355,9 +355,9 @@ public class panel_skill : Panel_Base
             if (SumSave.GreenhandGuide_TotalTasks[item].tasktype == GreenhandGuideTaskType.收集任务)
             {
                 GreenhandGuide_TotalTaskVO task = SumSave.GreenhandGuide_TotalTasks[item];//读取任务
-                for (int i = 0; i < SumSave.crt_skills.Count; i++)
+                for (int i = 0; i < SumSave.oldcrt_skills.Count; i++)
                 {
-                    if (task.TaskDesc.Contains(SumSave.crt_skills[i].skillname))//判断是否有当前技能
+                    if (task.TaskDesc.Contains(SumSave.oldcrt_skills[i].skillname))//判断是否有当前技能
                     {
                         tool_Categoryt.Base_Task(task.taskid);
                     }
@@ -371,7 +371,7 @@ public class panel_skill : Panel_Base
     /// 选择物品
     /// </summary>  
     /// <param name="item"></param>
-    private void Select_skill(skill_offect_item item)
+    private void Select_skill(oldskill_offect_item item)
     {
         user_skill = item;
         Open_Select_Btn();
@@ -444,7 +444,7 @@ public class panel_skill : Panel_Base
         else
         {
             int number = 0;//当前技能类型的总等级
-            foreach (var item in SumSave.crt_skills)
+            foreach (var item in SumSave.oldcrt_skills)
             {
                 if (item.skill_type == user_skill.Data.skill_type)
                 {

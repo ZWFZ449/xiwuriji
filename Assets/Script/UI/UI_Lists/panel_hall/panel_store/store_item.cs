@@ -22,12 +22,12 @@ public class store_item : Base_Mono
     /// 数据
     /// </summary>
     private material_item material_item_Prefabs;
-    private (string, int) data;
+    private db_store_vo data;
     private void Awake()
     {
         baseinfo=Find<Text>("info");
         icon=Find<Image>("icon");
-        material_item_Prefabs = Battle_Tool.Find_Prefabs<material_item>("material_item"); //Resources.Load<material_item>("Prefabs/panel_bag/material_item");
+        material_item_Prefabs = Tool_UI.Find_Prefabs<material_item>("material_item"); //Battle_Tool.Find_Prefabs<material_item>("material_item");
     }
     /// <summary>
     /// 初始化
@@ -35,7 +35,6 @@ public class store_item : Base_Mono
     /// <param name="bag_Resources"></param>
     public void Init((string, int) bag_Resources,string unit)
     {
-        data = bag_Resources;
         baseinfo.text = Show_Color.White(bag_Resources.Item1) + "\n单价"
             + Battle_Tool.FormatNumberToChineseUnit(bag_Resources.Item2)
             + " " + unit
@@ -49,16 +48,23 @@ public class store_item : Base_Mono
     /// <param name="store"></param>
     public void Init(db_store_vo store)
     {
+        data = store;
         baseinfo.text = Show_Color.White(store.ItemName) + "\n单价"
             + Battle_Tool.FormatNumberToChineseUnit(store.ItemPrice)
             + " " + store.unit
             + "\n" + Show_Color.Green("购买");
         Instantiate(material_item_Prefabs, icon.transform).Init((store.ItemName, 1));
     }
-
+    /// <summary>
+    /// 获取值
+    /// </summary>
+    /// <returns></returns>
+    public db_store_vo Set()
+    {
+        return data;
+    }
     public void PetInit((string, int) bag_Resources, string unit)
     {
-        data = bag_Resources;
         baseinfo.alignment = TextAnchor.MiddleCenter;
         baseinfo.text = Show_Color.White(bag_Resources.Item1);
         material_item item = Instantiate(material_item_Prefabs, icon.transform);

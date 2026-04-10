@@ -38,7 +38,7 @@ public class panel_setting : Panel_Base
         for (int i = 0; i < SumSave.db_sttings.Count; i++)
         {
             setting_item item = Instantiate(setting_Item_prefab, crt_setting);
-            item.Init(i, SumSave.db_sttings[i].option_setting.Split(' '), SumSave.crt_setting.user_setting[i]);
+            item.Init(i, SumSave.db_sttings[i].option_setting.Split(' '), SumSave.crt_settingold.user_setting[i]);
         }
         
     }
@@ -70,10 +70,10 @@ public class panel_setting : Panel_Base
     /// <param name="data"></param>
     protected void Select_Setting((int index, int value) data)
     {
-        SumSave.crt_setting.user_setting[data.index] = data.value;
-        SendNotification(NotiList.Refresh_User_Setting, SumSave.crt_setting);
+        SumSave.crt_settingold.user_setting[data.index] = data.value;
+        SendNotification(NotiList.Refresh_User_Setting, SumSave.crt_settingold);
         AutomaticEquipmentRecyclingTask(data);
-        if (SumSave.crt_setting.user_setting[4] == 1)//1为静音
+        if (SumSave.crt_settingold.user_setting[4] == 1)//1为静音
         {
             AudioListener.pause = true;
             AudioManager.Instance.audioSource.Stop(); 

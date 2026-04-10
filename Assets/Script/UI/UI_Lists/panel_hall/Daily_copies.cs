@@ -55,8 +55,8 @@ public class Daily_copies : Base_Mono
         {
             if (item.index.need_Required != "")
             {
-                NeedConsumables(item.index.need_Required, 1);
-                if (RefreshConsumables())
+                NeedConsumablesold(item.index.need_Required, 1);
+                if (RefreshConsumables_old())
                 {
                     Open_Map(item);
                 }
@@ -131,7 +131,7 @@ public class Daily_copies : Base_Mono
     public override void Show()
     {
         base.Show();
-        if (SumSave.crt_MaxHero.Lv < 30 && SumSave.ios_account_number != "admin001")
+        if (SumSave.crt_MaxHero_okd.Lv < 30 && SumSave.ios_account_number != "admin001")
         {
             Alert_Dec.Show("副本开启等级为30级");
             gameObject.SetActive(false);
@@ -146,22 +146,22 @@ public class Daily_copies : Base_Mono
     {
         ClearObject(pos_crtmap);
         List<(string, int)> list = SumSave.crt_needlist.SetMap();
-        int maxnumber = SumSave.crt_MaxHero.Lv / 100 + 1;
-        for (int i = SumSave.db_maps.Count - 1; i > 0; i--)
+        int maxnumber = SumSave.crt_MaxHero_okd.Lv / 100 + 1;
+        for (int i = SumSave.read_lose_map.Count - 1; i > 0; i--)
         {
-            if (SumSave.db_maps[i].map_type == 4&& SumSave.db_maps[i].need_Required=="")
+            if (SumSave.read_lose_map[i].map_type == 4&& SumSave.read_lose_map[i].need_Required=="")
             {
                 int number = 0;
                 for (int j = 0; j < list.Count; j++)
                 {
-                    if (list[j].Item1 == SumSave.db_maps[i].map_name)
+                    if (list[j].Item1 == SumSave.read_lose_map[i].map_name)
                     { 
                         number = list[j].Item2;
                         break;
                     }
                 }
                 copies_item item = Instantiate(copies_item_Prefabs, pos_crtmap);
-                item.Init(SumSave.db_maps[i], number, maxnumber);
+                item.Init(SumSave.read_lose_map[i], number, maxnumber);
                 item.GetComponent<Button>().onClick.AddListener(() => { OnClick(item); });
             }
         }

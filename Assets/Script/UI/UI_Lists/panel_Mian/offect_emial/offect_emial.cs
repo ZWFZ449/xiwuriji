@@ -132,8 +132,8 @@ public class offect_emial : Base_Mono
                         SumSave.crt_pass.Get(dic);
                         break;
                     case 4://皮肤
-                        SumSave.crt_hero.hero_value += (SumSave.crt_hero.hero_value == "" ? "" : ",") + material;
-                        Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_hero, new string[] { Battle_Tool.GetStr(SumSave.crt_hero.hero_value) },
+                        SumSave.old_crt_hero.hero_value += (SumSave.old_crt_hero.hero_value == "" ? "" : ",") + material;
+                        Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_hero, new string[] { Battle_Tool.GetStr(SumSave.old_crt_hero.hero_value) },
                             new string[] { "hero_value" });
                         break;
                     case 5://月卡

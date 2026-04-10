@@ -16,16 +16,8 @@ namespace UI
         {
             closeButton = Find<Button>("close_button");
             if (closeButton != null) closeButton.onClick.AddListener(Hide);
-            //if (TipsBtn != null) TipsBtn.onClick.AddListener(() =>{ });
             Initialize();
         }
-        /// <summary>
-        ///  显示
-        /// </summary>
-        //public virtual void Show()
-        //{
-        //    this.gameObject.SetActive(true);
-        //}
         /// <summary>
         /// 初始化
         /// </summary>

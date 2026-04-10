@@ -85,7 +85,7 @@ namespace MVC
 
         private IEnumerator Read_Instace()
         {
-            while (SumSave.db_monsters==null)
+            while (SumSave.olddb_monsters==null)
             {
                 yield return new WaitForSeconds(1f);
                 SendNotification(NotiList.Read_Instace);
@@ -490,40 +490,40 @@ namespace MVC
                 }
                 if (SumSave.crt_world != null)
                 {
-                    int value = SumSave.db_lvs.world_offect_list[SumSave.crt_world.World_Lv];
+                    int value = SumSave.db_lvs_old.world_offect_list[SumSave.crt_world.World_Lv];
                     int value_2 = number / 60 * value;
                     Battle_Tool.Obtain_Unit(currency_unit.灵气, value_2, 2);
                     dec += "\n获得灵气 " + value_2;
                 }
                 if (SumSave.crt_resources.user_map_index != "")
                 {
-                    user_map_vo map = ArrayHelper.Find(SumSave.db_maps, e => e.map_name == SumSave.crt_resources.user_map_index);
+                    user_map_vo map = ArrayHelper.Find(SumSave.read_lose_map, e => e.map_name == SumSave.crt_resources.user_map_index);
                     if (map != null)
                     {
                         float numbers = 7;
-                        if (SumSave.crt_MaxHero.totalPower < map.map_index * 10000)
+                        if (SumSave.crt_MaxHero_okd.totalPower < map.map_index * 10000)
                         {
-                            numbers += SumSave.crt_MaxHero.totalPower * 3 / (map.map_index * 10000f);
+                            numbers += SumSave.crt_MaxHero_okd.totalPower * 3 / (map.map_index * 10000f);
                         }
                         numbers = Math.Clamp(numbers, 7, 20);
                         int monster_number= (int)(number / numbers);
                         if (Tool_State.IsState(State_List.至尊卡))
                         {
                             //离线至尊积分进度条 
-                            if (SumSave.crt_setting.user_setting[7] == 0) Combat_statistics.offline(monster_number);
+                            if (SumSave.crt_settingold.user_setting[7] == 0) Combat_statistics.offline(monster_number);
                             int unit_2 = Random.Range(monster_number, monster_number * 2);
                             //离线历练值
-                            Battle_Tool.Obtain_Unit(currency_unit.历练, unit_2,2);
+                            Battle_Tool.Obtain_Unit(currency_unit.元宝, unit_2,2);
                             dec += "\n历练收益 " + unit_2 + Show_Color.Red(" (+" + (long)(unit_2 * Show_Buff(enum_skill_attribute_list.人物历练) / 100) + ")");
                         }
                        
                         List<string> vs = ConfigBattle.Offline(monster_number);
-                        crtMaxHeroVO monster = ArrayHelper.Find(SumSave.db_monsters, e => e.index == map.map_index);
+                        crtMaxHeroVO monster = ArrayHelper.Find(SumSave.olddb_monsters, e => e.index == map.map_index);
                         dec += "\n地图 " + map.map_name + " 收益";
                         if (monster != null)
                         {
                             int moeny = (monster.Lv * 5 + 1) * monster_number;
-                            Battle_Tool.Obtain_Unit(currency_unit.灵珠, moeny,2);
+                            Battle_Tool.Obtain_Unit(currency_unit.金币, moeny,2);
                             dec += "\n灵珠收益 " + moeny + Show_Color.Red(" (+" + (int)(moeny * Show_Buff(enum_skill_attribute_list.灵珠收益)/100) + ")");
                             long obexp = (long)(monster.Exp * monster_number * 0.6);
                             Battle_Tool.Obtain_Exp(obexp);
@@ -542,8 +542,8 @@ namespace MVC
         private float Show_Buff(enum_skill_attribute_list index)
         {
             float value = 0;
-            if ((int)index < SumSave.crt_MaxHero.bufflist.Count)
-                value += SumSave.crt_MaxHero.bufflist[(int)index];
+            if ((int)index < SumSave.crt_MaxHero_okd.bufflist.Count)
+                value += SumSave.crt_MaxHero_okd.bufflist[(int)index];
             return value;
         }
         public override void Show()

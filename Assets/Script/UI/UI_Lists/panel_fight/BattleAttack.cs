@@ -48,7 +48,7 @@ namespace MVC
         /// <summary>
         /// 技能列表
         /// </summary>
-        protected List<skill_offect_item> battle_skills;
+        protected List<oldskill_offect_item> battle_skills;
         /// <summary>
         /// 名称 称号
         /// </summary>
@@ -83,7 +83,7 @@ namespace MVC
         }
 
 
-        public virtual void Refresh_Skill(List<skill_offect_item> skills)
+        public virtual void Refresh_Skill(List<oldskill_offect_item> skills)
         { 
         
         }

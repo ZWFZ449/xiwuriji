@@ -71,7 +71,7 @@ public class signIn : Base_Mono
             SumSave.crt_signin.number++;
             SumSave.crt_signin.max_number++;
             Clear();
-            Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_signin, SumSave.crt_signin.Set_Uptade_String(),
+            Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.dream_user_signin, SumSave.crt_signin.Set_Uptade_String(),
                 SumSave.crt_signin.Get_Update_Character());
             Alert_Dec.Show("签到成功");
             SumSave.crt_pass.clear_data();
@@ -80,7 +80,7 @@ public class signIn : Base_Mono
             {
                 num = 100000000;
             }
-            SumSave.crt_user_unit.verify_data(currency_unit.灵珠, num);
+            SumSave.crt_user_unit.verify_data(currency_unit.金币, num);
 
             string dec = "\n签到奖励\n";
             dec+="灵珠 * "+ Battle_Tool.FormatNumberToChineseUnit(num) +"\n";
@@ -88,7 +88,7 @@ public class signIn : Base_Mono
 
             if (Tool_State.IsState(State_List.月卡))
             {
-                SumSave.crt_user_unit.verify_data(currency_unit.魔丸, 30);
+                SumSave.crt_user_unit.verify_data(currency_unit.Boss积分, 30);
                 SumSave.crt_accumulatedrewards.Set(2, 4);
                 dec += Show_Color.Red("月卡奖励\n") + "1.魔丸 * 30\n2.荣耀点 + 2\n";
             }
@@ -206,7 +206,7 @@ public class signIn : Base_Mono
         Alert_Dec.Show("领取成功");
         SumSave.crt_signin.Set(index);
         item.Init(index, SumSave.db_Signins[index], 1);
-        Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_signin, SumSave.crt_signin.Set_Uptade_String(),
+        Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.dream_user_signin, SumSave.crt_signin.Set_Uptade_String(),
     SumSave.crt_signin.Get_Update_Character());
     }
 
@@ -222,7 +222,7 @@ public class signIn : Base_Mono
     {
         string dec = "签到奖励";
         dec += "\n累积签到天数 " + "* " + SumSave.crt_signin.number + " 天";
-        dec += "\n签到获得" + currency_unit.灵珠 + "* " + (1000000 * (SumSave.crt_signin.number + 1));
+        dec += "\n签到获得" + currency_unit.金币 + "* " + (1000000 * (SumSave.crt_signin.number + 1));
         info.text = dec;
 
         if ((SumSave.nowtime - SumSave.crt_signin.now_time).Days < 1)

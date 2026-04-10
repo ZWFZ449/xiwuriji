@@ -146,7 +146,7 @@ public class panel_collect : Base_Mono
             if ( !SumSave.crt_collect.user_collect_dic.ContainsKey(crt_collect.Name)|| SumSave.crt_collect.user_collect_dic[crt_collect.Name] == 0)
             {
                 List<Bag_Base_VO> sell_list = new List<Bag_Base_VO>();
-                foreach (Bag_Base_VO item in SumSave.crt_bag)
+                foreach (Bag_Base_VO item in sell_list)
                 {
                     if (item.user_value != null)
                     {
@@ -172,8 +172,8 @@ public class panel_collect : Base_Mono
 
                     if (item.Name == crt_collect.Name && int.Parse(info[2]) >= 7)
                     {
-                        SumSave.crt_bag.Remove(item);
-                        Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
+                        //SumSave.crt_bag.Remove(item);
+                        //Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
                         SumSave.crt_collect.collect_complete(crt_collect.Name);//收集完成
                         Alert_Dec.Show(crt_collect.Name + " 收集成功");
                         SuitCollect(crt_collect);

@@ -59,16 +59,16 @@ public class panel_equip : Panel_Base
         equip_item item = Instantiate(equip_item_prafabs, crt_pos_equip);
         item.Show_Info_Btn();
         item.Data = bag.Data;
-        foreach (var equip in SumSave.crt_euqip)
-        {
-            if (equip.StdMode == crt_bag.Data.StdMode)
-            {
-                equip_item equip_item = Instantiate(equip_item_prafabs, crt_pos_equip);
-                equip_item.Show_take_Btn();
-                equip_item.Data = equip;
-                crt_equip = equip;
-            }
-        }
+        //foreach (var equip in SumSave.crt_euqip)
+        //{
+        //    if (equip.StdMode == crt_bag.Data.StdMode)
+        //    {
+        //        equip_item equip_item = Instantiate(equip_item_prafabs, crt_pos_equip);
+        //        equip_item.Show_take_Btn();
+        //        equip_item.Data = equip;
+        //        crt_equip = equip;
+        //    }
+        //}
     }
 
     /// <summary>
@@ -93,11 +93,11 @@ public class panel_equip : Panel_Base
     {
         if (index == 0)
         {
-            SumSave.crt_bag.Add(crt_equip);
-            SumSave.crt_euqip.Remove(crt_equip);
-            Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
-            Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.equip_value, SumSave.crt_euqip);
-            SendNotification(NotiList.Refresh_Max_Hero_Attribute);
+            //SumSave.crt_bag.Add(crt_equip);
+            //SumSave.crt_euqip.Remove(crt_equip);
+            //Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
+            //Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.equip_value, SumSave.crt_euqip);
+            //SendNotification(NotiList.Refresh_Max_Hero_Attribute);
         }
         Refresh();
     }
@@ -110,26 +110,26 @@ public class panel_equip : Panel_Base
         //穿戴
         if (index == 0)
         {
-            List<Bag_Base_VO> euqip = new List<Bag_Base_VO>();
-            foreach (var item in SumSave.crt_euqip)
-            {
-                if (item.StdMode == crt_bag.Data.StdMode)
-                {
-                    euqip.Add(item);
-                }
-            }
-            for (int i = 0; i < euqip.Count; i++)
-            {
-                SumSave.crt_bag.Add(euqip[i]);
-                SumSave.crt_euqip.Remove(euqip[i]);
-            }
+            //List<Bag_Base_VO> euqip = new List<Bag_Base_VO>();
+            //foreach (var item in SumSave.crt_euqip)
+            //{
+            //    if (item.StdMode == crt_bag.Data.StdMode)
+            //    {
+            //        euqip.Add(item);
+            //    }
+            //}
+            //for (int i = 0; i < euqip.Count; i++)
+            //{
+            //    SumSave.crt_bag.Add(euqip[i]);
+            //    SumSave.crt_euqip.Remove(euqip[i]);
+            //}
 
-            WearingEquipmentTask();
-            SumSave.crt_bag.Remove(crt_bag.Data);
-            SumSave.crt_euqip.Add(crt_bag.Data);
-            Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
-            Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.equip_value, SumSave.crt_euqip);
-            SendNotification(NotiList.Refresh_Max_Hero_Attribute);
+            //WearingEquipmentTask();
+            //SumSave.crt_bag.Remove(crt_bag.Data);
+            //SumSave.crt_euqip.Add(crt_bag.Data);
+            //Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
+            //Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.equip_value, SumSave.crt_euqip);
+            //SendNotification(NotiList.Refresh_Max_Hero_Attribute);
         }
         else
         if (index == 1)//锁定
@@ -139,7 +139,7 @@ public class panel_equip : Panel_Base
             {
                 info_str[5] = info_str[5] == "1" ? "0" : "1";
                 crt_bag.Data.user_value = Battle_Tool.Equip_User_Value(info_str);
-                Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
+                //Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
             }
             else Alert_Dec.Show("装备品质过低,无法锁定");
 
@@ -178,7 +178,7 @@ public class panel_equip : Panel_Base
                 if (number + (crt_bag.Data.need_lv / 2 + 1) < 50)
                 {
                     number += (crt_bag.Data.need_lv / 2 + 1);
-                    SumSave.crt_user_unit.verify_data(currency_unit.魔丸, (crt_bag.Data.need_lv / 2 + 1));
+                    SumSave.crt_user_unit.verify_data(currency_unit.Boss积分, (crt_bag.Data.need_lv / 2 + 1));
                     string dec = "出售奖励\n" + "本次出售获得魔丸 " + ((crt_bag.Data.need_lv / 2 + 1)) + "\n今日剩余获取魔丸" + (50 - number);
                     Alert.Show("出售奖励", dec);
                     SumSave.crt_needlist.SetMap((MapStateList.背包回收魔丸.ToString(), number));
@@ -188,7 +188,7 @@ public class panel_equip : Panel_Base
                 {
                     if (number < 50)
                     {
-                        SumSave.crt_user_unit.verify_data(currency_unit.魔丸, (50 - number));
+                        SumSave.crt_user_unit.verify_data(currency_unit.Boss积分, (50 - number));
                         string dec = "出售奖励\n" + "本次出售获得魔丸 " + ((50 - number)) + "\n今日剩余获取魔丸" + (50 - number);
                         Alert.Show("出售奖励", dec);
                         number = 50;
@@ -211,10 +211,10 @@ public class panel_equip : Panel_Base
         }
         if (exist)
         {
-            SumSave.crt_user_unit.verify_data(currency_unit.灵珠, moeny);
+            SumSave.crt_user_unit.verify_data(currency_unit.金币, moeny);
             Alert_Dec.Show("出售成功 获得灵珠" + moeny);
-            SumSave.crt_bag.Remove(crt_bag.Data);
-            Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
+            //SumSave.crt_bag.Remove(crt_bag.Data);
+            //Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
             SellingSellingEquipmentTask();
         }
         

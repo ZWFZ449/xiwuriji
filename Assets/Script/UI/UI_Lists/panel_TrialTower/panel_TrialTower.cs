@@ -68,11 +68,11 @@ public class panel_TrialTower : Panel_Base
         progress= Find<Slider>("progress");
         Hp_Text= Find<Text>("progress/Hp_Text");
         numberText = Find<Text>("up_map/number");
-        for (int i = 0; i < SumSave.db_maps.Count; i++)
+        for (int i = 0; i < SumSave.read_lose_map.Count; i++)
         {
-            if (SumSave.db_maps[i].map_type == 5 && SumSave.db_maps[i].need_lv == 1)
+            if (SumSave.read_lose_map[i].map_type == 5 && SumSave.read_lose_map[i].need_lv == 1)
             {
-                crt_map = SumSave.db_maps[i];
+                crt_map = SumSave.read_lose_map[i];
             }
         }
 
@@ -92,11 +92,11 @@ public class panel_TrialTower : Panel_Base
             }
         }
 
-        for (int i = 0; i < SumSave.db_monsters.Count; i++)
+        for (int i = 0; i < SumSave.olddb_monsters.Count; i++)
         {
-            if (crt_map.monster_list == SumSave.db_monsters[i].show_name)
+            if (crt_map.monster_list == SumSave.olddb_monsters[i].show_name)
             {
-                monster = SumSave.db_monsters[i];
+                monster = SumSave.olddb_monsters[i];
             }
         }
 

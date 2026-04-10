@@ -60,12 +60,12 @@ public class panel_destinyTower : Base_Mono
     /// </summary>
     private void SwitchButton()
     {
-        if(SumSave.crt_hero.tianming_Platform.SequenceEqual(switch_tianming))
+        if(SumSave.old_crt_hero.tianming_Platform.SequenceEqual(switch_tianming))
         {
             Alert_Dec.Show("当前天命相同");
         }else
         {
-            SumSave.crt_hero.tianming_Platform = (int[])switch_tianming.Clone();
+            SumSave.old_crt_hero.tianming_Platform = (int[])switch_tianming.Clone();
             RefreshDisplay();
             Battle_Tool.Init_Life_type();
             SendNotification(NotiList.Refresh_Max_Hero_Attribute);
@@ -86,7 +86,7 @@ public class panel_destinyTower : Base_Mono
         }else
         {
             locktianming.gameObject.SetActive(true);
-            switch_tianming =(int[]) SumSave.crt_hero.tianming_Platform.Clone();
+            switch_tianming =(int[]) SumSave.old_crt_hero.tianming_Platform.Clone();
             Refresh_and_switch_display(switch_tianming);
             need = 25;
         }
@@ -115,11 +115,11 @@ public class panel_destinyTower : Base_Mono
         ClearObject(tianming_image);
         string str = "";
         str = "天命属性：";
-        for (int i = 0; i < SumSave.crt_hero.tianming_Platform.Length; i++)
+        for (int i = 0; i < SumSave.old_crt_hero.tianming_Platform.Length; i++)
         {
-            GameObject game = Resources.Load<GameObject>("Prefabs/halo/halo_" +(SumSave.crt_hero.tianming_Platform[i]+1));
+            GameObject game = Resources.Load<GameObject>("Prefabs/halo/halo_" +(SumSave.old_crt_hero.tianming_Platform[i]+1));
             Instantiate(game, tianming_image);
-            str += SumSave.five_element_type[SumSave.crt_hero.tianming_Platform[i]]+" ";
+            str += SumSave.five_element_type[SumSave.old_crt_hero.tianming_Platform[i]]+" ";
         }
         tianming_Title.text = str;
     }
@@ -138,10 +138,10 @@ public class panel_destinyTower : Base_Mono
         if (locktianming.gameObject.activeInHierarchy)
         {
             Alert_Dec.Show("天命已锁定");
-            NeedConsumables(currency_unit.魔丸, need);
-            if (RefreshConsumables())
+            NeedConsumablesold(currency_unit.Boss积分, need);
+            if (RefreshConsumables_old())
             {
-                switch_tianming = (int[])SumSave.crt_hero.Uptianming_Platform().Clone();
+                switch_tianming = (int[])SumSave.old_crt_hero.Uptianming_Platform().Clone();
                 Refresh_and_switch_display(switch_tianming);
                 Game_Omphalos.i.archive();
             }
@@ -154,10 +154,10 @@ public class panel_destinyTower : Base_Mono
         else
         {
             Alert_Dec.Show("天命未锁定");
-            NeedConsumables(currency_unit.魔丸, need);
-            if (RefreshConsumables())
+            NeedConsumablesold(currency_unit.Boss积分, need);
+            if (RefreshConsumables_old())
             {
-                SumSave.crt_hero.RefreshTianming();
+                SumSave.old_crt_hero.RefreshTianming();
                 RefreshDisplay();
                 Battle_Tool.Init_Life_type();
                 SendNotification(NotiList.Refresh_Max_Hero_Attribute);
@@ -178,7 +178,7 @@ public class panel_destinyTower : Base_Mono
     public override void Show()
     {
         base.Show();
-        if (SumSave.crt_MaxHero.Lv < 10 && SumSave.ios_account_number != "admin001")
+        if (SumSave.crt_MaxHero_okd.Lv < 10 && SumSave.ios_account_number != "admin001")
         {
             Alert_Dec.Show("天命台开启等级为10级");
             gameObject.SetActive(false);

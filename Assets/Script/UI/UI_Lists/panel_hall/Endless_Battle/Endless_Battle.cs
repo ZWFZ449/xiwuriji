@@ -75,9 +75,9 @@ public class Endless_Battle : Panel_Base
     /// </summary>
     private void Challenge()
     {
-        user_map_vo map = ArrayHelper.Find(SumSave.db_maps, e => e.map_type == 7);
-        NeedConsumables(map.need_Required, 1);
-        if (RefreshConsumables())
+        user_map_vo map = ArrayHelper.Find(SumSave.read_lose_map, e => e.map_type == 7);
+        NeedConsumablesold(map.need_Required, 1);
+        if (RefreshConsumables_old())
         {
             fight_panel.Show();
             //fight_panel.Open_Map(map, (int)user.Item3, this);
@@ -112,7 +112,7 @@ public class Endless_Battle : Panel_Base
     public override void Show()
     {
         base.Show();
-        if (SumSave.crt_MaxHero.Lv < 40 && SumSave.ios_account_number != "admin001")
+        if (SumSave.crt_MaxHero_okd.Lv < 40 && SumSave.ios_account_number != "admin001")
         {
             Alert_Dec.Show("试练塔开启等级为40级");
             gameObject.SetActive(false);

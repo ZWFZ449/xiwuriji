@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class db_pet_vo : Base_VO
+public class db_pet_vo_old : Base_VO
 {
     /// <summary>
     /// 宠物名字
@@ -208,7 +208,7 @@ public class db_pet_vo : Base_VO
     /// </summary>
     /// <param name="crt_pet_vo"></param>
     /// <returns></returns>
-    public string IntegrationData(db_pet_vo crt_pet_vo)
+    public string IntegrationData(db_pet_vo_old crt_pet_vo)
     {
         string value = "";
         value += crt_pet_vo.petName + ",";

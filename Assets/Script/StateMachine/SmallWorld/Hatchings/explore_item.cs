@@ -8,7 +8,7 @@ public class explore_item : Base_Mono
 {
     private Image icon;
 
-    private db_pet_vo crt_pet;
+    private db_pet_vo_old crt_pet;
 
     private void Awake()
     {
@@ -19,7 +19,7 @@ public class explore_item : Base_Mono
     /// 初始化
     /// </summary>
     /// <param name="pet"></param>
-    public void Init(db_pet_vo pet)
+    public void Init(db_pet_vo_old pet)
     { 
         crt_pet = pet;
         icon.sprite = UI.UI_Manager.I.GetEquipSprite("UI/pet/", pet.petName);
@@ -29,7 +29,7 @@ public class explore_item : Base_Mono
     /// 获取当前数据
     /// </summary>
     /// <returns></returns>
-    public db_pet_vo SetData()
+    public db_pet_vo_old SetData()
     {
         return crt_pet;
     }

@@ -158,13 +158,13 @@ public class Alchemy : Base_Mono
         } 
         foreach (var item in Select_Materials.Keys)
         {
-            NeedConsumables(Select_Materials[item].Item1, Select_Materials[item].Item2);
+            NeedConsumablesold(Select_Materials[item].Item1, Select_Materials[item].Item2);
         }
         if (slider.value > 0)
         { 
-            NeedConsumables("天麻", (int)slider.value);
+            NeedConsumablesold("天麻", (int)slider.value);
         }
-        if (RefreshConsumables())
+        if (RefreshConsumables_old())
         {
             effect_gather.gameObject.SetActive(true);
             effect_gather.OpenEffect_Gather((int)(slider.value * 10 / (slider.maxValue + 1)) + 1);
@@ -374,9 +374,7 @@ public class Alchemy : Base_Mono
     /// <param name="weight"></param>
     private void Obtain_Weight(string seed_name, int weight)
     {
-        WeightedItem weightedItem = new WeightedItem();
-        weightedItem.prizedraw = seed_name;
-        weightedItem.Weight = weight;
+        WeightedItem weightedItem = new WeightedItem(seed_name,weight);
         eighteditems.Add(weightedItem);
     }
 

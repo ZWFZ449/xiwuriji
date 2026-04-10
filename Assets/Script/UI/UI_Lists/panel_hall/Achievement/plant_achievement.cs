@@ -145,10 +145,10 @@ public class plant_achievement : Base_Mono
                     reward = temp[1];
                     break;
                 case 3://获得灵珠
-                    reward = currency_unit.灵珠.ToString();
+                    reward = currency_unit.金币.ToString();
                     break;
                 case 4://获得魔丸
-                    reward = currency_unit.魔丸.ToString();
+                    reward = currency_unit.Boss积分.ToString();
                     break;
             
             }
@@ -195,12 +195,12 @@ public class plant_achievement : Base_Mono
                 {
                     if(SumSave.db_Achievement_dic[j].achievement_value==( Achieve_collect.等级升级).ToString())
                     {
-                        SumSave.crt_achievement.up_date_Exp((Achieve_collect.等级升级).ToString(), SumSave.crt_hero.hero_Lv);//更新等级
+                        SumSave.crt_achievement.up_date_Exp((Achieve_collect.等级升级).ToString(), SumSave.old_crt_hero.hero_Lv);//更新等级
                     }
                     else if(SumSave.db_Achievement_dic[j].achievement_value == (Achieve_collect.技能数量).ToString())
                     {
 
-                        SumSave.crt_achievement.up_date_Exp((Achieve_collect.技能数量).ToString(), SumSave.crt_skills.Count);//更新技能数量
+                        SumSave.crt_achievement.up_date_Exp((Achieve_collect.技能数量).ToString(), SumSave.oldcrt_skills.Count);//更新技能数量
                     }
 
                     ach_item item = Instantiate(Achieve_Item_Prefab, crt);//实例化具体成就

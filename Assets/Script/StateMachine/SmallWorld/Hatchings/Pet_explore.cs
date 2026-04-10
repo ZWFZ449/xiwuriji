@@ -179,7 +179,7 @@ public class Pet_explore : Base_Mono
         ClearObject(pos_Items);
         int max = SumSave.crt_world.World_Lv / 30 + 1;
         max = Mathf.Min(max, 3);
-        List<db_pet_vo> list = SumSave.crt_pet.Set();
+        List<db_pet_vo_old> list = SumSave.crt_pet_Old.Set();
          
         int number = 0;
         for (int i = 0; i < list.Count; i++)
@@ -250,7 +250,7 @@ public class Pet_explore : Base_Mono
         }
         int maxtime = (SumSave.crt_world.World_Lv * 2 + 5) * 60;//单位 分钟
         Dictionary<string, string> dic = SumSave.crt_explore.Set();
-        db_pet_vo vo = crt_explore.SetData();
+        db_pet_vo_old vo = crt_explore.SetData();
         if (dic.ContainsKey(vo.petName + " " + vo.startHatchingTime))
         {
             //获取收益列表
@@ -366,7 +366,7 @@ public class Pet_explore : Base_Mono
             return;
         }
         Dictionary<string, string> dic = SumSave.crt_explore.Set();
-        db_pet_vo vo = crt_explore.SetData();
+        db_pet_vo_old vo = crt_explore.SetData();
         if (dic.ContainsKey(vo.petName + " " + vo.startHatchingTime))
         {
             //获取收益列表
@@ -394,13 +394,13 @@ public class Pet_explore : Base_Mono
             Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.material_value, 
                 SumSave.crt_bag_resources.GetData());
             //更新宠物状态
-            List<db_pet_vo> list = SumSave.crt_pet.Set();
+            List<db_pet_vo_old> list = SumSave.crt_pet_Old.Set();
             for (int i = 0; i < list.Count; i++)
             {
                 if (list[i].petName == vo.petName && list[i].startHatchingTime == vo.startHatchingTime)
                 {
                     list[i].pet_state = "0";
-                    SumSave.crt_pet.Get();
+                    SumSave.crt_pet_Old.Get();
                 }
             }
             Alert_Icon.Show(dic2);
@@ -512,8 +512,8 @@ public class Pet_explore : Base_Mono
                 break;
             case 3:
                 //获得皮肤
-                SumSave.crt_hero.hero_value += (SumSave.crt_hero.hero_value == "" ? "" : ",") + data[0];
-                Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_hero, new string[] { Battle_Tool.GetStr(SumSave.crt_hero.hero_value) },
+                SumSave.old_crt_hero.hero_value += (SumSave.old_crt_hero.hero_value == "" ? "" : ",") + data[0];
+                Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_hero, new string[] { Battle_Tool.GetStr(SumSave.old_crt_hero.hero_value) },
                     new string[] { "hero_value" });
                 break;
             case 4:

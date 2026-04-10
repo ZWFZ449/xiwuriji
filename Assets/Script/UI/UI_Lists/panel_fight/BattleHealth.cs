@@ -130,7 +130,7 @@ namespace MVC
             offset *= -1;
             string _dec=dec.ToString("F0");
             DamageTextManager.Instance.ShowDamageText(type, _dec, this.transform, offset);
-            if(SumSave.crt_setting.user_setting[2]==0)
+            if(SumSave.crt_settingold.user_setting[2]==0)
             transform.parent.parent.parent.SendMessage("show_battle_info",
                     GetComponent<BattleAttack>().Data.show_name+" 受到 "+type+" 效果"+"造成"+dec+"伤害");
         }
@@ -150,13 +150,13 @@ namespace MVC
             }
             SumSave.crt_achievement.increase_date_Exp((Achieve_collect.击杀怪物).ToString(), 1);
             Battle_Tool.Obtain_Exp(monster.Data.Exp);
-            user_map_vo map = ArrayHelper.Find(SumSave.db_maps, e => e.map_index == monster.Data.map_index);
+            user_map_vo map = ArrayHelper.Find(SumSave.read_lose_map, e => e.map_index == monster.Data.map_index);
             if (map.map_type == 4)
             {
-                Battle_Tool.Obtain_Unit(currency_unit.灵珠, monster.Data.unit);
+                Battle_Tool.Obtain_Unit(currency_unit.金币, monster.Data.unit);
 
             }
-            else Battle_Tool.Obtain_Unit(currency_unit.灵珠, monster.Data.unit, 2);
+            else Battle_Tool.Obtain_Unit(currency_unit.金币, monster.Data.unit, 2);
             int number = 1;
             Combat_statistics.AddMaxNumber();
 
@@ -165,7 +165,7 @@ namespace MVC
                 if (Tool_State.IsState(State_List.至尊卡))
                 {
                     int value = Random.Range(1, 3);
-                    SumSave.crt_user_unit.verify_data(currency_unit.历练, value);//monster.Data.Point
+                    SumSave.crt_user_unit.verify_data(currency_unit.元宝, value);//monster.Data.Point
                     transform.parent.parent.parent.SendMessage("show_battle_info",
                     "至尊卡击杀 " + monster.Data.show_name + " 获得 " + value + "历练");//monster.Data.Point 
                 }
@@ -194,11 +194,11 @@ namespace MVC
                 }
                 if (map.map_type == 4)//判断是否是副本
                 {
-                    Battle_Tool.Obtain_Unit(currency_unit.历练, monster.Data.Point);
+                    Battle_Tool.Obtain_Unit(currency_unit.元宝, monster.Data.Point);
                 }
                 else
                 {
-                    Battle_Tool.Obtain_Unit(currency_unit.历练, monster.Data.Point, 2);
+                    Battle_Tool.Obtain_Unit(currency_unit.元宝, monster.Data.Point, 2);
                 }
                 transform.parent.parent.parent.SendMessage("show_battle_info",
                 "击杀 " + monster.Data.show_name + " 获得 " + monster.Data.Point + "历练" + Show_Color.Red(" (+" + (long)(monster.Data.Point * Tool_State.Value_playerprobabilit(enum_skill_attribute_list.人物历练) / 100) + ")"));//monster.Data.Point 
@@ -221,7 +221,7 @@ namespace MVC
             List<string> lists = ConfigBattle.LoadSetting(monster, number);
            
             //增加经验
-            if (SumSave.crt_setting.user_setting[2] == 0)
+            if (SumSave.crt_settingold.user_setting[2] == 0)
             {
                 transform.parent.parent.parent.SendMessage("show_battle_info",
             "击杀 " + monster.Data.show_name + " 获得 " + monster.Data.Exp+ Show_Color.Red(" (+" + (long)(monster.Data.Exp * Tool_State.Value_playerprobabilit(enum_skill_attribute_list.经验加成) / 100) + ")")+ "经验");
@@ -322,7 +322,7 @@ namespace MVC
                     if (monster.Data.Monster_Lv == 3)//判断是否是当前地图
                     {
                         GreenhandGuide_TotalTaskVO task = SumSave.GreenhandGuide_TotalTasks[item];//读取任务
-                        user_map_vo map = SumSave.db_maps.Find(x => x.map_index == monster.Data.map_index);//读取地图
+                        user_map_vo map = SumSave.read_lose_map.Find(x => x.map_index == monster.Data.map_index);//读取地图
                         if (task.TaskDesc.Contains(map.map_name))//判断是否是当前地图
                         {
                             tool_Categoryt.Base_Task(task.taskid);
@@ -339,7 +339,7 @@ namespace MVC
                 Array enumValues = Enum.GetValues(typeof(Achieve_collect));
                 for (int i = 0; i < enumValues.Length; i++)
                 {
-                    user_map_vo map = SumSave.db_maps.Find(x => x.map_index == monster.Data.map_index);//读取地图
+                    user_map_vo map = SumSave.read_lose_map.Find(x => x.map_index == monster.Data.map_index);//读取地图
                     string enumName = enumValues.GetValue(i).ToString(); // 获取枚举的字符串值
                     if (enumName.Contains(map.map_name))
                     {

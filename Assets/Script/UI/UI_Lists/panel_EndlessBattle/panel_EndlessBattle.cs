@@ -38,7 +38,7 @@ public class panel_EndlessBattle : Panel_Base
     /// <summary>
     /// 战斗技能
     /// </summary>
-    private List<skill_offect_item> battle_skills;
+    private List<oldskill_offect_item> battle_skills;
     /// <summary>
     /// 显示基础信息
     /// </summary>
@@ -243,7 +243,7 @@ public class panel_EndlessBattle : Panel_Base
                 dec += "获得经验 " + exp + "\n";
                 dec += "获得历练值 " + plint + "\n";
                 Battle_Tool.Obtain_Exp(exp, 2);
-                Battle_Tool.Obtain_Unit(currency_unit.历练, plint);
+                Battle_Tool.Obtain_Unit(currency_unit.元宝, plint);
 
                 Dictionary<string, int> dic = new Dictionary<string, int>();
                 for (int i = 0; i < SumSave.db_EndlessBattle_list.Count; i++)
@@ -294,8 +294,8 @@ public class panel_EndlessBattle : Panel_Base
                 SendNotification(NotiList.Read_EndlessBattle);
                 user_endless_battle.endlsess_battle data = new user_endless_battle.endlsess_battle();
                 data.endless_uid = SumSave.uid;
-                data.name = SumSave.crt_hero.hero_name;
-                data.type = SumSave.crt_hero.hero_pos;
+                data.name = SumSave.old_crt_hero.hero_name;
+                data.type = SumSave.old_crt_hero.hero_pos;
                 data.num = _num;
                 SumSave.crt_endless_battle.AddEndless(data, true);
             }
@@ -308,8 +308,8 @@ public class panel_EndlessBattle : Panel_Base
             SendNotification(NotiList.Read_EndlessBattle);
             user_endless_battle.endlsess_battle data = new user_endless_battle.endlsess_battle();
             data.endless_uid = SumSave.uid;
-            data.name = SumSave.crt_hero.hero_name;
-            data.type = SumSave.crt_hero.hero_pos;
+            data.name = SumSave.old_crt_hero.hero_name;
+            data.type = SumSave.old_crt_hero.hero_pos;
             data.num = _num;
             SumSave.crt_endless_battle.AddEndless(data, true);
         }
@@ -365,10 +365,10 @@ public class panel_EndlessBattle : Panel_Base
   
         if (SumSave.crt_world != null)
         {
-            if (SumSave.crt_pet!=null)
+            if (SumSave.crt_pet_Old!=null)
             {
-                List<db_pet_vo> crt_pet_list = SumSave.crt_pet.Set();
-                foreach (db_pet_vo pet in crt_pet_list)
+                List<db_pet_vo_old> crt_pet_list = SumSave.crt_pet_Old.Set();
+                foreach (db_pet_vo_old pet in crt_pet_list)
                 {
                     if (pet.pet_state == "1")
                     {
@@ -387,7 +387,7 @@ public class panel_EndlessBattle : Panel_Base
                         // 设置Data
                         crt.Push_name = "无尽" + crt.show_name;
                         item.GetComponent<endlessplayer_battle_attck>().Data = crt;
-                        item.GetComponent<endlessplayer_battle_attck>().Refresh_Skill(new List<skill_offect_item>());
+                        item.GetComponent<endlessplayer_battle_attck>().Refresh_Skill(new List<oldskill_offect_item>());
                         item.GetComponent<BattleAttack>().FindTergets(monsters);
                         item.GetComponent<BattleAttack>().StateMachine.skil_pet(crt.show_name);
                         //if (item.GetComponent<Button>().enabled)
@@ -415,15 +415,15 @@ public class panel_EndlessBattle : Panel_Base
     private void crate_hero()
     {
         int num = 0;///玩家初始化偏移量
-        List<db_pet_vo> crt_pet_list = SumSave.crt_pet.Set();
-        foreach (db_pet_vo pet in crt_pet_list)
+        List<db_pet_vo_old> crt_pet_list = SumSave.crt_pet_Old.Set();
+        foreach (db_pet_vo_old pet in crt_pet_list)
         {
             if (pet.pet_state == "1")
             {
                 num= 220;
             }
         }
-        crtMaxHeroVO crt = SumSave.crt_MaxHero;
+        crtMaxHeroVO crt = SumSave.crt_MaxHero_okd;
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool("无尽" + crt.show_name, player_battle_attack_prefabs,
             new Vector3(pos_player.position.x, pos_player.position.y-num, pos_player.position.z), Quaternion.identity, pos_player);
         // 设置Data
@@ -483,8 +483,8 @@ public class panel_EndlessBattle : Panel_Base
         crt_map_monsters.Clear();
         if (select_map.map_type == 7)
         {
-            for (int i = 0; i < SumSave.db_monsters.Count; i++)
-                crt_map_monsters.Add(SumSave.db_monsters[i]);
+            for (int i = 0; i < SumSave.olddb_monsters.Count; i++)
+                crt_map_monsters.Add(SumSave.olddb_monsters[i]);
         }
     }
     // 下一波怪

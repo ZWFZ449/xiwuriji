@@ -143,7 +143,7 @@ namespace StateMachine
         private void Show_Info_life()
         {
 
-            tianming_Platform = (int[])SumSave.crt_hero.tianming_Platform.Clone();
+            tianming_Platform = (int[])SumSave.old_crt_hero.tianming_Platform.Clone();
 
             for (int i = show_tianming_Platform.childCount - 1; i >= 0; i--)//清空区域内按钮
             {
@@ -155,22 +155,22 @@ namespace StateMachine
 
 
 
-            for (int i = 0; i < SumSave.crt_hero.tianming_Platform.Length; i++)
+            for (int i = 0; i < SumSave.old_crt_hero.tianming_Platform.Length; i++)
             {
-                if (tianming_num.ContainsKey(SumSave.crt_hero.tianming_Platform[i]))
+                if (tianming_num.ContainsKey(SumSave.old_crt_hero.tianming_Platform[i]))
                 {
-                    tianming_num[SumSave.crt_hero.tianming_Platform[i]]++;
+                    tianming_num[SumSave.old_crt_hero.tianming_Platform[i]]++;
                 }
                 else
                 {
-                    tianming_num.Add(SumSave.crt_hero.tianming_Platform[i], 1);
+                    tianming_num.Add(SumSave.old_crt_hero.tianming_Platform[i], 1);
                 }
             }
 
 
-            for (int i = 0; i < SumSave.crt_hero.tianming_Platform.Length; i++)
+            for (int i = 0; i < SumSave.old_crt_hero.tianming_Platform.Length; i++)
             {
-                GameObject game = Resources.Load<GameObject>("Prefabs/halo/halo_" + (SumSave.crt_hero.tianming_Platform[i] + 1));
+                GameObject game = Resources.Load<GameObject>("Prefabs/halo/halo_" + (SumSave.old_crt_hero.tianming_Platform[i] + 1));
                 GameObject tianming = Instantiate(game, show_tianming_Platform);
 
                 tianming.transform.Rotate(new Vector3(0, 0, 15 * i));
@@ -180,7 +180,7 @@ namespace StateMachine
                 tianming.GetComponent<RectTransform>().sizeDelta = tianming_size;
 
                 Color currentColor = tianming.GetComponentInChildren<Image>().color;
-                currentColor.a = tianming_num[SumSave.crt_hero.tianming_Platform[i]] * 0.2f;
+                currentColor.a = tianming_num[SumSave.old_crt_hero.tianming_Platform[i]] * 0.2f;
                 tianming.GetComponentInChildren<Image>().color = currentColor;
             }
         }
@@ -207,12 +207,12 @@ namespace StateMachine
                 //skin_state = (enum_skin_state)hero_index;
                 if(is_pet==false)
                 {
-                    if (animName != SumSave.crt_hero.hero_pos)
+                    if (animName != SumSave.old_crt_hero.hero_pos)
                     {
 
-                        skin_prefabs = Resources.Load<GameObject>("Prefabs/Skins/skin_" + SumSave.crt_hero.hero_pos);
+                        skin_prefabs = Resources.Load<GameObject>("Prefabs/Skins/skin_" + SumSave.old_crt_hero.hero_pos);
 
-                        animName = SumSave.crt_hero.hero_pos;
+                        animName = SumSave.old_crt_hero.hero_pos;
 
                         panel_role_health = transform.Find("Appearance");
 
@@ -226,7 +226,7 @@ namespace StateMachine
 
                     }
 
-                    if (tianming_Platform == null || !tianming_Platform.SequenceEqual(SumSave.crt_hero.tianming_Platform))
+                    if (tianming_Platform == null || !tianming_Platform.SequenceEqual(SumSave.old_crt_hero.tianming_Platform))
                     {
                         Show_Info_life();
                     }

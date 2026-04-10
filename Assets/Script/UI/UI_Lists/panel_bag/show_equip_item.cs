@@ -14,11 +14,11 @@ public class show_equip_item : Base_Mono
     /// <summary>
     /// 预制件
     /// </summary>
-    public bag_item BagItemPrefabs;
+    private bag_item BagItemPrefabs;
 
     private void Awake()
     {
-        transform.parent.parent.parent.parent.SendMessage("Instance_Pos", this);
+        //transform.parent.parent.parent.parent.SendMessage("Instance_Pos", this);
         BagItemPrefabs = Battle_Tool.Find_Prefabs<bag_item>("bag_item");// Resources.Load<bag_item>("Prefabs/panel_bag/bag_item");
         show_type = GetComponent<Image>();
     }

@@ -64,7 +64,7 @@ public class user_world_vo : Base_VO
     /// </summary>
     private void VerifyMaximum()
     {
-        int max = SumSave.db_lvs.word_lv_max_value[SumSave.crt_world.World_Lv] + Tool_State.Value_playerprobabilit(enum_skill_attribute_list.灵气上限);
+        int max = SumSave.db_lvs_old.word_lv_max_value[SumSave.crt_world.World_Lv] + Tool_State.Value_playerprobabilit(enum_skill_attribute_list.灵气上限);
         if (int.Parse(value_lists[1]) >= max)
         {
             value_lists[1] = max.ToString();

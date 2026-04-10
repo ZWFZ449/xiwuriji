@@ -88,9 +88,9 @@ public class panel_map : Panel_Base
     {
         show_map_list.gameObject.SetActive(true);
         ClearObject(pos_btn_map);
-        foreach (var map in SumSave.db_maps)
+        foreach (var map in SumSave.read_lose_map)
         {
-            if (map.need_lv <= SumSave.crt_MaxHero.Lv && map.map_type <= 3)
+            if (map.need_lv <= SumSave.crt_MaxHero_okd.Lv && map.map_type <= 3)
             {
                 btn_item btn = Instantiate(btn_item_prefab, pos_btn_map);
                 string dec = map.map_name + "\n(Lv." + map.need_lv + "级)";
@@ -113,7 +113,7 @@ public class panel_map : Panel_Base
     private void Select_Map(btn_item item)
     {
         base_show_info.gameObject.SetActive(true);
-        user_map_vo map = ArrayHelper.Find(SumSave.db_maps, m => m.map_index == item.index);
+        user_map_vo map = ArrayHelper.Find(SumSave.read_lose_map, m => m.map_index == item.index);
         Show_Info(map);
     }
     /// <summary>
@@ -175,7 +175,7 @@ public class panel_map : Panel_Base
             case EquipConfigTypeList.玉佩:
             case EquipConfigTypeList.披风:
                 bag = tool_Categoryt.crate_equip(bag.Name, 7);
-                SumSave.crt_bag.Add(bag);
+                //SumSave.crt_bag.Add(bag);
                 break;
             default:
                 break;
@@ -189,13 +189,13 @@ public class panel_map : Panel_Base
     {
         if (!maplists.ContainsKey(item))
         {
-            foreach (var map in SumSave.db_maps)
+            foreach (var map in SumSave.read_lose_map)
             {
                 if (map.map_type <= 3)
                 {
                     if (map.map_index == item.index)
                     {
-                        if (map.need_lv <= SumSave.crt_MaxHero.Lv)
+                        if (map.need_lv <= SumSave.crt_MaxHero_okd.Lv)
                         {
                             maplists.Add(item, map);
                             btn_item btn = Instantiate(btn_item_prefab, item.transform);
@@ -268,8 +268,8 @@ public class panel_map : Panel_Base
         if(crt_map==null)  return;
         if (crt_map.need_Required != "")
         {
-            NeedConsumables(crt_map.need_Required, 1);
-            if (RefreshConsumables())
+            NeedConsumablesold(crt_map.need_Required, 1);
+            if (RefreshConsumables_old())
             {
                 Set_Map();
             }else Alert_Dec.Show("门票不足");

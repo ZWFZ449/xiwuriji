@@ -28,23 +28,7 @@ public class material_item : Base_Mono
         item_frame = GetComponent<Image>();
         base_info= Find<Text>("base_info");
     }
-    ///// <summary>
-    ///// 存储数据
-    ///// </summary>
-    ///// <typeparam name="T"></typeparam>
-    ///// <param name="value"></param>
-    //public void Init<T>(T value)
-    //{
-    //    base_data = value;
-    //}
-    ///// <summary>
-    ///// 读取数据
-    ///// </summary>
-    ///// <returns></returns>
-    //public object GetItemData()
-    //{
-    //    return base_data;
-    //}
+     
     /// <summary>
     /// 初始化
     /// </summary>

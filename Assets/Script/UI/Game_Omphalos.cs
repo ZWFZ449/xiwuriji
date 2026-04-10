@@ -1,12 +1,9 @@
 using Common;
 using Components;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UI;
-using UnityEngine;
 using UnityEngine.Analytics;
-using Random = UnityEngine.Random;
 
 namespace MVC
 {
@@ -15,15 +12,6 @@ namespace MVC
     /// </summary>
     public class Game_Omphalos : Base_Mono
     {
-        /// <summary>
-        /// 基础战斗
-        /// </summary>
-        private panel_fight panel_fight;
-        /// <summary>
-        /// 无尽模式
-        /// </summary>
-        private panel_EndlessBattle panel_EndlessBattle;
-
         public static Game_Omphalos i;
         private void Awake()
         {
@@ -35,10 +23,14 @@ namespace MVC
             Analytics.limitUserTracking = false;//禁止Unity对用户的追踪，保护用户隐私，一般这个选项是为了遵守隐私政策
             PerformanceReporting.enabled = false;//禁止Unity收集应用程序性能数据的报告，比如崩溃报告，性能下降等
             AppFacade.I.Startup();
-            panel_fight = UI_Manager.I.GetPanel<panel_fight>();
-            panel_EndlessBattle = UI_Manager.I.GetPanel<panel_EndlessBattle>();
+            panelBattle = UI_Manager.I.GetPanel<PanelBattle>();
+            panelMian = UI_Manager.I.GetPanel<PanelMian>();
         }
         private List<Base_Wirte_VO> wirtes = new List<Base_Wirte_VO>();
+
+        private static PanelBattle panelBattle;
+
+        private static PanelMian panelMian;
         /// <summary>
         /// 屏保开关显示时间
         /// </summary>
@@ -56,6 +48,33 @@ namespace MVC
         {
             show_Screensaver_time_state = 0;
         }
+        /// <summary>
+        /// 刷新指令
+        /// </summary>
+        /// <param name="dream_user_bag"></param>
+        public static void Refresh(Mysql_Table_Name index= Mysql_Table_Name.mo_user_hero)
+        {
+            switch (index)
+            {
+                case Mysql_Table_Name.mo_user_hero:
+                case Mysql_Table_Name.dream_user_bag://刷新背包数据
+                case Mysql_Table_Name.dream_user_pet:
+                    if (panelBattle.gameObject.activeInHierarchy) panelBattle.Refresh();
+                    break;
+            }
+        }
+        /// <summary>
+        /// 设置全局数据
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="bag"></param>
+        public static void global_battle_info(string info, Bag_Base_VO bag = null)
+        {
+            global_battle_info_VO vo = new global_battle_info_VO();
+            vo.SetData(Tool_UI.ToStandardFormat(SumSave.nowtime) + " " + SumSave.crtHero.hero_name + " " + info, bag);
+            SumSave.global_battle_info.Add(vo);
+        }
+
         /// <summary>
         /// 提示信息
         /// </summary>
@@ -92,83 +111,37 @@ namespace MVC
         private void CountTime()
         {
             opentime();
-            //Debug.Log(22);
             performTime+=1;
             monitor_plant();
-            if (SumSave.crt_setting.user_setting[8]==0)
-            {
-                show_Screensaver_time_state++;
-                //显示屏保
-                if (show_Screensaver_time_state >= 300)
-                {
-                    show_Screensaver_time_state = 0;
-                    Alert_Screensaver.show_Screensaver();
-                }
-            }
-           
-            if (panel_fight.gameObject.activeInHierarchy)
-            {
-                Combat_statistics.Time();
-                panel_fight.Show_Combat_statistics();
-            }
-            if (panel_EndlessBattle.gameObject.activeInHierarchy)
-            {
-                panel_EndlessBattle.Show_Combat_statistics();
-            }
-            //if ((performTime) % 5 == 0)
-            //    SendNotification(NotiList.Execute_Write, wirtes);
-            if (performTime>=60)
+            ////显示屏幕保护
+            //if (SumSave.data_settings.base_settings[8]==0)
+            //{
+            //    show_Screensaver_time_state++;
+            //    //显示屏保
+            //    if (show_Screensaver_time_state >= 300)
+            //    {
+            //        show_Screensaver_time_state = 0;
+            //    } 
+            //}
+            if (performTime>=600)
             {
                 performTime = 0;
-                SumSave.crt_achievement.increase_date_Exp((Achieve_collect.在线时间).ToString(), 1);
-                SumSave.crt_pass.progress(0);
-                for (int i = 0; i < SumSave.crt_Trial_Tower_rank.lists.Count; i++)
-                {
-                    if (SumSave.crt_Trial_Tower_rank.lists[i].Item1 == SumSave.crt_user.uid)
-                    {
-                        int value= (int)SumSave.crt_Trial_Tower_rank.lists[i].Item3;
-                        Battle_Tool.Obtain_Unit(currency_unit.试炼积分, value, 2);
-                        break;
-                    }
-                }
-                if (SumSave.crt_world != null)
-                {
-                    int value = SumSave.db_lvs.world_offect_list[SumSave.crt_world.World_Lv];
-                    Battle_Tool.Obtain_Unit(currency_unit.灵气, value, 2);
-
-                }
+                Read_User_Ranks();
             }
+            panelMian.Show_Golbal_Info_list();
         }
-        /// <summary>
-        /// 获取基准时间
-        /// </summary>
-        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+     
         /// <summary>
         /// 每s刷新一次
         /// </summary>
         private void opentime()
         {
-            //SumSave.nowtime += TimeSpan.FromSeconds(1);
-            //Debug.Log($"{SumSave.nowtime}");
+            if (SumSave.nowtime >= SumSave.local_time) SumSave.local_time = SumSave.nowtime;
+            SumSave.local_time = SumSave.local_time.AddSeconds(1);
+            SumSave.nowtime = SumSave.nowtime.AddSeconds(1);
+            archive();
 
-            //Debug.Log("基准时间" + $"{UnixEpoch}");
-            long timestamp = GetCurrentTimestamp();
-            // 时间戳转回时间
-            timestamp++;
-            SumSave.nowtime = TimestampToDateTime(timestamp);
-            ////Debug.Log($"{SumSave.nowtime}");
         }
-        private static long GetCurrentTimestamp()
-        {
-            return (long)(SumSave.nowtime - UnixEpoch).TotalSeconds;
-        }
-
-        // 时间戳转DateTime
-        private static DateTime TimestampToDateTime(long timestamp)
-        {
-            return UnixEpoch.AddSeconds(timestamp);
-        }
-
         /// <summary>
         /// 存档
         /// </summary>
@@ -183,68 +156,7 @@ namespace MVC
         /// </summary>
         private void monitor_plant()
         {
-            int growTimeInt = 0;
-            if (SumSave.crt_setting.user_setting[6] == 1) return;
-            if (SumSave.crt_world != null)
-            {
-                bool exist = true;
-                int number = 0;
-                List<(string, DateTime)> Set = SumSave.crt_plant.Set();
-                for (int i = 0; i < Set.Count; i++)
-                {
-                    if (true || Set[i].Item1.Contains("天麻"))
-                    {
-                        growTimeInt = Battle_Tool.SettlementTransport(Set[i].Item2.ToString(),2);
-                        user_plant_vo vo = ArrayHelper.Find(SumSave.db_plants, e => e.plantName == Set[i].Item1);
-                        if (vo != null)
-                        {
-                            if (growTimeInt > vo.plantTime)
-                            {
-                                exist = true;
-                                //Set[i] = ("0", SumSave.nowtime > DateTime.Now ? SumSave.nowtime : DateTime.Now);
-                                Set[i] = ("0", SumSave.nowtime);// > DateTime.Now ? SumSave.nowtime : DateTime.Now);
-                                int harvestnumber = vo.DoubleTheAcquisition();
-                                int random = Random.Range(1, 100);
-                                int maxnumber = harvestnumber + Random.Range(1, 100);
-                                Battle_Tool.Obtain_Resources(Obtain_Int.Add(1, vo.HarvestMaterials, new int[] { harvestnumber + random, random }), maxnumber);
-                                //Battle_Tool.Obtain_Resources(vo.HarvestMaterials, harvestnumber, max);
-                                Alert_Dec.Show("自动收获 " + vo.HarvestMaterials + " * " + (vo.harvestnumber - vo.lossnumber));
-                            }
-                        }
-                    }
-                }
-                if (exist)
-                {
-                    string currentPlant= "天麻种子";
-                    List<int> numbers = new List<int>();//空土地的索引
-                    for (int i = 0; i < Set.Count; i++)
-                    {
-                        if (Set[i].Item1 == "0") numbers.Add(i);
-                    }
-                    number= numbers.Count;
-                    NeedConsumables(currentPlant, number);
-                    while (!RefreshConsumables())
-                    {
-                        if (number > 0)
-                        {
-                            number--;
-                            NeedConsumables(currentPlant, number);
-                        }
-                        else
-                        {
-                            Alert_Dec.Show("背包中没有该种子");
-                            return;
-                        }
-                    }
-                    //判断是否可以种植
-                    for (int i = 0; i < number; i++)
-                    {
-                        Set[numbers[i]] = (currentPlant.ToString(), SumSave.nowtime);
-                    }
-                    SumSave.crt_plant.Set_data(Set);
-                    exist= false;
-                }
-            }
+
         }
 
         /// <summary>
@@ -254,10 +166,9 @@ namespace MVC
         {
             //定时存档数据
             archive();
-            //SendNotification(NotiList.Execute_Write, wirtes);
             //每日任务 在线时长
-            Battle_Tool.validate_rank();
-            Tool_State.self_inspection();//10分钟验证一次状态
+            //Battle_Tool.validate_rank();
+            //Tool_State.self_inspection();//10分钟验证一次状态
         }
         public void Delete(string dec)
         { 
@@ -282,9 +193,7 @@ namespace MVC
                         //执行合并
                         item.columnValues = sql;
                         item.exist = true;
-                        //return item.columnValues;
                         return;
-
                     }
                 }
             }
@@ -296,15 +205,7 @@ namespace MVC
             vo.columnValues = sql;
             vo.exist = true;
             wirtes.Add(vo);
-            //return sql;
-
-            /// <summary>
         }
-
-       
-
-
-
         /// <summary>
         /// 主账户
         /// </summary>
@@ -330,13 +231,6 @@ namespace MVC
         public void Wirte_Iphone()
         {
             SendNotification(NotiList.Read_Crate_IPhone_Uid, Accout);
-        }
-        /// <summary>
-        /// 读取服务器列表
-        /// </summary>
-        internal void Crate_Par()
-        {
-            SendNotification(NotiList.Read_Obtain_Par);
         }
 
         /// <summary>
@@ -412,6 +306,7 @@ namespace MVC
             }
             GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_value, SumSave.crt_resources.Set_Uptade_String(), SumSave.crt_resources.Get_Update_Character());
         }
+
         /// <summary>
         /// 写入材料资源
         /// </summary>
@@ -541,7 +436,7 @@ namespace MVC
                     break;
                 case Mysql_Table_Name.db_signin:
                     break;
-                case Mysql_Table_Name.mo_user_signin:
+                case Mysql_Table_Name.dream_user_signin:
                     break;
                 case Mysql_Table_Name.mo_user_tap:
                     break;

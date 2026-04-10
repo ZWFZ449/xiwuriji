@@ -78,8 +78,8 @@ public class panel_warehouse : Panel_Base
     private void confirmWarehouse(object arg0)
     {
         int value = (int)arg0;
-        NeedConsumables(currency_unit.灵气, value);
-        if (RefreshConsumables())
+        NeedConsumablesold(currency_unit.灵气, value);
+        if (RefreshConsumables_old())
         {
             SumSave.crt_resources.SetPage(1);
             Alert_Dec.Show("扩容成功");
@@ -110,8 +110,8 @@ public class panel_warehouse : Panel_Base
     private void confirmEquipment(object arg0)
     {
         int value = (int)arg0;
-        NeedConsumables(currency_unit.魔丸, value);
-        if (RefreshConsumables())
+        NeedConsumablesold(currency_unit.Boss积分, value);
+        if (RefreshConsumables_old())
         {
             SumSave.crt_resources.SetPage(0);
             Alert_Dec.Show("扩容成功");
@@ -125,13 +125,13 @@ public class panel_warehouse : Panel_Base
     public void ShowEquipment()
     {
         ClearObject(Equipment);
-        ArrayHelper.OrderDescding(SumSave.crt_bag, e => int.Parse(e.user_value.Split(' ')[2]));
-        for (int i = 0; i < SumSave.crt_bag.Count; i++)
-        {
-            bag_item item = Instantiate(bag_item_Prefabs, Equipment);
-            item.Data = SumSave.crt_bag[i];
-            item.GetComponent<Button>().onClick.AddListener(delegate { Show_Bag_item(item,true); });
-        }
+        //ArrayHelper.OrderDescding(SumSave.crt_bag, e => int.Parse(e.user_value.Split(' ')[2]));
+        //for (int i = 0; i < SumSave.crt_bag.Count; i++)
+        //{
+        //    bag_item item = Instantiate(bag_item_Prefabs, Equipment);
+        //    item.Data = SumSave.crt_bag[i];
+        //    item.GetComponent<Button>().onClick.AddListener(delegate { Show_Bag_item(item,true); });
+        //}
         //page_info.text = SumSave.crt_bag.Count + "/" + SumSave.crt_resources.pages[0];
     }
 
@@ -141,19 +141,19 @@ public class panel_warehouse : Panel_Base
     /// <param name="item"></param>
     protected void OnTakeOut_Btn(Bag_Base_VO item)
     {
-        if (SumSave.crt_bag.Count < SumSave.crt_resources.pages[0])
-        {
-            List<Bag_Base_VO> euqip = new List<Bag_Base_VO>();
-            SumSave.crt_house.Remove(item);
-            SumSave.crt_bag.Add(item);
-            Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
-            Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.house_value, SumSave.crt_house);
-            Refresh();
-        }
-        else
-        {
-            Alert_Dec.Show("背包已满，无法放入");
-        }
+        //if (SumSave.crt_bag.Count < SumSave.crt_resources.pages[0])
+        //{
+        //    List<Bag_Base_VO> euqip = new List<Bag_Base_VO>();
+        //    SumSave.crt_house.Remove(item);
+        //    SumSave.crt_bag.Add(item);
+        //    Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
+        //    Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.house_value, SumSave.crt_house);
+        //    Refresh();
+        //}
+        //else
+        //{
+        //    Alert_Dec.Show("背包已满，无法放入");
+        //}
     }
 
     /// <summary>
@@ -162,19 +162,19 @@ public class panel_warehouse : Panel_Base
     /// <param name="item"></param>
     protected void OnHousedeposit_Btn(Bag_Base_VO item)
     {
-        if (SumSave.crt_house.Count < SumSave.crt_resources.pages[1])
-        {
-            List<Bag_Base_VO> euqip = new List<Bag_Base_VO>();
-            SumSave.crt_bag.Remove(item);
-            SumSave.crt_house.Add(item);
-            Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
-            Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.house_value, SumSave.crt_house);
-            Refresh();
-        }
-        else
-        {
-            Alert_Dec.Show("仓库已满，无法放入");
-        }
+    //    if (SumSave.crt_house.Count < SumSave.crt_resources.pages[1])
+    //    {
+    //        List<Bag_Base_VO> euqip = new List<Bag_Base_VO>();
+    //        SumSave.crt_bag.Remove(item);
+    //        SumSave.crt_house.Add(item);
+    //        Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
+    //        Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.house_value, SumSave.crt_house);
+    //        Refresh();
+    //    }
+    //    else
+    //    {
+    //        Alert_Dec.Show("仓库已满，无法放入");
+    //    }
     }
 
 
@@ -197,13 +197,13 @@ public class panel_warehouse : Panel_Base
     public void ShowWarehouse()
     {
         ClearObject(Warehouse);
-        ArrayHelper.OrderDescding(SumSave.crt_house, e => int.Parse(e.user_value.Split(' ')[2]));
-        for (int i = 0; i < SumSave.crt_house.Count; i++)
-        {
-            bag_item item = Instantiate(bag_item_Prefabs, Warehouse);
-            item.Data = SumSave.crt_house[i];
-            item.GetComponent<Button>().onClick.AddListener(delegate { Show_Bag_item(item,false); });
-        }
+        //ArrayHelper.OrderDescding(SumSave.crt_house, e => int.Parse(e.user_value.Split(' ')[2]));
+        //for (int i = 0; i < SumSave.crt_house.Count; i++)
+        //{
+        //    bag_item item = Instantiate(bag_item_Prefabs, Warehouse);
+        //    item.Data = SumSave.crt_house[i];
+        //    item.GetComponent<Button>().onClick.AddListener(delegate { Show_Bag_item(item,false); });
+        //}
     }
  
     /// <summary>
@@ -222,8 +222,8 @@ public class panel_warehouse : Panel_Base
     /// </summary>
     private void ShowQuantity()
     {
-        Warehouse_quantity.text = SumSave.crt_house.Count.ToString()+"/"+SumSave.crt_resources.pages[1];
-        Equipment_quantity.text = SumSave.crt_bag.Count.ToString()+"/"+SumSave.crt_resources.pages[0];
+        //Warehouse_quantity.text = SumSave.crt_house.Count.ToString()+"/"+SumSave.crt_resources.pages[1];
+        //Equipment_quantity.text = SumSave.crt_bag.Count.ToString()+"/"+SumSave.crt_resources.pages[0];
     }
 
 

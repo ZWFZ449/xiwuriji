@@ -90,7 +90,7 @@ namespace StateMachine
         public override void Init( BattleAttack battle, BattleHealth _tatgetObg)
         {
             base.Init( battle, _tatgetObg);
-            AttackDistance = SumSave.crt_MaxHero.attack_distance;
+            AttackDistance = SumSave.crt_MaxHero_okd.attack_distance;
         }
 
 

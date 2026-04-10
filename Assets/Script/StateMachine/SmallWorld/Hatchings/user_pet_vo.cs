@@ -14,7 +14,7 @@ public class user_pet_vo : Base_VO
     /// <summary>
     /// 获取属性基准值
     /// </summary>
-    private List<db_pet_vo> pet_list = new List<db_pet_vo>();
+    private List<db_pet_vo_old> pet_list = new List<db_pet_vo_old>();
     /// <summary>
     /// 宠物蛋列表
     /// </summary>
@@ -32,8 +32,8 @@ public class user_pet_vo : Base_VO
         for (int i = 0; i < pets.Length; i++)
         {
             string[] splits = pets[i].Split(',');
-            db_pet_vo pet = new db_pet_vo();
-            db_pet_vo base_pet = ArrayHelper.Find(SumSave.db_pet, e => e.petName == splits[0]);
+            db_pet_vo_old pet = new db_pet_vo_old();
+            db_pet_vo_old base_pet = ArrayHelper.Find(SumSave.db_pet_old, e => e.petName == splits[0]);
             pet.pet_explore = base_pet.pet_explore;
             if (splits.Length == 7)
             {
@@ -61,16 +61,16 @@ public class user_pet_vo : Base_VO
     /// 获取宠物
     /// </summary>
     /// <returns></returns>
-    public List<db_pet_vo> Set()
+    public List<db_pet_vo_old> Set()
     {
         return pet_list;
     }
 
-    public void Get_pet_list(db_pet_vo pet)
+    public void Get_pet_list(db_pet_vo_old pet)
     {
         pet_list.Add(pet);
         Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_pet,
-       SumSave.crt_pet.Set_Uptade_String(), SumSave.crt_pet.Get_Update_Character());
+       SumSave.crt_pet_Old.Set_Uptade_String(), SumSave.crt_pet_Old.Get_Update_Character());
     }
 
 
@@ -94,7 +94,7 @@ public class user_pet_vo : Base_VO
     {
         base.MysqlData();
         Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_pet,
-        SumSave.crt_pet.Set_Uptade_String(), SumSave.crt_pet.Get_Update_Character());
+        SumSave.crt_pet_Old.Set_Uptade_String(), SumSave.crt_pet_Old.Get_Update_Character());
     }
 
     public string Set_pet_value()

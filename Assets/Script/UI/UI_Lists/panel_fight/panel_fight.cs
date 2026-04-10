@@ -42,7 +42,7 @@ public class panel_fight : Panel_Base
     /// <summary>
     /// 战斗技能
     /// </summary>
-    private List<skill_offect_item> battle_skills;
+    private List<oldskill_offect_item> battle_skills;
     /// <summary>
     /// 显示基础信息
     /// </summary>
@@ -262,7 +262,7 @@ public class panel_fight : Panel_Base
     /// <param name="target"></param>
     protected void settlementSecretRealm(BattleAttack target)
     {
-        user_map_vo map = ArrayHelper.Find(SumSave.db_maps, e => e.map_index == target.Data.map_index);
+        user_map_vo map = ArrayHelper.Find(SumSave.read_lose_map, e => e.map_index == target.Data.map_index);
         Dictionary<string, int> dic = new Dictionary<string, int>();
         string dec = "";
         if (map.Independent_Drop != "")//保底收益
@@ -304,8 +304,8 @@ public class panel_fight : Panel_Base
                 {
                     int random = Obtain_Number(SecretRealm_lv);
                     Bag_Base_VO bag = tool_Categoryt.crate_equip(ProfitList_values[0], random);
-                    dec += "获得" + (enum_equip_quality_list)random + " " + bag.Name + " * 1\n";
-                    SumSave.crt_bag.Add(bag);
+                    //dec += "获得" + (enum_equip_quality_list)random + " " + bag.Name + " * 1\n";
+                    //SumSave.crt_bag.Add(bag);
                 }
             }
         }
@@ -365,16 +365,16 @@ public class panel_fight : Panel_Base
         switch (select_map.map_index)
         {
             case 37: //历练
-                max = SumSave.crt_MaxHero.Lv * 1000;
+                max = SumSave.crt_MaxHero_okd.Lv * 1000;
                 value = (long)(damge * max / target.maxHP);
                 Alert.Show(select_map.map_name, "副本战斗结束,造成伤害 " + damge + "\n获得历练 " + value);
-                Battle_Tool.Obtain_Unit(currency_unit.历练, value) ;
+                Battle_Tool.Obtain_Unit(currency_unit.元宝, value) ;
                 break;
             case 36: //魔丸
-                max = SumSave.crt_MaxHero.Lv / 5 + 20;
+                max = SumSave.crt_MaxHero_okd.Lv / 5 + 20;
                 value = (long)(damge * max / target.maxHP);
                 Alert.Show(select_map.map_name, "副本战斗结束,造成伤害 " + damge + "\n获得魔丸 " + value );
-                Battle_Tool.Obtain_Unit(currency_unit.魔丸, value);
+                Battle_Tool.Obtain_Unit(currency_unit.Boss积分, value);
                 break;
             case 35: //灵气
                 if (SumSave.crt_world != null)
@@ -390,21 +390,21 @@ public class panel_fight : Panel_Base
                 }
                 break;
             case 34: //经验
-                max = SumSave.db_lvs.hero_lv_list[SumSave.crt_MaxHero.Lv] / 5;
+                max = SumSave.db_lvs_old.hero_lv_list[SumSave.crt_MaxHero_okd.Lv] / 5;
                 value = (long)(damge * max / target.maxHP );
                 Alert.Show(select_map.map_name, "副本战斗结束,造成伤害 " + damge + "\n获得经验 " + value );
                 Battle_Tool.Obtain_Exp(value,2);
                 break;
             case 33://灵珠
-                max = SumSave.crt_MaxHero.Lv * 1000000;
+                max = SumSave.crt_MaxHero_okd.Lv * 1000000;
                 value = (long)(damge * max / target.maxHP);
                 Alert.Show(select_map.map_name, "副本战斗结束,造成伤害 " + damge + "\n获得灵珠 " + value );
-                Battle_Tool.Obtain_Unit(currency_unit.灵珠, value);
+                Battle_Tool.Obtain_Unit(currency_unit.金币, value);
                 break;
             case 32://下品噬心魔丸
-                max = SumSave.crt_MaxHero.Lv + 50;
+                max = SumSave.crt_MaxHero_okd.Lv + 50;
                 value = (int)(damge * max / target.maxHP);
-                List<(string,int)> str = SumSave.db_lvs.world_lv_list_dic[0];
+                List<(string,int)> str = SumSave.db_lvs_old.world_lv_list_dic[0];
                 Alert.Show(select_map.map_name, "副本战斗结束,造成伤害 " + damge + "\n获得 " + str[0].Item1+" * "+value );
                 int random = Random.Range(1, 100);
                 int number = (int)value;
@@ -416,7 +416,7 @@ public class panel_fight : Panel_Base
                 break;
         }
      
-        Open_Map(ArrayHelper.Find(SumSave.db_maps, e => e.map_name == SumSave.crt_resources.user_map_index));
+        Open_Map(ArrayHelper.Find(SumSave.read_lose_map, e => e.map_name == SumSave.crt_resources.user_map_index));
     }
     /// <summary>
     /// 游戏结束
@@ -425,7 +425,7 @@ public class panel_fight : Panel_Base
     {
         if (trial_storey >= 0)
         {
-            select_map = ArrayHelper.Find(SumSave.db_maps, e => e.map_name == SumSave.crt_resources.user_map_index);
+            select_map = ArrayHelper.Find(SumSave.read_lose_map, e => e.map_name == SumSave.crt_resources.user_map_index);
         } 
         trial_storey = -1;
         if (Open_Monster_State)
@@ -565,7 +565,7 @@ public class panel_fight : Panel_Base
             crate_Skill();
             foreach (var item in players)
             {
-                item.GetComponent<BattleAttack>().Refresh(SumSave.crt_MaxHero);
+                item.GetComponent<BattleAttack>().Refresh(SumSave.crt_MaxHero_okd);
                 item.GetComponent<BattleAttack>().Refresh_Skill(battle_skills);
             }
         }
@@ -601,7 +601,7 @@ public class panel_fight : Panel_Base
     private void crate_hero()
     {
        
-        crtMaxHeroVO crt = SumSave.crt_MaxHero;
+        crtMaxHeroVO crt = SumSave.crt_MaxHero_okd;
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(crt.show_name, player_battle_attack_prefabs,
             new Vector3(pos_player.position.x, pos_player.position.y, pos_player.position.z), Quaternion.identity, pos_player);
         // 设置Data
@@ -648,16 +648,16 @@ public class panel_fight : Panel_Base
         crt_map_monsters.Clear();
         if (select_map.map_type == 6)
         {
-            for (int i = 0; i < SumSave.db_monsters.Count; i++)
-                crt_map_monsters.Add(SumSave.db_monsters[i]);
+            for (int i = 0; i < SumSave.olddb_monsters.Count; i++)
+                crt_map_monsters.Add(SumSave.olddb_monsters[i]);
         }
         else
         {
-            for (int i = 0; i < SumSave.db_monsters.Count; i++)
+            for (int i = 0; i < SumSave.olddb_monsters.Count; i++)
             {
-                if (SumSave.db_monsters[i].index == select_map.map_index)
+                if (SumSave.olddb_monsters[i].index == select_map.map_index)
                 {
-                    crt_map_monsters.Add(SumSave.db_monsters[i]);
+                    crt_map_monsters.Add(SumSave.olddb_monsters[i]);
                 }
             }
         }
@@ -680,7 +680,7 @@ public class panel_fight : Panel_Base
         //判断是否切换地图
         if (iSOpenMap(true))
             Open_Map(select_map);
-        else Open_Map(ArrayHelper.Find(SumSave.db_maps, e => e.map_name == SumSave.crt_resources.user_map_index));
+        else Open_Map(ArrayHelper.Find(SumSave.read_lose_map, e => e.map_name == SumSave.crt_resources.user_map_index));
     }
     /// <summary>
     /// 开始游戏
@@ -710,7 +710,7 @@ public class panel_fight : Panel_Base
             }
             if(iSOpenMap())
                 StartCoroutine(ProduceMonster(WaitTime()));
-            else Open_Map(ArrayHelper.Find(SumSave.db_maps, e => e.map_name == SumSave.crt_resources.user_map_index));
+            else Open_Map(ArrayHelper.Find(SumSave.read_lose_map, e => e.map_name == SumSave.crt_resources.user_map_index));
         }
     }
     /// <summary>
@@ -728,7 +728,7 @@ public class panel_fight : Panel_Base
         dec = "通关试练塔" + Show_Color.Red(trial_storey) + "层";
         dec += "\n奖励" + Show_Color.Red("下品噬心魔种" + " * 5");
         dec += "\n奖励" + Show_Color.Red("历练值" + " * " + ((trial_storey / 10 + 1) * 10000));
-        Battle_Tool.Obtain_Unit(currency_unit.历练, ((trial_storey / 10 + 1) * 10000));
+        Battle_Tool.Obtain_Unit(currency_unit.元宝, ((trial_storey / 10 + 1) * 10000));
         int random = Random.Range(1, 100);
         int number = 5;
         int maxnumber = number + Random.Range(1, 100);
@@ -765,8 +765,8 @@ public class panel_fight : Panel_Base
         {
             if (state || crt_monster_number >= maxnumber)
             {
-                NeedConsumables(select_map.need_Required, 1);
-                if (!RefreshConsumables())
+                NeedConsumablesold(select_map.need_Required, 1);
+                if (!RefreshConsumables_old())
                 {
                     exist = false;
                 }

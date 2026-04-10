@@ -62,7 +62,7 @@ public class panel_Mian : Panel_Base
         InvokeRepeating("Read_Message_Window", 600, 600);
         file = Find<Button>("base_info/bg/bg/file");
         file.onClick.AddListener(() => { Open_File(); });
-        if (SumSave.crt_setting.user_setting[4] == 1)//1为静音
+        if (SumSave.crt_settingold.user_setting[4] == 1)//1为静音
         {
             AudioListener.pause = true;
             AudioManager.Instance.audioSource.Stop();

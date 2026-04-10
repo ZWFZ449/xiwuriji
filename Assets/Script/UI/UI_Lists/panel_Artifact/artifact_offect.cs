@@ -51,9 +51,9 @@ public class artifact_offect : Base_Mono
                 for (int i = 0; i < crt_artifact.Data.Artifact_open_needs.Length; i++)
                 {
                     string[] temp = crt_artifact.Data.Artifact_open_needs[i].Split(' ');
-                    NeedConsumables(temp[0], int.Parse(temp[1]));
+                    NeedConsumablesold(temp[0], int.Parse(temp[1]));
                 }
-                if (RefreshConsumables())
+                if (RefreshConsumables_old())
                 {
                     result.Item1 = crt_artifact.Data.arrifact_name;
                     result.Item2 = 1;
@@ -81,9 +81,9 @@ public class artifact_offect : Base_Mono
                     for (int i = 0; i < crt_artifact.Data.arrifact_needs.Length; i++)
                     {
                         string[] temp = crt_artifact.Data.arrifact_needs[i].Split(' ');
-                        NeedConsumables(temp[0], int.Parse(temp[1]));
+                        NeedConsumablesold(temp[0], int.Parse(temp[1]));
                     }
-                    if (RefreshConsumables())
+                    if (RefreshConsumables_old())
                     {
                         result.Item2 += 1;
                         SumSave.crt_artifact.Get(result);

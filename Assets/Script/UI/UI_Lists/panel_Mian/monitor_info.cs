@@ -144,8 +144,8 @@ public class monitor_info : Base_Mono
                     {
                         case GreenhandGuide_Enum_List.武器:
                         case GreenhandGuide_Enum_List.装备:
-                            SumSave.crt_bag.Add(tool_Categoryt.crate_equip(task.Award[i], task.AwardNumber[i]));
-                            Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
+                            //SumSave.crt_bag.Add(tool_Categoryt.crate_equip(task.Award[i], task.AwardNumber[i]));
+                            //Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
                             break;
                         case GreenhandGuide_Enum_List.物品:
                         case GreenhandGuide_Enum_List.材料:
@@ -162,7 +162,7 @@ public class monitor_info : Base_Mono
                             Battle_Tool.Obtain_Exp(task.AwardNumber[i]);
                             break;
                         case GreenhandGuide_Enum_List.灵珠:
-                            Battle_Tool.Obtain_Unit(currency_unit.灵珠, task.AwardNumber[i]);
+                            Battle_Tool.Obtain_Unit(currency_unit.金币, task.AwardNumber[i]);
                             break;
                         case GreenhandGuide_Enum_List.宠物:
                             Battle_Tool.Obtain_Pet(task.Award[i], task.AwardNumber[i]);
@@ -189,9 +189,9 @@ public class monitor_info : Base_Mono
         {
             Destroy(pos_health.GetChild(i).gameObject);
         }
-        skin_prefabs = Resources.Load<GameObject>("Prefabs/Skins/within_" + SumSave.crt_hero.hero_pos);
+        skin_prefabs = Resources.Load<GameObject>("Prefabs/Skins/within_" + SumSave.old_crt_hero.hero_pos);
         Instantiate(skin_prefabs, pos_health);
-        skin_state = SumSave.crt_hero.hero_pos;
+        skin_state = SumSave.old_crt_hero.hero_pos;
     }
     /// <summary>
     /// 显示五行光环
@@ -199,7 +199,7 @@ public class monitor_info : Base_Mono
     private void Show_Info_life()
     {
 
-        tianming_Platform = (int[])SumSave.crt_hero.tianming_Platform.Clone();
+        tianming_Platform = (int[])SumSave.old_crt_hero.tianming_Platform.Clone();
 
         for (int i = show_tianming_Platform.childCount - 1; i >= 0; i--)//清空区域内按钮
         {
@@ -211,22 +211,22 @@ public class monitor_info : Base_Mono
 
 
 
-        for (int i = 0; i < SumSave.crt_hero.tianming_Platform.Length; i++)
+        for (int i = 0; i < SumSave.old_crt_hero.tianming_Platform.Length; i++)
         {
-            if (tianming_num.ContainsKey(SumSave.crt_hero.tianming_Platform[i]))
+            if (tianming_num.ContainsKey(SumSave.old_crt_hero.tianming_Platform[i]))
             {
-                tianming_num[SumSave.crt_hero.tianming_Platform[i]]++;
+                tianming_num[SumSave.old_crt_hero.tianming_Platform[i]]++;
             }
             else
             {
-                tianming_num.Add(SumSave.crt_hero.tianming_Platform[i], 1);
+                tianming_num.Add(SumSave.old_crt_hero.tianming_Platform[i], 1);
             }
         }
 
 
-        for (int i = 0; i < SumSave.crt_hero.tianming_Platform.Length; i++)
+        for (int i = 0; i < SumSave.old_crt_hero.tianming_Platform.Length; i++)
         {
-            GameObject game = Resources.Load<GameObject>("Prefabs/halo/halo_" + (SumSave.crt_hero.tianming_Platform[i] + 1));
+            GameObject game = Resources.Load<GameObject>("Prefabs/halo/halo_" + (SumSave.old_crt_hero.tianming_Platform[i] + 1));
             GameObject tianming = Instantiate(game, show_tianming_Platform);
 
             tianming.transform.Rotate(new Vector3(0, 0, 15 * i));
@@ -236,31 +236,31 @@ public class monitor_info : Base_Mono
             tianming.GetComponent<RectTransform>().sizeDelta = tianming_size;
 
             Color currentColor = tianming.GetComponentInChildren<Image>().color;
-            currentColor.a = tianming_num[SumSave.crt_hero.tianming_Platform[i]] * 0.2f;
+            currentColor.a = tianming_num[SumSave.old_crt_hero.tianming_Platform[i]] * 0.2f;
             tianming.GetComponentInChildren<Image>().color = currentColor;
         }
     }
         private void Update()
         {
-            if (SumSave.crt_MaxHero != null)
+            if (SumSave.crt_MaxHero_okd != null)
             {
-                if (SumSave.crt_hero.hero_pos != skin_state)
+                if (SumSave.old_crt_hero.hero_pos != skin_state)
                 {
                     Instance_Skin();
                 }
-                if (tianming_Platform == null ||!tianming_Platform.SequenceEqual(SumSave.crt_hero.tianming_Platform))
+                if (tianming_Platform == null ||!tianming_Platform.SequenceEqual(SumSave.old_crt_hero.tianming_Platform))
                 {
                     Show_Info_life();
                 }
-                show_name.text = SumSave.crt_hero.hero_name;
-                show_exp.text = " Lv." + SumSave.crt_hero.hero_Lv +
-                   "(" + SumSave.crt_hero.hero_Exp * 100 / SumSave.db_lvs.hero_lv_list[SumSave.crt_hero.hero_Lv] + "%)";
-                role_exp.maxValue = SumSave.db_lvs.hero_lv_list[SumSave.crt_hero.hero_Lv];
-                role_exp.value = SumSave.crt_hero.hero_Exp;
+                show_name.text = SumSave.old_crt_hero.hero_name;
+                show_exp.text = " Lv." + SumSave.old_crt_hero.hero_Lv +
+                   "(" + SumSave.old_crt_hero.hero_Exp * 100 / SumSave.db_lvs_old.hero_lv_list[SumSave.old_crt_hero.hero_Lv] + "%)";
+                role_exp.maxValue = SumSave.db_lvs_old.hero_lv_list[SumSave.old_crt_hero.hero_Lv];
+                role_exp.value = SumSave.old_crt_hero.hero_Exp;
                 List<long> list = SumSave.crt_user_unit.Set();
-                show_moeny.text = Battle_Tool.FormatNumberToChineseUnit(list[0]) + " " + currency_unit.灵珠;
-                show_point.text = Battle_Tool.FormatNumberToChineseUnit(list[1]) + " " + currency_unit.历练;
-                show_diamond.text = Battle_Tool.FormatNumberToChineseUnit(list[2]) + " " + currency_unit.魔丸;
+                show_moeny.text = Battle_Tool.FormatNumberToChineseUnit(list[0]) + " " + currency_unit.金币;
+                show_point.text = Battle_Tool.FormatNumberToChineseUnit(list[1]) + " " + currency_unit.元宝;
+                show_diamond.text = Battle_Tool.FormatNumberToChineseUnit(list[2]) + " " + currency_unit.Boss积分;
                 base_info_Task();
             }
         }

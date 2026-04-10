@@ -127,7 +127,7 @@ public class panel_wodleBoss : Panel_Base
 
 
         IncreaseFrequency();
-        long hurt=Random.Range(SumSave.crt_MaxHero.totalPower*50/100, SumSave.crt_MaxHero.totalPower * 60 / 100);//每次挑战根据战力50%-60%随机伤害
+        long hurt=Random.Range(SumSave.crt_MaxHero_okd.totalPower*50/100, SumSave.crt_MaxHero_okd.totalPower * 60 / 100);//每次挑战根据战力50%-60%随机伤害
 
 
 #if UNITY_EDITOR
@@ -160,8 +160,8 @@ public class panel_wodleBoss : Panel_Base
                 int honor = 2;
                 string dec = "造成伤害：" + hurt;
                 dec += "\n获得奖励：\n历练 + " + experience + "\n魔丸 + " + MagicPill;
-                SumSave.crt_user_unit.verify_data(currency_unit.历练, experience);
-                SumSave.crt_user_unit.verify_data(currency_unit.魔丸, MagicPill);
+                SumSave.crt_user_unit.verify_data(currency_unit.元宝, experience);
+                SumSave.crt_user_unit.verify_data(currency_unit.Boss积分, MagicPill);
                 if (boss_number == 1)
                 {
                     SumSave.crt_accumulatedrewards.Set(2, honor);
@@ -212,7 +212,7 @@ public class panel_wodleBoss : Panel_Base
     public override void Show()
     {
         base.Show();
-        if (SumSave.crt_MaxHero.Lv < 20&& SumSave.ios_account_number != "admin001")
+        if (SumSave.crt_MaxHero_okd.Lv < 20&& SumSave.ios_account_number != "admin001")
         {
             Alert_Dec.Show("世界Boss开启等级为20级");
             gameObject.SetActive(false);
@@ -298,7 +298,7 @@ public class panel_wodleBoss : Panel_Base
                 Boss_list.RemoveAt(i);
             }
         }
-        Boss_list.Add((SumSave.crt_user.uid,SumSave.crt_hero.hero_name,SumSave.crt_world_boss_hurt.damage));
+        Boss_list.Add((SumSave.crt_user.uid,SumSave.old_crt_hero.hero_name,SumSave.crt_world_boss_hurt.damage));
         SumSave.crt_world_boss_rank.lists = Boss_list;
         //排序
         Refresh_Rank();

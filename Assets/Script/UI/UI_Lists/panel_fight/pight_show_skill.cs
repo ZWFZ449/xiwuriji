@@ -12,17 +12,17 @@ public class pight_show_skill : Base_Mono
     /// 功能按键
     /// </summary>
     private Transform crt_attack_skill, crt_special_skill;
-    private skill_offect_item skill_item_parfabs;
+    private oldskill_offect_item skill_item_parfabs;
    
     private void Awake()
     {
         crt_attack_skill = Find<Transform>("attack_skill");
         crt_special_skill = Find<Transform>("special_skill");
-        skill_item_parfabs = Battle_Tool.Find_Prefabs<skill_offect_item>("skill_offect_item"); //Resources.Load<skill_offect_item>("Prefabs/panel_skill/skill_offect_item");
+        skill_item_parfabs = Battle_Tool.Find_Prefabs<oldskill_offect_item>("skill_offect_item"); //Resources.Load<skill_offect_item>("Prefabs/panel_skill/skill_offect_item");
     }
-    public List<skill_offect_item> Init()
+    public List<oldskill_offect_item> Init()
     {
-        List<skill_offect_item> battle_skills = new List<skill_offect_item>();
+        List<oldskill_offect_item> battle_skills = new List<oldskill_offect_item>();
 
         for (int i = crt_attack_skill.childCount - 1; i >= 0; i--)
         {
@@ -38,14 +38,14 @@ public class pight_show_skill : Base_Mono
 
         for (int j = 0; j < attack_numbers.Count; j++)
         {
-            for (int i = 0; i < SumSave.crt_skills.Count; i++)
+            for (int i = 0; i < SumSave.oldcrt_skills.Count; i++)
             {
-                if (int.Parse(SumSave.crt_skills[i].user_values[2]) == attack_numbers[j])
+                if (int.Parse(SumSave.oldcrt_skills[i].user_values[2]) == attack_numbers[j])
                 {
-                    if ((skill_btn_list)SumSave.crt_skills[i].skill_type == skill_btn_list.战斗)
+                    if ((skill_btn_list)SumSave.oldcrt_skills[i].skill_type == skill_btn_list.战斗)
                     {
-                        skill_offect_item item = Instantiate(skill_item_parfabs, crt_attack_skill);
-                        item.Data = SumSave.crt_skills[i];
+                        oldskill_offect_item item = Instantiate(skill_item_parfabs, crt_attack_skill);
+                        item.Data = SumSave.oldcrt_skills[i];
                         item.GetComponent<Button>().onClick.AddListener(() => { On_Click(item); });
                         battle_skills.Add(item);
                         continue;
@@ -58,14 +58,14 @@ public class pight_show_skill : Base_Mono
 
         for (int j = 0; j < special_numbers.Count; j++)
         {
-            for (int i = 0; i < SumSave.crt_skills.Count; i++)
+            for (int i = 0; i < SumSave.oldcrt_skills.Count; i++)
             {
-                if (int.Parse(SumSave.crt_skills[i].user_values[2]) == special_numbers[j])
+                if (int.Parse(SumSave.oldcrt_skills[i].user_values[2]) == special_numbers[j])
                 {
-                    if ((skill_btn_list)SumSave.crt_skills[i].skill_type == skill_btn_list.秘笈)
+                    if ((skill_btn_list)SumSave.oldcrt_skills[i].skill_type == skill_btn_list.秘笈)
                     {
-                        skill_offect_item item = Instantiate(skill_item_parfabs, crt_special_skill);
-                        item.Data = SumSave.crt_skills[i];
+                        oldskill_offect_item item = Instantiate(skill_item_parfabs, crt_special_skill);
+                        item.Data = SumSave.oldcrt_skills[i];
                         item.GetComponent<Button>().onClick.AddListener(() => { On_Click(item); });
                         continue;
                     }
@@ -75,7 +75,7 @@ public class pight_show_skill : Base_Mono
         return ArrayHelper.Ascending(battle_skills, e => int.Parse(e.Data.user_values[2]));
     }
 
-    private void On_Click(skill_offect_item item)
+    private void On_Click(oldskill_offect_item item)
     {
 
     }

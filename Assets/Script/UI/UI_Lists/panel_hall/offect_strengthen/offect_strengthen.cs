@@ -101,22 +101,22 @@ public class offect_strengthen : Base_Mono
                     string[] need_value = SumSave.db_strengthen_need_list[i].need_value_list[j].Split('*');
                     if (need_value.Length == 2)
                     {
-                        NeedConsumables(need_value[0], int.Parse(need_value[1]) * (lv + 1));
+                        NeedConsumablesold(need_value[0], int.Parse(need_value[1]) * (lv + 1));
                     }
                 }
             }
         }
-        NeedConsumables(currency_unit.灵珠, need);
-        if (RefreshConsumables())
+        NeedConsumablesold(currency_unit.金币, need);
+        if (RefreshConsumables_old())
         {
             infos[1] = (lv + 1).ToString();
             crt_bag.Data.user_value = Battle_Tool.Equip_User_Value(infos);
             Select_Strengthen(crt_bag);
-            if (index == 0)
-            {
-                Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.equip_value, SumSave.crt_euqip);
-            }
-            else Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
+            //if (index == 0)
+            //{
+            //    Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.equip_value, SumSave.crt_euqip);
+            //}
+            //else Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
             SendNotification(NotiList.Refresh_Max_Hero_Attribute);
             EquipmentEnhancementTask();
         }
@@ -132,13 +132,13 @@ public class offect_strengthen : Base_Mono
             Alert_Dec.Show("网络连接失败");
             return;  
         }
-        NeedConsumables(currency_unit.灵气, 2000);
-        NeedConsumables(currency_unit.灵珠, 50000000);
-        if (RefreshConsumables())
+        NeedConsumablesold(currency_unit.灵气, 2000);
+        NeedConsumablesold(currency_unit.金币, 50000000);
+        if (RefreshConsumables_old())
         {
             string[] infos = crt_bag.Data.user_value.Split(' ');
             crt_bag.Data.user_value = tool_Categoryt.Obtain_Equip(crt_bag.Data, int.Parse(infos[1]), int.Parse(infos[2]));
-            Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.equip_value, SumSave.crt_euqip);
+            //Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.equip_value, SumSave.crt_euqip);
             Game_Omphalos.i.archive();
             Alert_Dec.Show("洗练成功");
             Base_Show();
@@ -156,15 +156,15 @@ public class offect_strengthen : Base_Mono
             Alert_Dec.Show("当前装备数量不足");
             return;
         }
-        NeedConsumables(currency_unit.灵气, synthesis_list[0].equip_lv * 20 + 500);
-        if (RefreshConsumables())
+        NeedConsumablesold(currency_unit.灵气, synthesis_list[0].equip_lv * 20 + 500);
+        if (RefreshConsumables_old())
         {
-            foreach (Bag_Base_VO item in synthesis_list)
-            {
-                SumSave.crt_bag.Remove(item);
-            }
-            SumSave.crt_bag.Add(tool_Categoryt.crate_equip(synthesis_list[0].Name, 7));
-            Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
+            //foreach (Bag_Base_VO item in synthesis_list)
+            //{
+            //    SumSave.crt_bag.Remove(item);
+            //}
+            //SumSave.crt_bag.Add(tool_Categoryt.crate_equip(synthesis_list[0].Name, 7));
+            //Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
             Alert_Dec.Show("合成成功");
             Base_Show();
         }
@@ -222,42 +222,42 @@ public class offect_strengthen : Base_Mono
         ClearObject(pos_bag);
         pos_icon.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
         crt_bag = null;
-        if (index == 0)
-        {
-            if (Show_Bag(SumSave.crt_euqip))
-            {
-                Alert_Dec.Show("当前无可强化装备");
-            }
-        }
-        if (index == 1)
-        {
-            if (Show_Bag(SumSave.crt_bag))
-            {
-                Alert_Dec.Show("当前无可强化装备");
-            }
-        }
-        if (index == 2)
-        {
-            synthesis_list = new List<Bag_Base_VO>();
-            pos_icon.GetComponent<RectTransform>().sizeDelta = new Vector2(360, 100);
-            info.text = "请放入合成装备(仅可使用神话级)";
-            ClearObject(pos_icon);
-            if (Show_synthesis(SumSave.crt_bag))
-            {
-                Alert_Dec.Show("当前无可合成装备");
-            }
-        }
-        if (index == 3)
-        {
-            synthesis_list = new List<Bag_Base_VO>();
-            info.text = "请放入洗练装备(仅可使用绝世级灵宝)";
-            ClearObject(pos_icon);
-            SendNotification(NotiList.Refresh_Max_Hero_Attribute);
-            if (Show_succinct(SumSave.crt_euqip))
-            {
-                Alert_Dec.Show("当前无可洗练装备");
-            }
-        }
+        //if (index == 0)
+        //{
+        //    if (Show_Bag(SumSave.crt_euqip))
+        //    {
+        //        Alert_Dec.Show("当前无可强化装备");
+        //    }
+        //}
+        //if (index == 1)
+        //{
+        //    if (Show_Bag(SumSave.crt_bag))
+        //    {
+        //        Alert_Dec.Show("当前无可强化装备");
+        //    }
+        //}
+        //if (index == 2)
+        //{
+        //    synthesis_list = new List<Bag_Base_VO>();
+        //    pos_icon.GetComponent<RectTransform>().sizeDelta = new Vector2(360, 100);
+        //    info.text = "请放入合成装备(仅可使用神话级)";
+        //    ClearObject(pos_icon);
+        //    if (Show_synthesis(SumSave.crt_bag))
+        //    {
+        //        Alert_Dec.Show("当前无可合成装备");
+        //    }
+        //}
+        //if (index == 3)
+        //{
+        //    synthesis_list = new List<Bag_Base_VO>();
+        //    info.text = "请放入洗练装备(仅可使用绝世级灵宝)";
+        //    ClearObject(pos_icon);
+        //    SendNotification(NotiList.Refresh_Max_Hero_Attribute);
+        //    if (Show_succinct(SumSave.crt_euqip))
+        //    {
+        //        Alert_Dec.Show("当前无可洗练装备");
+        //    }
+        //}
     }
     /// <summary>
     /// 洗练装备
@@ -311,7 +311,7 @@ public class offect_strengthen : Base_Mono
         }
         ClearObject(pos_icon);
         Instantiate(bag_item_Prefabs, pos_icon).Data = data.Data;
-        info.text = "洗练" + data.Data.Name + "需要" + currency_unit.灵珠 + Battle_Tool.FormatNumberToChineseUnit(50000000);
+        info.text = "洗练" + data.Data.Name + "需要" + currency_unit.金币 + Battle_Tool.FormatNumberToChineseUnit(50000000);
         info.text += "\n灵气 * 2000";
     }
 
@@ -432,7 +432,7 @@ public class offect_strengthen : Base_Mono
             synthesis_list.Add(item.Data);
             Show_synthesis_list();
             ClearObject(pos_bag);
-            Show_synthesis(SumSave.crt_bag);
+            //Show_synthesis(SumSave.crt_bag);
         }
         else Alert_Dec.Show("合成装备已满");
     }
@@ -487,7 +487,7 @@ public class offect_strengthen : Base_Mono
                 }
             }
         }
-        info.text += currency_unit.灵珠 + Battle_Tool.FormatNumberToChineseUnit(need);
+        info.text += currency_unit.金币 + Battle_Tool.FormatNumberToChineseUnit(need);
 
 
     }

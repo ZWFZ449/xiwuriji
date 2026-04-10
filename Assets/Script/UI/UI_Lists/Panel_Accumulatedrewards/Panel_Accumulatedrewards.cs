@@ -187,7 +187,7 @@ public class Panel_Accumulatedrewards : Panel_Base
                         dic.Add(("魔丸", 200));
                         dic.Add(("荣耀点", 50));
                         SumSave.crt_accumulatedrewards.Set(2, 50);
-                        Battle_Tool.Obtain_Unit(currency_unit.魔丸, 200);
+                        Battle_Tool.Obtain_Unit(currency_unit.Boss积分, 200);
                     }
                     else
                     if (str[1] == "新手福利礼包")
@@ -195,7 +195,7 @@ public class Panel_Accumulatedrewards : Panel_Base
                         dic.Add(("魔丸", 300));
                         dic.Add(("荣耀点", 100));
                         SumSave.crt_accumulatedrewards.Set(2, 100);
-                        Battle_Tool.Obtain_Unit(currency_unit.魔丸, 300);
+                        Battle_Tool.Obtain_Unit(currency_unit.Boss积分, 300);
                     }
                     break;
                 default:

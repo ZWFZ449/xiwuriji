@@ -202,9 +202,9 @@ public class Chemical_furnace : Base_Mono
                 Alert_Dec.Show("请选择分解物品");
                 return;
             }
-            NeedConsumables("下品噬心魔种", buy_num);
-            NeedConsumables(crt_break.Item1,buy_num);
-            if (RefreshConsumables())
+            NeedConsumablesold("下品噬心魔种", buy_num);
+            NeedConsumablesold(crt_break.Item1,buy_num);
+            if (RefreshConsumables_old())
             {
                 int random = Random.Range(1, 100);
                 int number = buy_num;
@@ -227,14 +227,14 @@ public class Chemical_furnace : Base_Mono
             db_formula_vo formula = SumSave.db_formula_list.Find((x) => x.formula_result_list.Item1 == synthesis_item.Item1);
             for (int i = 0; i < formula.formula_need_list.Count; i++)
             {
-                NeedConsumables(formula.formula_need_list[i].Item1, formula.formula_need_list[i].Item2 * buy_num);
+                NeedConsumablesold(formula.formula_need_list[i].Item1, formula.formula_need_list[i].Item2 * buy_num);
             }
-            if (RefreshConsumables()) 
+            if (RefreshConsumables_old()) 
             {
                 if (select_type == 4)//灵宝
                 {
-                    SumSave.crt_bag.Add(tool_Categoryt.crate_equip(synthesis_item.Item1, 7));
-                    Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
+                    //SumSave.crt_bag.Add(tool_Categoryt.crate_equip(synthesis_item.Item1, 7));
+                    //Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.bag_value, SumSave.crt_bag);
                     Game_Omphalos.i.archive();
                 }
                 else

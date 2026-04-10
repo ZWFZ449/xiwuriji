@@ -16,7 +16,7 @@ public class offect_up_skill : Base_Mono
 
     private btn_item btn_Item_parfabs;
 
-    private skill_offect_item skill_item_parfabs;
+    private oldskill_offect_item skill_item_parfabs;
     /// <summary>
     /// 当前技能
     /// </summary>
@@ -29,7 +29,7 @@ public class offect_up_skill : Base_Mono
         crt_attack_skill=Find<Transform>("attack_skill");
         crt_special_skill = Find<Transform>("special_skill");
         btn_Item_parfabs = Battle_Tool.Find_Prefabs<btn_item>("btn_item"); //Resources.Load<btn_item>("Prefabs/base_tool/btn_item");
-        skill_item_parfabs = Battle_Tool.Find_Prefabs<skill_offect_item>("skill_offect_item"); //Resources.Load<skill_offect_item>("Prefabs/panel_skill/skill_offect_item");
+        skill_item_parfabs = Battle_Tool.Find_Prefabs<oldskill_offect_item>("skill_offect_item"); //Resources.Load<skill_offect_item>("Prefabs/panel_skill/skill_offect_item");
         close = Find<Button>("close_button");
         close.onClick.AddListener(() => { On_Close(); });
 
@@ -59,15 +59,15 @@ public class offect_up_skill : Base_Mono
         for (int j = 0; j < attack_numbers.Count; j++)
         {
             bool exist = true;
-            for (int i = 0; i < SumSave.crt_skills.Count; i++)
+            for (int i = 0; i < SumSave.oldcrt_skills.Count; i++)
             {
-                if (int.Parse(SumSave.crt_skills[i].user_values[2]) == attack_numbers[j])
+                if (int.Parse(SumSave.oldcrt_skills[i].user_values[2]) == attack_numbers[j])
                 {
-                    if ((skill_btn_list)SumSave.crt_skills[i].skill_type == skill_btn_list.战斗)
+                    if ((skill_btn_list)SumSave.oldcrt_skills[i].skill_type == skill_btn_list.战斗)
                     {
                         exist = false;
-                        skill_offect_item item = Instantiate(skill_item_parfabs, crt_attack_skill);
-                        item.Data = SumSave.crt_skills[i];
+                        oldskill_offect_item item = Instantiate(skill_item_parfabs, crt_attack_skill);
+                        item.Data = SumSave.oldcrt_skills[i];
                         item.GetComponent<Button>().onClick.AddListener(() => { On_Click(item); });
                         continue;
                     }
@@ -87,15 +87,15 @@ public class offect_up_skill : Base_Mono
         for (int j = 0; j < special_numbers.Count; j++)
         {
             bool exist = true;
-            for (int i = 0; i < SumSave.crt_skills.Count; i++)
+            for (int i = 0; i < SumSave.oldcrt_skills.Count; i++)
             {
-                if (int.Parse(SumSave.crt_skills[i].user_values[2]) == special_numbers[j])
+                if (int.Parse(SumSave.oldcrt_skills[i].user_values[2]) == special_numbers[j])
                 {
-                    if ((skill_btn_list)SumSave.crt_skills[i].skill_type == skill_btn_list.秘笈)
+                    if ((skill_btn_list)SumSave.oldcrt_skills[i].skill_type == skill_btn_list.秘笈)
                     {
                         exist = false;
-                        skill_offect_item item = Instantiate(skill_item_parfabs, crt_special_skill);
-                        item.Data = SumSave.crt_skills[i];
+                        oldskill_offect_item item = Instantiate(skill_item_parfabs, crt_special_skill);
+                        item.Data = SumSave.oldcrt_skills[i];
                         item.GetComponent<Button>().onClick.AddListener(() => { On_Click(item); });
                         continue;
                     }
@@ -144,14 +144,14 @@ public class offect_up_skill : Base_Mono
     {
         user_skill.user_values[2]= index.ToString();
         user_skill.user_value = ArrayHelper.Data_Encryption(user_skill.user_values);
-        Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.skill_value, SumSave.crt_skills);
+        Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.skill_value, SumSave.oldcrt_skills);
         SendNotification(NotiList.Refresh_Max_Hero_Attribute);
     }
     /// <summary>
     /// 切换技能
     /// </summary>
     /// <param name="item"></param>
-    private void On_Click(skill_offect_item item)
+    private void On_Click(oldskill_offect_item item)
     {
         int pos = int.Parse(item.Data.user_values[2]);
         item.Data.user_values[2] = user_skill.user_values[2];

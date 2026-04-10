@@ -170,8 +170,8 @@ public class panel_store : Base_Mono
                 if (nums > 0)//查找限购物品
                 {
                     long value = (((long)buy_num) * (long)(buy_item.ItemPrice));
-                    NeedConsumables(buy_item.unit, value);
-                    if (RefreshConsumables())
+                    NeedConsumablesold(buy_item.unit, value);
+                    if (RefreshConsumables_old())
                     {
                         //Debug.Log("数量："+ buy_num + "消耗金额：" + buy_num * buy_item.ItemPrice);
                         int num = SumSave.crt_needlist.store_value_dic[buy_item.ItemName] + buy_num;
@@ -186,8 +186,8 @@ public class panel_store : Base_Mono
             {
                 exceedNum(0);
                 long value = (((long)buy_num) * (long)(buy_item.ItemPrice));
-                NeedConsumables(buy_item.unit, value);
-                if (RefreshConsumables())
+                NeedConsumablesold(buy_item.unit, value);
+                if (RefreshConsumables_old())
                 {
                     SumSave.crt_needlist.store_value_dic.Add(buy_item.ItemName, buy_num);
                     QuotaComplete();
@@ -201,8 +201,8 @@ public class panel_store : Base_Mono
         else
         {
             long value = (((long)buy_num) * (long)(buy_item.ItemPrice));
-            NeedConsumables(buy_item.unit, value);
-            if (RefreshConsumables())
+            NeedConsumablesold(buy_item.unit, value);
+            if (RefreshConsumables_old())
             {
                 SpecialItems();
             }else Alert_Dec.Show("购买失败");
@@ -244,11 +244,11 @@ public class panel_store : Base_Mono
         {
             case "1亿灵珠":
                 long value = (long)100000000 * buy_num;
-                SumSave.crt_user_unit.verify_data(currency_unit.灵珠, value);//获得灵珠
+                SumSave.crt_user_unit.verify_data(currency_unit.金币, value);//获得灵珠
                 Alert_Dec.Show(buy_item.ItemName + "X" + buy_num + " 购买成功 ");
                 break;
             case "2000历练值":
-                SumSave.crt_user_unit.verify_data(currency_unit.历练, 2000 * buy_num);
+                SumSave.crt_user_unit.verify_data(currency_unit.元宝, 2000 * buy_num);
                 break;
             case "下品历练丹":
                 //添加1.5倍的历练值

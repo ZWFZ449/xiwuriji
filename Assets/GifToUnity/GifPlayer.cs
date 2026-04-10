@@ -8,11 +8,23 @@ namespace GifImporter
     public class GifPlayer : MonoBehaviour
     {
         public Gif Gif;
-
+        /// <summary>
+        /// gif播放类型
+        /// </summary>
+        public gifMoveType giftype = gifMoveType.sustain;
+        public enum gifMoveType
+        {
+            sustain,      // 持续移动
+            Playonlyonce, // 只播放一次
+        }
         private int   _index;
         private float _flip;
         private Gif   _setGif;
-
+        private Button button;
+        private void Awake()
+        {
+            button = GetComponent<Button>();
+        }
         private void OnEnable()
         {
             if (Gif == null) return;
@@ -44,6 +56,16 @@ namespace GifImporter
             if (index > frames.Count - 1)
             {
                 index %= frames.Count;
+                switch (giftype)
+                {
+                    case gifMoveType.sustain:
+                        break;
+                    case gifMoveType.Playonlyonce:
+                        button.onClick.Invoke();
+                        break;
+                    default:
+                        break;
+                }
             }
 
             if (index != _index || _setGif != Gif)

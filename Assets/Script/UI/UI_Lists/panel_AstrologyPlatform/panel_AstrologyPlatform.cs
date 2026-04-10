@@ -133,8 +133,8 @@ public class panel_AstrologyPlatform : Panel_Base
     /// </summary>
     private void SwitchWeather()
     {
-        NeedConsumables(currency_unit.魔丸, need);
-        if (RefreshConsumables())
+        NeedConsumablesold(currency_unit.Boss积分, need);
+        if (RefreshConsumables_old())
         {
             if (SumSave.crt_player_buff.player_Buffs.Count > 0)
             {

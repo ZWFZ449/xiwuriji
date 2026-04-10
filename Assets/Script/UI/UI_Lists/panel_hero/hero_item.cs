@@ -37,11 +37,11 @@ public class hero_item : Base_Mono
             if (data == null) return;
 
             base_info.text = data.hero_name;
-            for (int j = 0; j < SumSave.db_heros.Count; j++)
+            for (int j = 0; j < SumSave.old_db_heros.Count; j++)
             {
-                if (data.hero_name == SumSave.db_heros[j].hero_name)
+                if (data.hero_name == SumSave.old_db_heros[j].hero_name)
                 { 
-                    skin_prefabs = Resources.Load<GameObject>("Prefabs/Skins/within_" + SumSave.db_heros[j].hero_name.ToString());
+                    skin_prefabs = Resources.Load<GameObject>("Prefabs/Skins/within_" + SumSave.old_db_heros[j].hero_name.ToString());
                     Instantiate(skin_prefabs, skin);
                     return;
                 }

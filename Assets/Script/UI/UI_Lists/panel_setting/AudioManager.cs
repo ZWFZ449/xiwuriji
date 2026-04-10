@@ -54,7 +54,7 @@ public class AudioManager : MonoBehaviour
     /// <param name="s"></param>
     public void playAudio(ClipEnum clip)
     {
-        if(SumSave.crt_setting.user_setting[3]==1) return;
+        //if(SumSave.crt_setting.user_setting[3]==1) return;
         if (Clipdic.ContainsKey(clip.ToString())) { audioSource.PlayOneShot(Clipdic[clip.ToString()]); return; }
         else StartCoroutine("GetClip");
 
@@ -66,7 +66,7 @@ public class AudioManager : MonoBehaviour
     /// <param name="clip"></param>
     public void ChangeBGM(BGMenum bg)
     {
-        if (SumSave.crt_setting.user_setting[3] == 1) return;
+        if (SumSave.crt_settingold.user_setting[3] == 1) return;
         if (BGMdic.ContainsKey(bg.ToString())) { audioSource.clip = BGMdic[bg.ToString()]; Debug.Log("没有音效库"); return; }
         else
         {

@@ -56,8 +56,8 @@ public class panel_role_health : Base_Mono
         role_Mp.maxValue = health.maxMP;
         role_internalforceMP.maxValue = health.internalforcemaxMP;
         role_EnergyMp.maxValue = health.EnergymaxMp;
-        show_name.text = SumSave.crt_MaxHero.show_name;
-        role_exp.maxValue=SumSave.db_lvs.hero_lv_list[SumSave.crt_MaxHero.Lv];
+        show_name.text = SumSave.crt_MaxHero_okd.show_name;
+        role_exp.maxValue=SumSave.db_lvs_old.hero_lv_list[SumSave.crt_MaxHero_okd.Lv];
     }
     /// <summary>
     /// 初始化角色皮肤
@@ -69,38 +69,38 @@ public class panel_role_health : Base_Mono
             Destroy(pos_health.GetChild(i).gameObject);
         }
      
-        skin_prefabs = Resources.Load<GameObject>("Prefabs/Skins/within_" + SumSave.crt_hero.hero_pos);
+        skin_prefabs = Resources.Load<GameObject>("Prefabs/Skins/within_" + SumSave.old_crt_hero.hero_pos);
         Instantiate(skin_prefabs, pos_health);
-        skin_state = SumSave.crt_hero.hero_pos;
+        skin_state = SumSave.old_crt_hero.hero_pos;
     }
     private void Update()
     {
         if (health != null)
         {
-            if (SumSave.crt_hero.hero_pos != skin_state)
+            if (SumSave.old_crt_hero.hero_pos != skin_state)
             {
                 Instance_Skin();
             }
 
-            if (tianming_Platform == null || !tianming_Platform.SequenceEqual(SumSave.crt_hero.tianming_Platform))
+            if (tianming_Platform == null || !tianming_Platform.SequenceEqual(SumSave.old_crt_hero.tianming_Platform))
             {
                 Show_Info_life();
             }
 
 
-            show_name.text = SumSave.crt_hero.hero_name + " Lv." + SumSave.crt_hero.hero_Lv +
-               "(" + SumSave.crt_hero.hero_Exp * 100 / SumSave.db_lvs.hero_lv_list[SumSave.crt_hero.hero_Lv] + "%)";
-            role_exp.maxValue = SumSave.db_lvs.hero_lv_list[SumSave.crt_hero.hero_Lv];
-            role_exp.value = SumSave.crt_hero.hero_Exp;
-            if (SumSave.crt_hero.hero_Exp >= SumSave.db_lvs.hero_lv_list[SumSave.crt_hero.hero_Lv])
+            show_name.text = SumSave.old_crt_hero.hero_name + " Lv." + SumSave.old_crt_hero.hero_Lv +
+               "(" + SumSave.old_crt_hero.hero_Exp * 100 / SumSave.db_lvs_old.hero_lv_list[SumSave.old_crt_hero.hero_Lv] + "%)";
+            role_exp.maxValue = SumSave.db_lvs_old.hero_lv_list[SumSave.old_crt_hero.hero_Lv];
+            role_exp.value = SumSave.old_crt_hero.hero_Exp;
+            if (SumSave.old_crt_hero.hero_Exp >= SumSave.db_lvs_old.hero_lv_list[SumSave.old_crt_hero.hero_Lv])
             {
-                SumSave.crt_MaxHero.Lv++;
-                SumSave.crt_MaxHero.Exp -= SumSave.db_lvs.hero_lv_list[SumSave.crt_hero.hero_Lv];
-                SumSave.crt_hero.hero_Exp -= SumSave.db_lvs.hero_lv_list[SumSave.crt_hero.hero_Lv];
-                SumSave.crt_hero.hero_Lv++;
-                role_exp.maxValue = SumSave.db_lvs.hero_lv_list[SumSave.crt_MaxHero.Lv];
+                SumSave.crt_MaxHero_okd.Lv++;
+                SumSave.crt_MaxHero_okd.Exp -= SumSave.db_lvs_old.hero_lv_list[SumSave.old_crt_hero.hero_Lv];
+                SumSave.old_crt_hero.hero_Exp -= SumSave.db_lvs_old.hero_lv_list[SumSave.old_crt_hero.hero_Lv];
+                SumSave.old_crt_hero.hero_Lv++;
+                role_exp.maxValue = SumSave.db_lvs_old.hero_lv_list[SumSave.crt_MaxHero_okd.Lv];
                 Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.mo_user_hero,
-                    SumSave.crt_hero.Set_Uptade_String(), SumSave.crt_hero.Get_Update_Character());
+                    SumSave.old_crt_hero.Set_Uptade_String(), SumSave.old_crt_hero.Get_Update_Character());
                 //刷新数据
                 SendNotification(NotiList.Refresh_Max_Hero_Attribute);
             }
@@ -110,8 +110,8 @@ public class panel_role_health : Base_Mono
             role_internalforceMP.value = health.internalforceMP;
             role_EnergyMp.value = health.EnergyMp;
             List<long> list = SumSave.crt_user_unit.Set();
-            show_moeny.text = Battle_Tool.FormatNumberToChineseUnit(list[0]) + " " + currency_unit.灵珠;
-            show_point.text = Battle_Tool.FormatNumberToChineseUnit(list[1]) + " " + currency_unit.历练;
+            show_moeny.text = Battle_Tool.FormatNumberToChineseUnit(list[0]) + " " + currency_unit.金币;
+            show_point.text = Battle_Tool.FormatNumberToChineseUnit(list[1]) + " " + currency_unit.元宝;
         }
         ObtainEquipmentTasks();
     }
@@ -121,34 +121,6 @@ public class panel_role_health : Base_Mono
     /// </summary>
     private static void ObtainEquipmentTasks()
     {
-        foreach (Bag_Base_VO bag in SumSave.crt_bag)
-        {
-            if (bag.Name == "无影蝉蜕") //(bag.Name == "无影蝉蜕")
-            {
-                tool_Categoryt.Base_Task(1033);
-            }
-            if (bag.Name == "破军七劫")
-            {
-                tool_Categoryt.Base_Task(1048);
-            }
-            if (bag.Name == "青冥断刃碎片")
-            {
-                tool_Categoryt.Base_Task(1055);
-
-            }
-            if (bag.Name == "冥君诏令通行证")
-            {
-                tool_Categoryt.Base_Task(1056);
-            }
-            if (bag.Name == "龙骸密匙通行证")
-            {
-                tool_Categoryt.Base_Task(1058);
-            }
-            if (bag.Name == "缚魂玉")
-            {
-                tool_Categoryt.Base_Task(1065);
-            }
-        }
 
     }
 
@@ -158,23 +130,23 @@ public class panel_role_health : Base_Mono
     /// </summary>
     private static void LevelTask()
     {
-        if (SumSave.crt_hero.hero_Lv >= 10)
+        if (SumSave.old_crt_hero.hero_Lv >= 10)
         {
             tool_Categoryt.Base_Task(1024);
         }
-        if (SumSave.crt_hero.hero_Lv >= 15)
+        if (SumSave.old_crt_hero.hero_Lv >= 15)
         {
             tool_Categoryt.Base_Task(1036);
         }
-        if (SumSave.crt_hero.hero_Lv >= 20)
+        if (SumSave.old_crt_hero.hero_Lv >= 20)
         {
             tool_Categoryt.Base_Task(1040);
         }
-        if (SumSave.crt_hero.hero_Lv >= 30)
+        if (SumSave.old_crt_hero.hero_Lv >= 30)
         {
             tool_Categoryt.Base_Task(1062);
         }
-        if (SumSave.crt_hero.hero_Lv >= 40)
+        if (SumSave.old_crt_hero.hero_Lv >= 40)
         {
             tool_Categoryt.Base_Task(1084);
         }
@@ -209,7 +181,7 @@ public class panel_role_health : Base_Mono
     private void Show_Info_life()
     {
 
-        tianming_Platform = (int[])SumSave.crt_hero.tianming_Platform.Clone();
+        tianming_Platform = (int[])SumSave.old_crt_hero.tianming_Platform.Clone();
 
         for (int i = show_tianming_Platform.childCount - 1; i >= 0; i--)//清空区域内按钮
         {
@@ -230,9 +202,9 @@ public class panel_role_health : Base_Mono
         //        tianming_num.Add(SumSave.crt_hero.tianming_Platform[i], 1);
         //    }
         //}
-        for (int i = 0; i < SumSave.crt_hero.tianming_Platform.Length; i++)
+        for (int i = 0; i < SumSave.old_crt_hero.tianming_Platform.Length; i++)
         {
-            GameObject game = Resources.Load<GameObject>("Prefabs/halo/halo_" + (SumSave.crt_hero.tianming_Platform[i] + 1));
+            GameObject game = Resources.Load<GameObject>("Prefabs/halo/halo_" + (SumSave.old_crt_hero.tianming_Platform[i] + 1));
             GameObject tianming = Instantiate(game, show_tianming_Platform);
 
             tianming.transform.Rotate(new Vector3(0, 0, 15 * i));
@@ -242,7 +214,7 @@ public class panel_role_health : Base_Mono
             tianming.GetComponent<RectTransform>().sizeDelta = tianming_size;
 
             Color currentColor = tianming.GetComponentInChildren<Image>().color;
-            currentColor.a = tianming_num[SumSave.crt_hero.tianming_Platform[i]] * 0.2f;
+            currentColor.a = tianming_num[SumSave.old_crt_hero.tianming_Platform[i]] * 0.2f;
             tianming.GetComponentInChildren<Image>().color = currentColor;
         }
     }
