@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="libs2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/.transforms/6b684c045ac2dab1e8dc32bdde1725f3/transformed/out/jars/libs/classes-2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/.transforms/6b684c045ac2dab1e8dc32bdde1725f3/transformed/out/jars/libs/unity-classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

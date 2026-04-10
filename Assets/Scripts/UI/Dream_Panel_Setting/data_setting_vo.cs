@@ -1,0 +1,201 @@
+using Common;
+using MVC;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class data_setting_vo : Base_VO
+{
+    /// <summary>
+    /// 药品设置 1类型 2名称 3标准线
+    /// </summary>
+    public List<(int,string,int)> medicine_list = new List<(int,string,int)>();
+    /// <summary>
+    /// 装备回收设置 1品质2等级
+    /// </summary>
+    public List<(int, int)> battle_base_list = new List<(int, int)>();
+
+    public List<(string,int)> battle_Boss_list = new List<(string,int)>();
+
+    public void Iint(string data_base_setting, string data_medicine_setting,string data_battle_setting)
+    {
+        base.Iint();
+        //设置装备回收
+        List<string> base_setting = ArrayHelper.Get_Split<string>(data_base_setting, ',');
+        for (int i = 0; i < base_setting.Count; i++)
+        { 
+            List<string> arr = ArrayHelper.Get_Split<string>(base_setting[i], ';');
+            if (arr.Count == 2)
+            { 
+                (int, int) data = (int.Parse(arr[0]), int.Parse(arr[1]));
+                battle_base_list.Add(data);
+            }
+        }
+        //设置药品
+        List<string> list = ArrayHelper.Get_Split<string>(data_medicine_setting, ',');
+        for (int i = 0; i < list.Count; i++)
+        { 
+            List<string> arr = ArrayHelper.Get_Split<string>(list[i], ';');
+            if (arr.Count == 3)
+            {
+                (int, string, int) data = (int.Parse(arr[0]), arr[1], int.Parse(arr[2]));
+                medicine_list.Add(data);
+            }
+        }
+        //自动boss
+        List<string> battle_list = ArrayHelper.Get_Split<string>(data_battle_setting, ',');
+        for (int i = 0; i < battle_list.Count; i++)
+        { 
+            List<string> arr = ArrayHelper.Get_Split<string>(battle_list[i], ';');
+            if (arr.Count == 2)
+            { 
+                (string, int) data = (arr[0], int.Parse(arr[1]));
+                this.battle_Boss_list.Add(data); 
+            }
+        }
+    }
+
+    public override string[] Set_Instace_String()
+    {
+        Iint(Setting(1), Setting(2), Setting(3));
+        return new string[]
+        {
+            GetStr(0),
+            GetStr(SumSave.crt_user.uid),
+            GetStr(GetData(1)),
+            GetStr(GetData(2)),
+            GetStr(GetData(3)),
+        };
+    }
+    /// <summary>
+    /// 设置初始化
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    private string Setting(int index)
+    {
+        string dec = "";
+        if (index == 1)
+        {
+            for (int i = 0; i < Enum.GetNames(typeof(enum_equip_quality_list)).Length; i++)
+            {
+                dec += (i + 1) + ";0,";
+            }
+        }
+
+        if (index == 2)
+        {
+            for (int i = 0; i < Enum.GetNames(typeof(medicineType)).Length; i++)
+            {
+                for (int j = 0; j < SumSave.db_stditems.Count; j++)
+                {
+                    if (SumSave.db_stditems[j].StdMode == Stditem_StdMode_List.消耗品.ToString() && SumSave.db_stditems[j].Shape == (i+1))
+                    {
+                        dec += (i + 1) + ";" + SumSave.db_stditems[j].Name + ";" + (60 - (i * 10)) + ",";
+                        break;
+                    }
+                }
+            }
+        }
+        if (index == 3)
+        {
+            dec += "稻草人[Boss]+" + SumSave.nowtime + ";0";
+        }
+        return dec;
+    }
+
+    private string GetData(int index)
+    { 
+        string dec = "";
+        switch (index)
+        {
+            case 1:
+                for (int i = 0; i < battle_base_list.Count; i++)
+                { 
+                    dec += battle_base_list[i].Item1 + ";" + battle_base_list[i].Item2 + ",";
+                }
+                break;
+            case 2:
+                for (int i = 0; i < medicine_list.Count; i++)
+                { 
+                    dec += medicine_list[i].Item1 + ";" + medicine_list[i].Item2 + ";" + medicine_list[i].Item3 + ",";
+                }
+                break;
+            case 3:
+                for (int i = 0; i < battle_Boss_list.Count; i++)
+                { 
+                    dec += battle_Boss_list[i].Item1 + ";" + battle_Boss_list[i].Item2 + ",";
+                }
+                break;
+            default:
+                break;
+        }
+        return dec ;
+    }
+
+    public void SetData(List<(int,int,string,int)> data)
+    {
+
+        for (int i = 0; i < data.Count; i++)
+        {
+            switch (data[i].Item1)
+            { 
+                case 1:
+                    for (int j = 0; j < battle_base_list.Count; j++)
+                    {
+                        if (battle_base_list[j].Item1 == data[i].Item2)
+                        { 
+                            battle_base_list[j] = (data[i].Item2, data[i].Item4);
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int j = 0; j < medicine_list.Count; j++)
+                    {
+                        if (medicine_list[j].Item1 == data[i].Item2)
+                        {
+                            medicine_list[j] = (data[i].Item2, data[i].Item3, data[i].Item4);
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int j = 0; j < battle_Boss_list.Count; j++)
+                    {
+                        if (battle_Boss_list[j].Item1 == data[i].Item3)
+                        {
+                            battle_Boss_list[j] = (data[i].Item3, data[i].Item4);
+                        }
+                    }
+                    break;
+            }
+        }
+        MysqlData();
+    }
+
+    public override string[] Get_Update_Character()
+    {
+        return new string[]
+        {
+            "data_base_setting",
+            "data_medicine_setting",
+            "data_battle_boss_setting",
+        };
+    }
+
+    public override string[] Set_Uptade_String()//Set_Uptade_String
+    {
+        return new string[]
+        {
+            GetStr(GetData(1)),
+            GetStr(GetData(2)),
+            GetStr(GetData(3)),
+        };
+    }
+
+    public override void MysqlData()
+    {
+        base.MysqlData();
+        Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.user_data_setting, Set_Uptade_String(), Get_Update_Character());
+    }
+}

@@ -1,0 +1,2296 @@
+fileFormatVersion: 2
+guid: 2db2d4daf8c93d542adf08ce9879477d
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BUFF_ICON01_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d78b019e7b5d5845b9985d761cf61ab
+      internalID: 442297876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_1
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d5c4e31dffc54a418f8abaf0a118d58
+      internalID: 950203315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_2
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c240dcdcc1876c24da2e330f3f82b2f7
+      internalID: -1231133734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_3
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6526e04e2301b95478cfdf6822af8aed
+      internalID: 838711581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_4
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: facd1ab8a0d76ce4ba015f7e0103473b
+      internalID: -1218096266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_5
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40b10512fa5f9474da8defe69032da3f
+      internalID: 1843170371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_6
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 972a95bff39e54a4796dd51f0c55dd77
+      internalID: 2002047681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_7
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4625520d5a96ce5408f8ce2a2c35d895
+      internalID: 1144522395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_8
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0803fd6f528738d449f9c5679305a055
+      internalID: -1921956024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_9
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72ce2a2214ff4b84a8a114302e5541e9
+      internalID: 625640954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_10
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 427640147793a7e4d8ce74ceff29c453
+      internalID: -1431601347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_11
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51986e3d2d0a4db4aae0531d22fa813f
+      internalID: 254982731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_12
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 785c623e55d688846af331a43664ac11
+      internalID: -1678023245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_13
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04acae714c350c9408094819289a5f19
+      internalID: 1633864486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_14
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb2ec427b7bc5af42a168a5870946ff8
+      internalID: -667928187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_15
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 488ba1064c82e5540b326bf3f61d1120
+      internalID: -999902353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_16
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e05d9fc604b1894385ed2a41efe592f
+      internalID: -1128998732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_17
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b047b557994b7c3418ebfe2aeae0f28a
+      internalID: 771305917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_18
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0e758a3742c13546bde9767fdf643cc
+      internalID: -1545739707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_19
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1660e8445a41ea4b9873d2520d11e98
+      internalID: 863989331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2457d4587fa46874d85307df45af3acf
+      internalID: -979507808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_21
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf6565e4e926cd34da5ce91e3afa6c47
+      internalID: -1101588744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_22
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 833b542dd7237b44ba1ac2b8729ad7eb
+      internalID: -1491312411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_23
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 124e9b8f7bcc72043861b779b946f719
+      internalID: 2136115206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_24
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0aaf1f900ad3ef4185662be6d579cb4
+      internalID: 2064930527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_25
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f78d0a62a64893048ab76db3ae862d0c
+      internalID: 1501396323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_26
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 548ab2ab8fc5dfd488a4f56aa7aa0ede
+      internalID: 1123403059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_27
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b8c1a99f91f3504a8587ab5384f529a
+      internalID: -520091469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_28
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 408983d1b5c754e49b74296444fa18f3
+      internalID: 1266717846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_29
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce2e38cf363f00840ae38d6a33f23a90
+      internalID: 1908567076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_30
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c31f2c517f62add4d8113cb07d171a54
+      internalID: -382736931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_31
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b06261eef93a1e84fa6409927772358a
+      internalID: -1199549692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_32
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67330a2f92fb4e14d8d1a0d21a5b51da
+      internalID: 860508943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_33
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76e6f9984f75a174cb99472bdb991679
+      internalID: 1623618318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_34
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58e02941f9523af4f8eb4b989f3d5a09
+      internalID: 1862591820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_35
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e68e702b6f7bdac418e1c15b18aa866b
+      internalID: 1228738540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_36
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ab853a7502d8ee4ab9bb338c8aece84
+      internalID: -1740013094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_37
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ede0ff00a7f6f2042868cc46f6d9dd11
+      internalID: 1084761433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_38
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c08bbe5b884c37d4a814280464385d96
+      internalID: -1025014928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_39
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 79
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59ba7542bb9cd914882050d803fd03a6
+      internalID: -1015355886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62d7952fc17922c4ea09d998bfe6995e
+      internalID: -25948561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_41
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38175306829612c428802648142ce51f
+      internalID: -1541372660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_42
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 530ef6a4b4887894cad4027290c95430
+      internalID: 2096624399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_43
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd99497c37893984a9113aec8a99c410
+      internalID: 1435982365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_44
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3dccf3088cd0c6478f508bc8ff01f54
+      internalID: 1431243593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_45
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e41d91cbc82ad4499f4b10b19a7c084
+      internalID: -225626295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_46
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ee5a97bc7d6de14d8bf4942be11d096
+      internalID: -1684562993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_47
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fdf62085a160534dab6c9568f4c80c1
+      internalID: 1106847149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_48
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46c62f686e468b244a77d51b64d28a75
+      internalID: -444564656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_49
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: def923673c148ac47a3ae6eb76eacf43
+      internalID: -488316730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_50
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2eb381295dcc0540bfab8d5778555d6
+      internalID: -139522899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_51
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 627713257b553264e99212ba598317ee
+      internalID: 877985738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_52
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d715c54dd7e129b40990573466cad48d
+      internalID: -1907960174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_53
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e6b9a4f4d82ee34ab3842b74e0785a1
+      internalID: -1284657652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_54
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba3bb7f92c06ccd4d9dc3e0733f07939
+      internalID: 1933743671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_55
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b27ac7726e0b05e449769db888551316
+      internalID: -230914267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_56
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 682eab0036218574ebb13b4b2f88f95f
+      internalID: 698640377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_57
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44c33608d6869734b954d48ba80d0a1c
+      internalID: -1000606900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_58
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 125b1c31098004a4c8193b421b52cfd9
+      internalID: 1415901856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_59
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 54
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1847c3314a45a784897f67a71dcd3b02
+      internalID: 2035774328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_60
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81a69a054bf26e743b6bdca27187c46a
+      internalID: 1628635764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_61
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66f8590274d4d9c4fb5dfc7295222565
+      internalID: 1879871803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_62
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ea693f84a2e2574e891ea0c3a0b429f
+      internalID: -1123046255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_63
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fc51cc18ec102b4796ff66a8ec6d4ef
+      internalID: -962911642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_64
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcc6b7e473401704c93c1764d8a4d889
+      internalID: -439675233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_65
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3f0b4d043a892b479fd8749a4133b7e
+      internalID: -1800674026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_66
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88f124485a6fd924c9305c0c7442f7da
+      internalID: -1713037130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_67
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2e2088df53a0934eba441f7655df87d
+      internalID: -1017572256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_68
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8dc341f4d53b3a4e910cd8a537f3062
+      internalID: -1602900725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_69
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04f75ac1b044c774bae3f59a9a35c151
+      internalID: 583995965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_70
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ccce168e1bef84a4d8a02a39b0471ef9
+      internalID: 585884991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_71
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8c2c2068b7fd2e498dbc207a277c36d
+      internalID: 1276651029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_72
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 746e861236b1e7742b65a198db5b68e5
+      internalID: -1457399009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_73
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07c412d1eac86504d8b8ae00b3fd2625
+      internalID: 1978137140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_74
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c20f619ee04c974aad9f29d52de93eb
+      internalID: -1166283786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_75
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed449fa347a43e446affc0a7002fe858
+      internalID: -617665988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_76
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2432d842bdb24147a2ece84142e0db9
+      internalID: -1549659213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_77
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 787dbe82323e2de4a93f5480dd6d6809
+      internalID: -1155860153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_78
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be6bc6f0f0de60e408843748a9917e64
+      internalID: -1596336518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_79
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 29
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3da67f0ec2798da49ab8e339f5e9b5d8
+      internalID: -1684720479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_80
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a768ca06316011449a024ea19e64cc02
+      internalID: -1499537827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_81
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86071455e92d90e42b3ecb12d4fa9880
+      internalID: 42609457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_82
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ace06e614ee5f4d418ee2e8c4b1085ea
+      internalID: 1970848535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_83
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7891167b4ecc7a441802d0dfc0525cce
+      internalID: -1694448890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_84
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d151de13692371544a106e518b39dc46
+      internalID: -915868445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_85
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9b92bb4a09a1ef4988cfde387a7dfc9
+      internalID: -1274871004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_86
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 636a75220955dc74c8a36a30e9990118
+      internalID: -1534355828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_87
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e49f5408df92d94896d993ba4e24fd2
+      internalID: -270937249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_88
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb87ae7ed1bf867458187c8cb141b5d9
+      internalID: 513996332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_89
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ddf3af28c11afa4b944ad40cd029fee
+      internalID: 1342858004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_90
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5ca32df2b78d25448830f446cf61fd0
+      internalID: 734167826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_91
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95ba085221a07cd48be8a4c48cb57f18
+      internalID: -773154113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_92
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ec1427b831f3f24b9d494afcc4e0f5f
+      internalID: 118659853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_93
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f7907658dab0d24489d7d6d6f1fdd5d
+      internalID: 2047280404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_94
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f435256f339bb6446b7846cb87f7cc85
+      internalID: 1310466294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_95
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04c73e5d8ad2e26419cf5bdaedc54b57
+      internalID: -1792163877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_96
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f38f1acdc01f1140b746fcbac9ad335
+      internalID: -921886041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BUFF_ICON01_97
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 4
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f186dd05a6d95a148913afc70035a019
+      internalID: 44151961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      BUFF_ICON01_0: 442297876
+      BUFF_ICON01_1: 950203315
+      BUFF_ICON01_10: -1431601347
+      BUFF_ICON01_11: 254982731
+      BUFF_ICON01_12: -1678023245
+      BUFF_ICON01_13: 1633864486
+      BUFF_ICON01_14: -667928187
+      BUFF_ICON01_15: -999902353
+      BUFF_ICON01_16: -1128998732
+      BUFF_ICON01_17: 771305917
+      BUFF_ICON01_18: -1545739707
+      BUFF_ICON01_19: 863989331
+      BUFF_ICON01_2: -1231133734
+      BUFF_ICON01_20: -979507808
+      BUFF_ICON01_21: -1101588744
+      BUFF_ICON01_22: -1491312411
+      BUFF_ICON01_23: 2136115206
+      BUFF_ICON01_24: 2064930527
+      BUFF_ICON01_25: 1501396323
+      BUFF_ICON01_26: 1123403059
+      BUFF_ICON01_27: -520091469
+      BUFF_ICON01_28: 1266717846
+      BUFF_ICON01_29: 1908567076
+      BUFF_ICON01_3: 838711581
+      BUFF_ICON01_30: -382736931
+      BUFF_ICON01_31: -1199549692
+      BUFF_ICON01_32: 860508943
+      BUFF_ICON01_33: 1623618318
+      BUFF_ICON01_34: 1862591820
+      BUFF_ICON01_35: 1228738540
+      BUFF_ICON01_36: -1740013094
+      BUFF_ICON01_37: 1084761433
+      BUFF_ICON01_38: -1025014928
+      BUFF_ICON01_39: -1015355886
+      BUFF_ICON01_4: -1218096266
+      BUFF_ICON01_40: -25948561
+      BUFF_ICON01_41: -1541372660
+      BUFF_ICON01_42: 2096624399
+      BUFF_ICON01_43: 1435982365
+      BUFF_ICON01_44: 1431243593
+      BUFF_ICON01_45: -225626295
+      BUFF_ICON01_46: -1684562993
+      BUFF_ICON01_47: 1106847149
+      BUFF_ICON01_48: -444564656
+      BUFF_ICON01_49: -488316730
+      BUFF_ICON01_5: 1843170371
+      BUFF_ICON01_50: -139522899
+      BUFF_ICON01_51: 877985738
+      BUFF_ICON01_52: -1907960174
+      BUFF_ICON01_53: -1284657652
+      BUFF_ICON01_54: 1933743671
+      BUFF_ICON01_55: -230914267
+      BUFF_ICON01_56: 698640377
+      BUFF_ICON01_57: -1000606900
+      BUFF_ICON01_58: 1415901856
+      BUFF_ICON01_59: 2035774328
+      BUFF_ICON01_6: 2002047681
+      BUFF_ICON01_60: 1628635764
+      BUFF_ICON01_61: 1879871803
+      BUFF_ICON01_62: -1123046255
+      BUFF_ICON01_63: -962911642
+      BUFF_ICON01_64: -439675233
+      BUFF_ICON01_65: -1800674026
+      BUFF_ICON01_66: -1713037130
+      BUFF_ICON01_67: -1017572256
+      BUFF_ICON01_68: -1602900725
+      BUFF_ICON01_69: 583995965
+      BUFF_ICON01_7: 1144522395
+      BUFF_ICON01_70: 585884991
+      BUFF_ICON01_71: 1276651029
+      BUFF_ICON01_72: -1457399009
+      BUFF_ICON01_73: 1978137140
+      BUFF_ICON01_74: -1166283786
+      BUFF_ICON01_75: -617665988
+      BUFF_ICON01_76: -1549659213
+      BUFF_ICON01_77: -1155860153
+      BUFF_ICON01_78: -1596336518
+      BUFF_ICON01_79: -1684720479
+      BUFF_ICON01_8: -1921956024
+      BUFF_ICON01_80: -1499537827
+      BUFF_ICON01_81: 42609457
+      BUFF_ICON01_82: 1970848535
+      BUFF_ICON01_83: -1694448890
+      BUFF_ICON01_84: -915868445
+      BUFF_ICON01_85: -1274871004
+      BUFF_ICON01_86: -1534355828
+      BUFF_ICON01_87: -270937249
+      BUFF_ICON01_88: 513996332
+      BUFF_ICON01_89: 1342858004
+      BUFF_ICON01_9: 625640954
+      BUFF_ICON01_90: 734167826
+      BUFF_ICON01_91: -773154113
+      BUFF_ICON01_92: 118659853
+      BUFF_ICON01_93: 2047280404
+      BUFF_ICON01_94: 1310466294
+      BUFF_ICON01_95: -1792163877
+      BUFF_ICON01_96: -921886041
+      BUFF_ICON01_97: 44151961
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
