@@ -77,6 +77,7 @@ PlayerSettings:
   androidMinimumWindowHeight: 300
   androidFullscreenMode: 1
   androidAutoRotationBehavior: 1
+  androidPredictiveBackSupport: 1
   defaultIsNativeResolution: 1
   macRetinaSupport: 1
   runInBackground: 0
@@ -291,7 +292,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 30835509114c85c4d80cf9b727f19c93, type: 3}
+      m_Icon: {fileID: 2800000, guid: 7c5b2c9adba737645907396483e09210, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -858,9 +859,8 @@ PlayerSettings:
   hmiPlayerDataPath: 
   hmiForceSRGBBlit: 0
   embeddedLinuxEnableGamepadInput: 0
-  hmiCpuConfiguration: 
   hmiLogStartupTiming: 0
-  qnxGraphicConfPath: 
+  hmiCpuConfiguration: 
   apiCompatibilityLevel: 3
   activeInputHandler: 0
   windowsGamepadBackendHint: 0

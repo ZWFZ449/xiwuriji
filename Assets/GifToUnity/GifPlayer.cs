@@ -9,13 +9,13 @@ namespace GifImporter
     {
         public Gif Gif;
         /// <summary>
-        /// gif²¥·ÅÀàĞÍ
+        /// gifæ’­æ”¾ç±»å‹
         /// </summary>
         public gifMoveType giftype = gifMoveType.sustain;
         public enum gifMoveType
         {
-            sustain,      // ³ÖĞøÒÆ¶¯
-            Playonlyonce, // Ö»²¥·ÅÒ»´Î
+            sustain,      // æŒç»­ç§»åŠ¨
+            Playonlyonce, // åªæ’­æ”¾ä¸€æ¬¡
         }
         private int   _index;
         private float _flip;
