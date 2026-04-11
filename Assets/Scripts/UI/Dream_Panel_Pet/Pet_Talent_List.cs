@@ -4,9 +4,9 @@ using UnityEngine;
 
 public enum  Pet_Talent_List 
 {
-    ÆÆ»÷,
-    »¤¶Ü,
-    »ğÑæ,
-    ±ùËª,
-    Á¬»÷
+    ç ´å‡»,
+    æŠ¤ç›¾,
+    ç«ç„°,
+    å†°éœœ,
+    è¿å‡»
 }

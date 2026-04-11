@@ -32,7 +32,7 @@ public class skill_item : Base_Mono
                 {
                     switch (item1)
                     {
-                        case enum_talent_offect_list.µØµ¿:
+                        case enum_talent_offect_list.ÂºπÈÅì:
                             talent_lv += data.GetBuff[item1];
                             break;
                     }

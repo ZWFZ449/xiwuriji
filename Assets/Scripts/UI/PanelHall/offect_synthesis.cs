@@ -1,12 +1,9 @@
 using Common;
 using Components;
 using MVC;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 public class offect_synthesis : Base_Mono
 {
@@ -23,7 +20,7 @@ public class offect_synthesis : Base_Mono
 
     private Dictionary<string,List<db_synthesis_vo>> dic_synthesis = new Dictionary<string, List<db_synthesis_vo>>();
     /// <summary>
-    /// ºÏ³É²ÄÁÏ
+    /// åˆæˆææ–™
     /// </summary>
     private List<string> needs = new List<string>();
     private void Awake()
@@ -39,7 +36,7 @@ public class offect_synthesis : Base_Mono
     {
         if (SumSave.crtHero.lv < 10)
         { 
-            Alert_Dec.Show("ºÏ³É¹¦ÄÜÔÚ10¼¶¿ª·Å");
+            Alert_Dec.Show("åˆæˆåŠŸèƒ½åœ¨10çº§å¼€æ”¾");
             Hide();
         }
     }
@@ -67,7 +64,7 @@ public class offect_synthesis : Base_Mono
         }
     }
     /// <summary>
-    /// ºÏ³É¹¦ÄÜ
+    /// åˆæˆåŠŸèƒ½
     /// </summary>
     /// <param name="key"></param>
     private void SelectBtn(string key)
@@ -84,14 +81,14 @@ public class offect_synthesis : Base_Mono
         }
     }
     /// <summary>
-    /// ºÏ³É
+    /// åˆæˆ
     /// </summary>
     /// <param name="db_synthesis_vo"></param>
     private void Synthesis(synthesis_item item)
     {
         db_synthesis_vo needlists = item.Data;
         needs.Clear();
-        string dec = "ºÏ³É" + needlists.synthesis_name;
+        string dec = "åˆæˆ" + needlists.synthesis_name;
         List<string> needlist = ArrayHelper.Get_Split<string>(needlists.synthesis_need,',');
         for (int i = 0; i < needlist.Count; i++)
         { 
@@ -116,16 +113,16 @@ public class offect_synthesis : Base_Mono
             }
         }
 
-        Alert.Show("ºÏ³É", dec, confirm,needlists);
+        Alert.Show("åˆæˆ", dec, confirm,needlists);
     }
     /// <summary>
-    /// ºÏ³É
+    /// åˆæˆ
     /// </summary>
     /// <param name="arg0"></param>
     private void confirm(object arg0)
     {
         db_synthesis_vo data = (db_synthesis_vo)arg0;
-        List<Bag_Base_VO> equips = SumSave.crt_equips.Get(Dream_User_Equip_Type.×°±¸);
+        List<Bag_Base_VO> equips = SumSave.crt_equips.Get(Dream_User_Equip_Type.è£…å¤‡);
         List<Bag_Base_VO> bags = new List<Bag_Base_VO>();
         int number = 0;
         for (int i = 0; i < needs.Count; i++)
@@ -144,9 +141,9 @@ public class offect_synthesis : Base_Mono
             if (Return_Condition())
             {
                 for (int i = 0; i < bags.Count; i++) equips.Remove(bags[i]);
-                SumSave.crt_equips.Set(Dream_User_Equip_Type.×°±¸, equips);
+                SumSave.crt_equips.Set(Dream_User_Equip_Type.è£…å¤‡, equips);
                 SendNotification(NotiList.Refresh_Max_Hero_Attribute);
-                Alert_Dec.Show("ºÏ³É³É¹¦ " + " »ñµÃ " + data.synthesis_name);
+                Alert_Dec.Show("åˆæˆæˆåŠŸ " + " è·å¾— " + data.synthesis_name);
                 Bag_Base_VO synthesis_value = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == data.synthesis_name);
                 if (synthesis_value != null)
                 {
@@ -155,9 +152,9 @@ public class offect_synthesis : Base_Mono
                     SumSave.crt_bags.Set_Bag_List(synthesis_value);
                 }
             }
-            else Alert_Dec.Show("ºÏ³ÉÊ§°Ü,²ÄÁÏ²»×ã");
+            else Alert_Dec.Show("åˆæˆå¤±è´¥,ææ–™ä¸è¶³");
         }
-        else Alert_Dec.Show("ºÏ³ÉÊ§°Ü,²ÄÁÏ²»×ã");
+        else Alert_Dec.Show("åˆæˆå¤±è´¥,ææ–™ä¸è¶³");
         
 
     }

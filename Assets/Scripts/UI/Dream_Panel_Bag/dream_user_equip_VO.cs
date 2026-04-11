@@ -6,9 +6,9 @@ using UnityEngine;
 
 public enum Dream_User_Equip_Type
 { 
-装备,
-仓库,
-法宝
+瑁呭,
+浠撳簱,
+娉曞疂
 }
 public class dream_user_equip_VO : Base_VO
 {
@@ -52,7 +52,7 @@ public class dream_user_equip_VO : Base_VO
         };
     }
     /// <summary>
-    /// 获取 
+    /// 鑾峰彇 
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
@@ -60,9 +60,9 @@ public class dream_user_equip_VO : Base_VO
     {
         switch (type)
         { 
-        case Dream_User_Equip_Type.装备:return Equip_List;
-        case Dream_User_Equip_Type.仓库:return House_List;
-        case Dream_User_Equip_Type.法宝:return Treasure_List;
+        case Dream_User_Equip_Type.瑁呭:return Equip_List;
+        case Dream_User_Equip_Type.浠撳簱:return House_List;
+        case Dream_User_Equip_Type.娉曞疂:return Treasure_List;
         default:return null;
         }
     }
@@ -71,9 +71,9 @@ public class dream_user_equip_VO : Base_VO
     {
         switch (type)
         { 
-            case Dream_User_Equip_Type.装备:Equip_List = list; break;
-            case Dream_User_Equip_Type.仓库:House_List = list; break;
-            case Dream_User_Equip_Type.法宝:Treasure_List = list; break;
+            case Dream_User_Equip_Type.瑁呭:Equip_List = list; break;
+            case Dream_User_Equip_Type.浠撳簱:House_List = list; break;
+            case Dream_User_Equip_Type.娉曞疂:Treasure_List = list; break;
         }
         MysqlData();
     }
