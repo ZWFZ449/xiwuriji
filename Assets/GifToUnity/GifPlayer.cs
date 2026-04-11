@@ -17,7 +17,7 @@ namespace GifImporter
             sustain,      // 持续移动
             Playonlyonce, // 只播放一次
         }
-        private int   _index;
+        private int   _index;  
         private float _flip;
         private Gif   _setGif;
         private Button button;
