@@ -4,81 +4,81 @@ using UnityEngine;
 
 public readonly struct FinalBattleValueVO 
 {
-    //²âÊÔ2
+    //æµ‹è¯•2
     /// <summary> 
-    /// ×îÖÕÊôĞÔ
+    /// æœ€ç»ˆå±æ€§
     /// </summary>
     public readonly long battle_maxhp;
     public readonly int battle_maxmp;
 
     /// <summary>
-    /// »ù´¡ÊôĞÔ
+    /// åŸºç¡€å±æ€§
     /// </summary>
     public readonly long hp, mp;
     public readonly int dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2;
     /// <summary>
-    /// ¶ş¼¶ÊôĞÔ
+    /// äºŒçº§å±æ€§
     /// </summary>
     public readonly int hit, dodge, crit, critDmg;
     /// <summary>
-    /// °Ù·Ö±ÈÊôĞÔ
+    /// ç™¾åˆ†æ¯”å±æ€§
     /// </summary>
     public readonly int battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def;
     /// <summary>
-    /// ÒÆ¶¯ËÙ¶È
+    /// ç§»åŠ¨é€Ÿåº¦
     /// </summary>
     public readonly int move_speed;
     /// <summary>
-    /// »Ø¸´
+    /// å›å¤
     /// </summary>
     public readonly int hpRegen, mpRegen;
     /// <summary>
-    /// buffĞ§¹û
+    /// buffæ•ˆæœ
     /// </summary>
     public readonly List<(enum_battle_pet_talent_list,int,int)> buffList;
     /// <summary>
-    /// ĞÒÔË
+    /// å¹¸è¿
     /// </summary>
     public readonly int lucky, damage_reduction, magic_damage_reduction;
 
     /// <summary>
-    /// ³õÊ¼»¯
+    /// åˆå§‹åŒ–
     /// </summary>
-    /// <param name="battle_maxhp">×îÖÕÉúÃü</param>
-    /// <param name="battle_maxmp">×îÖÕÄ§·¨Öµ</param>
-    /// <param name="hp">¼Ó³ÉÇ°ÉúÃü</param>
-    /// <param name="mp">¼Ó³ÉÇ°Ä§·¨</param>
-    /// <param name="dc">ÎïÀí¹¥»÷ÏÂ</param>
-    /// <param name="dc2">ÎïÀí¹¥»÷ÉÏ</param>
-    /// <param name="mac">Ä§·¨·ÀÓùÏÂ</param>
-    /// <param name="mac2">Ä§·¨·ÀÓùÉÏ</param>
-    /// <param name="ac">ÎïÀí·ÀÓùÏÂ</param>
-    /// <param name="ac2">ÎïÀí·ÀÓùÉÏ</param>
-    /// <param name="sc">Ä§·¨¹¥»÷</param>
-    /// <param name="sc2">Ä§·¨¹¥»÷ÉÏ</param>
-    /// <param name="mc">µÀÊõ¹¥»÷</param>
-    /// <param name="mc2">µÀÊõ¹¥»÷ÉÏ</param>
-    /// <param name="hit">ÃüÖĞ³õÊ¼100Ã¿Ò»¼¶¼õÉÙ1µã</param>
-    /// <param name="dodge">¶ã±Ü</param>
-    /// <param name="crit">±©»÷ÂÊ</param>
-    /// <param name="critDmg">±©»÷ÉËº¦</param>
-    /// <param name="hpRegen">»ØÑª</param>
-    /// <param name="mpRegen">»ØÀ¶</param>
-    /// <param name="battle_hp">ÉúÃü%</param>
-    /// <param name="battle_mp">Ä§·¨%</param>
-    /// <param name="battle_ac">Îï·À%</param>
-    /// <param name="battle_mac">Ä§·À%</param>
-    /// <param name="battle_dc">Îï¹¥%</param>
-    /// <param name="battle_sc">Ä§¹¥%</param>
-    /// <param name="battle_mc">µÀ¹¥%</param>
-    /// <param name="battle_speed">¹¥»÷ËÙ¶È³õÊ¼180</param>
-    /// <param name="battle_range">¹¥»÷·¶Î§</param>
-    /// <param name="battle_Damage">ÕæÉË</param>
-    /// <param name="battle_def">ÎüÉË</param>
-    /// <param name="buffList">ÃúÎÄ</param>
-    /// <param name="lucky">ĞÒÔË</param>
-    /// <param name="damage_reduction">ÉËº¦¼õÃâ</param>
-    /// <param name="magic_damage_reduction">Ä§·¨ÉËº¦¼õÃâ</param>
+    /// <param name="battle_maxhp">æœ€ç»ˆç”Ÿå‘½</param>
+    /// <param name="battle_maxmp">æœ€ç»ˆé­”æ³•å€¼</param>
+    /// <param name="hp">åŠ æˆå‰ç”Ÿå‘½</param>
+    /// <param name="mp">åŠ æˆå‰é­”æ³•</param>
+    /// <param name="dc">ç‰©ç†æ”»å‡»ä¸‹</param>
+    /// <param name="dc2">ç‰©ç†æ”»å‡»ä¸Š</param>
+    /// <param name="mac">é­”æ³•é˜²å¾¡ä¸‹</param>
+    /// <param name="mac2">é­”æ³•é˜²å¾¡ä¸Š</param>
+    /// <param name="ac">ç‰©ç†é˜²å¾¡ä¸‹</param>
+    /// <param name="ac2">ç‰©ç†é˜²å¾¡ä¸Š</param>
+    /// <param name="sc">é­”æ³•æ”»å‡»</param>
+    /// <param name="sc2">é­”æ³•æ”»å‡»ä¸Š</param>
+    /// <param name="mc">é“æœ¯æ”»å‡»</param>
+    /// <param name="mc2">é“æœ¯æ”»å‡»ä¸Š</param>
+    /// <param name="hit">å‘½ä¸­åˆå§‹100æ¯ä¸€çº§å‡å°‘1ç‚¹</param>
+    /// <param name="dodge">èº²é¿</param>
+    /// <param name="crit">æš´å‡»ç‡</param>
+    /// <param name="critDmg">æš´å‡»ä¼¤å®³</param>
+    /// <param name="hpRegen">å›è¡€</param>
+    /// <param name="mpRegen">å›è“</param>
+    /// <param name="battle_hp">ç”Ÿå‘½%</param>
+    /// <param name="battle_mp">é­”æ³•%</param>
+    /// <param name="battle_ac">ç‰©é˜²%</param>
+    /// <param name="battle_mac">é­”é˜²%</param>
+    /// <param name="battle_dc">ç‰©æ”»%</param>
+    /// <param name="battle_sc">é­”æ”»%</param>
+    /// <param name="battle_mc">é“æ”»%</param>
+    /// <param name="battle_speed">æ”»å‡»é€Ÿåº¦åˆå§‹180</param>
+    /// <param name="battle_range">æ”»å‡»èŒƒå›´</param>
+    /// <param name="battle_Damage">çœŸä¼¤</param>
+    /// <param name="battle_def">å¸ä¼¤</param>
+    /// <param name="buffList">é“­æ–‡</param>
+    /// <param name="lucky">å¹¸è¿</param>
+    /// <param name="damage_reduction">ä¼¤å®³å‡å…</param>
+    /// <param name="magic_damage_reduction">é­”æ³•ä¼¤å®³å‡å…</param>
     public FinalBattleValueVO(long battle_maxhp, int battle_maxmp, long hp, int mp, int dc, int dc2, int mac,
         int mac2, int ac, int ac2, int sc, int sc2, int mc, int mc2, int hit, int dodge, int crit, int critDmg, int hpRegen, int mpRegen,
         int battle_hp, int battle_mp, int battle_ac, int battle_mac, int battle_dc, int battle_sc, int battle_mc, int battle_speed, int battle_range, int battle_Damage, int battle_def,
@@ -126,41 +126,41 @@ public readonly struct FinalBattleValueVO
 
 public enum Battle_Game_Type
 { 
-    player,//Íæ¼Ò
-    call,//ÕÙ»½ÊŞ
-    monster,//¹ÖÎï
+    player,//ç©å®¶
+    call,//å¬å”¤å…½
+    monster,//æ€ªç‰©
     Boss,//boss
-    Activity_Monster,//»î¶¯¹ÖÎï
+    Activity_Monster,//æ´»åŠ¨æ€ªç‰©
 }
 
 
 public enum Hero_Type
 { 
-Æ½Ãñ,
-Õ½Ê¿,
-·¨Ê¦,
-µÀÊ¿,
+å¹³æ°‘,
+æˆ˜å£«,
+æ³•å¸ˆ,
+é“å£«,
 }
 
 public enum enum_battle_pet_talent_list
 { 
-    ÈÎÒâÃÅ,
-    ÊÈÑª×·»÷,
-    ÆÆ±ÚÒ»»÷,
-    »ªÉ½Õ¶,
-    Õ¶É±,
+    ä»»æ„é—¨,
+    å—œè¡€è¿½å‡»,
+    ç ´å£ä¸€å‡»,
+    åå±±æ–©,
+    æ–©æ€,
     zero,
-    Á¬»÷Ğ§¹û,
-    Á¬»÷,
-    ·¨Á¬,
-    µÀÁ¬,
-    Õ½Æì,
-    ·¨Æì,
-    µÀÆì,
-    ·´Õğ,
-    ·À±¬,
-    ÕĞ¼Ü,
-    ·´µ¯,
-    »Û¸ù
+    è¿å‡»æ•ˆæœ,
+    è¿å‡»,
+    æ³•è¿,
+    é“è¿,
+    æˆ˜æ——,
+    æ³•æ——,
+    é“æ——,
+    åéœ‡,
+    é˜²çˆ†,
+    æ‹›æ¶,
+    åå¼¹,
+    æ…§æ ¹
 }
 
