@@ -4,6 +4,7 @@ using UnityEngine;
 
 public readonly struct FinalBattleValueVO 
 {
+
     /// <summary> 
     /// 最终属性
     /// </summary>
@@ -122,6 +123,7 @@ public readonly struct FinalBattleValueVO
     }
 }
 
+
 public enum Battle_Game_Type
 { 
     player,//玩家
@@ -130,6 +132,7 @@ public enum Battle_Game_Type
     Boss,//boss
     Activity_Monster,//活动怪物
 }
+
 
 public enum Hero_Type
 { 
@@ -160,3 +163,4 @@ public enum enum_battle_pet_talent_list
     反弹,
     慧根
 }
+
