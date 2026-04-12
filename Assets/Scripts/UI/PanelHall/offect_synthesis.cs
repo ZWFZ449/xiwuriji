@@ -34,7 +34,7 @@ public class offect_synthesis : Base_Mono
 
     private void OnEnable()
     {
-        if (SumSave.crtHero.lv < 10)
+        if (SumSave.crtHero.lv < 10)  
         { 
             Alert_Dec.Show("合成功能在10级开放");
             Hide();
