@@ -4,7 +4,7 @@ using UnityEngine;
 
 public readonly struct FinalBattleValueVO 
 {
-    /// <summary>
+    /// <summary> 
     /// 最终属性
     /// </summary>
     public readonly long battle_maxhp;
