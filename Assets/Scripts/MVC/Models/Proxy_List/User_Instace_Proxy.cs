@@ -1486,7 +1486,7 @@ namespace MVC
                         Enum_Value(crt, (int)enum_skill_attribute_list.离线间隔, SumSave.db_vip_list[i].offlineInterval);
                         Enum_Value(crt, (int)enum_skill_attribute_list.签到收益, SumSave.db_vip_list[i].signInIncome);
                         Enum_Value(crt, (int)enum_skill_attribute_list.鞭尸概率, SumSave.db_vip_list[i].whippingCorpses);
-                        Enum_Value(crt, (int)enum_skill_attribute_list.灵气上限, SumSave.db_vip_list[i].upperLimitOfSpiritualEnergy);
+                        //Enum_Value(crt, (int)enum_skill_attribute_list.灵气上限, SumSave.db_vip_list[i].upperLimitOfSpiritualEnergy);
                         break;
                     }
                 }

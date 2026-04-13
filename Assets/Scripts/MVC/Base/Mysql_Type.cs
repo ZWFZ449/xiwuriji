@@ -106,4 +106,6 @@ public enum Mysql_Table_Name
     db_illustrated,//图鉴信息
     dream_user_illustrated,//用户图鉴信息
     global_battle_info,//全局战斗信息
+    db_chronicle,//大事记
+    dream_user_gift,//用户礼物信息
 }

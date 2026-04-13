@@ -4,9 +4,7 @@ using UnityEngine;
 
 public readonly struct FinalBattleValueVO 
 {
-    //测试1
-    //测试2
-    //测试3
+
     /// <summary> 
     /// 最终属性
     /// </summary>

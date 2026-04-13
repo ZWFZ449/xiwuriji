@@ -19,7 +19,7 @@ public class db_vip : Base_VO
     /// </summary>
     public readonly int experienceBonus;
     /// <summary>
-    /// 灵珠收益 106
+    /// 金币收益 106
     /// </summary>
     public readonly int lingzhuIncome;
     /// <summary>
@@ -27,11 +27,11 @@ public class db_vip : Base_VO
     /// </summary>
     public readonly int equipmentExplosionRate;
     /// <summary>
-    /// 人物历练 103
+    /// boss卷轴 103
     /// </summary>
     public readonly int characterExperience;
     /// <summary>
-    /// 寻怪间隔 116
+    /// boss刷新减少 116
     /// </summary>
     public readonly int monsterHuntingInterval;
     /// <summary>
@@ -65,9 +65,9 @@ public class db_vip : Base_VO
     /// <summary>
     /// 灵气上限 508
     /// </summary>
-    public readonly int upperLimitOfSpiritualEnergy;
+    public readonly string gift_value;
 
-    public db_vip(int vip_lv, string vip_name, int vip_exp, int experienceBonus, int lingzhuIncome, int equipmentExplosionRate, int characterExperience, int monsterHuntingInterval, int hpRecovery, int manaRegeneration, int goodFortune, int strengthenCosts, int offlineInterval, int signInIncome, int whippingCorpses, int upperLimitOfSpiritualEnergy)
+    public db_vip(int vip_lv, string vip_name, int vip_exp, int experienceBonus, int lingzhuIncome, int equipmentExplosionRate, int characterExperience, int monsterHuntingInterval, int hpRecovery, int manaRegeneration, int goodFortune, int strengthenCosts, int offlineInterval, int signInIncome, int whippingCorpses, string gift_value)
     {
         this.vip_lv = vip_lv;
         this.vip_name = vip_name;
@@ -84,6 +84,6 @@ public class db_vip : Base_VO
         this.offlineInterval = offlineInterval;
         this.signInIncome = signInIncome;
         this.whippingCorpses = whippingCorpses;
-        this.upperLimitOfSpiritualEnergy = upperLimitOfSpiritualEnergy;
+        this.gift_value = gift_value;
     }
 }

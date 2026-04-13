@@ -84,7 +84,7 @@ public class vip_effect : Base_Mono
         title.Add("+" + vip_data.offlineInterval + tool_Categoryt.Obtain_unit((int)enum_skill_attribute_list.离线间隔));
         title.Add("+" + vip_data.signInIncome + tool_Categoryt.Obtain_unit((int)enum_skill_attribute_list.签到收益));
         title.Add("+" + vip_data.whippingCorpses + tool_Categoryt.Obtain_unit((int)enum_skill_attribute_list.鞭尸概率));
-        title.Add("+" + vip_data.upperLimitOfSpiritualEnergy + tool_Categoryt.Obtain_unit((int)enum_skill_attribute_list.灵气上限));
+        title.Add("+" + vip_data.gift_value + tool_Categoryt.Obtain_unit((int)enum_skill_attribute_list.灵气上限));
         return title;
     }
 

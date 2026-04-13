@@ -200,7 +200,13 @@ public static class Mysql_Read
         }
         return new db_store_vo(store_Type, ItemName, ItemPrice, unit, discount, ItemMaxQuantity);
     }
-
+    public static (int,string) Read_Chronicle(MySqlDataReader reader)
+    {
+        (int, string) item = (0, "");
+        item.Item1 = reader.GetInt32(reader.GetOrdinal("id"));
+        item.Item2 = reader.GetString(reader.GetOrdinal("Chronicle_value"));
+        return item;
+    }
     public static db_skill_vo ReadSkill(MySqlDataReader reader)
     {
         int id = reader.GetInt32(reader.GetOrdinal("id"));

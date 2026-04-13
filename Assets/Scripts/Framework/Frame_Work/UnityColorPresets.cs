@@ -58,6 +58,16 @@ public class UnityColorPresets
         return new Color32(r, g, b, a);
     }
     /// <summary>
+    /// 将Color对象转换为十六进制颜色代码
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="color"></param>
+    /// <returns></returns>
+    public static string Colorize(string text, Color color)
+    { 
+        return $"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{text}</color>";
+    }
+    /// <summary>
     /// 调整颜色亮度
     /// </summary>
     /// <param name="color"></param>

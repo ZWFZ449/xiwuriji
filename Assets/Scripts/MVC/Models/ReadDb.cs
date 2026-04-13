@@ -122,6 +122,14 @@ public static class ReadDb
         item.value = reader.GetString(reader.GetOrdinal("user_value"));
         return item;
     }
+    public static data_global_gift_vo Read(MySqlDataReader reader, data_global_gift_vo item)
+    {
+        item.Init(
+            ArrayHelper.Get_Split<string>(reader.GetString(reader.GetOrdinal("gift_value")), ','),
+            reader.GetInt32(reader.GetOrdinal("gift_points"))
+            );
+        return item;
+    }
     public static user_mail_vo Read(MySqlDataReader reader, user_mail_vo item)
     {
         item.user_value = reader.GetString(reader.GetOrdinal("user_value"));
@@ -526,10 +534,10 @@ public static class ReadDb
         int offlineInterval = reader.GetInt32(reader.GetOrdinal("offlineInterval"));
         int signInIncome = reader.GetInt32(reader.GetOrdinal("signInIncome"));
         int whippingCorpses = reader.GetInt32(reader.GetOrdinal("whippingCorpses"));
-        int upperLimitOfSpiritualEnergy = reader.GetInt32(reader.GetOrdinal("upperLimitOfSpiritualEnergy"));
+        string gift_value = reader.GetString(reader.GetOrdinal("gift_value"));
         return new db_vip(vip_lv, vip_name, vip_exp, experienceBonus, lingzhuIncome, equipmentExplosionRate, characterExperience
             , monsterHuntingInterval, hpRecovery, manaRegeneration, goodFortune, strengthenCosts, offlineInterval, signInIncome,
-            whippingCorpses, upperLimitOfSpiritualEnergy);
+            whippingCorpses, gift_value);
     }
 
 

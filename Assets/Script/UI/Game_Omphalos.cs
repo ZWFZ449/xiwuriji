@@ -139,7 +139,7 @@ namespace MVC
             if (SumSave.nowtime >= SumSave.local_time) SumSave.local_time = SumSave.nowtime;
             SumSave.local_time = SumSave.local_time.AddSeconds(1);
             SumSave.nowtime = SumSave.nowtime.AddSeconds(1);
-            archive();
+            //archive();
 
         }
         /// <summary>

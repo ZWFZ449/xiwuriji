@@ -70,8 +70,25 @@ namespace MVC
             Read_User_Setting();
             Read_Signin();
             Read_illustrated();
+            Read_global_gift();
             refresh_Max_Hero_Attribute();
             Read_global_battle_info();
+        }
+        /// <summary>
+        /// 读取礼包
+        /// </summary>
+        private void Read_global_gift()
+        {
+            mysqlReader = MysqlDb.Select(Mysql_Table_Name.dream_user_gift, "uid", GetStr(SumSave.crt_user.uid));
+            SumSave.crt_global_gift = new data_global_gift_vo();
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    SumSave.crt_global_gift=(ReadDb.Read(mysqlReader, new data_global_gift_vo()));
+                }
+            }
+            else Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.dream_user_gift, SumSave.crt_global_gift.Set_Instace_String());
         }
         /// <summary>
         /// 交换数据

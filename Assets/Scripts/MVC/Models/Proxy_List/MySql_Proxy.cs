@@ -42,6 +42,8 @@ namespace MVC
             Read_Db_Pet_Talent();
             Read_Db_Synthesis();
             Read_Db_Illustrated();
+            Read_Db_Chronicle();
+            Read_db_vip();
             //Read_Db_Magic();
             //
             //Read_Db_Hero();
@@ -63,7 +65,7 @@ namespace MVC
             //Read_Guide_TotalTask();
             //Read_db_Accumulatedrewards();
             //Read_Guide_Fate();
-            //Read_db_vip();
+            //
             //Read_db_formula();
             //Read_db_strengthen_needlist();
             //Read_db_weather();
@@ -73,6 +75,43 @@ namespace MVC
             //ReadDb_Endless();
             CloseMySqlDB();
         }
+
+
+        /// <summary>
+        /// 读取vip列表
+        /// </summary>
+        private void Read_db_vip()
+        {
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_vip);
+            SumSave.db_vip_list = new List<db_vip>();
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    SumSave.db_vip_list.Add(ReadDb.Read_Vip(mysqlReader));
+                }
+            }
+        }
+
+        /// <summary>
+        /// 大事记
+        /// </summary>
+        private void Read_Db_Chronicle()
+        {
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_chronicle);
+            SumSave.global_Chronicle = new List<(int, string)>();
+            SumSave.db_illustrateds = new Dictionary<int, List<db_illustrated_vo>>();
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    SumSave.global_Chronicle.Add(Mysql_Read.Read_Chronicle(mysqlReader));
+                }
+            }
+        }
+        /// <summary>
+        /// 图鉴
+        /// </summary>
         private void Read_Db_Illustrated()
         {
             mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_illustrated);
@@ -226,22 +265,6 @@ namespace MVC
         }
 
 
-
-        /// <summary>
-        /// 读取vip列表
-        /// </summary>
-        public void Read_db_vip()
-        {
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_vip);
-            SumSave.db_vip_list = new List<db_vip>();
-            if (mysqlReader.HasRows)
-            {
-                while (mysqlReader.Read())
-                {
-                    SumSave.db_vip_list.Add(ReadDb.Read_Vip(mysqlReader));
-                }
-            }
-        }
 
 
         /// <summary>

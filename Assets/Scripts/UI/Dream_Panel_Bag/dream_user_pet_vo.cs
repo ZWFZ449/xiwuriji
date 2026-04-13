@@ -39,6 +39,15 @@ public class dream_user_pet_vo : Base_VO
         return vo; 
     }
     /// <summary>
+    /// 添加宠物
+    /// </summary>
+    /// <param name="pet"></param>
+    public void AddPet(pet_list pet)
+    { 
+        sum_pet.Add(InitPet(Tool_Battle.Obtain_Pet((int)pet),','));
+        MysqlData();
+    }
+    /// <summary>
     /// 获取宠物属性
     /// </summary>
     /// <returns></returns>
@@ -53,7 +62,7 @@ public class dream_user_pet_vo : Base_VO
     public List<db_pet_vo> SetPets { set { sum_pet = value; MysqlData(); } }
     public override string[] Set_Instace_String()
     {
-        Init(Tool_Battle.Obtain_Pet(0,6), "");
+        Init(Tool_Battle.Obtain_Pet(0), "");
         return new string[]
         {
             GetStr(0),

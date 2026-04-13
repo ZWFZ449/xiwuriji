@@ -462,5 +462,11 @@ namespace Common
         /// 获取全局数据
         /// </summary>
         public static List<global_battle_info_VO> global_battle_info;
+
+        public static data_global_gift_vo crt_global_gift;
+        /// <summary>
+        /// 大事记
+        /// </summary>
+        public static List<(int,string)> global_Chronicle;
     }
 }
