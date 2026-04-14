@@ -15,12 +15,14 @@ public class dream_user_equip_VO : Base_VO
     private List<Bag_Base_VO> Equip_List;
     private List<Bag_Base_VO> House_List;
     private List<Bag_Base_VO> Treasure_List;
+    private int Page;
 
     public void Init(string equipvalue, string housevalue,string treasurevalue,int page)
     {
         Equip_List = toList(equipvalue, Equip_List);
         House_List = toList(housevalue, House_List);
         Treasure_List = toList(treasurevalue, Treasure_List);
+        Page = page + 60;
     }
     private List<Bag_Base_VO> toList(string value, List<Bag_Base_VO> list)
     {
@@ -66,6 +68,10 @@ public class dream_user_equip_VO : Base_VO
         default:return null;
         }
     }
+    /// <summary>
+    /// 获取页数
+    /// </summary>
+    public int GetPage { get { return Page; } }
 
     public void Set(Dream_User_Equip_Type type, List<Bag_Base_VO> list)
     {

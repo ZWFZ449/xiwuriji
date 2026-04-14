@@ -26,7 +26,7 @@ namespace MVC
         public void Execute_Write(List<Base_Wirte_VO> list)
         {
             OpenMySqlDB();
-            //写入数据
+            //写入数据 
             ExecuteWrite(list);
 
             CloseMySqlDB();
@@ -71,8 +71,82 @@ namespace MVC
             Read_Signin();
             Read_illustrated();
             Read_global_gift();
+            read_global_promotion();
             refresh_Max_Hero_Attribute();
             Read_global_battle_info();
+        }
+        /// <summary>
+        /// 读取推广数据
+        /// </summary>
+        public void Read_global_promotion()
+        {
+            OpenMySqlDB();
+            read_global_promotion();
+            CloseMySqlDB();
+        }
+
+        public void Add_global_promotion(object value)
+        {
+            (string, int) data =  ("", 0);
+            var tuple = value as (string, int)?;
+            if (tuple.HasValue)
+            {
+                data.Item1 = tuple.Value.Item1;  
+                data.Item2 = tuple.Value.Item2;  
+            }
+            OpenMySqlDB();
+            mysqlReader = MysqlDb.Select(Mysql_Table_Name.global_promotion, "uid", GetStr(data.Item1));
+            if (mysqlReader == null) return;
+            global_promotion_vo crt_global = new global_promotion_vo();
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    crt_global = (ReadDb.Read(mysqlReader, new global_promotion_vo(),data.Item1));
+                }
+            }
+            crt_global.SetPromotion_moeny(data.Item2);
+            CloseMySqlDB();
+        }
+
+        public void Read_Global_Gift(string key)
+        { 
+            OpenMySqlDB();
+            mysqlReader = MysqlDb.Select(Mysql_Table_Name.global_gift, "gift_selectkey", GetStr(key));
+            SumSave.global_gift = null;
+            if(mysqlReader == null) return;
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    SumSave.global_gift= ReadDb.Read(mysqlReader, new global_gift_vo());
+                }
+            }
+            CloseMySqlDB();
+        }
+
+        private void read_global_promotion()
+        {
+            mysqlReader = MysqlDb.Select(Mysql_Table_Name.global_promotion, "uid", GetStr(SumSave.crt_user.uid));
+            if (mysqlReader == null) return;
+            SumSave.crt_global_promotion = new global_promotion_vo();
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    SumSave.crt_global_promotion = (ReadDb.Read(mysqlReader, new global_promotion_vo(), SumSave.crt_user.uid));
+                }
+            }
+            else Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.global_promotion, SumSave.crt_global_promotion.Set_Instace_String());
+            //检查推广数量
+            mysqlReader = MysqlDb.Select(Mysql_Table_Name.global_promotion, "promotion_value", GetStr(SumSave.crt_user.uid));
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    SumSave.crt_global_promotion.promotion_number++;
+                }
+            }
         }
         /// <summary>
         /// 读取礼包
@@ -102,6 +176,7 @@ namespace MVC
         private void Read_global_battle_info()
         {
             mysqlReader = MysqlDb.ReadGetLatest(Mysql_Table_Name.global_battle_info, "par", GetStr(SumSave.par), 100);
+            if (mysqlReader == null) return;
             SumSave.global_battle_info = new List<global_battle_info_VO>();
             if (mysqlReader.HasRows)
             {

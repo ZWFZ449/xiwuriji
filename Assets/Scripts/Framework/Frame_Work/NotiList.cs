@@ -33,5 +33,11 @@ public class NotiList
 
 
     public const string read_Obtain_Info= "读取服务器交互装备信息";
+
+    public const string Read_global_promotion = "推广数据";
+
+    public const string Read_Global_Gift= "读取全球礼包";
+
+    public const string Add_global_promotion = "添加推广数据";
     #endregion
 }

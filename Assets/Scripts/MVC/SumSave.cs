@@ -462,11 +462,22 @@ namespace Common
         /// 获取全局数据
         /// </summary>
         public static List<global_battle_info_VO> global_battle_info;
-
+        /// <summary>
+        /// 领取礼包vip状态
+        /// </summary>
         public static data_global_gift_vo crt_global_gift;
         /// <summary>
         /// 大事记
         /// </summary>
         public static List<(int,string)> global_Chronicle;
+
+        /// <summary>
+        /// 获取推广
+        /// </summary>
+        public static global_promotion_vo crt_global_promotion;
+        /// <summary>
+        /// 获取礼包码
+        /// </summary>
+        public static global_gift_vo global_gift;
     }
 }

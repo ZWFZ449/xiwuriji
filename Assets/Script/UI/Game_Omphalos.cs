@@ -182,7 +182,7 @@ namespace MVC
         /// <param name="tableName">调用列表</param>
         /// <param name="sql">写入值</param>
         /// /// <param name="sql_names">序列名</param>
-        public void GetQueue(Mysql_Type type, Mysql_Table_Name tableName, string[] sql, string[] sql_names = null)
+        public void GetQueue(Mysql_Type type, Mysql_Table_Name tableName, string[] sql, string[] sql_names = null, string selectkey="uid", string selectvalue="")
         {
             foreach (var item in wirtes)
             {
@@ -203,6 +203,8 @@ namespace MVC
             vo.tableName = tableName;
             vo.columnNames = sql_names;
             vo.columnValues = sql;
+            vo.selectkey = selectkey;
+            vo.selectvalue = selectvalue == "" ? SumSave.crt_user.uid : selectvalue;
             vo.exist = true;
             wirtes.Add(vo);
         }

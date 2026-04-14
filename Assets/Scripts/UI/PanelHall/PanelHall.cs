@@ -24,6 +24,7 @@ public class PanelHall : PanelBase
 
     private Image offect_list;
 
+    
     /// <summary>
     /// offect打开类型
     /// </summary>
@@ -70,9 +71,9 @@ public class PanelHall : PanelBase
         {
             btn_item item = Instantiate(btn_item_Prefabs, pos_map);
             item.Show(i, SumSave.db_halls.maplist_btn[i]);
-            item.GetComponent<Button>().onClick.AddListener(() => { OnClickOtainItem(item); });
+            item.GetComponent<Button>().onClick.AddListener(() => { OnClickMapItem(item); });
         }
-    }
+    } 
     /// <summary>
     /// 打开资源提升开关
     /// </summary>

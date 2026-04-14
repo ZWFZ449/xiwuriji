@@ -207,20 +207,21 @@ public class Dream_Panel_Pet : Panel_Base
         (int, int, int, int, int) CrtAttr = crt_pet.GetCrtAttr;
         (int, int, int, int, int) AddAttr = crt_pet.GetAddAttr;
         List<db_pet_talent_vo> CrtTalent = crt_pet.GetCrtTalent;
+        Bag_Base_VO bag = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == crt_pet.pet_name);
         foreach (enum_equip_entry_list item in info_Dic.Keys)
         {
             switch (item)
             {
                 case enum_equip_entry_list.物理防御:
-                    info_Dic[item].SetInfo(item, 1 + " - " + CrtAttr.Item1+Show_Color.Red(" +( " + AddAttr.Item1+")")); break;
+                    info_Dic[item].SetInfo(item, 1 + " - " +(bag.ac2+ CrtAttr.Item1) +Show_Color.Red(" +( " + AddAttr.Item1+")")); break;
                 case enum_equip_entry_list.魔法防御:
-                    info_Dic[item].SetInfo(item, 1 + " - " + CrtAttr.Item2 + Show_Color.Red(" +( " + AddAttr.Item2 + ")")); break;
+                    info_Dic[item].SetInfo(item, 1 + " - " + (bag.mac2+ CrtAttr.Item2) + Show_Color.Red(" +( " + AddAttr.Item2 + ")")); break;
                 case enum_equip_entry_list.物理攻击:
-                    info_Dic[item].SetInfo(item, 1 + " - " + CrtAttr.Item3 + Show_Color.Red(" +( " + AddAttr.Item3 + ")")); break;
+                    info_Dic[item].SetInfo(item, 1 + " - " + (bag.dc2+ CrtAttr.Item3) + Show_Color.Red(" +( " + AddAttr.Item3 + ")")); break;
                 case enum_equip_entry_list.魔法攻击:
-                    info_Dic[item].SetInfo(item, 1 + " - " + CrtAttr.Item4 + Show_Color.Red(" +( " + AddAttr.Item4 + ")")); break;
+                    info_Dic[item].SetInfo(item, 1 + " - " + (bag.mc2+ CrtAttr.Item4) + Show_Color.Red(" +( " + AddAttr.Item4 + ")")); break;
                 case enum_equip_entry_list.道术攻击:
-                    info_Dic[item].SetInfo(item, 1 + " - " + CrtAttr.Item5 + Show_Color.Red(" +( " + AddAttr.Item5 + ")")); break; 
+                    info_Dic[item].SetInfo(item, 1 + " - " + (bag.sc2+ CrtAttr.Item5 )+ Show_Color.Red(" +( " + AddAttr.Item5 + ")")); break;  
             }
         }
         ClearObject(m_Talent_brom);

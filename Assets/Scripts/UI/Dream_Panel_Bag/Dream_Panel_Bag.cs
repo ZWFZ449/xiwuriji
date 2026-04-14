@@ -147,24 +147,25 @@ public class Dream_Panel_Bag : Panel_Base
     {
         ClearObject(m_BagItem_brom);
         switch (m_curPanel_BagType)
-        { case Panel_BagType.灵宠:
+        {
+            case Panel_BagType.灵宠:
                 List<db_pet_vo> pet_list = SumSave.crt_pet.GetPets;
                 base_info.text = m_curPanel_BagType + " " + pet_list.Count + "/10";
                 for (int i = 0; i < pet_list.Count; i++)
-                { 
+                {
                     dream_BagItem bagItem = Instantiate(p_bagItem_prefab, m_BagItem_brom);
-                    bagItem.Pet_Data= pet_list[i];
+                    bagItem.Pet_Data = pet_list[i];
                     bagItem.GetComponent<Button>().onClick.AddListener(() => SelectPetItem(bagItem));
                 }
                 break;
-           case Panel_BagType.装备:
-           case Panel_BagType.存入仓库:
+            case Panel_BagType.装备:
+            case Panel_BagType.存入仓库:
                 List<Bag_Base_VO> baglist = SumSave.crt_bags.Get_Bag_List();
                 base_info.text = m_curPanel_BagType + " " + baglist.Count + "/120";
                 for (int i = 0; i < baglist.Count; i++)
-                { 
+                {
                     dream_BagItem bagItem = Instantiate(p_bagItem_prefab, m_BagItem_brom);
-                    bagItem.Data= baglist[i];
+                    bagItem.Data = baglist[i];
                     bagItem.GetComponent<Button>().onClick.AddListener(() => SelectBagItem(bagItem));
                 }
                 break;
@@ -172,13 +173,37 @@ public class Dream_Panel_Bag : Panel_Base
                 List<(string, int)> resources_list = SumSave.crt_bags.Set();
                 base_info.text = m_curPanel_BagType + " " + resources_list.Count + "/120";
                 for (int i = 0; i < resources_list.Count; i++)
-                { 
+                {
                     material_item bagItem = Instantiate(p_material_item_prefab, m_BagItem_brom);
                     bagItem.Init(resources_list[i]);
                     bagItem.GetComponent<Button>().onClick.AddListener(() => SelectBagResourcesItem(bagItem));
                 }
                 break;
+            case Panel_BagType.宝石:
+                break;
+            case Panel_BagType.取出仓库:
+                List<Bag_Base_VO> houselist = SumSave.crt_equips.Get(Dream_User_Equip_Type.仓库);
+                base_info.text = m_curPanel_BagType + " " + houselist.Count + "/" + SumSave.crt_equips.GetPage;
+                for (int i = 0; i < houselist.Count; i++)
+                {
+                    dream_BagItem bagItem = Instantiate(p_bagItem_prefab, m_BagItem_brom);
+                    bagItem.Data = houselist[i];
+                    bagItem.GetComponent<Button>().onClick.AddListener(() => SelectBagItem(bagItem));
+                }
+                break;
+                break;
+            case Panel_BagType.一键出售:
+                break;
+            case Panel_BagType.已装备:
+                break;
+            case Panel_BagType.展示:
+                break;
         }
+    }
+
+    private void SelectHouseItem(dream_BagItem bagItem)
+    {
+
     }
 
     private void SelectPetItem(dream_BagItem bagItem)

@@ -114,12 +114,11 @@ public class dream_setting_item : Base_Mono
     /// <param name="input"></param>
     public void Init(string boss, int input = 0)
     {
-        List<string> analysis = ArrayHelper.Get_Split<string>(boss, '+');
         dropdown.options.Clear();
         dropdown_list = new List<string>();
         dropdown.interactable = false;
         unit.text = "次";
-        dropdown_list.Add("自动召唤击杀 " + Show_Color.Red(analysis[0]) + " 次数:");
+        dropdown_list.Add("自动召唤击杀 " + Show_Color.Red(boss) + " 次数:");
         dropdown.AddOptions(dropdown_list);
         currentItem = (3, 3, boss, input);
         inputField.text = input.ToString();

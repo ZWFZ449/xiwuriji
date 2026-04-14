@@ -108,4 +108,6 @@ public enum Mysql_Table_Name
     global_battle_info,//全局战斗信息
     db_chronicle,//大事记
     dream_user_gift,//用户礼物信息
+    global_promotion,//全局推广
+    global_gift,//全局礼物
 }

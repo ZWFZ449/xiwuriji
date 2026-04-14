@@ -136,12 +136,7 @@ namespace MVC
                                 MysqlDb.InsertInto(wirtes[i].tableName, wirtes[i].columnValues);
                                 break;
                                 case Mysql_Type.UpdateInto:
-                                if (wirtes[i].tableName == Mysql_Table_Name.user_rank|| wirtes[i].tableName== Mysql_Table_Name.user_world_boss_rank)
-                                {
-                                    MysqlDb.UpdateInto(wirtes[i].tableName, wirtes[i].columnNames, wirtes[i].columnValues, "par", GetStr(SumSave.par));
-                                }
-                                else 
-                                MysqlDb.UpdateInto(wirtes[i].tableName, wirtes[i].columnNames, wirtes[i].columnValues, "uid", GetStr(SumSave.crt_user.uid));
+                                MysqlDb.UpdateInto(wirtes[i].tableName, wirtes[i].columnNames, wirtes[i].columnValues, wirtes[i].selectkey, GetStr(wirtes[i].selectvalue));
                                 break;
                             case Mysql_Type.Delete:
                                 MysqlDb.Delete(wirtes[i].tableName, new string[] { "uid" }, new string[] { GetStr(SumSave.crt_user.uid)});

@@ -117,6 +117,31 @@ public static class ReadDb
         int _moeny = reader.GetInt32(reader.GetOrdinal("moeny"));
         return new db_mail_vo(_mail_id, _mail_time, _mail_par, _uid, _user_value, _dec, _moeny);
     }
+    public static global_promotion_vo Read(MySqlDataReader reader, global_promotion_vo item,string uid)
+    {
+        string value = reader.GetString(reader.GetOrdinal("promotion_value"));
+        int moeny= reader.GetInt32(reader.GetOrdinal("promotion_moeny"));
+        item.Init(value, moeny,"uid", uid);
+        return item;
+    }
+    public static global_gift_vo Read(MySqlDataReader reader, global_gift_vo item)
+    {
+        reader.GetInt32(reader.GetOrdinal("id"));
+        reader.GetInt32(reader.GetOrdinal("gift_type"));
+        reader.GetInt32(reader.GetOrdinal("gift_par"));
+        reader.GetString(reader.GetOrdinal("gift_value"));
+        reader.GetInt32(reader.GetOrdinal("gift_state"));
+        reader.GetInt32(reader.GetOrdinal("Gift_Points"));
+        item.Init(
+            reader.GetInt32(reader.GetOrdinal("id")),
+            reader.GetInt32(reader.GetOrdinal("gift_type")),
+            reader.GetInt32(reader.GetOrdinal("gift_par")),
+            reader.GetString(reader.GetOrdinal("gift_value")),
+            reader.GetInt32(reader.GetOrdinal("gift_state")),
+            reader.GetInt32(reader.GetOrdinal("Gift_Points"))
+            );
+        return item;
+    }
     public static global_battle_info_VO Read(MySqlDataReader reader, global_battle_info_VO item)
     {
         item.value = reader.GetString(reader.GetOrdinal("user_value"));

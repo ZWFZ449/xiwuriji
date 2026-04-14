@@ -127,8 +127,10 @@ public class hero_equip_item : Base_Mono
             case equip_btn_list.回收:
                 break;
             case equip_btn_list.存入:
+                deposit();
                 break;
             case equip_btn_list.取出:
+                takeout();
                 break;
             case equip_btn_list.脱下:
                 takeoff();
@@ -137,6 +139,37 @@ public class hero_equip_item : Base_Mono
                 break;
         }
     }
+    /// <summary>
+    /// 取出
+    /// </summary>
+    private void takeout()
+    {
+        List<Bag_Base_VO> equips = SumSave.crt_equips.Get(Dream_User_Equip_Type.仓库);
+        equips.Remove(data.Data);
+        SumSave.crt_equips.Set(Dream_User_Equip_Type.仓库, equips);
+        SumSave.crt_bags.Set_Bag_List(data.Data);
+        Hide(true);
+    }
+    /// <summary>
+    /// 存入
+    /// </summary>
+    private void deposit()
+    {
+        List<Bag_Base_VO> equips = SumSave.crt_equips.Get(Dream_User_Equip_Type.仓库);
+        if (equips.Count >= SumSave.crt_equips.GetPage)
+        {
+            Alert_Dec.Show("仓库已满，无法存入");
+            return;
+        }
+        equips.Add(data.Data);
+        SumSave.crt_equips.MysqlData();
+        List<Bag_Base_VO> bags = SumSave.crt_bags.Get_Bag_List();
+        bags.Remove(data.Data);
+        SumSave.crt_equips.Set(Dream_User_Equip_Type.仓库, equips);
+        SumSave.crt_bags.Set_Bag_List(bags);
+        Hide(true);
+    }
+
     /// <summary>
     /// 锁定
     /// </summary>
@@ -316,7 +349,7 @@ public class hero_equip_item : Base_Mono
         ClearObject(m_info_brom);
         ClearObject(m_dream_bag_brom);
         Instantiate(dream_BagItem_prefab, m_dream_bag_brom).Data = data.Data;
-        Color c = Color.white;
+        Color c = HexToColor("#ffffff");
         Get().Init(("[" + enum_equip_basetype_list.基础属性 + "]"), c);
         if (data.Data.hp > 0)
         {
@@ -370,9 +403,10 @@ public class hero_equip_item : Base_Mono
                         switch ((enum_equip_basetype_list)i)
                         {
                             case enum_equip_basetype_list.基础属性:
+                                c = HexToColor("#ffffff");
                                 break;
                             case enum_equip_basetype_list.附加属性:
-                                c = Color.green;
+                                c = HexToColor("#70ff69");
                                 Get().Init(("[" + enum_equip_basetype_list.附加属性 + "]"), c);
                                 break;
                             case enum_equip_basetype_list.元素属性:
@@ -380,7 +414,7 @@ public class hero_equip_item : Base_Mono
                                 Get().Init(("[" + enum_equip_basetype_list.元素属性 + "]"), c);
                                 break;
                             case enum_equip_basetype_list.铭文属性:
-                                c = Color.yellow;
+                                c = HexToColor("#ffff00");
                                 Get().Init(("[" + enum_equip_basetype_list.铭文属性 + "]"), c);
                                 break;
                             default:
@@ -502,11 +536,11 @@ public class hero_equip_item : Base_Mono
                 {
                     if (item.suit == data.Data.suit) number++;
                 }
-                c = Color.red;
+                c = HexToColor("#ffa9fe");
                 Get().Init(("[" + suit.suit_name + "]"), c);
                 for (int i = 0; i < suit.suit_list.Count; i++)
                 {
-                    c = Color.yellow;
+                    c = HexToColor("#ffd8ab");
                     if (suit.suit_list[i].Item1 > number)
                     { 
                         c = Color.gray;

@@ -36,7 +36,11 @@ namespace MVC
                 NotiList.User_Login,
                 NotiList.Execute_Write,
                 NotiList.Refresh_Max_Hero_Attribute,
-                NotiList.read_Obtain_Info
+                NotiList.read_Obtain_Info,
+                NotiList.Read_global_promotion,
+                NotiList.Add_global_promotion,
+                NotiList.Read_Global_Gift
+
 
             };
         }
@@ -61,6 +65,15 @@ namespace MVC
                     break;
                 case NotiList.read_Obtain_Info:
                     user.read_Obtain_Info();
+                    break;
+                case NotiList.Read_global_promotion:
+                    user.Read_global_promotion();
+                    break;
+                case NotiList.Read_Global_Gift:
+                    user.Read_Global_Gift(data.ToString());
+                    break;
+                    case NotiList.Add_global_promotion:
+                    user.Add_global_promotion(data);
                     break;
                 default:
                     break;

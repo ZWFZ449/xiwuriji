@@ -55,7 +55,7 @@ public class Dream_Panel_Setting : Panel_Base
         m_setting_btn_borm = Find<Transform>("bg/offect_list/Scroll View/Viewport/Content");
         dream_setting_item_prefab = Tool_UI.Find_Prefabs<dream_setting_item>("dream_setting_item");
         confirm= Find<Button>("bg/offect_list/confirm");
-        for (int i = 1; i < Enum.GetNames(typeof(Map_Btn_list)).Length; i++)
+        for (int i = 1; i < Enum.GetNames(typeof(setting_type)).Length; i++)
         {
             btn_item btn_item = Instantiate(btn_item_prefab, m_btn_type_borm);
             btn_item.Show(i, (setting_type)i);
@@ -112,8 +112,21 @@ public class Dream_Panel_Setting : Panel_Base
             case setting_type.Boss设置:
                 for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
                 {
-                    dream_setting_item dream_setting_item = Instantiate(dream_setting_item_prefab, m_setting_btn_borm);
-                    dream_setting_item.Init(SumSave.crt_setting.battle_Boss_list[i].Item1, SumSave.crt_setting.battle_Boss_list[i].Item2);
+                    List<string> analysis = ArrayHelper.Get_Split<string>(SumSave.crt_setting.battle_Boss_list[i].Item1, '+');
+
+                    for (int j = 0; j < SumSave.db_maps.Count; j++)
+                    {
+                        if (SumSave.db_maps[j].map_type == 0)
+                        {
+                            if (SumSave.db_maps[j].map_boss.Contains(analysis[0]))
+                            {
+                                dream_setting_item dream_setting_item = Instantiate(dream_setting_item_prefab, m_setting_btn_borm);
+                                dream_setting_item.Init(analysis[0], SumSave.crt_setting.battle_Boss_list[i].Item2);
+                                break;
+                            }
+                        }
+                    }
+                    
                 }
                 break;
         }

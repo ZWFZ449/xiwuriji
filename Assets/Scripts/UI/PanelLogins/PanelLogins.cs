@@ -107,8 +107,8 @@ public class PanelLogins : PanelBase
         loginBt.gameObject.SetActive(true);
 
 #elif UNITY_ANDROID
-            TaploginBt.gameObject.SetActive(true);//true
-            loginBt.gameObject.SetActive(false);
+            //TaploginBt.gameObject.SetActive(true);//true
+            //loginBt.gameObject.SetActive(false);
            
 #elif UNITY_IPHONE
             TaploginBt.gameObject.SetActive(false);
@@ -425,7 +425,7 @@ public class PanelLogins : PanelBase
     public override void Hide()
     {
         ////计算离线收益
-        offline();
+        //offline();
         base.Hide();
     }
     /// <summary>
