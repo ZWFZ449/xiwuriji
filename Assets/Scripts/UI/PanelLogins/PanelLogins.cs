@@ -89,7 +89,7 @@ public class PanelLogins : PanelBase
 
         loginBt = Find<Button>("btn_login");
         loginBt.onClick.AddListener(Open_function);
-        loginBt.gameObject.SetActive(false);
+        //loginBt.gameObject.SetActive(false);
 
 #if UNITY_EDITOR
         loginBt.gameObject.SetActive(true);
@@ -99,8 +99,8 @@ public class PanelLogins : PanelBase
             //loginBt.gameObject.SetActive(false);
            
 #elif UNITY_IPHONE
-            TaploginBt.gameObject.SetActive(false);
-            loginBt.gameObject.SetActive(true);
+            //TaploginBt.gameObject.SetActive(false);
+            //loginBt.gameObject.SetActive(true);
 #endif
         #region 用户协议
 
