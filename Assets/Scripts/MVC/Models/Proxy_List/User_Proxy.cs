@@ -79,10 +79,10 @@ namespace MVC
             else
             {
                 string par_uid = Guid.NewGuid().ToString("N");
-                Debug.Log("par_uid:" + SumSave.uid + " " + par_uid);
+                //Debug.Log("par_uid:" + SumSave.uid + " " + par_uid);
                 Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.global_uid, new string[] { GetStr(0), GetStr(SumSave.uid), GetStr(SumSave.par), GetStr(par_uid) });
                 SumSave.uid = par_uid;
-                Debug.Log("uid:" + SumSave.uid);
+                //Debug.Log("uid:" + SumSave.uid);
             }
         }
 

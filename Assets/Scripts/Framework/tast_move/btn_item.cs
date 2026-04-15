@@ -1,10 +1,11 @@
 using MVC;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class btn_item : Base_Mono
 {
-    private Text info;
+    private TMP_Text info;
     public int index;
     /// <summary>
     /// 是否为激活状态
@@ -13,7 +14,7 @@ public class btn_item : Base_Mono
 
     private void Awake()
     {
-        info = Find<Text>("info"); 
+        info = Find<TMP_Text>("info"); 
     }
 
     /// <summary>

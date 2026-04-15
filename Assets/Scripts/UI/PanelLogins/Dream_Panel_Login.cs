@@ -58,7 +58,6 @@ public class Dream_Panel_Login : PanelBase
             Alert_Dec.Show("创建账号成功");
             SumSave.uid = Guid.NewGuid().ToString("N");
             PlayerPrefs.SetString(user_password, SumSave.uid);
-            Debug.Log("创建默认id "+SumSave.uid);
         } 
         else
             SumSave.uid = PlayerPrefs.GetString(user_password);
