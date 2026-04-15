@@ -4,6 +4,7 @@ using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +16,7 @@ public class map_show_offect : Base_Mono
     /// <summary>
     /// 显示地图信息
     /// </summary>
-    private Text base_info;
+    private TMP_Text base_info;
 
     private Transform m_drop_borm, m_map_intensity_borm;
 
@@ -41,7 +42,7 @@ public class map_show_offect : Base_Mono
     private void Awake()
     {
         close=Find<Button>("close_button");
-        base_info=Find<Text>("baseinfo");
+        base_info=Find<TMP_Text>("baseinfo/info");
         close.onClick.AddListener(()=> { Hide(); });
         m_map_intensity_borm = Find<Transform>("map_intensity_borm");
         select_map_lv_item_Prefab = Tool_UI.Find_Prefabs<select_map_lv_item>("select_map_lv_item");

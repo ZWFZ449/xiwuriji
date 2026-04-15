@@ -63,7 +63,7 @@ public class UnityColorPresets
     /// <param name="text"></param>
     /// <param name="color"></param>
     /// <returns></returns>
-    public static string Colorize(string text, Color color)
+    public static string Colorize(object text, Color color)
     { 
         return $"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{text}</color>";
     }

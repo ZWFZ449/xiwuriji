@@ -1,6 +1,7 @@
 using MVC;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,12 +9,12 @@ public class synthesis_item : Base_Mono
 {
     private Image icon;
 
-    private Text info;
+    private TMP_Text info;
 
     private void Awake()
     {
         icon = Find<Image>("icon/icon");
-        info = Find<Text>("show_info/info");
+        info = Find<TMP_Text>("show_info/info");
     }
 
     public void Init(string value)

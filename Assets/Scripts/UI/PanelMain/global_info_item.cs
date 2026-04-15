@@ -1,17 +1,19 @@
+using MVC;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class global_info_item : MonoBehaviour
+public class global_info_item : Base_Mono
 {
-    private Text info;
+    private TMP_Text info;
 
     public global_battle_info_VO data;
 
     private void Awake()
     {
-        info = GetComponent<Text>();
+        info = Find<TMP_Text>("info");
     }
 
     public void SetInfo(global_battle_info_VO vo)

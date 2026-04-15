@@ -4,6 +4,7 @@ using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,7 +37,7 @@ public class Dream_Panel_Setting : Panel_Base
     /// <summary>
     /// 显示信息
     /// </summary>
-    private Text base_info;
+    private TMP_Text base_info;
     /// <summary>
     /// 确认按钮
     /// </summary>
@@ -51,7 +52,7 @@ public class Dream_Panel_Setting : Panel_Base
         base.Initialize();
         m_btn_type_borm = Find<Transform>("bg/battle_btn_list");
         btn_item_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
-        base_info= Find<Text>("bg/offect_list/title/info");
+        base_info= Find<TMP_Text>("bg/offect_list/title/info/info");
         m_setting_btn_borm = Find<Transform>("bg/offect_list/Scroll View/Viewport/Content");
         dream_setting_item_prefab = Tool_UI.Find_Prefabs<dream_setting_item>("dream_setting_item");
         confirm= Find<Button>("bg/offect_list/confirm");

@@ -4,6 +4,7 @@ using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityColorPresets;
@@ -22,7 +23,7 @@ public class offect_Fame : Base_Mono
 
     private Button confirm;
 
-    private Text info;
+    private TMP_Text info;
     /// <summary>
     /// 选中vip
     /// </summary>
@@ -30,7 +31,7 @@ public class offect_Fame : Base_Mono
     private void Awake()
     {
         m_btn_brom = Find<Transform>("btn_list/Viewport/Content");
-        info = Find<Text>("fame_list/Viewport/Text");
+        info = Find<TMP_Text>("fame_list/Viewport/Text");
         btn_item_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
         m_gift_borm = Find<Transform>("rechargeGift/Scroll View/Viewport/Content");
         p_material_item_prefab = Tool_UI.Find_Prefabs<material_item>("material_item");
@@ -130,12 +131,12 @@ public class offect_Fame : Base_Mono
         this.vip = vip;
         dec += "荣耀积分(" + SumSave.crt_global_gift.GetGiftPoints + "/" + vip.vip_exp + ")\n";
 
-        dec += enum_equip_entry_list.金币掉落 + "：" + Colorize(vip.lingzhuIncome + "%\n", GameColors.Uncommon);
-        dec += enum_equip_entry_list.经验加成 + "：" + Colorize(vip.experienceBonus + "%\n", GameColors.Uncommon);
-        dec+= enum_equip_entry_list.怪物爆率 + "：" + Colorize( vip.equipmentExplosionRate + "%\n", GameColors.Uncommon);
-        dec += "Boss刷新时间" + "：" + Colorize(-vip.monsterHuntingInterval + "%\n", GameColors.Uncommon);
-        dec += "签到" + "：" + Colorize(common_items_list.Boss召唤卷轴 + " * "+vip.characterExperience + "\n", GameColors.Uncommon);
-        dec += "签到" + "：" + Colorize(common_items_list.双倍经验卷轴 + " * " + vip.characterExperience + "\n", GameColors.Uncommon);
+        dec += enum_equip_entry_list.金币掉落 + " + " + Colorize(vip.lingzhuIncome + "%\n", GameColors.Uncommon);
+        dec += enum_equip_entry_list.经验加成 + " + " + Colorize(vip.experienceBonus + "%\n", GameColors.Uncommon);
+        dec+= enum_equip_entry_list.怪物爆率 + " + " + Colorize( vip.equipmentExplosionRate + "%\n", GameColors.Uncommon);
+        dec += "Boss刷新时间" + " - " + Colorize(-vip.monsterHuntingInterval + "%\n", GameColors.Uncommon);
+        dec += "签到" + " " + Colorize(common_items_list.Boss召唤卷轴 + " * "+vip.characterExperience + "\n", GameColors.Uncommon);
+        dec += "签到" + " " + Colorize(common_items_list.双倍经验卷轴 + " * " + vip.characterExperience + "\n", GameColors.Uncommon);
         if (isOpen)
         {
             confirm.gameObject.SetActive(!SumSave.crt_global_gift.IsHaveGift(vip.vip_name));

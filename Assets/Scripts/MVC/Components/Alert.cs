@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UI;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -23,7 +24,7 @@ namespace Components
         /// </summary>
         private static bool isShow = true;
 
-        private Text base_info, info_content;
+        private TMP_Text base_info, info_content;
 
         private Button btn_success, btn_close;
 
@@ -40,9 +41,9 @@ namespace Components
 
             transform.SetAsLastSibling();
 
-            base_info = Find<Text>("alertbg/base_info/Text");
+            base_info = Find<TMP_Text>("alertbg/base_info/Text");
 
-            info_content = Find<Text>("alertbg/info_value/ScrollView/Viewport/Text");
+            info_content = Find<TMP_Text>("alertbg/info_value/ScrollView/Viewport/Text");
 
             btn_success = Find<Button>("alertbg/btn_list/btn_success");
 

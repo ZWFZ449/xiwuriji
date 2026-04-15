@@ -4,6 +4,7 @@ using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -79,7 +80,7 @@ public class PanelBattle : PanelBase
     /// <summary>
     /// 刷新间隔
     /// </summary>
-    private Text time_info,map_name;
+    private TMP_Text time_info,map_name;
     /// <summary>
     /// 信息预制体
     /// </summary>
@@ -100,8 +101,8 @@ public class PanelBattle : PanelBase
     public override void Initialize()
     {
         base.Initialize();
-        time_info = Find<Text>("Title/time_info");
-        map_name= Find<Text>("Title/map_name");
+        time_info = Find<TMP_Text>("Title/time_info/info");
+        map_name= Find<TMP_Text>("Title/map_name/info");
         monster_list = new List<GameObject>();
         player_list = new List<GameObject>();
         monster_battle_list = new List<crtMaxBattleVO>();

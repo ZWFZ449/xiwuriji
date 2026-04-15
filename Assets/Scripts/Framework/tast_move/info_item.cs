@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using MVC;
 using UnityEngine.UI;
+using TMPro;
 
 public class info_item : Base_Mono
 {
-    private Text base_type, base_value;
+    private TMP_Text base_type, base_value;
     private void Awake()
     {
-        base_value = Find<Text>("base_value");
-        base_type = Find<Text>("base_type");
+        base_value = Find<TMP_Text>("base_value");
+        base_type = Find<TMP_Text>("base_type");
     }
     /// <summary>
     /// 显示信息

@@ -2,6 +2,7 @@ using Common;
 using Components;
 using MVC;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,18 +10,18 @@ public class store_item_buy : Base_Mono
 {
     private Transform m_icon_brom;
     private InputField inputField;
-    private Text buy_item_Title;
+    private TMP_Text buy_item_Title;
     private Button buy_btn;
-    private Text buy_text;
+    private TMP_Text buy_text;
     private material_item material_item_Prefabs;
     private db_store_vo buy_title;
 
     private void Awake()
     {
         inputField = Find<InputField>("InputField");
-        buy_item_Title = Find<Text>("buy_item_Title/Title");
+        buy_item_Title = Find<TMP_Text>("buy_item_Title/Title/info");
         buy_btn = Find<Button>("buy_btn");
-        buy_text = Find<Text>("buy_text");
+        buy_text = Find<TMP_Text>("buy_text/info");
         m_icon_brom = Find<Transform>("icon");
         material_item_Prefabs = Tool_UI.Find_Prefabs<material_item>("material_item");
         inputField.onEndEdit.AddListener(OnInputChanged);//监听输入框

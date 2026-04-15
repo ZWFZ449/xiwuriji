@@ -1,4 +1,5 @@
 using MVC;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
@@ -73,11 +74,11 @@ public enum enum_equip_entry_list
 public class equip_show_info_item : Base_Mono
 {
     private Image icon;
-    private Text info;
+    private TMP_Text info;
     private void Awake()
     {
         icon = Find<Image>("show_info");
-        info = Find<Text>("base_info");
+        info = Find<TMP_Text>("base_info/info");
     }
 
     public void Init(enum_equip_basetype_list basetype, enum_equip_entry_list type,object _info,Color color)

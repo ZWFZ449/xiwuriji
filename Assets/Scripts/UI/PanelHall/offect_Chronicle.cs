@@ -2,16 +2,17 @@ using Common;
 using Components;
 using MVC;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class offect_Chronicle : Base_Mono
 {
-    private Text info;
+    private TMP_Text info;
 
     private void Awake()
     {
-        info = Find<Text>("list/Viewport/info");
+        info = Find<TMP_Text>("list/Viewport/info");
     }
 
     private void OnEnable()

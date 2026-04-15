@@ -1,18 +1,12 @@
-using Components;
 using MVC;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 
-public class input_offect
-    : Base_Mono
+public class input_offect : Base_Mono
 {
     private InputField inputField;
 
-    private Text info, title;
+    private TMP_Text info, title;
 
     private Button close;
 
@@ -20,12 +14,11 @@ public class input_offect
     private void Awake()
     {
         inputField =Find<InputField>("bg/InputField");
-        info = Find<Text>("bg/info");
-        title = Find<Text>("bg/title");
+        info = Find<TMP_Text>("bg/info");
+        title = Find<TMP_Text>("bg/title");
         close = Find<Button>("close_button");
         close.onClick.AddListener(delegate {gameObject.SetActive(false); });
         confirm = Find<Button>("bg/confirm");
-        //confirm.onClick.AddListener(delegate { OnConfirm(); });
     }
 
     /// <summary>

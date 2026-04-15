@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,7 +44,7 @@ public class Dream_Panel_Bag : Panel_Base
 
     private Dream_Panel_Pet m_panel_pet;
 
-    private Text base_info;
+    private TMP_Text base_info;
     public override void Hide()
     {
         base.Hide();
@@ -57,7 +58,7 @@ public class Dream_Panel_Bag : Panel_Base
         p_btn_item_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
         p_bagItem_prefab = Tool_UI.Find_Prefabs<dream_BagItem>("dream_BagItem");
         p_material_item_prefab = Tool_UI.Find_Prefabs<material_item>("material_item");
-        base_info = Find<Text>("bg/base_info");
+        base_info = Find<TMP_Text>("bg/base_info/info");
         ClearObject(m_BagItem_brom);
         ClearObject(m_btn_brom);
         for (int i = 0; i < Enum.GetNames(typeof(Panel_BagType)).Length-2; i++)

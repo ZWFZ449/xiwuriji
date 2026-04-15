@@ -2,12 +2,13 @@ using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class base_map_item : Base_Mono 
 {
-    private Text map_name, map_lv, map_boss, map_boss_cdtime;
+    private TMP_Text map_name, map_lv, map_boss;
     private Button b_map_name, b_map_lv, b_map_boss, b_map_boss_cdtime;
     /// <summary>
     /// 当前地图数据
@@ -19,10 +20,9 @@ public class base_map_item : Base_Mono
     private int map_intensity = 1;
     private void Awake()
     {
-        map_name=Find<Text>("map_name/info");
-        map_lv = Find<Text>("map_lv/info");
-        map_boss = Find<Text>("map_boss/info");
-        map_boss_cdtime = Find<Text>("map_boss_cdtime/info");
+        map_name=Find<TMP_Text>("map_name/info/info");
+        map_lv = Find<TMP_Text>("map_lv/info/info");
+        map_boss = Find<TMP_Text>("map_boss/info/info");
         b_map_name = Find<Button>("map_name");
         b_map_lv = Find<Button>("map_lv");
         b_map_boss = Find<Button>("map_boss");

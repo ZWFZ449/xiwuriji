@@ -37,6 +37,16 @@ public class offect_job : Base_Mono
     /// </summary>
     private void ResetTalent()
     {
+        if (SumSave.crtHero.job == 0)
+        {
+            Alert_Dec.Show("当前职业为默认职业无法重置");
+            return;
+        }
+        if (SumSave.crtHero.SelectPos == -1)
+        {
+            Alert_Dec.Show("当前不需要重置天赋");
+            return;
+        }
         List<long> Units = SumSave.crt_user_unit.Set();
         int buy = 1000;
         if (Units[(int)currency_unit.元宝] >= buy)
@@ -74,7 +84,8 @@ public class offect_job : Base_Mono
             Alert.Show("重置天赋成功", dec);
             Hide();
         }
-         
+        else Alert_Dec.Show("元宝不足");
+
     }
 
     private void Hide()
@@ -88,6 +99,11 @@ public class offect_job : Base_Mono
     /// </summary>
     private void ResetJob()
     {
+        if (SumSave.crtHero.job == 0)
+        {
+            Alert_Dec.Show("当前职业为默认职业无法重置");
+            return;
+        }
         List<long> Units = SumSave.crt_user_unit.Set();
         int buy = 5000;
         if (Units[(int)currency_unit.元宝] >= buy)
@@ -126,5 +142,6 @@ public class offect_job : Base_Mono
             Alert.Show("重置职业成功", dec);
             Hide();
         }
+        else Alert_Dec.Show("元宝不足");
     }
 }

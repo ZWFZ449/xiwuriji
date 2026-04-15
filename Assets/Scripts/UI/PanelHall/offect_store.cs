@@ -3,6 +3,7 @@ using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,14 +17,14 @@ public enum Store_Type
 public class offect_store : Base_Mono
 { 
     private store_item_buy show_store_item_buy;
-    private Text title_name;
+    private TMP_Text title_name;
     private Transform m_pos_brom;
     private store_item  store_item_prefab;
     private Store_Type crt_type;
     private Button close_button;
     private void Awake()
     {
-        title_name = Find<Text>("title_name/info");
+        title_name = Find<TMP_Text>("title_name/info/info");
         m_pos_brom = Find<Transform>("Scroll View/Viewport/Content");
         store_item_prefab= Tool_UI.Find_Prefabs<store_item>("store_item");
         close_button = Find<Button>("close_button");

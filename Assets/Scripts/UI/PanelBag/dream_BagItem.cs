@@ -1,5 +1,6 @@
 using System;
 using Common;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -14,13 +15,13 @@ namespace MVC
     public class dream_BagItem : Base_Mono
     {
         private Image item_icon, item_frame, lock_On;
-        private Text info;
+        //private TMP_Text info;
         private Transform receive;
         private void Awake()
         {
             item_icon = Find<Image>("icon");
             item_frame = Find<Image>("frame");
-            info = Find<Text>("info");
+            //info = Find<TMP_Text>("info/info");
             lock_On = Find<Image>("icon/lock");
             receive = Find<Transform>("receive");
             receive.gameObject.SetActive(false);

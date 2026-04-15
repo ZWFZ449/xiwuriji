@@ -4,6 +4,7 @@ using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +14,7 @@ public enum Hero_Resources_BtnType
 }
 public class hero_Resources_item : Base_Mono
 {
-    private Text info;
+    private TMP_Text info;
 
     private Transform m_btn_brom,m_showIcon_brom;
 
@@ -26,7 +27,7 @@ public class hero_Resources_item : Base_Mono
     private Dictionary<Hero_Resources_BtnType, btn_item> btn_item_dic = new Dictionary<Hero_Resources_BtnType, btn_item>();
     private void Awake()
     {
-        info=Find<Text>("info");
+        info=Find<TMP_Text>("info/info");
         m_btn_brom = Find<Transform>("btn_brom");  
         m_showIcon_brom= Find<Transform>("icon");  
         material_item_prefab = Tool_UI.Find_Prefabs<material_item>("material_item");

@@ -7,6 +7,8 @@ using System;
 using Common;
 using UnityEngine.UI;
 using Components;
+using TMPro;
+using static UnityColorPresets;
 
 public class Dream_Panel_Hero : Panel_Base
 {
@@ -25,7 +27,7 @@ public class Dream_Panel_Hero : Panel_Base
     /// <summary>
     /// 玩家天赋和职业
     /// </summary>
-    private Text player_talent_name;
+    private TMP_Text player_talent_name;
 
     private Image offect_talent;
     /// <summary>
@@ -49,7 +51,7 @@ public class Dream_Panel_Hero : Panel_Base
         p_player_talent_item_prefab = Tool_UI.Find_Prefabs<player_talent_item>("player_talent_item");
         m_player_talent_brom = Find<Transform>("bg/job_list");
         grid_layout_group = Find<GridLayoutGroup>("bg/job_list");
-        player_talent_name =Find<Text>("bg/show_title/info");
+        player_talent_name =Find<TMP_Text>("bg/show_title/info/info");
         offect_talent = Find<Image>("bg/offect_talent");
         InitObtain_Equip_List();
     }
@@ -621,43 +623,44 @@ public class Dream_Panel_Hero : Panel_Base
                case enum_equip_entry_list.幸运:
                    info_Dic[item].SetInfo(item, data.lucky);break;
                case enum_equip_entry_list.命中:
-                   info_Dic[item].SetInfo(item, data.hit+" %",Show_Color.Set_Color(Color_list.绿色));break;
+                    
+                   info_Dic[item].SetInfo(item, data.hit+" %",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.闪避:
-                   info_Dic[item].SetInfo(item, data.dodge+" %",Show_Color.Set_Color(Color_list.绿色));break;
+                   info_Dic[item].SetInfo(item, data.dodge+" %",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.生命属性:
-                   info_Dic[item].SetInfo(item, data.battle_hp+" %",Show_Color.Set_Color(Color_list.绿色));break;
+                   info_Dic[item].SetInfo(item, data.battle_hp+" %",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.魔法属性:
-                   info_Dic[item].SetInfo(item, data.battle_mp+" %",Show_Color.Set_Color(Color_list.绿色));break;
+                   info_Dic[item].SetInfo(item, data.battle_mp+" %",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.防御属性:
-                   info_Dic[item].SetInfo(item, data.battle_ac+" %",Show_Color.Set_Color(Color_list.绿色));break;
+                   info_Dic[item].SetInfo(item, data.battle_ac+" %",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.魔防属性:
-                   info_Dic[item].SetInfo(item, data.battle_mac+" %",Show_Color.Set_Color(Color_list.绿色));break;
+                   info_Dic[item].SetInfo(item, data.battle_mac+" %",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.物攻属性:
-                   info_Dic[item].SetInfo(item, data.battle_dc+" %",Show_Color.Set_Color(Color_list.绿色));break;
+                   info_Dic[item].SetInfo(item, data.battle_dc+" %",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.魔攻属性:
-                   info_Dic[item].SetInfo(item, data.battle_mc+" %",Show_Color.Set_Color(Color_list.绿色));break;
+                   info_Dic[item].SetInfo(item, data.battle_mc+" %",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.道攻属性:
-                   info_Dic[item].SetInfo(item, data.battle_sc+" %",Show_Color.Set_Color(Color_list.绿色));break;
+                   info_Dic[item].SetInfo(item, data.battle_sc+" %",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.攻击速度:
-                   info_Dic[item].SetInfo(item, data.battle_speed+"",Show_Color.Set_Color(Color_list.绿色));break;
+                   info_Dic[item].SetInfo(item, data.battle_speed+"",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.攻击范围:
-                   info_Dic[item].SetInfo(item, data.battle_range+"",Show_Color.Set_Color(Color_list.绿色));break;
+                   info_Dic[item].SetInfo(item, data.battle_range+"",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.暴击属性:
-                   info_Dic[item].SetInfo(item, data.crit+" %",Show_Color.Set_Color(Color_list.绿色));break;
+                   info_Dic[item].SetInfo(item, data.crit+" %",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.暴击伤害:
-                   info_Dic[item].SetInfo(item, data.critDmg+" %",Show_Color.Set_Color(Color_list.绿色));break;
+                   info_Dic[item].SetInfo(item, data.critDmg+" %",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.物伤减免:
-                   info_Dic[item].SetInfo(item, data.damage_reduction+" %",Show_Color.Set_Color(Color_list.黄色));break;
+                   info_Dic[item].SetInfo(item, data.damage_reduction+" %",HexToColor("ffff00"));break;
                case enum_equip_entry_list.魔伤减免:
-                   info_Dic[item].SetInfo(item, data.magic_damage_reduction + " %",Show_Color.Set_Color(Color_list.黄色));break;
+                   info_Dic[item].SetInfo(item, data.magic_damage_reduction + " %",HexToColor("ffff00"));break;
                case enum_equip_entry_list.怪物爆率:
-                   info_Dic[item].SetInfo(item, SumSave.crtMaxBattle.drop_bonus + " %",Show_Color.Set_Color(Color_list.黄色));break;
+                   info_Dic[item].SetInfo(item, SumSave.crtMaxBattle.drop_bonus + " %",HexToColor("ffff00"));break;
                case enum_equip_entry_list.极品爆率:
-                   info_Dic[item].SetInfo(item, SumSave.crtMaxBattle.quality_bonus + " %",Show_Color.Set_Color(Color_list.黄色));break;
+                   info_Dic[item].SetInfo(item, SumSave.crtMaxBattle.quality_bonus + " %",HexToColor("ffff00"));break;
                case enum_equip_entry_list.金币掉落:
-                   info_Dic[item].SetInfo(item, SumSave.crtMaxBattle.gold_bonus + " %",Show_Color.Set_Color(Color_list.黄色));break;
+                   info_Dic[item].SetInfo(item, SumSave.crtMaxBattle.gold_bonus + " %",HexToColor("ffff00"));break;
                case enum_equip_entry_list.经验加成:
-                   info_Dic[item].SetInfo(item, SumSave.crtMaxBattle.exp_bonus + " %",Show_Color.Set_Color(Color_list.黄色));break; 
+                   info_Dic[item].SetInfo(item, SumSave.crtMaxBattle.exp_bonus + " %",HexToColor("ffff00"));break; 
             }
         }
 

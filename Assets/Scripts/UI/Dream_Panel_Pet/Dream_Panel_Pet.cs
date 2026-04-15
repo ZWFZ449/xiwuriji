@@ -4,6 +4,7 @@ using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,7 +36,7 @@ public class Dream_Panel_Pet : Panel_Base
     /// </summary>
     private db_pet_vo crt_pet;
 
-    private Text info_name;
+    private TMP_Text info_name;
 
     private PanelMian panelMian;
 
@@ -63,7 +64,7 @@ public class Dream_Panel_Pet : Panel_Base
         p_btn_item_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
         m_Talent_brom= Find<Transform>("bg/offect_list/talent_list/Viewport/Content");
         p_talent_item_prefab= Tool_UI.Find_Prefabs<pet_talent_item>("pet_talent_item");
-        info_name = Find<Text>("bg/show_title/info");
+        info_name = Find<TMP_Text>("bg/show_title/info/info");
         InitObtain_Equip_List();
         m_input_brom = Find<Transform>("bg");
         input_offect_prefab = Tool_UI.Find_Prefabs<input_offect>("input_offect");

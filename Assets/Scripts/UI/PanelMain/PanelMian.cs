@@ -4,6 +4,7 @@ using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -50,7 +51,7 @@ public class PanelMian : PanelBase
     /// <summary>
     /// 金币 元宝 积分
     /// </summary>
-    private Text moeny, sycee, points, hero_name;
+    private TMP_Text moeny, sycee, points, hero_name;
     /// <summary>
     /// 改名
     /// </summary>
@@ -94,10 +95,10 @@ public class PanelMian : PanelBase
         }
         m_global_info_brom = Find<Transform>("special_list/Scroll View/Viewport/Content");
         global_info_item_prefab = Tool_UI.Find_Prefabs<global_info_item>("global_info_item");
-        moeny = Find<Text>("monitor_info/show_unit/moeny/info");
-        sycee = Find<Text>("monitor_info/show_unit/sycee/info");
-        points = Find<Text>("monitor_info/show_unit/points/info");
-        hero_name = Find<Text>("hero_equips/hero_name/info");
+        moeny = Find<TMP_Text>("monitor_info/show_unit/moeny/info/info");
+        sycee = Find<TMP_Text>("monitor_info/show_unit/sycee/info/info");
+        points = Find<TMP_Text>("monitor_info/show_unit/points/info/info");
+        hero_name = Find<TMP_Text>("hero_equips/hero_name/info/info");
         btn_name = Find<Button>("hero_equips/hero_name");
         btn_name.onClick.AddListener(() => { show_name(); });
         m_input_brom = GetComponent<Transform>();

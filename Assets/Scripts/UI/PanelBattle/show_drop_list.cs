@@ -3,6 +3,7 @@ using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +13,7 @@ public class show_drop_list : Base_Mono
 {
     private Transform m_drop_borm;
     private dream_BagItem dream_BagItem_Prefabs;
-    private Text drop_show_name;
+    private TMP_Text drop_show_name;
     private Button close_button, confirm;
     /// <summary>
     /// 掉落列表
@@ -44,7 +45,7 @@ public class show_drop_list : Base_Mono
     {
         m_drop_borm = Find<Transform>("Scroll View/Viewport/Content");
         dream_BagItem_Prefabs = Tool_UI.Find_Prefabs<dream_BagItem>("dream_BagItem");
-        drop_show_name = Find<Text>("drop_name/info");
+        drop_show_name = Find<TMP_Text>("drop_name/info/info");
         close_button = Find<Button>("close_button");
         close_button.onClick.AddListener(() => { Hide(); });
         confirm = Find<Button>("confirm");

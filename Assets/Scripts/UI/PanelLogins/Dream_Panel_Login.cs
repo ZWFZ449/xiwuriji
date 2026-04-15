@@ -4,6 +4,7 @@ using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,7 +26,7 @@ public class Dream_Panel_Login : PanelBase
     /// <summary>
     /// 当前选择的服务器
     /// </summary>
-    private Text TheServerText;
+    private TMP_Text TheServerText;
     /// <summary>
     /// 确定选择的服务器
     /// </summary>
@@ -82,7 +83,7 @@ public class Dream_Panel_Login : PanelBase
         TheServerObg = Find<Transform>("TheServer");
         TheServerObg.gameObject.SetActive(false);
         TheServerList = Find<Transform>("TheServer/TheServerList/Viewport/Content");
-        TheServerText = Find<Text>("TheServer/CurrentTheServer/TheServerText/Text");
+        TheServerText = Find<TMP_Text>("TheServer/CurrentTheServer/TheServerText/Text");
         //选区进入游戏
         TheServerUP = Find<Button>("TheServer/CurrentTheServer/TheServerUP");
         TheServerUP.onClick.AddListener(OnLoginClick);

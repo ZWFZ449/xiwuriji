@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityColorPresets;
@@ -29,7 +30,7 @@ public enum equip_btn_list
 
 public class hero_equip_item : Base_Mono
 {
-    private Text title_name, show_base_need;
+    private TMP_Text title_name, show_base_need;
 
     private Transform m_info_brom,m_dream_bag_brom,m_btn_brom;
 
@@ -53,8 +54,8 @@ public class hero_equip_item : Base_Mono
     //private 
     private void Awake()
     {
-        title_name=Find<Text>("title_name/info");
-        show_base_need = Find<Text>("show_base_need");
+        title_name=Find<TMP_Text>("title_name/info/info");
+        show_base_need = Find<TMP_Text>("show_base_need/info");
         m_info_brom = Find<Transform>("info_brom/Scroll View/Viewport/Content");
         equip_type_info_item_prefab = Tool_UI.Find_Prefabs<equip_type_info_item>("equip_type_info_item");
         equip_show_info_item_prefab = Tool_UI.Find_Prefabs<equip_show_info_item>("equip_show_info_item");
@@ -92,8 +93,8 @@ public class hero_equip_item : Base_Mono
         int lv = 1;// int.Parse(data.Data.user_value.Split(' ')[2]);
         if(data.Data.user_value != null)lv= int.Parse(data.Data.user_value.Split(' ')[2]);
         title_name.text = "[" + (enum_equip_quality_list)(lv) + "]" + data.Data.Name;
-        title_name.color = Show_Color.Set_Color((Color_list)lv);
-        show_base_need.text = "装备类型：" + data.Data.StdMode + "\n职业限定：" + (equip_job)data.Data.job + "\n需要等级：" + data.Data.need_lv;
+        //title_name.color = Show_Color.Set_Color((Color_list)lv);
+        show_base_need.text = "装备类型 " + data.Data.StdMode + "\n职业限定 " + (equip_job)data.Data.job + "\n需要等级 " + data.Data.need_lv;
         baseInfo();
     }
 

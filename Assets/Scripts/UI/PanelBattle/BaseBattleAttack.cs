@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Common;
 using StateMachine;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -653,7 +654,7 @@ namespace MVC
         /// <summary>
         /// 名称 称号
         /// </summary>
-        protected Text Name, sliderInfo, damageInfo;
+        protected TMP_Text Name, sliderInfo, damageInfo;
         /// <summary>
         /// 计数器
         /// </summary>
@@ -661,14 +662,14 @@ namespace MVC
         /// <summary>
         /// 生命值显示文本
         /// </summary>
-        protected Text hp_text;
+        protected TMP_Text hp_text;
 
         /// <summary>
         /// 角色状态机
         /// </summary>
         public AttackStateMachine AttackStateMachine;
         public RolesManage StateMachine;
-        private Text name_text;
+        private TMP_Text name_text;
 
         /// <summary>
         /// 天命台父物体大小,当前天命大小
@@ -695,8 +696,8 @@ namespace MVC
             StateMachine = GetComponent<RolesManage>();
             frame = Find<Image>("frame");
             show_hp = Find<Slider>("Slider");
-            name_text = Find<Text>("base_info/info");
-            hp_text = Find<Text>("Slider/Hp_text");
+            name_text = Find<TMP_Text>("base_info/info");
+            hp_text = Find<TMP_Text>("Slider/Hp_text");
         }
 
         /// <summary>

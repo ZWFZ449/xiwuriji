@@ -1,19 +1,20 @@
 using MVC;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class skill_item : Base_Mono
 {
     private Image icon;
-    private Text info;
+    private TMP_Text info;
     private db_skill_vo data;
 
     private void Awake()
     {
         icon=Find<Image>("bg/icon");
-        info=Find<Text>("info");
+        info=Find<TMP_Text>("info/info");
     }
 
     public void Init(db_skill_vo skill)
