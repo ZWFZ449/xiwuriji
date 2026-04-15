@@ -203,8 +203,11 @@ namespace MVC
             vo.tableName = tableName;
             vo.columnNames = sql_names;
             vo.columnValues = sql;
-            vo.selectkey = selectkey;
-            vo.selectvalue = selectvalue == "" ? SumSave.crt_user.uid : selectvalue;
+            if (type != Mysql_Type.InsertInto)
+            {
+                vo.selectkey = selectkey;
+                vo.selectvalue = selectvalue == "" ? SumSave.uid : selectvalue;
+            }
             vo.exist = true;
             wirtes.Add(vo);
         }

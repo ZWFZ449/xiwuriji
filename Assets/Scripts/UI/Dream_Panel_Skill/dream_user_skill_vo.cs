@@ -26,7 +26,7 @@ public class dream_user_skill_vo : Base_VO
         db_Hero_VO hero = ArrayHelper.Find(SumSave.db_heros, (x) => x.id == SumSave.crtHero.job);
         db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, (x) => x.show_name == hero.initskill);
         string select_skill_type = skill.id + " " + skill.id + " " + skill.id + " " + skill.id + " " + skill.id;
-        Init(hero.initskill + " " + 0 + " " + 0, hero.initskill + " " + 0 + " " + 0, select_skill_type);
+        Init(skill.id + " " + 0 + " " + 0, skill.id + " " + 0 + " " + 0, select_skill_type);
         return new string[]
         {
             GetStr(0),
@@ -231,12 +231,22 @@ public class dream_user_skill_vo : Base_VO
     public void Select_Job()
     {
         user_current_skill.Clear();
+        db_Hero_VO hero = ArrayHelper.Find(SumSave.db_heros, (x) => x.id == SumSave.crtHero.job);
+        db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, (x) => x.show_name == hero.initskill);
+        bool exist = true;
         foreach (var item in user_sum_skill)
         {
+            if (item.Value.show_name == skill.show_name) exist = false;//判断有初始技能
             if (item.Value.Job == SumSave.crtHero.job)
             {
                 user_current_skill.Add(item.Key, item.Value);
             }
         }
+        if (exist)
+        {
+            skill.activate_skill();
+            activate_skill(skill);
+        }
+        UpLv_skill();
     }
 }

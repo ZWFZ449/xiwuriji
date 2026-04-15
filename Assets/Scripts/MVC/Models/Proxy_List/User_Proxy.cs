@@ -34,7 +34,9 @@ namespace MVC
 
         public void User_Login()
         {
+            bool isLogin = false;
             OpenMySqlDB();
+            Read_Par_Uid();
             mysqlReader = MysqlDb.Select(Mysql_Table_Name.Dream_user_base, "uid", GetStr(SumSave.uid));
             SumSave.crt_user = new user_base_vo();
             if (mysqlReader == null) return;
@@ -49,6 +51,7 @@ namespace MVC
             }
             else
             {
+                isLogin = true;
                 SumSave.crt_user.uid = SumSave.uid;
                 SumSave.crt_user.Nowdate = DateTime.Now;
                 SumSave.crt_user.RegisterDate = DateTime.Now;
@@ -57,6 +60,30 @@ namespace MVC
             }
             Read_Instace();
             CloseMySqlDB();
+            if (isLogin) Game_Omphalos.i.archive();
+        }
+        /// <summary>
+        /// 创建用户数据
+        /// </summary>
+        private void Read_Par_Uid()
+        {
+            mysqlReader = MysqlDb.SelectWhere(Mysql_Table_Name.global_uid, new string[] { "uid", "par" }, new string[] { "=", "=" }, new string[] { SumSave.uid, SumSave.par.ToString() });
+            //if (mysqlReader == null) return;
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    SumSave.uid = mysqlReader.GetString(mysqlReader.GetOrdinal("par_uid"));
+                }
+            }
+            else
+            {
+                string par_uid = Guid.NewGuid().ToString("N");
+                Debug.Log("par_uid:" + SumSave.uid + " " + par_uid);
+                Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.global_uid, new string[] { GetStr(0), GetStr(SumSave.uid), GetStr(SumSave.par), GetStr(par_uid) });
+                SumSave.uid = par_uid;
+                Debug.Log("uid:" + SumSave.uid);
+            }
         }
 
         private void Read_Instace()

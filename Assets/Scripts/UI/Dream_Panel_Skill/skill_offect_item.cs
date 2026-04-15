@@ -51,6 +51,6 @@ public class skill_offect_item : Base_Mono
     /// <summary>
     /// 需要的MP
     /// </summary>
-    public int Get_Mp { get { return data.spells[data.SetLv()]; } } 
+    public int Get_Mp { get { return data.spells[data.SetLv()>=0? data.SetLv() : 0]; } }
    
 }

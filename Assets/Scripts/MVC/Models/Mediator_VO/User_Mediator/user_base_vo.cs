@@ -11,6 +11,7 @@ namespace MVC
         public string uid;//主id
         public DateTime RegisterDate;//注册日期
         public DateTime Nowdate;//登录日期
+        public int isdownloadable;//是否可以下载
         /// <summary>
         /// 初始化
         /// </summary>
@@ -22,7 +23,8 @@ namespace MVC
             GetStr(par),
             GetStr(uid),
             GetStr(Tool_UI.ToStandardFormat( RegisterDate)),
-            GetStr(Tool_UI.ToStandardFormat(Nowdate))
+            GetStr(Tool_UI.ToStandardFormat(Nowdate)),
+            GetStr(0)
             };
               
 

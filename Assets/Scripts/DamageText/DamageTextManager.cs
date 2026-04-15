@@ -78,22 +78,37 @@ public class DamageTextManager : MonoBehaviour// MonoSingleton <DamageTextManage
     public void ShowDamageText(DamageEnum damageEnum, string damage, Transform parent,float offset)
     {
         Color color = normalColor;
+        string path= "UI/base_bg/text/";
         switch (damageEnum)
         {
             case DamageEnum.普通伤害:
-                color = normalColor;
+            case DamageEnum.未命中:
+                path = "UI/base_bg/text/red/";
                 break;
             case DamageEnum.治疗伤害:
-                color = volleyColor;
+            case DamageEnum.回血:
+            case DamageEnum.回蓝:
+                path = "UI/base_bg/text/green/"; 
                 break;
             case DamageEnum.真实伤害:
-                color = readlyColor;
+                path = "UI/base_bg/text/white/";
+
+                break;
+            case DamageEnum.暴击伤害:
+                path = "UI/base_bg/text/red/";
+                break;
+            case DamageEnum.命运一击:
+            case DamageEnum.技能伤害:
+            case DamageEnum.暴击技能伤害:
+            case DamageEnum.技能未命中:
+                path = "UI/base_bg/text/Purple/";
                 break;
         }
         GameObject damageText = GetDamageTextFromPool();
         damageText.transform.position = parent.position;
         damageText.transform.SetParent(parent);
-        char[] characters = (damageEnum + damage).ToCharArray();
+        //char[] characters = (damageEnum + damage).ToCharArray(); 带文字
+        char[] characters = (damage).ToCharArray();//纯数字
         int max = Mathf.Max(characters.Length, damageText.transform.childCount);
         for (int i = 0; i < max; i++)// damageText.transform.childCount
         {
@@ -104,8 +119,8 @@ public class DamageTextManager : MonoBehaviour// MonoSingleton <DamageTextManage
             damageText.transform.GetChild(i).gameObject.SetActive(true);
             if (characters.Length > i)
             {
-                damageText.transform.GetChild(i).GetComponent<Image>().sprite = UI.UI_Manager.I.GetEquipSprite("UI/base_bg/text/", characters[i].ToString()); ;
-                damageText.transform.GetChild(i).GetComponent<Image>().color = color;
+                damageText.transform.GetChild(i).GetComponent<Image>().sprite = UI.UI_Manager.I.GetEquipSprite(path, characters[i].ToString()); ;
+                //damageText.transform.GetChild(i).GetComponent<Image>().color = color;
             }
             else damageText.transform.GetChild(i).gameObject.SetActive(false);
 
@@ -114,7 +129,7 @@ public class DamageTextManager : MonoBehaviour// MonoSingleton <DamageTextManage
         damageText.transform.GetOrAddComponent<DamageAnimiton>().Init(offset);
 
     }
-   
+
     /// <summary>
     /// 从对象池中获取伤害文本
     /// </summary>

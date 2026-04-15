@@ -1,3 +1,4 @@
+using Common;
 using MVC;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,21 +11,39 @@ public class global_gift_vo : Base_VO
     public int gift_type;
 
     public int gift_par;
-
+    private string gift_selectkey;
     private string gift_value;
 
     private int gift_state;
 
     private int GiftPoints;
 
-    public void Init(int gift_id, int gift_type,int gift_par, string gift_value, int gift_state,int GiftPoints)
+    public void Init(int gift_id, int gift_type,int gift_par,string gift_selectkey, string gift_value, int gift_state,int GiftPoints)
     { 
         this.gift_id = gift_id;
         this.gift_type = gift_type;
         this.gift_par = gift_par;
+        this.gift_selectkey = gift_selectkey;
         this.gift_value = gift_value;
         this.gift_state = gift_state;
         this.GiftPoints = GiftPoints;
+    }
+
+    public override string[] Set_Instace_String()
+    {
+        return new string[]
+        {
+        GetStr(0),
+        GetStr(SumSave.uid),
+        GetStr(SumSave.nowtime),
+        GetStr(gift_id),
+        GetStr(gift_type),
+        //GetStr(gift_par), 
+        GetStr(gift_selectkey),
+        GetStr(gift_value),
+        GetStr(GiftPoints)
+
+        };
     }
     /// <summary>
     /// 获取礼物内容

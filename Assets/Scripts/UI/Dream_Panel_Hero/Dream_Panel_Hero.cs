@@ -579,6 +579,8 @@ public class Dream_Panel_Hero : Panel_Base
         SumSave.crtHero.SelectPos = -1;
         SumSave.crtHero.MysqlData();
         SendNotification(NotiList.Refresh_Max_Hero_Attribute);
+        UI_Manager.I.GetPanel<PanelMian>().Show();
+        Game_Omphalos.i.archive();
         Show();
      }
 

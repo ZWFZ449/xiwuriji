@@ -13,19 +13,7 @@ public class PanelLogins : PanelBase
 {
     private const string lastServer = "选区";
 
-    private Button loginBt, userBt, selfBt;//开始按钮, 用户，隐私
-
-    private GameObject AgreementButter, AgreementWindow, userWd, selfWd;//协议点击组件，协议面板
-
-    private Text titleText;//标题
-
-    private Toggle Toggle;//协议确定开关
-
-    private panel_fight fightPanel;
-    /// <summary>
-    /// Tap登录按钮
-    /// </summary>
-    private Button TaploginBt;
+   
     /// <summary>
     /// 服务器obg
     /// </summary>
@@ -42,6 +30,10 @@ public class PanelLogins : PanelBase
     /// 确定选择的服务器
     /// </summary>
     private Button TheServerUP;
+    /// <summary>
+    /// 登录按钮
+    /// </summary>
+    private Button loginBt;
     /// <summary>
     /// 按钮预制体
     /// </summary>
@@ -68,10 +60,9 @@ public class PanelLogins : PanelBase
     /// </summary>
     private Dictionary<int, bool> open_pars = new Dictionary<int, bool>();
 
-
-
     private void Start()
     {
+        
         SendNotification(NotiList.Read_Instace);
         StartCoroutine("Read_Instace");
     }
@@ -99,11 +90,8 @@ public class PanelLogins : PanelBase
         loginBt = Find<Button>("btn_login");
         loginBt.onClick.AddListener(Open_function);
         loginBt.gameObject.SetActive(false);
-        TaploginBt = Find<Button>("Taplogin");
-        TaploginBt.onClick.AddListener(TapLogin);
 
 #if UNITY_EDITOR
-        TaploginBt.gameObject.SetActive(false);
         loginBt.gameObject.SetActive(true);
 
 #elif UNITY_ANDROID
@@ -116,25 +104,7 @@ public class PanelLogins : PanelBase
 #endif
         #region 用户协议
 
-        AgreementButter = GameObject.Find("AgreementButter");
-        if (AgreementButter == null)
-        {
-            Debug.Log("协议组件为空");
-            return;
-        }
-        userBt = AgreementButter.transform.Find("user").GetComponent<Button>();
-        selfBt = AgreementButter.transform.Find("self").GetComponent<Button>();
-        userBt = Find<Button>("AgreementButter/user");
-        userBt.onClick.AddListener(OpenUser);
-        selfBt = Find<Button>("AgreementButter/self");
-        selfBt.onClick.AddListener(OpenSelf);
-
-        AgreementWindow = GameObject.Find("AgreementWindow");
-        userWd = AgreementWindow.transform.Find("userWd").gameObject;
-        selfWd = AgreementWindow.transform.Find("selfWd").gameObject;
-        titleText = AgreementWindow.transform.Find("Title").GetComponentInChildren<Text>();
-        Toggle = AgreementButter.transform.Find("Toggle").GetComponent<Toggle>();
-        Toggle.isOn = PlayerPrefs.GetInt("同意阅读协议", 0) == 1;
+      
         OpenUser();
         #endregion
 
@@ -247,7 +217,6 @@ public class PanelLogins : PanelBase
     //tap登录完成之后打开开关
     public void ShowStartBtn(bool v)
     {
-        TaploginBt.gameObject.SetActive(!v);
         loginBt.gameObject.SetActive(v);
     }
 
@@ -257,56 +226,20 @@ public class PanelLogins : PanelBase
     private void TapLogin()
     {
 
-        if (!Toggle.isOn)
-        {
-            Alert_Dec.Show("请先阅读并勾选同意协议");
-            Debug.Log("请先阅读并勾选同意协议");
-            PlayerPrefs.SetInt("同意阅读协议", 0);
-            return;
-        }
-#if UNITY_EDITOR
-        TaploginBt.gameObject.SetActive(false);
-        loginBt.gameObject.SetActive(true);
-#elif UNITY_ANDROID
-            _ = GameLogin.Instance.Login();
-#elif UNITY_IPHONE
-
-#endif
     }
 
     private void OpenUser()//打开用户协议
     {
-        if (IsAgreementWdNull())
-        {
-            titleText.text = "用户协议";
-            selfWd.SetActive(false);
-            userWd.SetActive(true);
-        }
+       
     }
 
     private void OpenSelf()//打开隐私协议
     {
-        if (IsAgreementWdNull())
-        {
-
-            titleText.text = "隐私协议";
-            userWd.SetActive(false);
-            selfWd.SetActive(true);
-        }
     }
 
     private bool IsAgreementWdNull()//判断协议是否为空
     {
-        if (selfWd != null && userWd != null && titleText != null && AgreementWindow != null)
-        {
-            AgreementWindow.SetActive(true);
-            return true;
-        }
-        else
-        {
-            Debug.LogError("协议窗口为空");
-            return false;
-        }
+        return false;
     }
 
     /// <summary>

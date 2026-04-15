@@ -122,6 +122,9 @@ public class offect_promotion : Base_Mono
         }
         if (exist)
         {
+            //写入历史领取
+            Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto,
+          Mysql_Table_Name.history_global_gift, SumSave.global_gift.Set_Instace_String()); 
             crt_input_offect.gameObject.SetActive(false);
             Game_Omphalos.i.archive();
             //Alert_Dec.Show("礼包领取成功");

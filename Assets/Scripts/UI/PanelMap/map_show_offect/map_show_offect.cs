@@ -1,4 +1,5 @@
 using Common;
+using Components;
 using MVC;
 using System;
 using System.Collections;
@@ -198,7 +199,7 @@ public class map_show_offect : Base_Mono
     /// <summary>
     /// 显示背包
     /// </summary>
-    /// <param name="bag_name"></param>
+    /// <param name="bag_name"></param> 
     private void Show_Bag(string value)
     {
         string[] values = value.Split(';');
@@ -231,6 +232,11 @@ public class map_show_offect : Base_Mono
     /// <param name="item"></param>
     private void OnClick(dream_BagItem item)
     {
+        if (SumSave.crtHero.lv <= crt_map.GetMap().map_lv)
+        { 
+            Alert_Dec.Show("等级不足,无法查看");
+            return;
+        }
         Stditem_StdMode_List equip_Type = Tool_State.ToEnum(item.Data.StdMode, Stditem_StdMode_List.nothing);
         if (equip_Type == Stditem_StdMode_List.nothing) return;
         panel_hero_equip.Show();

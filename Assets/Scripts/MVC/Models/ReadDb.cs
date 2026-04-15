@@ -80,16 +80,12 @@ public static class ReadDb
     public static user_base_vo Read_user_base(MySqlDataReader reader)
     {
         user_base_vo item = new user_base_vo();
-        //string _uid = reader.GetString(reader.GetOrdinal("uid"));
-        //DateTime _RegisterDate = Convert.ToDateTime(reader.GetString(reader.GetOrdinal("RegisterDate")));
-        //DateTime _Nowdate = Convert.ToDateTime(reader.GetString(reader.GetOrdinal("Nowdate")));
-        //int _par = reader.GetInt32(reader.GetOrdinal("par"));
         item.uid= reader.GetString(reader.GetOrdinal("uid"));
         item.RegisterDate= Convert.ToDateTime(reader.GetString(reader.GetOrdinal("RegisterDate")));
         item.Nowdate= Convert.ToDateTime(reader.GetString(reader.GetOrdinal("Nowdate")));
         item.par= reader.GetInt32(reader.GetOrdinal("par"));
+        item.isdownloadable = reader.GetInt32(reader.GetOrdinal("isdownloadable"));
         return item;
-        //return new user_base_vo(_uid, _RegisterDate, _Nowdate, _par);
     }
 
 
@@ -126,16 +122,12 @@ public static class ReadDb
     }
     public static global_gift_vo Read(MySqlDataReader reader, global_gift_vo item)
     {
-        reader.GetInt32(reader.GetOrdinal("id"));
-        reader.GetInt32(reader.GetOrdinal("gift_type"));
-        reader.GetInt32(reader.GetOrdinal("gift_par"));
-        reader.GetString(reader.GetOrdinal("gift_value"));
-        reader.GetInt32(reader.GetOrdinal("gift_state"));
-        reader.GetInt32(reader.GetOrdinal("Gift_Points"));
+
         item.Init(
             reader.GetInt32(reader.GetOrdinal("id")),
             reader.GetInt32(reader.GetOrdinal("gift_type")),
             reader.GetInt32(reader.GetOrdinal("gift_par")),
+            reader.GetString(reader.GetOrdinal("gift_selectkey")),
             reader.GetString(reader.GetOrdinal("gift_value")),
             reader.GetInt32(reader.GetOrdinal("gift_state")),
             reader.GetInt32(reader.GetOrdinal("Gift_Points"))
