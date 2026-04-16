@@ -1,14 +1,16 @@
+using MVC;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class show_info_item : MonoBehaviour
+public class show_info_item : Base_Mono
 {
-    private Text info;
+    private TMP_Text info;
     private void Awake()
     {
-        info = GetComponent<Text>();
+        info = Find<TMP_Text>("info");
     }
 
     public void Show(string str)

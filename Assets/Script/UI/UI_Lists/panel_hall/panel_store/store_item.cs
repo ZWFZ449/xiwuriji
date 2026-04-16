@@ -1,6 +1,7 @@
 using MVC;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +14,7 @@ public class store_item : Base_Mono
     /// <summary>
     /// 显示信息
     /// </summary>
-    private Text baseinfo;
+    private TMP_Text baseinfo;
     /// <summary>
     /// 显示图标
     /// </summary>
@@ -25,7 +26,7 @@ public class store_item : Base_Mono
     private db_store_vo data;
     private void Awake()
     {
-        baseinfo=Find<Text>("info");
+        baseinfo=Find<TMP_Text>("info/info");
         icon=Find<Image>("icon");
         material_item_Prefabs = Tool_UI.Find_Prefabs<material_item>("material_item"); //Battle_Tool.Find_Prefabs<material_item>("material_item");
     }
@@ -65,7 +66,8 @@ public class store_item : Base_Mono
     }
     public void PetInit((string, int) bag_Resources, string unit)
     {
-        baseinfo.alignment = TextAnchor.MiddleCenter;
+        //baseinfo.alignment =  
+        //baseinfo.alignment = TextAnchor.MiddleCenter;
         baseinfo.text = Show_Color.White(bag_Resources.Item1);
         material_item item = Instantiate(material_item_Prefabs, icon.transform);
         item.Init((bag_Resources.Item1, 1));
