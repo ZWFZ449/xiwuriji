@@ -1,5 +1,6 @@
 
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
@@ -16,9 +17,12 @@ public class base_info_item : MonoBehaviour
 
     private Color color;
 
+    private TMP_Text info;
+
     private void Start()
     {
-        color = GetComponent<Text>().color;
+        info = transform.Find("info").GetComponent<TMP_Text>();
+        color = info.color;
     }
 
     public void show_info(string info)//显示信息

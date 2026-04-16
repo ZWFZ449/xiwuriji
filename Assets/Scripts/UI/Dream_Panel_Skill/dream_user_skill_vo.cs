@@ -79,7 +79,7 @@ public class dream_user_skill_vo : Base_VO
             {
                 string[] skill_info = skill[i].Split(' ');
                 {
-                    if (!string.IsNullOrEmpty(skill_info[i]))
+                    if (!string.IsNullOrEmpty(skill_info[0]))
                     {
                         db_skill_vo skill_vo = ArrayHelper.Find(SumSave.db_skills, (x) => x.id.ToString() == skill_info[0]);
                         if (skill_vo != null)

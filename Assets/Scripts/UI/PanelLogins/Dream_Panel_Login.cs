@@ -146,7 +146,7 @@ public class Dream_Panel_Login : PanelBase
                 }
                 else
                 {
-                    into += "\n开区:" + SumSave.db_pars[i].opentime;
+                    //into += "\n开区:" + SumSave.db_pars[i].opentime;不需要展示时间
                     item.Show(SumSave.db_pars[i].index, into);
                     open_pars[SumSave.db_pars[i].index] = true;
                 }
