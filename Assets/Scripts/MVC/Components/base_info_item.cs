@@ -19,7 +19,7 @@ public class base_info_item : MonoBehaviour
 
     private TMP_Text info;
 
-    private void Start()
+    private void Awake()
     {
         info = transform.Find("info").GetComponent<TMP_Text>();
         color = info.color;
@@ -28,9 +28,9 @@ public class base_info_item : MonoBehaviour
     public void show_info(string info)//显示信息
     {
         transform.SetAsLastSibling();
-        GetComponent<Text>().fontSize = (int)fontSize;
-        time = 0;state = true; 
-        GetComponent<Text>().text = info;
+        this.info.fontSize = (int)fontSize;
+        time = 0;state = true;
+        this.info.text = info;
     }
 
     private void Update()
