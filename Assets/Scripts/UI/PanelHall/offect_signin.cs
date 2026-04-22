@@ -37,7 +37,9 @@ public class offect_signin : Base_Mono
             SumSave.crt_signin.MysqlData();
             Alert_Dec.Show("签到成功");
             int money = 1000000;
-            string dec = "获得" + Show_Color.Red(money) + " " + currency_unit.金币;
+            SumSave.crt_global_gift.SetGiftPoints(2);
+            string dec = "获得 " + Show_Color.Red(2) + " 荣耀积分";
+            dec += "\n获得" + Show_Color.Red(money) + " " + currency_unit.金币;
             Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, money, Obtain_Int.Add_unit(money));
             int number = 10;
             int random = Random.Range(1, 1000);
@@ -59,7 +61,7 @@ public class offect_signin : Base_Mono
                 Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_Buff.双倍经验卷轴, new int[] { crt_vip.characterExperience + random, random }), maxnumber);
                 pet_list pet = (pet_list)(crt_vip.vip_lv - 1);
                 SumSave.crt_pet.AddPet(pet);
-                dec += Colorize("获得 灵宠 " + pet.ToString() + "\n", GameColors.Uncommon);
+                dec += Colorize("\n获得 灵宠 " + pet.ToString() + "\n", GameColors.Uncommon);
             }
             else
             {
@@ -67,8 +69,6 @@ public class offect_signin : Base_Mono
                 SumSave.crt_pet.AddPet(pet);
                 dec += Colorize("获得 灵宠 " + pet.ToString() + "\n", GameColors.Uncommon);
             }
-            SumSave.crt_global_gift.SetGiftPoints(2);
-            dec += "获得 " + Show_Color.Red(2) + " 荣耀积分";
             Alert.Show("签到奖励", dec);
             Game_Omphalos.i.archive();
             Hide();
@@ -96,7 +96,7 @@ public class offect_signin : Base_Mono
         dec += Colorize(enum_equip_entry_list.经验加成 + "+20%\n", c);
         dec += Colorize(enum_equip_entry_list.怪物爆率 + "+20%\n", c);
         dec += Colorize("Boss刷新时间" + "-5%\n", c);
-        dec += Colorize("提前查阅物品掉落属性", c);
+        dec += Colorize("提前查阅物品掉落属性\n", c);
         if (crt_vip != null)
         {
             dec += "\n" + crt_vip.vip_name + " 奖励\n";

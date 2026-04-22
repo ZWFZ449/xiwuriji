@@ -95,8 +95,8 @@ public  static class Tool_State
                 case Stditem_StdMode_List.遗物_足:
                     break;
                 case Stditem_StdMode_List.消耗品:
-                    if (item.hp > 0) dec += "生命回复：" + Show_Color.Set_String(item.hp, Color_list.紫色) + " ";
-                    if (item.mp > 0) dec += (dec == "" ? "" : "\n") + "魔法回复：" + Show_Color.Set_String(item.mp, Color_list.黄色) + " ";
+                    if (item.hp > 0) dec += "生命回复 " + Show_Color.Orange(item.hp) + " ";
+                    if (item.mp > 0) dec += (dec == "" ? "" : "\n") + "魔法回复 " + Show_Color.Green(item.mp) + " ";
                     break;
                 case Stditem_StdMode_List.材料:
                     dec += item.dec;
@@ -104,6 +104,12 @@ public  static class Tool_State
                 case Stditem_StdMode_List.nothing:
                     break;
                 case Stditem_StdMode_List.货币:
+                    dec += item.dec;
+
+                    break;
+                case Stditem_StdMode_List.宝石:
+                    dec += item.dec;
+
                     break;
             }
         }
