@@ -100,7 +100,6 @@ namespace MVC
         {
             mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_chronicle);
             SumSave.global_Chronicle = new List<(int, string)>();
-            SumSave.db_illustrateds = new Dictionary<int, List<db_illustrated_vo>>();
             if (mysqlReader.HasRows)
             {
                 while (mysqlReader.Read())
@@ -704,6 +703,30 @@ namespace MVC
             }
             ArrayHelper.Ascending(SumSave.db_maps, e => e.map_lv);
             //Battle_Tool.tool_map();
+            Tool_Battle.Carte_Read_Boss_Time();
+            //Carte_Read_Boss_Time();
+        }
+        /// <summary>
+        /// 创建地图开启时间
+        /// </summary>
+        private void Carte_Read_Boss_Time()
+        {
+            Dictionary<string,Dictionary<int, DateTime>> dic = new Dictionary<string, Dictionary<int, DateTime>>();
+            DateTime now = SumSave.nowtime >= DateTime.Now ? SumSave.nowtime : DateTime.Now;
+            for (int i = 0; i < SumSave.db_maps.Count; i++)
+            {
+                if (SumSave.db_maps[i].map_type == 0)
+                {
+                    for (int j = 0; j < SumSave.db_maps[i].map_boss.Count; j++)
+                    {
+                        if (!dic.ContainsKey(SumSave.db_maps[i].map_boss[j]))
+                        {
+                            dic.Add(SumSave.db_maps[i].map_boss[j], new Dictionary<int, DateTime>());
+                        }
+                        dic[SumSave.db_maps[i].map_boss[j]].Add(SumSave.db_maps[i].map_boss_cdtime[j], now);
+                    }
+                }
+            }
         }
     }
 }

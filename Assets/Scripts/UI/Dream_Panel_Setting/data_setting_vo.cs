@@ -18,7 +18,7 @@ public class data_setting_vo : Base_VO
 
     public List<(string,int)> battle_Boss_list = new List<(string,int)>();
 
-    public void Iint(string data_base_setting, string data_medicine_setting,string data_battle_setting)
+    public void Iint(string data_base_setting, string data_medicine_setting,string data_battle_setting,string user_data_settings)
     {
         base.Iint();
         //设置装备回收
@@ -58,7 +58,7 @@ public class data_setting_vo : Base_VO
 
     public override string[] Set_Instace_String()
     {
-        Iint(Setting(1), Setting(2), Setting(3));
+        Iint(Setting(1), Setting(2), Setting(3),"");
         return new string[]
         {
             GetStr(0),
@@ -66,6 +66,8 @@ public class data_setting_vo : Base_VO
             GetStr(GetData(1)),
             GetStr(GetData(2)),
             GetStr(GetData(3)),
+            GetStr(""),
+            GetStr("")
         };
     }
     /// <summary>
@@ -196,6 +198,6 @@ public class data_setting_vo : Base_VO
     public override void MysqlData()
     {
         base.MysqlData();
-        Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.user_data_setting, Set_Uptade_String(), Get_Update_Character());
+        Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.user_data_settings, Set_Uptade_String(), Get_Update_Character());
     }
 }

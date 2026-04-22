@@ -29,6 +29,12 @@ public class info_item : Base_Mono
         base_type.text = type.ToString();
         base_value.text = value.ToString();
     }
+    public void SetPetInfo(object type, object value)
+    {
+        base_type.text = type.ToString();
+        //base_type.color = UnityColorPresets.HexToColor("#ffe400");
+        base_value.text = value.ToString();
+    }
     public void SetInfo(object type, object value, Color C)
     {
         base_type.text = type.ToString();

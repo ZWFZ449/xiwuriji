@@ -61,6 +61,10 @@ namespace MVC
                 case Mysql_Table_Name.dream_user_pet:
                     if (panelBattle.gameObject.activeInHierarchy) panelBattle.Refresh();
                     break;
+                case Mysql_Table_Name.Dream_Users:
+                case Mysql_Table_Name.dream_user_gift:
+                    if (panelMian.gameObject.activeInHierarchy) panelMian.Show_unit();
+                    break;
             }
         }
         /// <summary>

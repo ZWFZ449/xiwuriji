@@ -114,6 +114,7 @@ public class equip_show_info_item : Base_Mono
     public void Init(string value,int lv)
     {
         icon.sprite = UI.UI_Manager.I.GetEquipSprite("skill/base_icon/",value);
-        info.text = "弹道 " + value + " + " + lv;
+        info.text =  "弹道 " + value + " + " + lv;
+        info.color = UnityColorPresets.HexToColor("#ffff00");
     }
 }

@@ -38,12 +38,14 @@ public class material_item : Base_Mono
         data = bag_Resources;
         item_icon.sprite = UI.UI_Manager.I.GetEquipSprite("icon/", data.Item1);
         base_info.text = Battle_Tool.FormatNumberToChineseUnit(data.Item2);
+        base_info.color = UnityColorPresets.HexToColor("70ff69");
     }
     public void Init((string,List<string>) bag_Resources)
     {
         data_seed = bag_Resources;
         item_icon.sprite = UI.UI_Manager.I.GetEquipSprite("icon/", bag_Resources.Item1);
         base_info.text = "1";
+        base_info.color = UnityColorPresets.HexToColor("70ff69");
     }
     /// <summary>
     /// 是否隐藏效果

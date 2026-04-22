@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
-
+/// <summary>
+/// 推广
+/// </summary>
 public class offect_promotion : Base_Mono
 {
 
@@ -35,6 +37,7 @@ public class offect_promotion : Base_Mono
         {
             SumSave.crt_global_gift.SetGiftPoints(SumSave.crt_global_promotion.GetPromotion_moeny);
             SumSave.crt_global_promotion.SetPromotion_moeny(-SumSave.crt_global_promotion.GetPromotion_moeny);
+            Init();
             Alert_Dec.Show("领取推荐收益成功");
         }
         else
@@ -107,7 +110,10 @@ public class offect_promotion : Base_Mono
                 SumSave.global_gift.SetGiftValue(0);
                 if (SumSave.global_gift.GetGiftPoints > 0)
                 {
-                    Alert_Dec.Show("获得荣耀积分:" + SumSave.global_gift.GetGiftPoints);
+                    int gift_points = SumSave.global_gift.GetGiftPoints * 100;
+                    Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, gift_points, Obtain_Int.Add_unit(gift_points));
+                    Alert_Dec.Show("获得 " + (currency_unit.元宝)+ " + " + gift_points);
+                    Alert_Dec.Show("获得荣耀积分  + " + SumSave.global_gift.GetGiftPoints);
                     SumSave.crt_global_gift.SetGiftPoints(SumSave.global_gift.GetGiftPoints);
                     if (SumSave.crt_global_promotion.GetPromotion_value != "")
                     {
@@ -149,24 +155,29 @@ public class offect_promotion : Base_Mono
                     case 1:
                         pet_list pet = Tool_State.ToEnum(gift_values[1], pet_list.麋鹿);
                         SumSave.crt_pet.AddPet(pet);
-                        Alert_Dec.Show("获得 灵宠：" + pet.ToString());
+                        Alert_Dec.Show("获得 灵宠 * " + pet.ToString());
                         break;
                     case 2:
                         Bag_Base_VO synthesis_value = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == gift_values[1]);
                         if (synthesis_value != null)
                         {
-                            synthesis_value.user_value = Tool_Battle.Obtain_Equip(synthesis_value, 1, 1);
-                            synthesis_value = tool_Categoryt.Read_Bag(synthesis_value.user_value);
-                            SumSave.crt_bags.Set_Bag_List(synthesis_value);
-                            Alert_Dec.Show("获得 " + synthesis_value.StdMode + "：" + synthesis_value.Name);
+                            string user_value = Tool_Battle.Obtain_Equip(synthesis_value, 1, 1);
+                            Bag_Base_VO synthesis = tool_Categoryt.Read_BaseBag(user_value);
+                            SumSave.crt_bags.Set_Bag_List(synthesis);
+                            Alert_Dec.Show("获得 " + synthesis.StdMode + " * " + synthesis.Name);
                         }
                         break;
                     case 3:
                         int number = int.Parse(gift_values[2]);
                         int random = Random.Range(1, 1000);
                         int maxnumber = number + Random.Range(1, 1000);
-                        Alert_Dec.Show("获得: " + gift_values[1] + " * " + number);
+                        Alert_Dec.Show("获得 " + gift_values[1] + " * " + number);
                         Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, gift_values[1], new int[] { number + random, random }), maxnumber);
+                        break;
+                    case 4:
+                        string buff = gift_values[1];
+                        int bufftime = int.Parse(gift_values[2]);
+                        SumSave.crt_user_unit.AddBuff(buff, Tool_UI.ToStandardFormat(SumSave.nowtime), bufftime);
                         break;
                     default:
                         break;

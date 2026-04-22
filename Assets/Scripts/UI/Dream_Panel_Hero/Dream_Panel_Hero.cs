@@ -544,6 +544,7 @@ public class Dream_Panel_Hero : Panel_Base
             Open_Talent();
             ShowInfo();
         }
+        else Alert_Dec.Show("升级失败,材料不足天赋" + data.talent_name + "未升级");
     }
 
     /// <summary>
@@ -663,7 +664,6 @@ public class Dream_Panel_Hero : Panel_Base
                    info_Dic[item].SetInfo(item, SumSave.crtMaxBattle.exp_bonus + " %",HexToColor("ffff00"));break; 
             }
         }
-
     }
 
     protected override void Awake()

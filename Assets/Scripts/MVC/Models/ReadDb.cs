@@ -214,19 +214,13 @@ public static class ReadDb
         string _value = reader.GetString(reader.GetOrdinal("value"));
         return new db_signin_vo(_index, _value);
     }
-
-
-
-
-
-
     public static user_signin_vo Read(MySqlDataReader reader, user_signin_vo item)
     {
         item.now_time = Convert.ToDateTime(reader.GetString(reader.GetOrdinal("now_time")));
         item.number = reader.GetInt32(reader.GetOrdinal("number"));
-        item.user_value = reader.GetString(reader.GetOrdinal("user_value"));
+        //item.user_value = reader.GetString(reader.GetOrdinal("user_value"));
         item.max_number= reader.GetInt32(reader.GetOrdinal("max_number"));
-        item.Init();
+        item.Init(reader.GetString(reader.GetOrdinal("user_value")));
         return item;
     }
     public static user_explore_vo Read(MySqlDataReader reader, user_explore_vo item)
@@ -614,7 +608,7 @@ public static class ReadDb
     public static user_vo Read(MySqlDataReader reader, user_vo item)
     {
         string value= reader.GetString(reader.GetOrdinal("value"));
-        item.Init(value);
+        //item.Init(DateTime.Now,value);
         return item;
     }
     public static user_artifact_vo Read(MySqlDataReader reader, user_artifact_vo item)

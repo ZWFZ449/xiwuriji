@@ -93,14 +93,14 @@ public enum Mysql_Table_Name
     db_player_talent,//玩家天赋
     db_player_talent_type,//玩家天赋类型
     db_pet_talent,//宠物天赋
-    Dream_User,//用户货币信息
+    Dream_Users,//用户货币信息
     Dream_user_base,//用户基础信息
     dream_base_hero,//用户英雄信息
     dream_user_bag,//用户背包信息
     dream_user_equip,//用户装备信息
     dream_user_skill,//用户技能信息
     dream_user_pet,//用户宠物信息
-    user_data_setting,//用户设置信息
+    user_data_settings,//用户设置信息
     dream_user_signin,//用户签到信息
     db_synthesis,//合成信息
     db_illustrated,//图鉴信息

@@ -74,6 +74,10 @@ public class PanelBattle : PanelBase
     /// </summary>
     private int kill_monster = 0;
     /// <summary>
+    /// 限时地图f
+    /// </summary>
+    private float limited_time = -1f;
+    /// <summary>
     /// 刷新boss监控
     /// </summary>
     private Boss_Slider boss_slider;
@@ -95,9 +99,7 @@ public class PanelBattle : PanelBase
     public override void Hide()
     {
         this.transform.SetAsFirstSibling();
-        //base.Hide();
     }
-
     public override void Initialize()
     {
         base.Initialize();
@@ -289,6 +291,11 @@ public class PanelBattle : PanelBase
 
     private void Init()
     {
+        open_crate_monster = true;
+        if (crt_map.map_type != 0)
+        {
+            limited_time = 60f;//限时地图
+        }
         map_crate_boss_condition = 0;
         boss_slider.gameObject.SetActive(false);
         InitMap();
@@ -331,12 +338,12 @@ public class PanelBattle : PanelBase
     /// <summary>
     /// 判断是否自动boss
     /// </summary>
-    private void Auto_Generate_Boss()
+    private void Auto_Generate_Bossold()
     {
         if(!IsBoss)return;
         for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
         {
-            (string,int) boss = SumSave.crt_setting.battle_Boss_list[i];
+            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
             if (boss.Item2 > 0)
             {
                 List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
@@ -345,7 +352,7 @@ public class PanelBattle : PanelBase
                     if (!Search_Generate_Boss_Time(list[0]))
                     {
                         //不存在boss跳过
-                        break ;
+                        break;
                     }
                     //计算过去了多久
                     int spanSeconds = Battle_Tool.SettlementTransport(list[1], 2);
@@ -369,7 +376,62 @@ public class PanelBattle : PanelBase
                 }
 
             }
-        } 
+        }
+
+    }
+    private void Auto_Generate_Boss()
+    {
+        if (!IsBoss) return;
+        for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+        {
+            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+            if (boss.Item2 > 0)
+            {
+                List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+                if (list.Count == 2)
+                {
+                    //时间召唤
+                    if (Meet_maposs_criteria(list[0]))
+                    {
+                        //判断是否满足召唤条件 开启召唤
+                        Generate_Boss_Monster(list[0]);
+                        return;
+                    }
+                }
+
+            }
+
+        }
+
+        for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+        {
+            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+            if (boss.Item2 > 0)
+            {
+                List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+                if (list.Count == 2)
+                {
+                    //物品召唤
+                    if (int.Parse(list[1]) > 0)
+                    {
+                        Need_Condition(common_items_list.Boss召唤卷轴, 1);
+                        if (Return_Condition())
+                        {
+                            Alert_Dec.Show("召唤 " + list[0] + " 成功");
+                            Generate_Boss_Monster(list[0]);
+                            SumSave.crt_setting.battle_Boss_list[i] = (
+                                list[0] + "+" + (int.Parse(list[1]) - 1),
+                                boss.Item2 - 1);
+                            SumSave.crt_setting.MysqlData();
+                        }
+                        return;
+                    }
+                }
+
+            }
+        }
+
+
     }
     /// <summary>
     /// 符合刷新条件
@@ -378,37 +440,34 @@ public class PanelBattle : PanelBase
     private bool Meet_maposs_criteria(string value)
     {
         if (!IsBoss) return false;
-        for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+        bool is_true = false;
+        (int, string) Boss_Time = Tool_Battle.GetBossTime(value);
+        if (Boss_Time.Item2 == "no") return false;
+        int spanSeconds = Battle_Tool.SettlementTransport(Boss_Time.Item2 , 2);
+        db_vip crt_vip = Tool_Battle.Obtain_Vip();
+        if (crt_vip != null)
         {
-            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-            List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-            if (list.Count == 2)
+            if (spanSeconds >= Boss_Time.Item1 * (100 - crt_vip.monsterHuntingInterval) / 100)
             {
-                if (list[0] == value)
-                {
-                    int spanSeconds = Battle_Tool.SettlementTransport(list[1], 2);
-
-                    if (Search_Generate_Boss_Time(list[0]))
-                    {
-                        //判断是否到了刷新时间
-                        if (Generate_Boss_Time[list[0]] <= spanSeconds)
-                        {
-                            SumSave.crt_setting.battle_Boss_list[i] = (
-                                       list[0] + "+" +
-                                       UnifiedDateTime.ToString(UnifiedDateTime.FromString(list[1]).AddSeconds(Generate_Boss_Time[list[0]])),
-                                       boss.Item2);
-                            SumSave.crt_setting.MysqlData();
-                            return true;
-                        }
-                        else return false;
-                    }
-                }
+                is_true = true;
             }
         }
-        //添加boss列表
-        SumSave.crt_setting.battle_Boss_list.Add(((value + "+" + SumSave.nowtime), 0));
-        SumSave.crt_setting.MysqlData();
-        return true;
+        else
+        {
+            if (spanSeconds >= Boss_Time.Item1)
+            { 
+                is_true = true;
+            }
+        }
+        if (is_true)
+        {
+            Tool_Battle.SetBossTime(value, Boss_Time.Item1, Tool_UI.ToStandardFormat(SumSave.nowtime >= DateTime.Now ? SumSave.nowtime : DateTime.Now));
+            //添加boss列表
+            //SumSave.crt_setting.battle_Boss_list.Add(((value + "+" + SumSave.nowtime), 0));
+            //SumSave.crt_setting.MysqlData();
+        }
+      
+        return is_true;
     }
     /// <summary>
     /// 查找boss刷新时间
@@ -493,30 +552,53 @@ public class PanelBattle : PanelBase
             {
                 case Battle_Game_Type.player:
                 case Battle_Game_Type.call:
+                    
                     player_list.Remove(health.gameObject);
                     health.Clear();
                     if (player_list.Count == 0)
                     {
                         //战斗失败
                         gameover();
+                    }else
+                    if (baseBattleAttack.Data.type == Battle_Game_Type.call)
+                    {
+                        //复活召唤兽
+                        Resurrection_Call(baseBattleAttack.Data.crt_name);
                     }
                     break;
                 case Battle_Game_Type.monster:
                 case Battle_Game_Type.Boss:
                 case Battle_Game_Type.Activity_Monster:
-                    //Game_Omphalos.global_battle_info("击杀 " + baseBattleAttack.Data.crt_name);
                     map_crate_boss_condition++;
                     kill_monster++;
                     Drop(baseBattleAttack);
                     monster_list.Remove(health.gameObject);
                     if (baseBattleAttack.Data.type == Battle_Game_Type.Boss)
                     {
-
-                    } 
+                        AddBossStringData(baseBattleAttack.Data.crt_name);
+                    }
                     health.Clear();
                     break;
             }
         }
+    }
+    /// <summary>
+    /// 首次击杀后写入可以召唤列表
+    /// </summary>
+    /// <param name="value"></param>
+    private void AddBossStringData(string value)
+    {
+
+        for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+        {
+            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+            if (boss.Item1.Contains(value))
+            {
+                return;
+            }
+        }
+        SumSave.crt_setting.battle_Boss_list.Add((value + "+" + 0, 0));
+        SumSave.crt_setting.MysqlData();
     }
     /// <summary>
     /// 获取额外收益
@@ -558,9 +640,11 @@ public class PanelBattle : PanelBase
     /// <param name="monster"></param>
     private void Drop(BaseBattleAttack monster)
     {
-        Show_Info("击杀 " + monster.Data.crt_name + " 获得经验 " + (int)monster.Data.exp);
+        int exp = (int)monster.Data.exp * (100 + SumSave.crtMaxBattle.exp_bonus) / 100;
+        Show_Info("击杀 " + monster.Data.crt_name + " 获得经验 " + exp);
         //掉落收益
-        Add_Exp((int)monster.Data.exp);
+
+        Add_Exp(exp); 
         AdditionalIncome(monster);
         Show_Info( show_drop_list.Init(monster));
         switch (monster.Data.type)
@@ -645,6 +729,10 @@ public class PanelBattle : PanelBase
         return list_skill;
     }
     /// <summary>
+    /// 是否生成护盾
+    /// </summary>
+    private bool Open_Crate_Effect_5 = true;
+    /// <summary>
     /// 生成玩家
     /// </summary>
     private void crate_player()
@@ -653,20 +741,75 @@ public class PanelBattle : PanelBase
             GetRandomUVPosition(10), Quaternion.identity, battle_borm.transform);
         item.GetComponent<BaseBattleAttack>().Data = SumSave.crtMaxBattle;
         item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(m_skill_borm));
+        Dictionary<int, db_skill_vo> dic = SumSave.crt_skill.Set_Current_skill();
+        foreach (var id in dic) 
+        {
+            if (id.Value.EffectType == 5)//护盾
+            {
+                if (Open_Crate_Effect_5)
+                {
+                    //护盾只生成一次
+                    GameObject skill_prefabs = Resources.Load<GameObject>("UI/skill_prefabs/skill_" + id.Value.id);// skill.id); 
+                    ObjectPoolManager.instance.GetObjectFormPool(id.Value.show_name, skill_prefabs, new Vector3(item.transform.position.x, item.transform.position.y), Quaternion.identity, item.transform);
+                    Open_Crate_Effect_5 = false;
+                }
+            }
+            else
+            if (id.Value.EffectType == 6)//召唤
+            {
+                GameObject call = ObjectPoolManager.instance.GetObjectFormPool(id.Value.show_name, battle_player_prefab,
+           GetRandomUVPosition(800), Quaternion.identity, battle_borm.transform);
+                call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(id.Value);
+                player_list.Add(call);
+            }
+        }
         player_list.Add(item);
     }
 
+    private void Resurrection_Call(string name)
+    {
+        Dictionary<int, db_skill_vo> dic = SumSave.crt_skill.Set_Current_skill();
+        foreach (var id in dic)
+        {
+            if (id.Value.show_name == name)
+            {
+                GameObject call = ObjectPoolManager.instance.GetObjectFormPool(id.Value.show_name, battle_player_prefab,
+               GetRandomUVPosition(800), Quaternion.identity, battle_borm.transform);
+                call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(id.Value);
+                player_list.Add(call);
+            }
+        }
+    }
+
+    bool open_crate_monster = false;
     private IEnumerator Game_WaitTime(float time)
     {
         while (time > 0)
         {
             time -= 0.1f;
-            time_info.text= time.ToString("0.0")+"s";
+            time_info.text = time.ToString("0.0") + "s";
+            if (crt_map.map_type != 0)
+            { 
+                limited_time-=0.1f;
+                time_info.text += "\n地图关闭" + limited_time.ToString("0.0") + "s";
+            }
             yield return new WaitForSeconds(0.1f);
         }
-        time_info.text = "";
-        crate_monster();
-        StartCoroutine(Game_WaitTime(crt_map.map_cd[crt_map.GetMapIntensityDrop - 1]));
+        if (crt_map.map_type != 0)
+        {
+            if (limited_time <= 0)
+            {
+                open_crate_monster = false;
+                 Alert.Show(crt_map.map_name,crt_map.map_name+"地图已关闭,请切换地图");
+            }
+        }
+        if (open_crate_monster)
+        {
+            time_info.text = "";
+            crate_monster();
+            StartCoroutine(Game_WaitTime(crt_map.map_cd[crt_map.GetMapIntensityDrop - 1]));
+        }
+        
 
 
     }

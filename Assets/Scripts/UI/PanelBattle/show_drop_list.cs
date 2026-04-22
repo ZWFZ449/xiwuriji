@@ -230,16 +230,16 @@ public class show_drop_list : Base_Mono
             { 
                 int random = Random.Range(0, int.Parse(probability[1]));
                 int probability_value = int.Parse(probability[0]);
-                if (type != Drop_Type.逐个掉落) probability_value = probability_value * SumSave.crtMaxBattle.drop_bonus / 100;
+                if (type != Drop_Type.逐个掉落) probability_value = probability_value * (100 + SumSave.crtMaxBattle.drop_bonus) / 100;
                 if (random <= probability_value)
                 {
                     data = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == drop_value_info[drop_value_info.Length - 1]);
                     if (data != null)
                     {
-                        data.user_value = Tool_Battle.Obtain_Equip(data, 1, Quality(data));
-                        data = tool_Categoryt.Read_Bag(data.user_value);
-                        SetData(data);
-                        if (type != Drop_Type.随机掉落) drop_list[index].Item2.Add(data);
+                        string user_value = Tool_Battle.Obtain_Equip(data, 1, Quality(data));
+                        Bag_Base_VO value_data = tool_Categoryt.Read_BaseBag(user_value);
+                        SetData(value_data);
+                        if (type != Drop_Type.随机掉落) drop_list[index].Item2.Add(value_data);
                     }
                 }
             }
@@ -298,7 +298,6 @@ public class show_drop_list : Base_Mono
                 {
                     SumSave.crt_bags.Set_Bag_List(data);
                 } 
-                   
                 break;
             case Stditem_StdMode_List.消耗品:
             case Stditem_StdMode_List.材料:
@@ -311,12 +310,12 @@ public class show_drop_list : Base_Mono
             case Stditem_StdMode_List.nothing:
                 break;
             case Stditem_StdMode_List.货币:
-                currency_unit unit = Tool_State.ToEnum(data.StdMode, currency_unit.金币);
+                currency_unit unit = Tool_State.ToEnum(data.Name, currency_unit.金币);
                 int moeny = 1;
                 switch (unit)
                 {
                     case currency_unit.金币:
-                        moeny = 100;
+                        moeny = 100 * (100 + SumSave.crtMaxBattle.gold_bonus) / 100;
                         break;
                     case currency_unit.元宝:
                         break;

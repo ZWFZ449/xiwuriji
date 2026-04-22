@@ -151,7 +151,7 @@ public class Dream_Panel_Bag : Panel_Base
         {
             case Panel_BagType.灵宠:
                 List<db_pet_vo> pet_list = SumSave.crt_pet.GetPets;
-                base_info.text = m_curPanel_BagType + " " + pet_list.Count + "/10";
+                base_info.text = m_curPanel_BagType + " " + pet_list.Count + "/30";
                 for (int i = 0; i < pet_list.Count; i++)
                 {
                     dream_BagItem bagItem = Instantiate(p_bagItem_prefab, m_BagItem_brom);
@@ -246,14 +246,13 @@ public class Dream_Panel_Bag : Panel_Base
     private Bag_Base_VO Init_Bag()
     {
         Bag_Base_VO data = SumSave.db_stditems[Random.Range(0, SumSave.db_stditems.Count)];
-        
         while (data.StdMode != equip_type_list.武器.ToString())
         {
             data = SumSave.db_stditems[Random.Range(0, SumSave.db_stditems.Count)];
         }
-        data.user_value = Tool_Battle.Obtain_Equip(data, 1, Random.Range(1,7));
-        data = tool_Categoryt.Read_Bag(data.user_value);
-        return data;
+        string user_value = Tool_Battle.Obtain_Equip(data, 1, Random.Range(1,7));
+        Bag_Base_VO datas = tool_Categoryt.Read_BaseBag(user_value);
+        return datas;
 
     }
 

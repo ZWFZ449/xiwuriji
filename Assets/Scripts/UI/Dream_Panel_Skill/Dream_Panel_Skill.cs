@@ -483,7 +483,7 @@ public class Dream_Panel_Skill : Panel_Base
             { 
                 for (int i = 0; i < crt_skill.skill_offect_value_list[entry].Count; i++)
                 {
-                    color_list = (i < lv + talent_lv) ? UnityColorPresets.HexToColor("cbfff9") : UnityColorPresets.HexToColor("#808080");
+                    color_list = (i <= lv + talent_lv) ? UnityColorPresets.HexToColor("ffe400") : UnityColorPresets.HexToColor("#808080");
                     str += "\n" + (skill_Lv_Type)i + " ";
                     switch (entry)
                     {

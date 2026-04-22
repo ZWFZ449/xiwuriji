@@ -9,10 +9,14 @@ public class data_global_gift_vo : Base_VO
 
     private int gift_points;
 
+    private int verification_gift_points, verification;
+
     public void Init(List<string> giftS,int gift_points)
     { 
         this.giftS = giftS;
         this.gift_points = gift_points;
+        verification = Random.Range(0, 1000000);
+        verification_gift_points = verification + gift_points;
     }
 
     public override string[] Set_Instace_String()
@@ -84,9 +88,18 @@ public class data_global_gift_vo : Base_VO
     /// </summary>
     /// <param name="value"></param>
     public void SetGiftPoints(int value)
-    { 
-        gift_points += value;
-        MysqlData();
+    {
+        if (verification == verification_gift_points - gift_points)
+        {
+            gift_points += value;
+            verification_gift_points += value;
+            MysqlData();
+        }
+        else
+        {
+            Game_Omphalos.i.Delete("充值礼包原值 " + (verification_gift_points - verification) + "当前值 " + gift_points); 
+        }
+       
     }
 
     public override void MysqlData()

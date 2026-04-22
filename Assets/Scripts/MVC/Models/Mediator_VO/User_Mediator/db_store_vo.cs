@@ -41,19 +41,19 @@ public class db_store_vo : Base_VO
         this.unit = unit;
         this.discount = discount;
         this.ItemMaxQuantity = ItemMaxQuantity;
-        Bag_Base_VO bag = ArrayHelper.Find(SumSave.db_stditems, (x) => x.Name == ItemName);
-        if (bag != null)
-        {
-            for (int i = 0; i < dream_user_bag_Type.GetNames(typeof(dream_user_bag_Type)).Length; i++)
-            {
-                if (((dream_user_bag_Type)i).ToString() == bag.StdMode)
-                { 
-                    bag_Type = (dream_user_bag_Type)i;
-                    return;
-                }
-            }
-        }
-        else Debug.LogError(ItemName + " 不在db_stditems数据库");
+        //Bag_Base_VO bag = ArrayHelper.Find(SumSave.db_stditems, (x) => x.Name == ItemName);
+        //if (bag != null)
+        //{
+        //    for (int i = 0; i < dream_user_bag_Type.GetNames(typeof(dream_user_bag_Type)).Length; i++)
+        //    {
+        //        if (((dream_user_bag_Type)i).ToString() == bag.StdMode)
+        //        { 
+        //            bag_Type = (dream_user_bag_Type)i;
+        //            return;
+        //        }
+        //    }
+        //}
+        //else Debug.LogError(ItemName + " 不在db_stditems数据库");
         
     }
      

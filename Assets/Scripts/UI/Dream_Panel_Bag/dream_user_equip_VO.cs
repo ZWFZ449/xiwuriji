@@ -32,10 +32,10 @@ public class dream_user_equip_VO : Base_VO
         {
             if (values[i].Length > 0)
             {
-                list.Add(tool_Categoryt.Read_Bag(values[i]));
+                Bag_Base_VO bag = tool_Categoryt.Read_BaseBag(values[i]);
+                if(bag!=null) list.Add(bag);
             }
         }
-
         return list;
     }
 

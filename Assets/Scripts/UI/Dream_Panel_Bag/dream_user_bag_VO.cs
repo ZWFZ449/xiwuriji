@@ -37,7 +37,8 @@ public class dream_user_bag_VO : Base_VO
         {
             if (bag_value[i].Length > 0)
             {
-                bag_List.Add(tool_Categoryt.Read_Bag(bag_value[i]));
+                Bag_Base_VO bag = tool_Categoryt.Read_BaseBag(bag_value[i]);
+                if (bag != null) bag_List.Add(bag);
             }
         }
         resources_List.Init(resources_value);

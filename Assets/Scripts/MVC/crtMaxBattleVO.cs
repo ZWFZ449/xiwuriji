@@ -37,15 +37,18 @@ public class crtMaxBattleVO
     /// </summary>
     public readonly int quality_bonus;
 
+    public readonly int boss_cd;
+
     /// <summary>
     ///  Ù–‘
     /// </summary>
     public FinalBattleValueVO data;
-    public crtMaxBattleVO(int exp_bonus, int gold_bonus, int drop_bonus ,int quality_bonus )
+    public crtMaxBattleVO(int exp_bonus, int gold_bonus, int drop_bonus ,int quality_bonus ,int boss_cd = 0)
     { 
         this.exp_bonus= exp_bonus;
         this.gold_bonus = gold_bonus;
         this.drop_bonus = drop_bonus;
         this.quality_bonus = quality_bonus;
+        this.boss_cd = boss_cd;
     }
 }

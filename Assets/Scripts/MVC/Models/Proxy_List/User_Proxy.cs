@@ -250,9 +250,10 @@ namespace MVC
             }
             else//为空的话初始化数据
             {
-                SumSave.crt_signin.now_time = Convert.ToDateTime(SumSave.nowtime.AddDays(-1).ToString("yyyy-MM-dd"));
+                string nowtime = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+                if (SumSave.nowtime != null) nowtime = SumSave.nowtime.AddDays(-1).ToString("yyyy-MM-dd");
+                SumSave.crt_signin.now_time = Convert.ToDateTime(nowtime);
                 SumSave.crt_signin.number = 0;
-                SumSave.crt_signin.user_value = "";
                 SumSave.crt_signin.Init();
                 Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.dream_user_signin, SumSave.crt_signin.Set_Instace_String());
             }
@@ -262,7 +263,7 @@ namespace MVC
         /// </summary>
         private void Read_User_Setting()
         {
-            mysqlReader = MysqlDb.Select(Mysql_Table_Name.user_data_setting, "uid", GetStr(SumSave.crt_user.uid));
+            mysqlReader = MysqlDb.Select(Mysql_Table_Name.user_data_settings, "uid", GetStr(SumSave.crt_user.uid));
             SumSave.crt_setting = new data_setting_vo();
             if (mysqlReader.HasRows)
             {
@@ -271,7 +272,7 @@ namespace MVC
                     SumSave.crt_setting = Mysql_Read.Read(mysqlReader, new data_setting_vo());
                 }
             }
-            else Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.user_data_setting, SumSave.crt_setting.Set_Instace_String());
+            else Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.user_data_settings, SumSave.crt_setting.Set_Instace_String());
         }
 
         private void Read_User_Pet()
@@ -291,7 +292,7 @@ namespace MVC
 
         private void Read_User_Unit()
         {
-            mysqlReader = MysqlDb.Select(Mysql_Table_Name.Dream_User, "uid", GetStr(SumSave.crt_user.uid));
+            mysqlReader = MysqlDb.Select(Mysql_Table_Name.Dream_Users, "uid", GetStr(SumSave.crt_user.uid));
             SumSave.crt_user_unit = new user_vo();
             if (mysqlReader.HasRows)
             {
@@ -302,8 +303,8 @@ namespace MVC
             }
             else
             {
-                SumSave.crt_user_unit.Init("100000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
-                Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.Dream_User, SumSave.crt_user_unit.Set_Instace_String());
+                SumSave.crt_user_unit.Init(DateTime.Now,"1000000,5000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0","");
+                Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.Dream_Users, SumSave.crt_user_unit.Set_Instace_String());
             }
         }
         private void Read_User_Skill()

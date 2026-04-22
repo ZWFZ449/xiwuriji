@@ -100,6 +100,14 @@ namespace MVC
             Instantiate(Resources.Load<GameObject>("UI/frame/frame/" + 6), item_frame.transform);
             Instantiate(Resources.Load<GameObject>("UI/Prefabs/panel_pet/" + pet_data.pet_id), item_frame.transform);
             item_icon.gameObject.SetActive(false);
+            if (pet_data.crt_name != pet_data.pet_name)
+            {
+                item_icon.gameObject.SetActive(true);
+                Color color = item_icon.color;
+                color.a = 0f;  // 透明度设为0（完全透明）
+                item_icon.color = color;
+                lock_On.gameObject.SetActive(true);
+            }
         }
 
         private db_pet_vo pet_data;

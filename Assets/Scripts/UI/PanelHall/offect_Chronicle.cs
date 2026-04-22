@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+/// <summary>
+/// 大事记
+/// </summary>
 public class offect_Chronicle : Base_Mono
 {
     private TMP_Text info;

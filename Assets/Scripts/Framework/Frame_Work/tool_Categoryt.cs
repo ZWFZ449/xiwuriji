@@ -266,31 +266,30 @@ public class tool_Categoryt : MonoBehaviour
     /// 获取数据列表
     /// </summary>
     /// <param name="bag"></param>
-    public static Bag_Base_VO Read_Bag(string user_value)
+    public static Bag_Base_VO Read_BaseBag(string user_value)
     {
-        Bag_Base_VO bag_base= new Bag_Base_VO();
-        string[] splits =user_value.Split(' ');
+        string[] splits = user_value.Split(' ');
         if (splits.Length > 1)
         {
             foreach (var item in SumSave.db_stditems)
             {
                 if (item.Name == splits[0])
                 {
-                    bag_base = new Bag_Base_VO(item.hp,item.mp,item.ac,item.ac2,item.mac,item.mac2,item.dc,item.dc2,item.sc,item.sc2,item.mc,item.mc2);
+                    Bag_Base_VO bag_base = new Bag_Base_VO(item.hp, item.mp, item.ac, item.ac2, item.mac, item.mac2, item.dc, item.dc2, item.sc, item.sc2, item.mc, item.mc2);
                     bag_base.Name = item.Name;
                     bag_base.StdMode = item.StdMode;
                     bag_base.Shape = item.Shape;
                     bag_base.job = item.job;
                     bag_base.need_lv = item.need_lv;
-                    bag_base.equip_lv= item.equip_lv;
-                    bag_base.price= item.price;
+                    bag_base.equip_lv = item.equip_lv;
+                    bag_base.price = item.price;
                     bag_base.suit = item.suit;
                     bag_base.user_value = user_value;
                     return bag_base;
                 }
-             }
+            }
         }
-        return bag_base;
+        return null;
     }
     /// <summary>
     /// 读取技能

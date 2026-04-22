@@ -34,8 +34,10 @@ public static class Mysql_Read
     }
     public static user_vo Read(MySqlDataReader reader, user_vo item)
     {
+        DateTime nowtime = Convert.ToDateTime(reader.GetString(reader.GetOrdinal("nowtime")));
+        string buff_value= reader.GetString(reader.GetOrdinal("buff_value"));
         string value = reader.GetString(reader.GetOrdinal("value"));
-        item.Init(value);
+        item.Init(nowtime,value, buff_value);
         return item;
     }
 
@@ -131,7 +133,9 @@ public static class Mysql_Read
     {
         item.Iint(reader.GetString(reader.GetOrdinal("data_base_setting")),
            reader.GetString(reader.GetOrdinal("data_medicine_setting")),
-           reader.GetString(reader.GetOrdinal("data_battle_boss_setting")));
+           reader.GetString(reader.GetOrdinal("data_battle_boss_setting")), 
+           reader.GetString(reader.GetOrdinal("data_setting"))
+           );
         return item;
     }
 

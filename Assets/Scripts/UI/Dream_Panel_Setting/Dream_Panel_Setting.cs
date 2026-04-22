@@ -15,6 +15,7 @@ public enum setting_type
     基础设置,
     捡取设置,
     Boss设置,
+    //技能设置,
 }
 public class Dream_Panel_Setting : Panel_Base
 {
@@ -50,7 +51,7 @@ public class Dream_Panel_Setting : Panel_Base
     public override void Initialize()
     {
         base.Initialize();
-        m_btn_type_borm = Find<Transform>("bg/battle_btn_list");
+        m_btn_type_borm = Find<Transform>("bg/battle_btn_list/Scroll View/Viewport/Content");
         btn_item_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
         base_info= Find<TMP_Text>("bg/offect_list/title/info/info");
         m_setting_btn_borm = Find<Transform>("bg/offect_list/Scroll View/Viewport/Content");
@@ -127,9 +128,11 @@ public class Dream_Panel_Setting : Panel_Base
                             }
                         }
                     }
-                    
+
                 }
                 break;
+            //case setting_type.技能设置:
+             //   break;
         }
     }
     /// <summary>

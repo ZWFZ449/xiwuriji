@@ -128,7 +128,34 @@ public class PanelMap : PanelBase
             case Map_Btn_list.中州秘境:
             case Map_Btn_list.每日副本:
             case Map_Btn_list.个人Boss:
+                switch ((Map_Btn_list)btn_item.index)
+                {
+                    case Map_Btn_list.野外地图:
+                        break;
+                    case Map_Btn_list.每日副本:
+                        if (SumSave.crtHero.lv < 30)
+                        { 
+                            Alert_Dec.Show("等级不足30级");
+                            return;
+                        }
+                        break;
+                    case Map_Btn_list.个人Boss:
+                        if (SumSave.crtHero.lv < 20)
+                        {
+                            Alert_Dec.Show("等级不足20级");
+                            return;
+                        }
+                        break;
+                    case Map_Btn_list.中州秘境:
+                        if (SumSave.crtHero.lv < 40)
+                        {
+                            Alert_Dec.Show("等级不足40级");
+                            return;
+                        }
+                        break;
+                }
                 Open_function_offect(true);
+
                 foreach (var item in base_map_item_dic.Values)
                 {
                     item.gameObject.SetActive(item.GetMap().map_type == btn_item.index);

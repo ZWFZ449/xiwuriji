@@ -64,8 +64,14 @@ public class db_pet_vo
         }
     }
 
-    public (int, int, int, int, int) GetCrtAttr { get { return crt_attr; } }
+    public (int, int, int, int, int) GetCrtAttr { get { return (0, 0, 0, 0, 0);} } //crt_attr; } }
+
     public (int, int, int, int, int) GetAddAttr { get { return add_attr; } }
+
+    public void SetAddAttr(int ac, int mac, int dc, int mc, int sc)
+    {
+        add_attr = (ac, mac, dc, mc, sc);
+    }
     public List<db_pet_talent_vo> GetCrtTalent { get { return crt_talents; } }
 
 }

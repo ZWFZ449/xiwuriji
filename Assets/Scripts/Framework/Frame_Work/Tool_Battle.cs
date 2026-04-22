@@ -1,10 +1,12 @@
 using Common;
 using MVC;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public static class Tool_Battle 
 {
@@ -28,7 +30,7 @@ public static class Tool_Battle
     /// <returns></returns>
     public static crtMaxBattleVO InitPlayerMaxBattle()
     {
-        int exp_bonus = 100, gold_bonus = 100, drop_bonus = 100, quality_bonus = 100;
+        int exp_bonus = 0, gold_bonus = 0, drop_bonus = 0, quality_bonus = 0,boss_cd=0;
         int maxhp = 0, maxmp = 0;
         int battle_hp = 0, battle_mp = 0, battle_ac = 0, battle_mac = 0, battle_dc = 0, battle_sc = 0, battle_mc = 0, battle_speed = 0, battle_range = 0, battle_Damage = 0, battle_def = 0;
         int hp = 0, mp = 0, dc = 0, dc2 = 0, mac = 0, mac2 = 0, ac = 0, ac2 = 0, sc = 0, sc2 = 0, mc = 0, mc2 = 0;
@@ -173,7 +175,7 @@ public static class Tool_Battle
                     break;
             }
 
-        }
+        }//角色天赋
         List<Bag_Base_VO> crt_euqip = SumSave.crt_equips.Get(Dream_User_Equip_Type.装备);
         for (int i = 0; i < crt_euqip.Count; i++)  
         {
@@ -606,11 +608,12 @@ public static class Tool_Battle
             (int,int,int,int,int) pet_attr = pet.GetCrtAttr;
             (int, int, int, int, int) pet_add_attr = pet.GetAddAttr;
             List<db_pet_talent_vo> talent_list = pet.GetCrtTalent;
-            ac2+= pet_attr.Item1 + pet_add_attr.Item1;
-            mac2 += pet_attr.Item2 + pet_add_attr.Item2;
-            dc2 += pet_attr.Item3 + pet_add_attr.Item3;
-            mc2 += pet_attr.Item4 + pet_add_attr.Item4;
-            sc2 += pet_attr.Item5 + pet_add_attr.Item5;
+            Bag_Base_VO bag = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == pet.pet_name);
+            ac2 += bag.ac2 + pet_attr.Item1 + pet_add_attr.Item1;
+            mac2 += bag.mac2 + pet_attr.Item2 + pet_add_attr.Item2;
+            dc2 += bag.dc2 + pet_attr.Item3 + pet_add_attr.Item3;
+            mc2 += bag.mc2 + pet_attr.Item4 + pet_add_attr.Item4;
+            sc2 += bag.sc2 + pet_attr.Item5 + pet_add_attr.Item5;
             foreach (var talent in talent_list)
             {
                 (enum_battle_pet_talent_list, int, int) D = (enum_battle_pet_talent_list.任意门, 0, 0);
@@ -713,7 +716,39 @@ public static class Tool_Battle
                 }
             }
         }
-       
+        if (crt_vip == null) Obtain_Vip();
+        if (crt_vip != null)
+        { 
+            exp_bonus += crt_vip.lingzhuIncome;
+            gold_bonus += crt_vip.experienceBonus;
+            drop_bonus += crt_vip.equipmentExplosionRate;
+            boss_cd += crt_vip.monsterHuntingInterval;
+        }
+        List<(string, string, int)> buffs = SumSave.crt_user_unit.GetBuff;
+        for (int i = 0; i < buffs.Count; i++)
+        {
+            int spanSeconds = Battle_Tool.SettlementTransport(buffs[i].Item2, 3);
+            int time = buffs[i].Item3 - spanSeconds;//剩余时间
+            if (time > 0|| buffs[i].Item3>=99999)
+            {
+                if (buffs[i].Item1 == common_Buff.狂欢.ToString())
+                {
+                    exp_bonus += 10;
+                    gold_bonus += 10;
+                }
+                if (buffs[i].Item1 == common_Buff.双倍经验卷轴.ToString())
+                {
+                    exp_bonus += 100;
+                }
+                if (buffs[i].Item1 == common_Buff.月卡.ToString())
+                {
+                    exp_bonus += 20;
+                    gold_bonus += 20;
+                    drop_bonus += 10;
+                    boss_cd += 5;
+                }
+            }
+        }
         maxhp = hp * (100 + battle_hp) / 100;
         maxmp = mp * (100 + battle_mp) / 100;
         ac= ac * (100 + battle_ac) / 100;
@@ -726,7 +761,7 @@ public static class Tool_Battle
         sc2 = sc2 * (100 + battle_sc) / 100;
         mc = mc * (100 + battle_mc) / 100;
         mc2 = mc2 * (100 + battle_mc) / 100;
-        crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus);
+        crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus, boss_cd);
         crt.crt_name = SumSave.crtHero.hero_name;
         crt.lv = SumSave.crtHero.lv;
         crt.exp = SumSave.crtHero.exp;
@@ -734,6 +769,218 @@ public static class Tool_Battle
         crt.type = Battle_Game_Type.player;
         crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky,damage_reduction,magic_damage_reduction,0);
+        return crt;
+    }
+    /// <summary>
+    /// 当前vip
+    /// </summary>
+    private static db_vip crt_vip;
+    /// <summary>
+    /// 获取当前vip等级
+    /// </summary>
+    /// <returns></returns>
+    public static db_vip Obtain_Vip()
+    {
+        db_vip crt_vip = null;
+        int sum = (int.Parse)(SumSave.crt_global_gift.GetGiftPoints);
+        if (sum == 0) return crt_vip;
+        for (int i = 0; i < SumSave.db_vip_list.Count; i++)
+        {
+            if (sum >= SumSave.db_vip_list[i].vip_exp)
+            {
+                crt_vip = SumSave.db_vip_list[i];
+            }
+        }
+        return crt_vip;
+    }
+    /// <summary>
+    /// 判断是否拥有buff
+    /// </summary>
+    /// <param name="buff"></param>
+    /// <returns></returns>
+    public static bool IsBuff(common_Buff buff)
+    {
+        List<(string, string, int)> buffs = SumSave.crt_user_unit.GetBuff;
+        for (int i = 0; i < buffs.Count; i++)
+        {
+            int spanSeconds = Battle_Tool.SettlementTransport(buffs[i].Item2, 3);
+            int time = buffs[i].Item3 - spanSeconds;//剩余时间
+            if (time > 0 || buffs[i].Item3 >= 99999)
+            {
+                if (buff.ToString() == buffs[i].Item1)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
+    /// <summary>
+    /// 初始化vip
+    /// </summary>
+    public static void Crate_Vip()
+    {
+        int sum = (int.Parse)(SumSave.crt_global_gift.GetGiftPoints);
+        if (sum == 0) return;
+        for (int i = 0; i < SumSave.db_vip_list.Count; i++)
+        {
+            if (sum >= SumSave.db_vip_list[i].vip_exp)
+            {
+                crt_vip = SumSave.db_vip_list[i];
+            }
+        }
+    }
+
+
+    private static Dictionary<string, (int,string)> map_boss_time = new Dictionary<string, (int, string)>();
+    /// <summary>
+    /// 读取boss刷新时间
+    /// </summary>
+    public static void Carte_Read_Boss_Time()
+    {
+        Dictionary<string, (int,string)> dic = new Dictionary<string, (int, string)>();
+        DateTime now = SumSave.nowtime >= DateTime.Now ? SumSave.nowtime : DateTime.Now;
+        string value = Tool_UI.ToStandardFormat(now);
+        for (int i = 0; i < SumSave.db_maps.Count; i++)
+        {
+            if (SumSave.db_maps[i].map_type == 0)
+            {
+                for (int j = 0; j < SumSave.db_maps[i].map_boss.Count; j++)
+                {
+                    if (!dic.ContainsKey(SumSave.db_maps[i].map_boss[j]))
+                    {
+                        //dic.Add(SumSave.db_maps[i].map_boss[j], new Dictionary<int, string>());
+                        dic[SumSave.db_maps[i].map_boss[j]] = (SumSave.db_maps[i].map_boss_cdtime[j], value);
+                    }
+                }
+            }
+        }
+        map_boss_time = dic;
+    }
+    /// <summary>
+    /// 获取当前地图boss刷新时间
+    /// </summary>
+    /// <param name="map_id"></param>
+    /// <returns></returns>
+    public static (int,string) GetBossTime(string map_id) { return (map_boss_time.ContainsKey(map_id))? map_boss_time[map_id]:(99999,"no"); }
+    /// <summary>
+    /// 更新boss刷新时间
+    /// </summary>
+    /// <param name="map_id"></param>
+    /// <param name="time"></param>
+    /// <param name="value"></param>
+    public static void SetBossTime(string map_id, int time, string value)
+    { 
+        map_boss_time[map_id] = (time, value);
+    }
+    /// <summary>
+    /// 创建召唤战斗数据
+    /// </summary>
+    /// <param name="skill"></param>
+    /// <returns></returns>
+    public static crtMaxBattleVO Crate_Call(db_skill_vo skill)
+    {
+        int exp_bonus = 0, gold_bonus = 0, drop_bonus = 0, quality_bonus = 0;
+        int maxhp = 0, maxmp = 0;
+        int battle_hp = 0, battle_mp = 0, battle_ac = 0, battle_mac = 0, battle_dc = 0, battle_sc = 0, battle_mc = 0, battle_speed = 0, battle_range = 0, battle_Damage = 0, battle_def = 0;
+        int hp = 0, mp = 0, dc = 0, dc2 = 0, mac = 0, mac2 = 0, ac = 0, ac2 = 0, sc = 0, sc2 = 0, mc = 0, mc2 = 0;
+        int hit = 0, dodge = 0, crit = 0, critDmg = 100;
+        int hpRegen = 0, mpRegen = 0;
+        int lucky = 0, damage_reduction = 0, magic_damage_reduction = 0;
+        List<(enum_battle_pet_talent_list, int, int)> talentList = new List<(enum_battle_pet_talent_list, int, int)>();
+        //str += "召唤 " + Show_Color.Set_String(crt_skill.show_name, color_list) + "\n继承" + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + " %属性" + " ", color_list);
+        //if (crt_skill.skill_damages.Count > 0) str += "[召唤兽伤害] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
+        int lv = Mathf.Min(skill.DefPowers.Count - 1, skill.SetLv());
+        int power = (skill.Power + skill.DefPowers[lv]);
+        maxhp = (int)SumSave.crtMaxBattle.data.battle_maxhp * (power) / 100;
+        maxmp = (int)SumSave.crtMaxBattle.data.battle_maxmp * (power) / 100;
+        hp = (int)SumSave.crtMaxBattle.data.battle_hp * (power) / 100;
+        mp = (int)SumSave.crtMaxBattle.data.battle_mp * (power) / 100;
+        ac = (int)SumSave.crtMaxBattle.data.ac * (power) / 100;
+        ac2 = (int)SumSave.crtMaxBattle.data.ac2 * (power) / 100;
+        mac = (int)SumSave.crtMaxBattle.data.mac * (power) / 100;
+        mac2 = (int)SumSave.crtMaxBattle.data.mac2 * (power) / 100;
+        dc = (int)SumSave.crtMaxBattle.data.dc * (power) / 100;
+        dc2 = (int)SumSave.crtMaxBattle.data.dc2 * (power) / 100;
+        sc = (int)SumSave.crtMaxBattle.data.sc * (power) / 100;
+        sc2 = (int)SumSave.crtMaxBattle.data.sc2 * (power) / 100;
+        mc = (int)SumSave.crtMaxBattle.data.mc * (power) / 100;
+        mc2 = (int)SumSave.crtMaxBattle.data.mc2 * (power) / 100;
+        hit = (int)SumSave.crtMaxBattle.data.hit * (power) / 100;
+        dodge = (int)SumSave.crtMaxBattle.data.dodge * (power) / 100;
+        crit = (int)SumSave.crtMaxBattle.data.crit * (power) / 100;
+        critDmg = (int)SumSave.crtMaxBattle.data.critDmg * (power) / 100;
+        hpRegen = (int)SumSave.crtMaxBattle.data.hpRegen * (power) / 100;
+        mpRegen = (int)SumSave.crtMaxBattle.data.mpRegen * (power) / 100;
+        battle_hp = (int)SumSave.crtMaxBattle.data.battle_hp * (power) / 100;
+        battle_mp = (int)SumSave.crtMaxBattle.data.battle_mp * (power) / 100;
+        battle_ac = (int)SumSave.crtMaxBattle.data.battle_ac * (power) / 100;
+        battle_mac = (int)SumSave.crtMaxBattle.data.battle_mac * (power) / 100;
+        battle_dc = (int)SumSave.crtMaxBattle.data.battle_dc * (power) / 100;
+        battle_sc = (int)SumSave.crtMaxBattle.data.battle_sc * (power) / 100;
+        battle_mc = (int)SumSave.crtMaxBattle.data.battle_mc * (power) / 100;
+        battle_speed = (int)SumSave.crtMaxBattle.data.battle_speed;
+        battle_range = (int)SumSave.crtMaxBattle.data.battle_range * (power) / 100;
+        battle_Damage = (int)SumSave.crtMaxBattle.data.battle_Damage * (power) / 100 + skill.skill_damages[lv];//真实伤害
+        battle_def = (int)SumSave.crtMaxBattle.data.battle_def * (power) / 100;
+        lucky = (int)SumSave.crtMaxBattle.data.lucky * (power) / 100;
+        damage_reduction = (int)SumSave.crtMaxBattle.data.damage_reduction * (power) / 100;
+        magic_damage_reduction = (int)SumSave.crtMaxBattle.data.magic_damage_reduction * (power) / 100;
+        Dictionary<enum_talent_offect_list, int> buff = skill.GetBuff;
+        foreach (var item in buff.Keys)
+        {
+            switch (item)
+            {
+                
+                case enum_talent_offect_list.命中: hit += buff[item]; break;
+                    break;
+                case enum_talent_offect_list.召唤兽攻击:dc2+= buff[item]; sc2+= buff[item];mc2 += buff[item]; break;
+                    break;
+                case enum_talent_offect_list.召唤兽生命:maxhp += buff[item]; break;
+                    break;
+                case enum_talent_offect_list.召唤兽防御:ac2 += buff[item]; mac2 += buff[item]; break;
+                    break;
+                case enum_talent_offect_list.召唤兽速度:
+                    battle_speed-= buff[item];
+                    break;
+                case enum_talent_offect_list.召唤兽死亡爆炸:
+                    break;
+                case enum_talent_offect_list.特殊效果:
+                    break;
+                case enum_talent_offect_list.临时伤害:
+                    break;
+                case enum_talent_offect_list.临时防御:
+                    break;
+                case enum_talent_offect_list.临时速度:
+                    break;
+                case enum_talent_offect_list.单体改群体:
+                    break;
+                case enum_talent_offect_list.技能攻击个数:
+                    break;
+                case enum_talent_offect_list.技能概率不消耗蓝:
+                    break;
+                case enum_talent_offect_list.技能全体伤害:
+                    break;
+                case enum_talent_offect_list.群体技能攻击范围:
+                    break;
+                case enum_talent_offect_list.每秒回复全体血量百分比:
+                    break;
+                case enum_talent_offect_list.攻击击退敌人概率:
+                    break;
+                case enum_talent_offect_list.弹道:
+                    break;
+            }
+        }
+
+        crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus);
+        crt.crt_name = skill.show_name;
+        crt.lv = skill.SetLv();
+        crt.exp = 0;
+        crt.hero_type = (Hero_Type)skill.Effect;
+        crt.type = Battle_Game_Type.call;
+        crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
+            mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky, damage_reduction, magic_damage_reduction, 0);
         return crt;
     }
     /// <summary>
@@ -1192,7 +1439,8 @@ public static class Tool_Battle
     /// <returns></returns>
     public static string Obtain_Pet(int index,int crate_skill_random=0)
     {
-        db_pet_vo pet = ArrayHelper.Find(SumSave.db_pets, (item) => item.pet_id == index);
+        db_pet_vo base_pet = ArrayHelper.Find(SumSave.db_pets, (item) => item.pet_id == index);
+        db_pet_vo pet = new db_pet_vo(base_pet.pet_id, base_pet.pet_name, base_pet.pet_ac, base_pet.pet_mac, base_pet.pet_dc, base_pet.pet_mc, base_pet.pet_sc, base_pet.pet_talent, base_pet.pet_scale);
         //0:可修改名称 1本命 2id 3基础数值 4极品值5技能
         string user_value = pet.pet_id + ","+pet.pet_name + "," + pet.pet_name + ",";
         user_value += Random.Range(1, pet.pet_ac / 3) + "X" + Random.Range(1, pet.pet_mac / 3) + "X"

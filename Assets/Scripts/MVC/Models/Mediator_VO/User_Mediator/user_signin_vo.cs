@@ -18,19 +18,25 @@ public class user_signin_vo : Base_VO
     /// <summary>
     /// 是否领取奖励
     /// </summary>
-    private List<int> values = new List<int>();
+    private List<string> values = new List<string>();
+
+    private Dictionary<string,int> dic = new Dictionary<string, int>();
+
     public int max_number;
-    public string user_value;
-    public void Init()
-    { 
-    
-        string[] str = user_value.Split(' ');
-        if (str.Length > 0)
+    //public string user_value;
+    public void Init(string user_value="")
+    {
+        if (user_value == "") return;
+        List<string> values = ArrayHelper.Get_Split<string>(user_value, ';');
+        if (values.Count > 0)
         {
-            for (int i = 0; i < str.Length; i++)
-            {
-                if (!string.IsNullOrEmpty(str[i]))
-                    values.Add(int.Parse(str[i]));
+            foreach (var item in values)
+            { 
+                List<string> list = ArrayHelper.Get_Split<string>(item, ' ');
+                if (list.Count == 2)
+                {
+                    if (!dic.ContainsKey(list[0])) dic.Add(list[0], int.Parse(list[1]));
+                }
             }
         }
     }
@@ -38,7 +44,7 @@ public class user_signin_vo : Base_VO
     /// 查看
     /// </summary>
     /// <returns></returns>
-    public List<int> Set()
+    public List<string> Set()
     { 
         return values;
     }
@@ -48,27 +54,64 @@ public class user_signin_vo : Base_VO
     /// <param name="index"></param>
     public void Set(int index)
     {
-        if (index < values.Count)
-            values[index] = 1;
-        else
+        //if (index < values.Count)
+        //    values[index] = 1;
+        //else
+        //{
+        //    while (index < values.Count)
+        //    {
+        //        values.Add(0);
+        //    }
+        //    values[index] = 1;
+        //}
+    }
+    /// <summary>
+    /// 获取是否可以使用
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public int GetIsValue(string key)
+    {
+        if (dic.ContainsKey(key))
         {
-            while (index < values.Count)
-            {
-                values.Add(0);
-            }
-            values[index] = 1;
+            return dic[key];
         }
+        else return 0;
+    }
+    /// <summary>
+    /// 写入
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    public void SetIsValue(string key, int value)
+    {
+        if (!dic.ContainsKey(key))
+        {
+            dic.Add(key, value);
+        }
+        else
+        { 
+            dic[key] += value;
+        }
+        MysqlData();
     }
 
     private string DataSet()
     { 
         string value="";
-        for (int i = 0; i < values.Count; i++)
-        { 
-            value += values[i].ToString() + " ";
+        
+        foreach (var item in dic)
+        {
+            value += item.Key + " " + item.Value + ";";
         }
         return value;
     }
+
+    public void Clear()
+    { 
+        dic.Clear();
+    }
+
 
     public override string[] Get_Update_Character()
     {
@@ -100,7 +143,7 @@ public class user_signin_vo : Base_VO
         {
         GetStr(0),
         GetStr(SumSave.crt_user.uid),
-        GetStr(now_time),
+        GetStr(now_time.ToString()),
         GetStr(number),
         GetStr(DataSet()),
         GetStr(max_number)

@@ -47,6 +47,20 @@ public class Dream_Panel_Pet : Panel_Base
     private Transform m_input_brom;
 
     private input_offect input_offect_prefab, crt_input_offect;
+    /// <summary>
+    /// 当前学习技能
+    /// </summary>
+    private pet_study crt_study;
+    /// <summary>
+    /// 当前吞噬
+    /// </summary>
+    private pet_devour crt_devour;
+    /// <summary>
+    /// 当前炼妖
+    /// </summary>
+    private pet_Demon crt_demon;
+
+    private Image offect;
     public override void Hide()
     {
         base.Hide();
@@ -68,6 +82,10 @@ public class Dream_Panel_Pet : Panel_Base
         InitObtain_Equip_List();
         m_input_brom = Find<Transform>("bg");
         input_offect_prefab = Tool_UI.Find_Prefabs<input_offect>("input_offect");
+        offect = Find<Image>("offect");
+        crt_study = Find<pet_study>("offect/pet_study");
+        crt_devour= Find<pet_devour>("offect/pet_devour");
+        crt_demon = Find<pet_Demon>("offect/pet_Demon");
     }
     /// <summary>
     /// 初始化获得装备列表
@@ -172,7 +190,7 @@ public class Dream_Panel_Pet : Panel_Base
                 {
                     crt_input_offect.gameObject.SetActive(true);
                     crt_input_offect.Init(replace_state.改名, "对" + crt_pet.crt_name + "进行调整");
-                } 
+                }
 
                 break;
             case replace_state.放生:
@@ -180,6 +198,21 @@ public class Dream_Panel_Pet : Panel_Base
                 lists.Remove(crt_pet);
                 SumSave.crt_pet.SetPets = lists;
                 Refresh();
+                break;
+            case replace_state.学习:
+                offect.gameObject.SetActive(true);
+                crt_study.gameObject.SetActive(true);
+                crt_study.Init(crt_pet);
+                break;
+            case replace_state.吞噬:
+                offect.gameObject.SetActive(true);
+                crt_devour.gameObject.SetActive(true);
+                crt_devour.Init(crt_pet);
+                break;
+            case replace_state.炼妖:
+                offect.gameObject.SetActive(true);
+                crt_demon.gameObject.SetActive(true);
+                crt_demon.Init(crt_pet);
                 break;
         }
     }
@@ -194,10 +227,18 @@ public class Dream_Panel_Pet : Panel_Base
             SumSave.crt_pet.MysqlData();
             info_name.text = crt_pet.crt_name;
             crt_input_offect.gameObject.SetActive(false);
-
+            Alert_Dec.Show("修改成功");
+            Refresh();
         }
         else Alert_Dec.Show("请输入不含特殊符号的内容");
 
+    }
+    /// <summary>
+    /// 更新宠物信息
+    /// </summary>
+    protected void update_pet()
+    {
+        ShowInfo();
     }
 
     /// <summary>
@@ -313,17 +354,17 @@ public class Dream_Panel_Pet : Panel_Base
                 }
                 break;
             case 2:
-                switch ((talent.pet_talent_offect))
+                switch ((talent.pet_talent_offect)) 
                 {
                     case 1:
                         dec += "攻击目标时 "+ Show_Color.Red((Hero_Type)(talent.pet_talent_job)) + " 职业 "
-                            + (talent.pet_talent_job == 3 ? "(召唤兽)" : "")
+                            //+ (talent.pet_talent_job == 3 ? "(召唤兽)" : "")
                             + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"; break;
                     case 2:
                     case 3:
                     case 4:
                         dec += "攻击目标时 " + Show_Color.Red((Hero_Type)(talent.pet_talent_offect-1)) + " 职业 "
-                            + (talent.pet_talent_offect == 4 ? "(召唤兽)" : "")
+                            //+ (talent.pet_talent_offect == 4 ? "(召唤兽)" : "")
                             + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 忽视 " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv) + " 防御"; break;
                     case 5:
                         dec+="受到伤害时 "+Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 反震 " + Show_Color.Red(talent.pet_talent_offectvalue +"%") + " 伤害"; break;

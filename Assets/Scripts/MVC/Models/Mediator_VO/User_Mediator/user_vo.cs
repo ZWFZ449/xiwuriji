@@ -1,9 +1,7 @@
 using Common;
 using MVC;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class user_vo : Base_VO
@@ -15,14 +13,19 @@ public class user_vo : Base_VO
     private List<long> list = new List<long>();
     private List<long> verify_list = new List<long>();
 
-
+    private DateTime nowtime;
+    /// <summary>
+    /// buff数据 内容 开始时间 开始时长
+    /// </summary>
+    private List<(string, string, int)> buffList = new List<(string, string, int)>();
     private int index = -1;
     /// <summary>
     /// 初始化
     /// </summary>
     /// <param name="value"></param>
-    public void Init(string value)
+    public void Init(DateTime time, string value, string buff_value)
     {
+        nowtime = time;
         index = Random.Range(1, 1000);
         string[] str = value.Split(',');
         for (int i = 0; i < str.Length; i++)
@@ -33,12 +36,59 @@ public class user_vo : Base_VO
                 verify_list.Add(long.Parse(str[i]) + index);
             }
         }
+        List<string> buff = ArrayHelper.Get_Split<string>(buff_value, (';'));
+        for (int i = 0; i < buff.Count; i++)
+        {
+            List<string> buff_str = ArrayHelper.Get_Split<string>(buff[i], ('+'));
+            if (buff_str.Count == 3)
+            { 
+                buffList.Add((buff_str[0], buff_str[1], int.Parse(buff_str[2])));
+            }
+        }
     }
     public List<long> Set()
     { 
       return list;
     }
 
+    public List<(string, string, int)> GetBuff {  get { return buffList;} }
+
+
+    /// <summary>
+    /// 加入buff效果
+    /// </summary>
+    /// <param name="buff_name"></param>
+    /// <param name="buff_time"></param>
+    /// <param name="buff_time_long"></param>
+    public void AddBuff(string buff_name, string buff_time, int buff_time_long)
+    {
+        for (int i = 0; i < buffList.Count; i++)
+        {
+            if (buffList[i].Item1 == buff_name)
+            {
+                //判断是否在有效期
+                int spanSeconds = Battle_Tool.SettlementTransport(buffList[i].Item2, 3);
+                int time = buffList[i].Item3 - spanSeconds;//剩余时间
+                if (time > 0)
+                {
+                    buffList[i] = (buff_name, buffList[i].Item2, buffList[i].Item3 + buff_time_long);
+                }
+                else
+                { 
+                    //重置有效期
+                    buffList[i] = (buff_name, buff_time, buff_time_long);
+                }
+                MysqlData();
+                return;
+            }
+        }
+        buffList.Add((buff_name, buff_time, buff_time_long));
+        MysqlData();
+    }
+    /// <summary>
+    /// 获取当前时间
+    /// </summary>
+    public DateTime GetTime { get { return nowtime; } }
     private string Set_data()
     {
 
@@ -50,7 +100,19 @@ public class user_vo : Base_VO
         }
         return dec;
     }
-
+    /// <summary>
+    /// 获取更新数据
+    /// </summary>
+    /// <returns></returns>
+    private string Set_buff_data()
+    { 
+        string dec = "";
+        for (int i = 0; i < buffList.Count; i++)
+        { 
+            dec += buffList[i].Item1 + "+" + buffList[i].Item2 + "+" + buffList[i].Item3 + ";";
+        }
+        return dec;
+    }
     /// <summary>
     /// 验证数据
     /// </summary>
@@ -98,18 +160,28 @@ public class user_vo : Base_VO
 
     public override void MysqlData()
     {
+        nowtime = SumSave.nowtime >= DateTime.Now ? SumSave.nowtime : DateTime.Now;
         Game_Omphalos.i.GetQueue(
-                       Mysql_Type.UpdateInto, Mysql_Table_Name.Dream_User, Set_Uptade_String(), Get_Update_Character());
+                       Mysql_Type.UpdateInto, Mysql_Table_Name.Dream_Users, Set_Uptade_String(), Get_Update_Character());
         base.MysqlData();
+        Game_Omphalos.Refresh(Mysql_Table_Name.Dream_Users);
     }
     public override string[] Get_Update_Character()
     {
-        return new string[] { "value" };
+        return new string[] {
+            "nowtime",
+            "buff_value",
+            "value" };
     }
 
     public override string[] Set_Uptade_String()
     {
-        return new string[] { GetStr(Set_data()) };
+        return new string[] { 
+            GetStr(Tool_UI.ToStandardFormat(nowtime)),
+            GetStr(Set_buff_data()),
+            GetStr(Set_data()),
+        
+        };
     }
 
     public override string[] Set_Instace_String()
@@ -117,7 +189,10 @@ public class user_vo : Base_VO
         return new string[] {
             GetStr(0),
             GetStr(SumSave.crt_user.uid),
+            GetStr(Tool_UI.ToStandardFormat(nowtime)),
+            GetStr(Set_buff_data()),
             GetStr(Set_data())
+
         };
     }
 }

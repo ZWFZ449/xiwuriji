@@ -1,8 +1,5 @@
 using MVC;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class store_item : Base_Mono
@@ -19,16 +16,19 @@ public class store_item : Base_Mono
     /// 显示图标
     /// </summary>
     private Image icon;
+
+    private Image state;
     /// <summary>
     /// 数据
     /// </summary>
     private material_item material_item_Prefabs;
     private db_store_vo data;
-    private void Awake()
+    private void Awake() 
     {
         baseinfo=Find<TMP_Text>("info/info");
-        icon=Find<Image>("icon");
+        icon=Find<Image>("icon/icon");
         material_item_Prefabs = Tool_UI.Find_Prefabs<material_item>("material_item"); //Battle_Tool.Find_Prefabs<material_item>("material_item");
+        state=Find<Image>("icon/state");
     }
     /// <summary>
     /// 初始化
@@ -50,11 +50,22 @@ public class store_item : Base_Mono
     public void Init(db_store_vo store)
     {
         data = store;
+        state.gameObject.SetActive(store.ItemMaxQuantity != -1);
         baseinfo.text = Show_Color.White(store.ItemName) + "\n单价"
             + Battle_Tool.FormatNumberToChineseUnit(store.ItemPrice)
             + " " + store.unit
             + "\n" + Show_Color.Green("购买");
-        Instantiate(material_item_Prefabs, icon.transform).Init((store.ItemName, 1));
+        string name = store.ItemName;
+        if (store.ItemName == "灵宠")
+        {
+            db_vip crt_vip = Tool_Battle.Obtain_Vip();
+            if (crt_vip == null)
+            {
+                name = pet_list.麋鹿.ToString();
+            }
+            else name = ((pet_list)(crt_vip.vip_lv - 1)).ToString();
+        }
+        Instantiate(material_item_Prefabs, icon.transform).Init((name, 1));
     }
     /// <summary>
     /// 获取值

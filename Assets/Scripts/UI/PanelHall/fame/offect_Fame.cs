@@ -57,26 +57,30 @@ public class offect_Fame : Base_Mono
                     {
                         switch (int.Parse(gift_values[0]))
                         {
+                            case 0://金币
+                                Battle_Tool.Dream_Obtain_Unit((currency_unit)int.Parse(gift_values[1]), int.Parse(gift_values[2]), Obtain_Int.Add_unit(int.Parse(gift_values[2])));
+                                Alert_Dec.Show("获得 " + (currency_unit)int.Parse(gift_values[1]) + "：" + gift_values[2]);
+                                break;
                             case 1:
                                 pet_list pet = Tool_State.ToEnum(gift_values[1], pet_list.麋鹿);
                                 SumSave.crt_pet.AddPet(pet);
-                                Alert_Dec.Show("获得 灵宠：" + pet.ToString());
+                                Alert_Dec.Show("获得 灵宠 " + pet.ToString());
                                 break;
                             case 2:
                                 Bag_Base_VO synthesis_value = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == gift_values[1]);
                                 if (synthesis_value != null)
                                 {
-                                    synthesis_value.user_value = Tool_Battle.Obtain_Equip(synthesis_value, 1, 1);
-                                    synthesis_value = tool_Categoryt.Read_Bag(synthesis_value.user_value);
-                                    SumSave.crt_bags.Set_Bag_List(synthesis_value);
-                                    Alert_Dec.Show("获得 "+ synthesis_value.StdMode + "：" + synthesis_value.Name);
+                                    string user_value = Tool_Battle.Obtain_Equip(synthesis_value, 1, 1);
+                                    Bag_Base_VO bag_Base_ = tool_Categoryt.Read_BaseBag(user_value);
+                                    SumSave.crt_bags.Set_Bag_List(bag_Base_);
+                                    Alert_Dec.Show("获得 "+ synthesis_value.StdMode + " * " + synthesis_value.Name);
                                 }
                                 break;
                             case 3:
                                 int number = int.Parse(gift_values[2]);
                                 int random = Random.Range(1, 1000);
                                 int maxnumber = number + Random.Range(1, 1000);
-                                Alert_Dec.Show("获得: " + gift_values[1] + " * " + number);
+                                Alert_Dec.Show("获得  " + gift_values[1] + " * " + number);
                                 Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, gift_values[1], new int[] { number + random, random }), maxnumber);
                                 break;
                             default:
@@ -84,6 +88,7 @@ public class offect_Fame : Base_Mono
                         }
                     }
                 }
+                Game_Omphalos.global_battle_info("领取 " + vip.vip_lv + " 奖励");
                 Show_Info(vip, true);
             }
         }
@@ -130,13 +135,14 @@ public class offect_Fame : Base_Mono
         string dec = vip.vip_name + "\n";
         this.vip = vip;
         dec += "荣耀积分(" + SumSave.crt_global_gift.GetGiftPoints + "/" + vip.vip_exp + ")\n";
-
         dec += enum_equip_entry_list.金币掉落 + " + " + Colorize(vip.lingzhuIncome + "%\n", GameColors.Uncommon);
         dec += enum_equip_entry_list.经验加成 + " + " + Colorize(vip.experienceBonus + "%\n", GameColors.Uncommon);
         dec+= enum_equip_entry_list.怪物爆率 + " + " + Colorize( vip.equipmentExplosionRate + "%\n", GameColors.Uncommon);
-        dec += "Boss刷新时间" + " - " + Colorize(-vip.monsterHuntingInterval + "%\n", GameColors.Uncommon);
-        dec += "签到" + " " + Colorize(common_items_list.Boss召唤卷轴 + " * "+vip.characterExperience + "\n", GameColors.Uncommon);
-        dec += "签到" + " " + Colorize(common_items_list.双倍经验卷轴 + " * " + vip.characterExperience + "\n", GameColors.Uncommon);
+        dec += "Boss刷新时间" + " " + Colorize(-vip.monsterHuntingInterval + "%\n", GameColors.Uncommon);
+        dec += "签到" + " + " + Colorize(currency_unit.元宝 + " * " + (vip.characterExperience * 20) + "\n", GameColors.Uncommon);
+        dec += "签到" + " + " + Colorize(common_items_list.Boss召唤卷轴 + " * "+vip.characterExperience + "\n", GameColors.Uncommon);
+        dec += "签到" + " + " + Colorize(common_Buff.双倍经验卷轴 + " * " + vip.characterExperience + "\n", GameColors.Uncommon);
+        dec += "签到" + " + " + Colorize((pet_list)(vip.vip_lv-1) + " * 1\n", GameColors.Uncommon);
         if (isOpen)
         {
             confirm.gameObject.SetActive(!SumSave.crt_global_gift.IsHaveGift(vip.vip_name));

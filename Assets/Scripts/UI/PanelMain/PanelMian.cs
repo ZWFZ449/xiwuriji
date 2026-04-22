@@ -209,7 +209,7 @@ public class PanelMian : PanelBase
         List<string> info = ArrayHelper.Get_Split<string>(global_info_item.data.value, ';');
         if (info.Count == 2)
         {
-            Bag_Base_VO bag_base_VO = tool_Categoryt.Read_Bag(info[1]);
+            Bag_Base_VO bag_base_VO = tool_Categoryt.Read_BaseBag(info[1]);
             if (bag_base_VO != null)
             {
                 panel_hero_equip.Show();
@@ -219,7 +219,6 @@ public class PanelMian : PanelBase
             }
         }
     }
-
     private void Base_Show()
     {
         show_equip();
@@ -227,12 +226,12 @@ public class PanelMian : PanelBase
         Show_unit();
     }
 
-    private void Show_unit()
+    public void Show_unit()
     {
         List<long> Units= SumSave.crt_user_unit.Set();
         moeny.text = currency_unit.金币 + " " + Battle_Tool.FormatNumberToChineseUnit(Units[(int)currency_unit.金币]);
         sycee.text = currency_unit.元宝 + " " + Battle_Tool.FormatNumberToChineseUnit(Units[(int)currency_unit.元宝]);
-        points.text = currency_unit.Boss积分 + " " + Battle_Tool.FormatNumberToChineseUnit(Units[(int)currency_unit.Boss积分]);
+        points.text = "荣耀积分"+ " " + SumSave.crt_global_gift.GetGiftPoints; 
     }
 
     private void Show_hero()

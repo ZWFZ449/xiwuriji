@@ -27,16 +27,17 @@ public class dream_user_pet_vo : Base_VO
     {
         if(value=="")return null;
         List<string> crt_pet_list = ArrayHelper.Get_Split<string>(value, split);
-        db_pet_vo vo = ArrayHelper.Find(SumSave.db_pets, (item) => item.pet_id == int.Parse(crt_pet_list[0]));
-        if (vo != null)
+        db_pet_vo base_pet = ArrayHelper.Find(SumSave.db_pets, (item) => item.pet_id == int.Parse(crt_pet_list[0]));
+        if (base_pet != null)
         {
+            db_pet_vo vo = new db_pet_vo(base_pet.pet_id, base_pet.pet_name, base_pet.pet_ac, base_pet.pet_mac, base_pet.pet_dc, base_pet.pet_mc, base_pet.pet_sc, base_pet.pet_talent, base_pet.pet_scale);
             vo.Init(crt_pet_list[1],
                 ArrayHelper.Get_Split<int>(crt_pet_list[3], 'X'),
                 ArrayHelper.Get_Split<int>(crt_pet_list[4], 'X'),
                 ArrayHelper.Get_Split<string>(crt_pet_list[5], 'X')
                 );
-        }
-        return vo; 
+            return vo;
+        }else return null;
     }
     /// <summary>
     /// 添加宠物

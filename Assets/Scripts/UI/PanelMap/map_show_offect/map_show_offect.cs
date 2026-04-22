@@ -58,8 +58,28 @@ public class map_show_offect : Base_Mono
     /// </summary>
     private void OnClickEnterMap()
     {
+        if (crt_map.GetMap().map_type != 0)
+        {
+            if (SumSave.crt_signin.GetIsValue(crt_map.GetMap().map_name) == 0)
+            {
+                SumSave.crt_signin.SetIsValue(crt_map.GetMap().map_name, 1);
+            }
+            else
+            {
+                Alert_Dec.Show("今日进入次数已满");
+                return;
+            }
+        }
+        else
+        {
+            if (SumSave.crtHero.lv < crt_map.GetMap().map_lv)
+            { 
+                Alert_Dec.Show("等级不足"); 
+                return;
+            }
+        }
         transform.parent.parent.SendMessage("OnClickEnterMap", crt_map);
-        Hide();
+        Hide(); 
     }
     /// <summary>
     /// 显示地图信息
@@ -107,15 +127,16 @@ public class map_show_offect : Base_Mono
     private void tool_equip()
 
     {
+        return;
         //测试模式
         foreach (var item in drop_dic)
         {
             Bag_Base_VO data = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == item.Key);
             if (data != null)
             {
-                data.user_value = Tool_Battle.Obtain_Equip(data, 1, 6);
-                data = tool_Categoryt.Read_Bag(data.user_value);
-                SetData(data);
+                string user_value = Tool_Battle.Obtain_Equip(data, 1, 6);
+                Bag_Base_VO base_data = tool_Categoryt.Read_BaseBag(user_value);
+                SetData(base_data);
             }
         }
     }

@@ -155,7 +155,7 @@ namespace MVC
                     base_icon.sprite = UI.UI_Manager.I.GetEquipSprite("UI/player/", data.hero_type+"头像");
                     break;
                 case Battle_Game_Type.call:
-                    base_icon.sprite = UI.UI_Manager.I.GetEquipSprite("UI/player/Call", data.crt_name);
+                    base_icon.sprite = UI.UI_Manager.I.GetEquipSprite("UI/player/Call", data.crt_name); 
                     break;
                 case Battle_Game_Type.monster:
                 case Battle_Game_Type.Boss:

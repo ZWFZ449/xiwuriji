@@ -58,7 +58,6 @@ public class base_map_item : Base_Mono
         map_name.text= map.map_name;
         map_lv.text = map.map_lv.ToString();
         map_boss.text = map.map_boss[map_intensity-1];
-        //map_boss_cdtime.text = map.map_boss_cdtime[map_intensity - 1].ToString();
     }
     /// <summary>
     /// 设置地图强度

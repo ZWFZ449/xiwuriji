@@ -41,17 +41,17 @@ public class signIn : Base_Mono
         max_signln.onClick.AddListener(OnClick_maxsignln);
         panel_accumulatedrewards = UI_Manager.I.GetPanel<Panel_Accumulatedrewards>();
         ClearObject(pos_list);
-        List<int> list = SumSave.crt_signin.Set();
-        for (int i = 0; i < SumSave.db_Signins.Count; i++)
-        {
-            signln_item item = Instantiate(signln_item_prafabs, pos_list);
-            while (i >= list.Count)
-            {
-                list.Add(0);
-            }
-            item.Init(i, SumSave.db_Signins[i], list[i]);
-            item.GetComponent<Button>().onClick.AddListener(() => { OnClick(item); });
-        }
+        //List<int> list = SumSave.crt_signin.Set();
+        //for (int i = 0; i < SumSave.db_Signins.Count; i++)
+        //{
+        //    signln_item item = Instantiate(signln_item_prafabs, pos_list);
+        //    while (i >= list.Count)
+        //    {
+        //        list.Add(0);
+        //    }
+        //    item.Init(i, SumSave.db_Signins[i], list[i]);
+        //    item.GetComponent<Button>().onClick.AddListener(() => { OnClick(item); });
+        //}
     }
 
     private void OnClick_maxsignln()
@@ -143,12 +143,12 @@ public class signIn : Base_Mono
     private void OnClick(signln_item item)
     {
         int index = item.Set();
-        List<int> list = SumSave.crt_signin.Set();
-        if (index<= list.Count && list[index] == 1)
-        {
-            Alert_Dec.Show("已领取奖励");
-            return;
-        } 
+        //List<int> list = SumSave.crt_signin.Set();
+        //if (index<= list.Count && list[index] == 1)
+        //{
+        //    Alert_Dec.Show("已领取奖励");
+        //    return;
+        //} 
         db_signin_vo vo = SumSave.db_Signins[index];
         if (SumSave.crt_signin.number < vo.index)
         {

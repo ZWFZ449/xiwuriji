@@ -147,9 +147,9 @@ public class offect_synthesis : Base_Mono
                 Bag_Base_VO synthesis_value = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == data.synthesis_name);
                 if (synthesis_value != null)
                 {
-                    synthesis_value.user_value = Tool_Battle.Obtain_Equip(synthesis_value, 1, 1);
-                    synthesis_value = tool_Categoryt.Read_Bag(synthesis_value.user_value);
-                    SumSave.crt_bags.Set_Bag_List(synthesis_value);
+                    string user_value = Tool_Battle.Obtain_Equip(synthesis_value, 1, 1);
+                    Bag_Base_VO synthesis = tool_Categoryt.Read_BaseBag(user_value);
+                    SumSave.crt_bags.Set_Bag_List(synthesis);
                 }
             }
             else Alert_Dec.Show("合成失败,材料不足");

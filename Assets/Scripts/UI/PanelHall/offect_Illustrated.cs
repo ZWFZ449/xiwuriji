@@ -108,6 +108,21 @@ public class offect_Illustrated : Base_Mono
         }
     }
 
+    private void OnEnable()
+    {
+        if (SumSave.crtHero.lv <= 15)  
+        { 
+            Alert_Dec.Show("图鉴功能在15级开放");
+            Hide();
+        }
+    }
+    private void Hide()
+    {
+        gameObject.SetActive(false);
+        transform.parent.gameObject.SetActive(false);
+    }
+
+
     private void OnClick_EquipItem(illustrated_item item)
     {
         Dictionary<string, int> crt_illustrated = SumSave.crt_illustrated.Get_illustrated_list();
