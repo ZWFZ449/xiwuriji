@@ -262,6 +262,14 @@ public class Dream_Panel_Login : PanelBase
         if(spanSeconds <= 600) return;
         string dec = "离线时长" + ConvertSecondsToHHMMSS(spanSeconds) + "\n"; 
         db_vip crt_vip = Tool_Battle.Obtain_Vip();
+        int moeny = spanSeconds * (SumSave.crtHero.lv + 1) * 2;
+        if (crt_vip != null)
+        {
+            moeny = spanSeconds * (100 + crt_vip.characterExperience) / 100;
+        }
+        dec += "获得" + currency_unit.金币 + " " + moeny + "\n";
+        Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
+
         for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
         {
             (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];

@@ -254,7 +254,7 @@ public class map_show_offect : Base_Mono
     /// <param name="item"></param>
     private void OnClick(dream_BagItem item)
     {
-        if (SumSave.crtHero.lv <= crt_map.GetMap().map_lv)
+        if (SumSave.crtHero.lv <= crt_map.GetMap().map_lv && !Tool_Battle.IsBuff(common_Buff.月卡))
         { 
             Alert_Dec.Show("等级不足,无法查看");
             return;
