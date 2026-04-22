@@ -1347,7 +1347,6 @@ public static class Tool_Battle
         Dictionary<enum_equip_entry_list, int> dics = new Dictionary<enum_equip_entry_list, int>();
         Dictionary<enum_equip_entry_list, int> dics_2 = new Dictionary<enum_equip_entry_list, int>();
         List<int> dics_3 = new List<int>();
-        //quality = 6;
         if (quality > 1)
         {
             Obtain_value(dics, Obtain_Enum_list(entry_list));
@@ -1375,9 +1374,19 @@ public static class Tool_Battle
                                 }
                                 if (quality >= 6)
                                 {
-                                    Obtain_value(dics, Obtain_Enum_list(entry_list));
-                                    Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), Random.Range(1, 100) < 30 ? 2 : 1, false, entry_coefficient_list);
-                                    dics_3.Add(Equip_Skill_eight());
+                                    if (bag.Name == "新手剑")
+                                    {
+                                        dics_3.Add(1002);
+                                        dics_3.Add(1008);
+                                        dics_3.Add(1014);
+                                    }
+                                    else
+                                    {
+                                        Obtain_value(dics, Obtain_Enum_list(entry_list));
+                                        Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), Random.Range(1, 100) < 30 ? 2 : 1, false, entry_coefficient_list);
+                                        dics_3.Add(Equip_Skill_eight());
+                                    }
+                                   
                                 }
                             }
                         }
@@ -1424,13 +1433,30 @@ public static class Tool_Battle
                         exist = false;
                     }
                     else value += "|";
-                    value += (int)dics_3[i] + "," + 1;
+                    value += dics_3[i] + "," + 1;
                 }
             }
             user_value+= " " + value;
         }
 
         return user_value;
+    }
+
+    /// <summary>
+    /// 创建装备
+    /// </summary>
+    /// <param name="name">名称</param>
+    /// <param name="lv">强化等级</param>
+    /// <param name="quality">品质等级</param>
+    /// <param name="islock">锁定</param>
+    /// <returns></returns>
+    public static Bag_Base_VO Crate_Equip(string name, int lv, int quality, int islock = 0)
+    {
+        Bag_Base_VO bag = new Bag_Base_VO();
+        Bag_Base_VO base_bag = ArrayHelper.Find(SumSave.db_stditems, (item) => item.Name == name);
+        string user_value = Obtain_Equip(base_bag, lv, quality, islock);
+        bag = tool_Categoryt.Read_BaseBag(user_value);
+        return bag;
     }
     /// <summary>
     /// 生成宠物

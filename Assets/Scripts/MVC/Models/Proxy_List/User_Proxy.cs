@@ -355,7 +355,10 @@ namespace MVC
             else
             {
                 Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.dream_user_equip, SumSave.crt_equips.Set_Instace_String());
-            }
+                List<Bag_Base_VO> list = new List<Bag_Base_VO>();
+                list.Add(Tool_Battle.Crate_Equip("新手剑", 1, 6, 1));
+                SumSave.crt_equips.Set(Dream_User_Equip_Type.装备, list);
+             }
         }
         private void Read_user_bag()
         {

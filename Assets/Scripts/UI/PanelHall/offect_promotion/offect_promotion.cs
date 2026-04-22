@@ -178,6 +178,7 @@ public class offect_promotion : Base_Mono
                         string buff = gift_values[1];
                         int bufftime = int.Parse(gift_values[2]);
                         SumSave.crt_user_unit.AddBuff(buff, Tool_UI.ToStandardFormat(SumSave.nowtime), bufftime);
+                        SendNotification(NotiList.Refresh_Max_Hero_Attribute);
                         break;
                     default:
                         break;

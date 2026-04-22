@@ -82,6 +82,7 @@ public class offect_buff : Base_Mono
                 SumSave.crt_user_unit.AddBuff(common_Buff.狂欢.ToString(), Tool_UI.ToStandardFormat(SumSave.nowtime), number);
                 Init();
                 Alert_Dec.Show("狂欢已激活");
+                SendNotification(NotiList.Refresh_Max_Hero_Attribute);
                 return;
             }
         }
