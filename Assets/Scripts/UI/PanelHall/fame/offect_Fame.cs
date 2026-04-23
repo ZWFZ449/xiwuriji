@@ -141,7 +141,7 @@ public class offect_Fame : Base_Mono
         dec += "Boss刷新时间" + " " + Colorize(-vip.monsterHuntingInterval + "%\n", GameColors.Uncommon);
         dec += "签到" + " + " + Colorize(currency_unit.元宝 + " * " + (vip.characterExperience * 20) + "\n", GameColors.Uncommon);
         dec += "签到" + " + " + Colorize(common_items_list.Boss召唤卷轴 + " * "+vip.characterExperience + "\n", GameColors.Uncommon);
-        dec += "签到" + " + " + Colorize(common_Buff.双倍经验卷轴 + " * " + vip.characterExperience + "\n", GameColors.Uncommon);
+        //dec += "签到" + " + " + Colorize(common_Buff.双倍经验卷轴 + " * " + vip.characterExperience + "\n", GameColors.Uncommon);
         dec += "签到" + " + " + Colorize((pet_list)(vip.vip_lv-1) + " * 1\n", GameColors.Uncommon);
         if (isOpen)
         {

@@ -262,7 +262,7 @@ public class Dream_Panel_Login : PanelBase
         if(spanSeconds <= 600) return;
         string dec = "离线时长" + ConvertSecondsToHHMMSS(spanSeconds) + "\n"; 
         db_vip crt_vip = Tool_Battle.Obtain_Vip();
-        int moeny = spanSeconds * (SumSave.crtHero.lv + 1) * 2;
+        int moeny = spanSeconds * (SumSave.crtHero.lv + 1) * 5;
         if (crt_vip != null)
         {
             moeny = spanSeconds * (100 + crt_vip.characterExperience) / 100;

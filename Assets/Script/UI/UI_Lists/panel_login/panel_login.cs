@@ -289,7 +289,7 @@ namespace MVC
             TaploginBt.gameObject.SetActive(false);
             loginBt.gameObject.SetActive(true);
 #elif UNITY_ANDROID
-            _ = GameLogin.Instance.Login();
+            //_ = GameLogin.Instance.Login();
 #elif UNITY_IPHONE
 
 #endif
@@ -425,7 +425,7 @@ namespace MVC
             //UI_Manager.Instance.GetPanel<Panel_cratehero>().Hide();
 
 #elif UNITY_ANDROID
-                _ = GameLogin.Instance.Login();
+                //_ = GameLogin.Instance.Login();
 
 #elif UNITY_IPHONE
             UI_Manager.Instance.GetPanel<Panel_cratehero>().Hide();

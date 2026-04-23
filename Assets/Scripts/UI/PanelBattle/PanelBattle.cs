@@ -652,10 +652,27 @@ public class PanelBattle : PanelBase
             //case Battle_Game_Type.monster://基础掉落
             case Battle_Game_Type.Boss://boss掉落
                 Game_Omphalos.global_battle_info("击杀 " + monster.Data.crt_name);
+                AddSkill();
                 Close_BossSlider();
                 break;
         }
     }
+    /// <summary>
+    /// 增加技能经验
+    /// </summary>
+    private void AddSkill()
+    {
+        Dictionary<int, db_skill_vo> keyValues = SumSave.crt_skill.Set_Current_skill();
+        foreach (var item in keyValues)
+        {
+            if (item.Value.Job != -1)
+            {
+                item.Value.GetExp(1); 
+            }
+        }
+        SumSave.crt_skill.UpLv_skill();
+    }
+
     List<show_info_item> list_show_info = new List<show_info_item>();
     /// <summary>
     /// 显示信息

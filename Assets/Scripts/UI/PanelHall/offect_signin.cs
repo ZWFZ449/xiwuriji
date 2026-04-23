@@ -51,14 +51,14 @@ public class offect_signin : Base_Mono
                 dec += "\n" + crt_vip.vip_name + " 奖励\n";
                 dec += Colorize(currency_unit.元宝 + " * " + (crt_vip.characterExperience * 20) + "\n", GameColors.Uncommon);
                 dec += Colorize(common_items_list.Boss召唤卷轴 + " * " + crt_vip.characterExperience + "\n", GameColors.Uncommon);
-                dec += Colorize(common_Buff.双倍经验卷轴 + " * " + crt_vip.characterExperience + "\n", GameColors.Uncommon);
+                //dec += Colorize(common_Buff.双倍经验卷轴 + " * " + crt_vip.characterExperience + "\n", GameColors.Uncommon);
                 Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, (crt_vip.characterExperience * 20), Obtain_Int.Add_unit((crt_vip.characterExperience * 20)));
                 random = Random.Range(1, 1000);
                 maxnumber = crt_vip.characterExperience + Random.Range(1, 1000);
                 Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.Boss召唤卷轴, new int[] { crt_vip.characterExperience + random, random }), maxnumber);
-                random = Random.Range(1, 1000);
-                maxnumber = crt_vip.characterExperience + Random.Range(1, 1000);
-                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_Buff.双倍经验卷轴, new int[] { crt_vip.characterExperience + random, random }), maxnumber);
+                //random = Random.Range(1, 1000);
+                //maxnumber = crt_vip.characterExperience + Random.Range(1, 1000);
+                //Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_Buff.双倍经验卷轴, new int[] { crt_vip.characterExperience + random, random }), maxnumber);
                 pet_list pet = (pet_list)(crt_vip.vip_lv - 1);
                 SumSave.crt_pet.AddPet(pet);
                 dec += Colorize("\n获得 灵宠 " + pet.ToString() + "\n", GameColors.Uncommon);
@@ -102,7 +102,7 @@ public class offect_signin : Base_Mono
             dec += "\n" + crt_vip.vip_name + " 奖励\n";
             dec += Colorize(currency_unit.元宝 + " * " + (crt_vip.characterExperience * 20) + "\n", GameColors.Uncommon);
             dec += Colorize(common_items_list.Boss召唤卷轴 + " * " + crt_vip.characterExperience + "\n", GameColors.Uncommon);
-            dec += Colorize(common_Buff.双倍经验卷轴 + " * " + crt_vip.characterExperience + "\n", GameColors.Uncommon);
+            //dec += Colorize(common_Buff.双倍经验卷轴 + " * " + crt_vip.characterExperience + "\n", GameColors.Uncommon);
             dec += Colorize("灵宠 " + (pet_list)(crt_vip.vip_lv - 1) + "\n", GameColors.Uncommon);
         }
         else
