@@ -143,7 +143,7 @@ public class user_signin_vo : Base_VO
         {
         GetStr(0),
         GetStr(SumSave.crt_user.uid),
-        GetStr(now_time.ToString()),
+        GetStr(now_time.ToString("yyyy-MM-dd")), 
         GetStr(number),
         GetStr(DataSet()),
         GetStr(max_number)
