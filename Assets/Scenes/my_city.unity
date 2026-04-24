@@ -2816,7 +2816,8 @@ GameObject:
   - component: {fileID: 194327717}
   - component: {fileID: 194327718}
   - component: {fileID: 194327719}
-  - component: {fileID: 194327720}
+  - component: {fileID: 194327721}
+  - component: {fileID: 194327722}
   m_Layer: 5
   m_Name: Game_Omphalos
   m_TagString: Untagged
@@ -3009,7 +3010,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bc344cb10ae8e446b18208c0d2ab2c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &194327720
+--- !u!114 &194327721
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3018,10 +3019,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 194327710}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 246254ac4c122e64ab3a2b93567c5c0c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1bc569ee97cfa0549b8a092625b4609f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LastDeepLinkUrl: 
+  testUrl: 
+--- !u!114 &194327722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 194327710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a53471e48b241148884c3c8372280e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &194983441
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UI;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -22,7 +23,7 @@ namespace Components
         /// <summary>
         /// 是否显示
         /// </summary>
-        private static bool isShow = true;
+        private static bool isShow = true, isInit = false;
 
         private TMP_Text base_info, info_content;
 
@@ -52,6 +53,7 @@ namespace Components
             btn_close = Find<Button>("alertbg/btn_list/btn_close");
 
             btn_close.onClick.AddListener(NoTryCallback);
+            isInit = true;
             // 自动隐藏
             Hide();
         }
@@ -143,7 +145,7 @@ namespace Components
         {
             (string, string, UnityAction<object>, object, UnityAction<object>, bool) item= (title, content, callback, data, Nocallback, showCloseButton);
             list.Add(item);
-            if (isShow)
+            if (isShow && isInit)
             {
                 current = item;
                 instance.ShowIt(title, content, callback, data, Nocallback, showCloseButton);
