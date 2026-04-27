@@ -278,7 +278,7 @@ public class Dream_Panel_Login : PanelBase
             {
                 (int, string) bossid = Tool_Battle.GetBossTime(list[0]);
                 if (bossid.Item2 == "no") continue;
-                int base_time = bossid.Item1 * (100 - crt_vip.monsterHuntingInterval) / 100;
+                int base_time = bossid.Item1 * (100 - crt_vip.monsterHuntingInterval-(Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
                 if (base_time <= 0) base_time = 999999999;
                 int number = spanSeconds / base_time;
                 if (number > 0)

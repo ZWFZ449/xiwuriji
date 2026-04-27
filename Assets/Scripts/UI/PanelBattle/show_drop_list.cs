@@ -362,7 +362,7 @@ public class show_drop_list : Base_Mono
             {
                 if (item.Item1 == lv)//判断回收等级
                 {
-                    if (data.equip_lv >= item.Item2)
+                    if (data.need_lv >= item.Item2)
                     {
                         exist = true;
                         dic.Add("获得 " + (enum_equip_quality_list)lv + " " + data.Name );

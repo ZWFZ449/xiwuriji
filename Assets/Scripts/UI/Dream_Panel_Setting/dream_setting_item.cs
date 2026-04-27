@@ -12,6 +12,8 @@ public class dream_setting_item : Base_Mono
 
     private InputField inputField;
 
+    private Toggle toggle;
+
     private Text unit;
     /// <summary>
     /// 药品类型
@@ -29,6 +31,8 @@ public class dream_setting_item : Base_Mono
         inputField=Find<InputField>("InputField");
         inputField.onValueChanged.AddListener(OnInputFieldChange);
         unit = Find<Text>("InputField/unit");
+        toggle=Find<Toggle>("Toggle");
+        toggle.onValueChanged.AddListener((bool arg0)=> { currentItem.Item4 = arg0 ? 1 : 0; send(); });
     }
     /// <summary>
     /// 下拉框内容
@@ -90,6 +94,7 @@ public class dream_setting_item : Base_Mono
             }
         }
         inputField.text = input.ToString();
+        IsOpen(true);
     }
     /// <summary>
     /// 回收
@@ -106,6 +111,9 @@ public class dream_setting_item : Base_Mono
         dropdown.AddOptions(dropdown_list);
         currentItem = (1,(int)type, "", input);
         inputField.text = input.ToString();
+        IsOpen(true);
+
+
     }
     /// <summary>
     /// 自动召唤boss
@@ -122,6 +130,33 @@ public class dream_setting_item : Base_Mono
         dropdown.AddOptions(dropdown_list);
         currentItem = (3, 3, boss, input);
         inputField.text = input.ToString();
+        IsOpen(true);
     }
+    /// <summary>
+    /// true 输入框 false 打钩
+    /// </summary>
+    /// <param name="exist"></param>
+    private void IsOpen(bool exist)
+    {
+        toggle.gameObject.SetActive(!exist);
+        inputField.gameObject.SetActive(exist);
+    }
+    /// <summary>
+    /// 设置
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="setting"></param>
+    /// <param name="value">0为否1为是默认为1</param>
+    public void Init(int index, db_setting_vo setting,int value=1)
+    {
+        IsOpen(setting.setting_type == 2);
+        dropdown.options.Clear();
+        dropdown_list = new List<string>();
+        dropdown.interactable = false;//禁用下拉框
+        dropdown_list.Add(setting.setting_value);
+        dropdown.AddOptions(dropdown_list);
+        toggle.isOn = value == 1;
+        currentItem = (4, index, "", value);
 
+    }
 }

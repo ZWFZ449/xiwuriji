@@ -294,7 +294,8 @@ namespace Common
             string[] str = array.Split(split);
             foreach (var item in str)
             {
-               list.Add((T)Convert.ChangeType(item, typeof(T)));
+                if (item != "")
+                    list.Add((T)Convert.ChangeType(item, typeof(T)));
             }
             return list;
         }

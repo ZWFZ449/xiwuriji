@@ -323,9 +323,6 @@ namespace MVC
                 Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.dream_user_skill, SumSave.crt_skill.Set_Instace_String());
             }
         }
-
-
-
         /// <summary>
         /// 刷新英雄属性
         /// </summary>

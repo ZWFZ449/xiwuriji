@@ -110,7 +110,7 @@ public class Dream_Panel_Hero : Panel_Base
     private void Show_Talent()
     {
         grid_layout_group.cellSize= new Vector2(240, 240);
-        player_talent_name.text = (Hero_Type)SumSave.crtHero.job + "";
+        player_talent_name.text = (Hero_Type)SumSave.crtHero.job + Battle_Tool.Obtain_Talent_Name();
         ClearObject(m_player_talent_brom);
         if (SumSave.crtHero.job == 0)
         {
@@ -149,7 +149,7 @@ public class Dream_Panel_Hero : Panel_Base
                 {
                     if (SumSave.db_player_talents[i].job == SumSave.crtHero.job &&//职业相同
                                 SumSave.db_player_talents[i].talent_type == SumSave.crtHero.SelectPos)//天赋类型相同
-                    { 
+                    {
                         player_talent_item item = Instantiate(p_player_talent_item_prefab, m_player_talent_brom);
                         int lv = Obtain_Talent_Lv(SumSave.db_player_talents[i].talent_name);
                         item.Init(SumSave.db_player_talents[i].talent_id, SumSave.db_player_talents[i].talent_name, lv);
@@ -264,8 +264,194 @@ public class Dream_Panel_Hero : Panel_Base
             }
         }
         int index = lv - 1;
-        if (index < 0) index = 0;
+        //if (index < 0) index = 0;
+        for (int i = 0; i < data.talent_offect_value.Count; i++) 
+        {
+            dec += "Lv." + (i + 1) + ":" + (index >= i ? Show_Base_Lv_Talent(i, data) : Show_Color.Grey(Show_Base_Lv_Talent(i, data))) + "\n";
+        }
+        /*
+        //string skill_name = "";
+        //switch ((enum_talent_offect_list)data.talent_offect)
+        //{
+        //    case enum_talent_offect_list.生命:
+        //    case enum_talent_offect_list.攻击:
+        //    case enum_talent_offect_list.魔法:
+        //    case enum_talent_offect_list.道术:
+        //    case enum_talent_offect_list.防御:
+        //        if (data.correlation_skill == -1)
+        //        {
+        //            dec += "[被动效果]\n" + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "%";
+        //        }
+        //        else
+        //        {
+        //            skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+        //            dec += "[被动效果]\n" + (enum_talent_offect_list)data.talent_offect + "+" + Show_Color.Yellow(skill_name) + "等级 * " + data.talent_offect_value[index] + "%";
+
+        //        }
+        //        break;
+        //    case enum_talent_offect_list.攻击速度:
+        //    case enum_talent_offect_list.物理攻击:
+        //    case enum_talent_offect_list.魔法攻击:
+        //    case enum_talent_offect_list.道术攻击:
+        //    case enum_talent_offect_list.防御值:
+        //    case enum_talent_offect_list.躲避:
+        //    case enum_talent_offect_list.命中:
+        //        if (data.correlation_skill == -1)
+        //        {
+        //            dec += "[被动效果]\n" + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "";
+        //        }
+        //        else
+        //        {
+        //            skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+        //            dec += "[被动效果]\n" + (enum_talent_offect_list)data.talent_offect + "+" + Show_Color.Yellow(skill_name) + "等级 * " + data.talent_offect_value[index] + "";
+
+        //        }
+        //        break;
+        //    case enum_talent_offect_list.技能:
+        //        break;
+        //    case enum_talent_offect_list.附加攻击:
+        //    case enum_talent_offect_list.附加魔法:
+        //    case enum_talent_offect_list.附加道术:
+        //    case enum_talent_offect_list.附加双防:
+        //        if (data.correlation_skill == -1)
+        //        {
+        //            dec += "[战斗效果]\n" + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "";
+        //        }
+        //        else
+        //        {
+        //            skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+        //            dec += "[战斗效果]\n" + (enum_talent_offect_list)data.talent_offect + "+" + Show_Color.Yellow(skill_name) + "等级 * " + data.talent_offect_value[index] + "";
+
+        //        }
+        //        break;
+        //    case enum_talent_offect_list.附加回血:
+        //        if (data.correlation_skill == -1)
+        //        {
+        //            dec += "[战斗效果]\n" + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "";
+        //        }
+        //        else
+        //        {
+        //            skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+        //            dec += "[专属技能效果]\n" + Show_Color.Yellow(skill_name) + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "";
+
+        //        }
+        //        break;
+        //    case enum_talent_offect_list.附加伤害:
+        //    case enum_talent_offect_list.附加攻击范围:
+        //    case enum_talent_offect_list.无视防御:
+        //        if (data.correlation_skill == -1)
+        //        {
+        //            dec += "[战斗效果]\n" + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "%";
+        //        }
+        //        else
+        //        {
+        //            skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+        //            dec += "[专属技能效果]\n" + Show_Color.Yellow(skill_name) + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "%";
+
+        //        }
+        //        break;
+        //    case enum_talent_offect_list.召唤兽:
+        //        break;
+        //    case enum_talent_offect_list.召唤兽攻击:
+        //    case enum_talent_offect_list.召唤兽生命:
+        //    case enum_talent_offect_list.召唤兽防御:
+        //    case enum_talent_offect_list.召唤兽速度:
+        //        dec += "[战斗效果]\n" + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "";
+        //        break;
+        //    case enum_talent_offect_list.召唤兽死亡爆炸:
+        //        dec += "[战斗效果]\n召唤兽死亡时对周围目标造成最大生命值" + "+" + data.talent_offect_value[index] + "%的伤害";
+        //        break;
+        //    case enum_talent_offect_list.特殊效果:
+        //        break;
+        //    case enum_talent_offect_list.临时伤害:
+        //    case enum_talent_offect_list.临时防御:
+        //    case enum_talent_offect_list.临时速度:
+        //        dec += "[战斗效果]\n自身生命值每降低10%" + " \n获得 " + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "%";
+        //        break;
+        //    case enum_talent_offect_list.单体改群体:
+        //        skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+        //        dec += "[战斗效果]\n" + Show_Color.Yellow(skill_name) + "变为群体技能" +
+        //            "\n群体技能攻击伤害 = " + skill_name + " 的 " + data.talent_offect_value[index] + "%";
+        //        break;
+        //    case enum_talent_offect_list.技能攻击个数:
+        //        skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+        //        dec += "[战斗效果]\n" + Show_Color.Yellow(skill_name) + " 的攻击次数变为 " + data.talent_offect_value[index] + "";
+        //        break;
+        //    case enum_talent_offect_list.技能概率不消耗蓝:
+        //        if (data.correlation_skill == -1)
+        //        {
+        //            dec += "[战斗效果]\n" + "释放技能" + " " + data.talent_offect_value[index] + "% 概率不消耗魔法";
+        //        }
+        //        else
+        //        {
+        //            skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+        //            dec += "[战斗效果]\n" + "释放技能 " + Show_Color.Yellow(skill_name) + " " + data.talent_offect_value[index] + "%概率不消耗魔法";
+
+        //        }
+        //        break;
+        //    case enum_talent_offect_list.技能全体伤害:
+        //        break;
+        //    case enum_talent_offect_list.群体技能攻击范围:
+        //        if (data.correlation_skill == -1)
+        //        {
+        //            dec += "[战斗效果]\n" + "技能攻击范围" + "+" + data.talent_offect_value[index] + "% ";
+        //        }
+        //        else
+        //        {
+        //            skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+        //            dec += "[战斗效果]\n" + "技能 " + Show_Color.Yellow(skill_name) + " 攻击范围 + " + data.talent_offect_value[index] + "%";
+
+        //        }
+        //        break;
+        //    case enum_talent_offect_list.每秒回复全体血量百分比:
+        //        dec += "[被动效果]\n" + "每秒回复全体血量" + "+" + data.talent_offect_value[index] + "% ";
+        //        break;
+        //    case enum_talent_offect_list.攻击击退敌人概率:
+        //        if (data.correlation_skill == -1)
+        //        {
+        //            dec += "[战斗效果]\n" + "攻击时" + data.talent_offect_value[index] + "%" + "击退敌人"; 
+        //        }
+        //        else
+        //        {
+        //            skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+        //            dec += "[战斗效果]\n" + "技能 " + Show_Color.Yellow(skill_name) + " 攻击时" + data.talent_offect_value[index] + "%" + "击退敌人";
+
+        //        }
+        //        break;
+        //}
+        */
+        if ((SumSave.crtHero.SelectPos==-1||data.talent_type == SumSave.crtHero.SelectPos) && data.job==SumSave.crtHero.job)
+        {
+            if (lv == data.ralent_need_uplv_value.Count)
+            {
+                Alert.Show(data.talent_name, dec);
+            }
+            else
+            {
+                if (lv == 0)
+                {
+                    dec += "\n点击确定开启 "+data.talent_name + "\n";
+                    if (SumSave.crtHero.SelectPos == -1)
+                    {
+                        dec += Show_Color.Red("重要提醒:仅可选择一个分支提升");
+                    }
+                }
+                else
+                {
+                    dec += "\n点击确定提升 " + data.talent_name + "\n";
+                }
+                Alert.Show(data.talent_name, dec, upLvTalent, data);
+
+            }
+        }
+        else Alert.Show(data.talent_name, dec);
+
+    }
+
+    private string Show_Base_Lv_Talent(int index, db_player_talent_vo data)
+    {
         string skill_name = "";
+        string dec = "";
         switch ((enum_talent_offect_list)data.talent_offect)
         {
             case enum_talent_offect_list.生命:
@@ -404,7 +590,7 @@ public class Dream_Panel_Hero : Panel_Base
             case enum_talent_offect_list.攻击击退敌人概率:
                 if (data.correlation_skill == -1)
                 {
-                    dec += "[战斗效果]\n" + "攻击时" + data.talent_offect_value[index] + "%" + "击退敌人"; 
+                    dec += "[战斗效果]\n" + "攻击时" + data.talent_offect_value[index] + "%" + "击退敌人";
                 }
                 else
                 {
@@ -414,32 +600,7 @@ public class Dream_Panel_Hero : Panel_Base
                 }
                 break;
         }
-        if ((SumSave.crtHero.SelectPos==-1||data.talent_type == SumSave.crtHero.SelectPos) && data.job==SumSave.crtHero.job)
-        {
-            if (lv == data.ralent_need_uplv_value.Count)
-            {
-                Alert.Show(data.talent_name, dec);
-            }
-            else
-            {
-                if (lv == 0)
-                {
-                    dec += "\n点击确定开启 "+data.talent_name + "\n";
-                    if (SumSave.crtHero.SelectPos == -1)
-                    {
-                        dec += Show_Color.Red("重要提醒:仅可选择一个分支提升");
-                    }
-                }
-                else
-                {
-                    dec += "\n点击确定提升 " + data.talent_name + "\n";
-                }
-                Alert.Show(data.talent_name, dec, upLvTalent, data);
-
-            }
-        }
-        else Alert.Show(data.talent_name, dec);
-
+        return dec;
     }
     /// <summary>
     /// 开启/升级天赋

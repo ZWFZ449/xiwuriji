@@ -29,24 +29,14 @@ public static class Tool_UI
     /// </summary>
     /// <param name="hex"></param>
     /// <returns></returns>
-    public static Color HexToColor(string hex)
-    {
-        hex = hex.Replace("0x", "").Replace("#", "");
-
-        byte a = 255; // 默认不透明
-        byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
-        byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
-        byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
-
-        // 如果有透明度
-        if (hex.Length == 8)
-        {
-            a = byte.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
-        }
-
-        return new Color32(r, g, b, a);
-    }
     private static Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
+
+    public static string Obtain_Talent_Name()
+    { 
+        string name = "";
+
+        return name;
+    }
     /// <summary>
     /// 根据路径获取图集
     /// </summary>

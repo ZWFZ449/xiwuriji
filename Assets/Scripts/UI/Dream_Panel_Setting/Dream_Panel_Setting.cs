@@ -15,7 +15,7 @@ public enum setting_type
     基础设置,
     捡取设置,
     Boss设置,
-    //技能设置,
+    系统设置,
 }
 public class Dream_Panel_Setting : Panel_Base
 {
@@ -131,8 +131,14 @@ public class Dream_Panel_Setting : Panel_Base
 
                 }
                 break;
-            //case setting_type.技能设置:
-             //   break;
+            case setting_type.系统设置:
+                List<int> settings = SumSave.crt_setting.user_data_settings;
+                for (int i = 0; i < SumSave.db_sttings.Count; i++)
+                {
+                    dream_setting_item dream_setting_item = Instantiate(dream_setting_item_prefab, m_setting_btn_borm);
+                    dream_setting_item.Init(i, SumSave.db_sttings[i], settings.Count > i ? settings[i] : 1);
+                }
+                break;
         }
     }
     /// <summary>

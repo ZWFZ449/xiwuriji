@@ -220,7 +220,7 @@ namespace Common
         ///<summary>
         /// 设置类型字典
         /// </summary>
-        public static List<user_setting_type_vo> db_sttings;
+        public static List<db_setting_vo> db_sttings;
         /// <summary>
         /// 神器列表
         /// </summary>

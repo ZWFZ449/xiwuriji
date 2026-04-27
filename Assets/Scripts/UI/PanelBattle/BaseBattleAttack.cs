@@ -153,6 +153,7 @@ namespace MVC
             {
                 case Battle_Game_Type.player:
                     base_icon.sprite = UI.UI_Manager.I.GetEquipSprite("UI/player/", data.hero_type+"头像");
+                    base_name.text += Show_Color.Red(Battle_Tool.Obtain_Talent_Name());
                     break;
                 case Battle_Game_Type.call:
                     base_icon.sprite = UI.UI_Manager.I.GetEquipSprite("UI/player/Call", data.crt_name); 
@@ -188,6 +189,7 @@ namespace MVC
             BaseBattleAttack monster = Terget.GetComponent<BaseBattleAttack>();
             if (monster.oneselfHealthState.isDead) return;//结战斗
             float damage = Base_Damage(monster);
+            int battle_Damage = 0;//真实伤害
             Dictionary<int, db_skill_vo> skill_list = SumSave.crt_skill.Set_Current_skill();
             int skilldamage = 0;
             foreach (var item in skill_list)
@@ -225,13 +227,13 @@ namespace MVC
             if ((Skill_Effect_Type)skill.EffectType == Skill_Effect_Type.单体 || (Skill_Effect_Type)skill.EffectType == Skill_Effect_Type.群体)
             {
                 skilldamage += skill.Power + skill.DefPowers[skill.SetLv()];
-                if (skill.skill_damages.Count> skill.SetLv()) damage += skill.skill_damages[skill.SetLv()];
                 damage = damage * (skilldamage) / 100;
+                if (skill.skill_damages.Count> skill.SetLv()) battle_Damage = skill.skill_damages[skill.SetLv()];
             }
             switch ((Skill_Effect_Type)skill.EffectType)
             {
                 case Skill_Effect_Type.单体:
-                    TakeDamage((int)damage, monster);
+                    TakeDamage((int)damage, monster,battle_Damage);
                     break;
                 case Skill_Effect_Type.群体:
                     List<BattleHealthState> monsterList = FindTheTarget(skill, monster);
@@ -241,9 +243,8 @@ namespace MVC
                         if (base_monster != null)
                         {
                             int base_damage = Base_Damage(base_monster) * (skilldamage) / 100;
-                            if (skill.skill_damages.Count > skill.SetLv()) base_damage += skill.skill_damages[skill.SetLv()];
                             if (base_damage < 0) base_damage = 1;
-                            TakeDamage(base_damage, base_monster);
+                            TakeDamage(base_damage, base_monster, battle_Damage);
                         }
                     }
                     break;
@@ -266,6 +267,17 @@ namespace MVC
                     break;
                 default:
                     break;
+            }
+        }
+        /// <summary>
+        /// 自动回复
+        /// </summary>
+        public void autoreply()
+        {
+            if (data.data.hpRegen > 0 || data.data.mpRegen>0)
+            {
+                //Debug.Log("huifu"+data.data.hpRegen + " " + data.data.mpRegen);
+                oneselfHealthState. Use_Medicine(data.data.hpRegen, data.data.mpRegen);
             }
         }
         private List<BattleHealthState> FindTheTarget(db_skill_vo skill, BaseBattleAttack base_monster)
@@ -348,7 +360,8 @@ namespace MVC
         /// </summary>
         /// <param name="damage"></param>
         /// <param name="monster"></param>
-        private void TakeDamage(int damage, BaseBattleAttack monster)
+        /// /// <param name="battle_Damage">真实伤害</param>
+        private void TakeDamage(int damage, BaseBattleAttack monster, int battle_Damage=0)
         {
             if (iSnHit(monster))
             {
@@ -400,11 +413,12 @@ namespace MVC
                 }
             }
             damage = (int)MathF.Max(1, damage);
-
             monster.oneselfHealthState.TakeDamage((int)damage, isCrit ? DamageEnum.暴击技能伤害 : DamageEnum.技能伤害);
-            if (data.data.battle_Damage > 0)
+            if (data.data.battle_Damage > 0 || battle_Damage > 0)
             {
-                monster.oneselfHealthState.TakeDamage(data.data.battle_Damage, DamageEnum.真实伤害);
+                int data_battle_Damage = data.data.battle_Damage + battle_Damage - monster.data.data.damage_reduction;
+                if (data_battle_Damage > 0)
+                monster.oneselfHealthState.TakeDamage(data_battle_Damage, DamageEnum.真实伤害); 
             }
             foreach (var item in monster.data.data.buffList)
             {

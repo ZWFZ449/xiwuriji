@@ -120,6 +120,13 @@ public static class ReadDb
         item.Init(value, moeny,"uid", uid);
         return item;
     }
+
+    public static db_setting_vo Read(MySqlDataReader reader, db_setting_vo item)
+    {
+        item.setting_value = reader.GetString(reader.GetOrdinal("setting_value"));
+        item.setting_type = reader.GetInt32(reader.GetOrdinal("setting_type"));
+        return item;
+    }
     public static global_gift_vo Read(MySqlDataReader reader, global_gift_vo item)
     {
 

@@ -107,7 +107,7 @@ public class map_show_offect : Base_Mono
             select_map_lv_item item = Instantiate(select_map_lv_item_Prefab, m_map_intensity_borm);
             item.Init(crt_map.GetMap().map_boss[i], i + 1);
             item.GetComponent<Button>().onClick.AddListener(() => { OnClickIntensity(item); });
-            if(crt_select_map_lv_item==null) OnClickIntensity(item);
+            //if(crt_select_map_lv_item==null) OnClickIntensity(item);
         }
     }
 
@@ -286,15 +286,71 @@ public class map_show_offect : Base_Mono
                 break;
         }
     }
-
+    /// <summary>
+    /// 显示信息 倒计时
+    /// </summary>
+    string map_info,crt_info;
     private void Dec()
     {
+        StopAllCoroutines();
         db_map_vo map = crt_map.GetMap();
-        string map_info = map.map_name +
+        map_info = map.map_name +
             "\n刷怪频率:" + map.map_add_number_monster[crt_map.GetMap_Intensity - 1] + "个/" + map.map_cd[crt_map.GetMap_Intensity - 1] + "s" +
-            "\nBoss:" + map.map_boss[crt_map.GetMap_Intensity - 1]+
-            "\nBoss前置击杀:" + map.map_crate_boss_condition[crt_map.GetMap_Intensity - 1];
-        base_info.text= map_info;
+            "\nBoss:" + map.map_boss[crt_map.GetMap_Intensity - 1] +
+            "\nBoss前置击杀:" + map.map_crate_boss_condition[crt_map.GetMap_Intensity - 1] +
+            "\nBoss刷新:" + map.map_boss_cdtime[crt_map.GetMap_Intensity - 1] + "s";
+        for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+        {
+            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+            List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+            if (list.Count == 2)
+            {
+                if (list[0] == map.map_boss[crt_map.GetMap_Intensity - 1])
+                    map_info += Show_Color.Green("\n存量 " + list[1]) + "";
+            }
+        }
+        int spanSeconds = Meet_maposs_criteria(map.map_boss[crt_map.GetMap_Intensity - 1]);
+        crt_info = "Boss倒计时:" + Show_Color.Green(ConvertSecondsToHHMMSS(spanSeconds));
+        if (spanSeconds > 0)
+        { 
+            StartCoroutine(Game_WaitTime(spanSeconds));
+        }
+        base_info.text = map_info + "\n" + crt_info;
+    }
+    private int Meet_maposs_criteria(string value)
+    {
+        (int, string) Boss_Time = Tool_Battle.GetBossTime(value);
+        if (Boss_Time.Item2 == "no") return 99999999;
+        int spanSeconds = Battle_Tool.SettlementTransport(Boss_Time.Item2, 2);
+        db_vip crt_vip = Tool_Battle.Obtain_Vip();
+        if (crt_vip != null)
+        {
+            int base_time = Boss_Time.Item1 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
+            if (spanSeconds >= base_time)
+            {
+                return 0;
+            }else return base_time - spanSeconds;
+        }
+        else
+        {
+            if (spanSeconds >= Boss_Time.Item1)
+            {
+                return 0;
+            }else return Boss_Time.Item1 - spanSeconds;
+        } 
+    }
+
+
+    private IEnumerator Game_WaitTime(int time)
+    {
+
+        while (time > 0)
+        { 
+            time--;
+            crt_info = "Boss倒计时:" + Show_Color.Green(ConvertSecondsToHHMMSS(time)); 
+            base_info.text = map_info + "\n" + crt_info;
+            yield return new WaitForSeconds(1f);
+        }
     }
 
     private void Hide()

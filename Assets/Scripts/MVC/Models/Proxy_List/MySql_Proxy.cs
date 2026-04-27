@@ -44,6 +44,7 @@ namespace MVC
             Read_Db_Illustrated();
             Read_Db_Chronicle();
             Read_db_vip();
+            Read_Db_Setting_Aoption();
             //Read_Db_Magic();
             //
             //Read_Db_Hero();
@@ -610,12 +611,12 @@ namespace MVC
         {
             mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_setting);
 
-            SumSave.db_sttings = new List<user_setting_type_vo>();
+            SumSave.db_sttings = new List<db_setting_vo>();
             if (mysqlReader.HasRows)
             {
                 while (mysqlReader.Read())
                 {
-                    SumSave.db_sttings.Add(ReadDb.Read(mysqlReader, new user_setting_type_vo()));
+                    SumSave.db_sttings.Add(ReadDb.Read(mysqlReader, new db_setting_vo()));
                 }
             }
         }

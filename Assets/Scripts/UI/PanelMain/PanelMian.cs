@@ -71,8 +71,9 @@ public class PanelMian : PanelBase
     public override void Initialize()
     {
         base.Initialize();
-        pos_equip =Find<Transform>("hero_equips/equips");
-        posLevelequip = Find<Transform>("hero_equips/equips/level_equips");
+        string path = "Scroll View/Viewport/Content/";
+        pos_equip =Find<Transform>(path+"hero_equips/equips");
+        posLevelequip = Find<Transform>(path + "hero_equips/equips/level_equips");
         equipuiItemprefab = Tool_UI.Find_Prefabs<equipuiItem>("equipuiItem");
         btnitem_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
         for (int i = 0; i < Enum.GetNames(typeof(equip_type_list)).Length; i++)
@@ -81,25 +82,25 @@ public class PanelMian : PanelBase
             equipuiItem.Insance_Crate((equip_type_list)(i));
             keyValuePairs.Add((equip_type_list)(i), equipuiItem);
         }
-        expBar = Find<CircularHealthBar>("btn_list/show_hero/exp");
-        hero_img= Find<Image>("btn_list/show_hero/hero_img/icon");
-        hero_icon = Find<Image>("hero_equips/hero_icon/icon");
+        expBar = Find<CircularHealthBar>(path + "btn_list/show_hero/exp");
+        hero_img= Find<Image>(path + "btn_list/show_hero/hero_img/icon");
+        hero_icon = Find<Image>(path + "hero_equips/hero_icon/icon");
         panelHall = UI_Manager.I.GetPanel<PanelHall>();
         panel_hero_equip= UI_Manager.I.GetPanel<panel_hero_equip>();
-        pos_btn_main = Find<Transform>("main_list");
+        pos_btn_main = Find<Transform>(path + "main_list");
         for (int i = 0; i < btn_names.Count; i++)
         {
             btn_item btn_item = Instantiate(btnitem_prefab, pos_btn_main);
             btn_item.Show(i, btn_names[i]);
             btn_item.GetComponent<Button>().onClick.AddListener(() => SelectBtn(btn_item));
         }
-        m_global_info_brom = Find<Transform>("special_list/Scroll View/Viewport/Content");
+        m_global_info_brom = Find<Transform>(path + "special_list/Scroll View/Viewport/Content");
         global_info_item_prefab = Tool_UI.Find_Prefabs<global_info_item>("global_info_item");
-        moeny = Find<TMP_Text>("monitor_info/show_unit/moeny/info/info");
-        sycee = Find<TMP_Text>("monitor_info/show_unit/sycee/info/info");
-        points = Find<TMP_Text>("monitor_info/show_unit/points/info/info");
-        hero_name = Find<TMP_Text>("hero_equips/hero_name/info/info");
-        btn_name = Find<Button>("hero_equips/hero_name");
+        moeny = Find<TMP_Text>(path + "monitor_info/show_unit/moeny/info/info");
+        sycee = Find<TMP_Text>(path + "monitor_info/show_unit/sycee/info/info");
+        points = Find<TMP_Text>(path + "monitor_info/show_unit/points/info/info");
+        hero_name = Find<TMP_Text>(path + "hero_equips/hero_name/info/info");
+        btn_name = Find<Button>(path + "hero_equips/hero_name");
         btn_name.onClick.AddListener(() => { show_name(); });
         m_input_brom = GetComponent<Transform>();
         input_offect_prefab = Tool_UI.Find_Prefabs<input_offect>("input_offect");
@@ -236,7 +237,7 @@ public class PanelMian : PanelBase
 
     private void Show_hero()
     {
-        hero_name.text = SumSave.crtMaxBattle.crt_name + "Lv." + SumSave.crtMaxBattle.lv;
+        hero_name.text = SumSave.crtMaxBattle.crt_name +" "+ Battle_Tool.Obtain_Talent_Name()+ " Lv." + SumSave.crtMaxBattle.lv;
         hero_img.sprite = UI.UI_Manager.I.GetEquipSprite("UI/player/", SumSave.crtMaxBattle.hero_type+"头像");
         hero_icon.sprite = UI.UI_Manager.I.GetEquipSprite("UI/player/", SumSave.crtMaxBattle.hero_type);
     }

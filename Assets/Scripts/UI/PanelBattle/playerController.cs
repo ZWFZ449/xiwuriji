@@ -69,7 +69,7 @@ public class playerController : BaseBattleAttack
 
             oneselfHealthState.Set_Mp = mp;
             StartCoroutine(On_Attack(skill.GetData));
-            skill_index = index++;
+            skill_index++;
             return true;
         }
         else Alert_Dec.Show("MP不足,释放" + skill.GetData.show_name + "失败");

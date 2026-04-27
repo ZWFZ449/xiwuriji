@@ -11,6 +11,12 @@ using Random = UnityEngine.Random;
 
 public class PanelBattle : PanelBase
 {
+    private enum slider_type
+    { 
+    hp,
+    mp,
+    exp
+    }
     /// <summary>
     /// 出生点
     /// </summary>
@@ -93,6 +99,19 @@ public class PanelBattle : PanelBase
     /// 信息框
     /// </summary>
     private Transform show_info_borm;
+
+
+    private Transform slider_type_borm;
+
+    private Slider_item Slider_item_prefab;
+
+    private Dictionary<slider_type, Slider_item> slider_list;
+    protected override void Awake()
+    {
+        closeButton = Find<Button>("info/close_button");
+        closeButton.onClick.AddListener(() => { Hide(); });
+        Initialize();
+    }
     /// <summary>
     /// 初始化怪物刷新
     /// </summary>
@@ -115,18 +134,79 @@ public class PanelBattle : PanelBase
         battle_monster_prefab = Resources.Load<GameObject>("UI/Prefabs/battle_monsters");
         battle_Boss_monster_prefab = Resources.Load<GameObject>("UI/Prefabs/battle_Boss_monsters");
         battle_player_prefab = Resources.Load<GameObject>("UI/Prefabs/battle_players"); 
-        m_medicine_borm = Find<Transform>("medicine_list");
-        m_skill_borm = Find<Transform>("skill_list");
+        m_medicine_borm = Find<Transform>("info/medicine_list");
+        m_skill_borm = Find<Transform>("info/skill_list");
         Medicineitem_prefab = Tool_UI.Find_Prefabs<medicineitem>("medicineitem");
         skill_offect_item_prefab = Tool_UI.Find_Prefabs<skill_offect_item>("skill_offect_item");
         show_drop_list = Find<show_drop_list>("show_drop_list");
         boss_slider = Find<Boss_Slider>("Boss_Slider");
         show_info_borm= Find<Transform>("show_info");
         show_info_item_prefab = Tool_UI.Find_Prefabs<show_info_item>("show_info_item");
+        slider_type_borm = Find<Transform>("info/slider_type");
+        Slider_item_prefab = Tool_UI.Find_Prefabs<Slider_item>("Slider_item");
         InitMedicine();
+        InitSlider();
         InitBoss();
     }
+    /// <summary>
+    /// 初始化信息
+    /// </summary>
+    private void InitSlider()
+    {
+        slider_list = new Dictionary<slider_type, Slider_item>();
+        foreach (slider_type item in Enum.GetValues(typeof(slider_type)))
+        { 
+            Slider_item slider_item = Instantiate(Slider_item_prefab, slider_type_borm);
+            switch (item)
+            {
+                case slider_type.hp:
+                    slider_item.Init(UnityColorPresets.GameColors.Uncommon, UnityColorPresets.GameColors.Alliance, 0, 100);
+                    break;
+                case slider_type.mp:
+                    slider_item.Init(UnityColorPresets.GameColors.ManaBar, UnityColorPresets.GameColors.Common, 0, 100);
+                    break;
+                case slider_type.exp:
+                    slider_item.Init(UnityColorPresets.GameColors.EnergyBar, UnityColorPresets.GameColors.Common, 0, 100);
+                    break;
+            }
+            slider_list.Add(item, slider_item);
+        }
+    }
 
+    protected void Show_Slider(BattleHealthState data)
+    {
+        foreach (var item in slider_list)
+        {
+            switch (item.Key)
+            {
+                case slider_type.hp:
+                    item.Value.Refresh(data.Get_hp, (int)SumSave.crtMaxBattle.data.battle_maxhp,item.Key);
+                    break;
+                case slider_type.mp:
+                    item.Value.Refresh(data.Get_MP, (int)SumSave.crtMaxBattle.data.battle_maxmp, item.Key);
+                    break;
+                case slider_type.exp:
+                    item.Value.Refresh((int)SumSave.crtMaxBattle.exp, (int)SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp, item.Key + "Lv." + SumSave.crtMaxBattle.lv);
+                    break;
+            }
+        }
+
+    }
+    /// <summary>
+    /// 单独显示经验
+    /// </summary>
+    private void Show_Exp()
+    {
+        foreach (var item in slider_list)
+        {
+            switch (item.Key)
+            {
+                case slider_type.exp:
+                    item.Value.Refresh((int)SumSave.crtMaxBattle.exp, (int)SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp, item.Key + "Lv." + SumSave.crtMaxBattle.lv);
+                    break;
+            }
+        }
+    }
     /// <summary>
     /// 刷新状态
     /// </summary>
@@ -301,6 +381,7 @@ public class PanelBattle : PanelBase
         InitMap();
         crate_player();
         crate_monster();
+        autoreply();
         StartCoroutine(Game_WaitTime(crt_map.map_cd[crt_map.GetMapIntensityDrop - 1]));
     }
 
@@ -317,9 +398,17 @@ public class PanelBattle : PanelBase
                 Generate_Boss_Monster(crt_map.map_boss[crt_map.GetMapIntensityDrop - 1]);
             }
         }
+        for (int i = 0; i < monster_list.Count; i++)
+        {
+            if (monster_list[i].GetComponent<BattleHealthState>().isDead)
+            { 
+                monster_list[i].SetActive(false);
+                monster_list.RemoveAt(i);
+                i--; 
+            }
+        }
         int max = (int)MathF.Min(crt_map.map_crate_number_monster[crt_map.GetMapIntensityDrop - 1],
             crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] - monster_list.Count);
-
         if (max > 0)
         { 
             for (int i = 0; i < max; i++) Generate_Monster();
@@ -382,6 +471,7 @@ public class PanelBattle : PanelBase
     private void Auto_Generate_Boss()
     {
         if (!IsBoss) return;
+        if (SumSave.crt_setting.user_data_settings.Count >= 2 && SumSave.crt_setting.user_data_settings[1] == 0) return;
         for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
         {
             (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
@@ -447,7 +537,7 @@ public class PanelBattle : PanelBase
         db_vip crt_vip = Tool_Battle.Obtain_Vip();
         if (crt_vip != null)
         {
-            if (spanSeconds >= Boss_Time.Item1 * (100 - crt_vip.monsterHuntingInterval) / 100)
+            if (spanSeconds >= Boss_Time.Item1 * (100 - crt_vip.monsterHuntingInterval-(Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100)
             {
                 is_true = true;
             }
@@ -552,14 +642,15 @@ public class PanelBattle : PanelBase
             {
                 case Battle_Game_Type.player:
                 case Battle_Game_Type.call:
-                    
+
                     player_list.Remove(health.gameObject);
                     health.Clear();
                     if (player_list.Count == 0)
                     {
                         //战斗失败
                         gameover();
-                    }else
+                    }
+                    else
                     if (baseBattleAttack.Data.type == Battle_Game_Type.call)
                     {
                         //复活召唤兽
@@ -569,10 +660,10 @@ public class PanelBattle : PanelBase
                 case Battle_Game_Type.monster:
                 case Battle_Game_Type.Boss:
                 case Battle_Game_Type.Activity_Monster:
+                    monster_list.Remove(health.gameObject);
                     map_crate_boss_condition++;
                     kill_monster++;
                     Drop(baseBattleAttack);
-                    monster_list.Remove(health.gameObject);
                     if (baseBattleAttack.Data.type == Battle_Game_Type.Boss)
                     {
                         AddBossStringData(baseBattleAttack.Data.crt_name);
@@ -580,7 +671,8 @@ public class PanelBattle : PanelBase
                     health.Clear();
                     break;
             }
-        }
+        } 
+        else Debug.Log("丢失脚本");
     }
     /// <summary>
     /// 首次击杀后写入可以召唤列表
@@ -632,8 +724,32 @@ public class PanelBattle : PanelBase
         Init();
 
     }
+    /// <summary>
+    /// 自动回复
+    /// </summary>
+    private void autoreply()
+    { 
+        StartCoroutine(autoreply(1f));
+    }
+    private IEnumerator autoreply(float time)
+    {
+        while (time > 0)
+        {
+            time-= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        for (int i = 0; i < player_list.Count; i++)
+        { 
+                player_list[i].GetComponent<BaseBattleAttack>().autoreply();
+        }
+        for (int i = 0; i < monster_list.Count; i++)
+        { 
+                monster_list[i].GetComponent<BaseBattleAttack>().autoreply();
+        }
 
+        StartCoroutine(autoreply(1f));
 
+    }
     /// <summary>
     /// 掉落收益
     /// </summary>
@@ -652,6 +768,7 @@ public class PanelBattle : PanelBase
             //case Battle_Game_Type.monster://基础掉落
             case Battle_Game_Type.Boss://boss掉落
                 Game_Omphalos.global_battle_info("击杀 " + monster.Data.crt_name);
+                Battle_Tool.Dream_Obtain_Unit(currency_unit.Boss积分, 1, Obtain_Int.Add_unit(1));
                 AddSkill();
                 Close_BossSlider();
                 break;
@@ -714,6 +831,7 @@ public class PanelBattle : PanelBase
     private void Add_Exp(int exp)
     {
         Battle_Tool.Obtain_Exp(exp);
+        Show_Exp();
     }
 
     /// <summary>
@@ -807,7 +925,7 @@ public class PanelBattle : PanelBase
             time_info.text = time.ToString("0.0") + "s";
             if (crt_map.map_type != 0)
             { 
-                limited_time-=0.1f;
+                limited_time-=0.1f; 
                 time_info.text += "\n地图关闭" + limited_time.ToString("0.0") + "s";
             }
             yield return new WaitForSeconds(0.1f);
@@ -838,6 +956,7 @@ public class PanelBattle : PanelBase
     {
         //每次只刷新一个boss
         if (!IsBoss) return;
+        if (SumSave.crt_setting.user_data_settings.Count >= 2 && SumSave.crt_setting.user_data_settings[1] == 0) return;
         crtMaxBattleVO monster = ArrayHelper.Find(monster_Bossbattle_list, e => e.crt_name == specify);
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(monster.crt_name, battle_Boss_monster_prefab,
             GetRandomUVPosition(2000), Quaternion.identity, battle_borm.transform);

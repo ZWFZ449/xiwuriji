@@ -20,6 +20,30 @@ public class BattleHealthState : Base_Mono
     /// </summary>
     private long currentHP, currentMP;
 
+    private long CurrentHP { set{ currentHP = value; Show_Info(); } get { return currentHP; } }
+    private long CurrentMP { set { currentMP = value; Show_Info(); } get { return currentMP; } }
+    /// <summary>
+    /// 显示信息
+    /// </summary>
+    private void Show_Info()
+    {
+        switch (GetComponent<BaseBattleAttack>().Data.type)
+        {
+            case Battle_Game_Type.player:
+                transform.parent.parent.parent.parent.SendMessage("Show_Slider", this);
+                break;
+            case Battle_Game_Type.call:
+                break;
+            case Battle_Game_Type.monster:
+                break;
+            case Battle_Game_Type.Boss:
+                transform.parent.parent.parent.parent.SendMessage("Real_Time_BossSlider", CurrentHP);
+                break;
+            case Battle_Game_Type.Activity_Monster:
+                break;
+        }
+
+    }
     public void Clear()
     {
         StopAllCoroutines();
@@ -33,9 +57,9 @@ public class BattleHealthState : Base_Mono
     public void Init(long _maxHP, int _maxMP,string _base_name)
     {
         maxHP = _maxHP;
-        maxMP = _maxMP; 
-        currentHP = maxHP;
-        currentMP = maxMP;
+        maxMP = _maxMP;
+        CurrentHP = maxHP;
+        CurrentMP = maxMP;
         base_name = _base_name;
         circularHealthBar.Init(maxHP);
     }
@@ -56,25 +80,11 @@ public class BattleHealthState : Base_Mono
     }
     public void TakeDamage(int damage,DamageEnum type = DamageEnum.普通伤害)
     {
-        if (currentHP <= 0) return;
-        currentHP -= damage;
-        switch (GetComponent<BaseBattleAttack>().Data.type)
-        {
-            case Battle_Game_Type.player:
-                break;
-            case Battle_Game_Type.call:
-                break;
-            case Battle_Game_Type.monster:
-                break;
-            case Battle_Game_Type.Boss:
-                transform.parent.parent.parent.parent.SendMessage("Real_Time_BossSlider", currentHP);
-                break;
-            case Battle_Game_Type.Activity_Monster:
-                break;
-        }
+        if (CurrentHP <= 0) return;
+        CurrentHP -= damage;
         Hurt(damage, type);
-        circularHealthBar.ChangeHealth(currentHP);
-        if (currentHP <= 0)
+        circularHealthBar.ChangeHealth(CurrentHP);
+        if (CurrentHP <= 0)
         {
             StartCoroutine(WaitAndDestory(base_name));
 
@@ -87,8 +97,8 @@ public class BattleHealthState : Base_Mono
     public (int, int) Proportion()
     {
         (int, int) proportion = (100, 100);
-        proportion.Item1 = (int)(currentHP * 100 / maxHP);
-        proportion.Item2 = (int)(currentMP * 100 / maxMP);
+        proportion.Item1 = (int)(CurrentHP * 100 / maxHP);
+        proportion.Item2 = (int)(CurrentMP * 100 / maxMP);
         return proportion;
     }
     public virtual IEnumerator WaitAndDestory(string healthname)
@@ -112,13 +122,15 @@ public class BattleHealthState : Base_Mono
     /// <summary>
     /// 判定死亡
     /// </summary>
-    public bool isDead { get { return currentHP <= 0; } }
+    public bool isDead { get { return CurrentHP <= 0; } }
 
-    public int Get_MP { get { return (int)currentMP; } } 
+    public int Get_MP { get { return (int)CurrentMP; } } 
+
+    public int Get_hp { get { return (int)CurrentHP; } }
     /// <summary>
     /// 消耗魔法值
     /// </summary>
-    public int Set_Mp { set { currentMP -= value; } }
+    public int Set_Mp { set { CurrentMP -= value; } }
     /// <summary>
     /// 使用药品或者治疗
     /// </summary>
@@ -126,8 +138,10 @@ public class BattleHealthState : Base_Mono
     /// <param name="mp"></param>
     public void Use_Medicine(int hp, int mp)
     {
-        currentHP = currentHP + hp > maxHP ? maxHP : currentHP + hp;
-        currentMP = currentMP + mp > maxMP ? maxMP : currentMP + mp;
+        CurrentHP = CurrentHP + hp > maxHP ? maxHP : CurrentHP + hp;
+        CurrentMP = CurrentMP + mp > maxMP ? maxMP : CurrentMP + mp;
     }
+
+
 
 }

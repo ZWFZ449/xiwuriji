@@ -17,7 +17,10 @@ public class data_setting_vo : Base_VO
     public List<(int, int)> battle_base_list = new List<(int, int)>();
 
     public List<(string,int)> battle_Boss_list = new List<(string,int)>();
-
+    /// <summary>
+    /// 0音效 1自动召唤 2自动集火boss
+    /// </summary>
+    public List<int> user_data_settings = new List<int>();
     public void Iint(string data_base_setting, string data_medicine_setting,string data_battle_setting,string user_data_settings)
     {
         base.Iint();
@@ -54,11 +57,12 @@ public class data_setting_vo : Base_VO
                 this.battle_Boss_list.Add(data); 
             }
         }
+        this.user_data_settings = ArrayHelper.Get_Split<int>(user_data_settings, ',');
     }
 
     public override string[] Set_Instace_String()
     {
-        Iint(Setting(1), Setting(2), Setting(3),"");
+        Iint(Setting(1), Setting(2), Setting(3), Setting(4));
         return new string[]
         {
             GetStr(0),
@@ -102,7 +106,14 @@ public class data_setting_vo : Base_VO
         }
         if (index == 3)
         {
-            dec += "稻草人[Boss]+" + SumSave.nowtime + ";0";
+            //dec += "稻草人[Boss]+" + SumSave.nowtime + ";0";
+        }
+        if (index == 4)
+        {
+            for (int i = 0; i < SumSave.db_sttings.Count; i++)
+            {
+                dec += 1 + ",";
+            }
         }
         return dec;
     }
@@ -128,6 +139,12 @@ public class data_setting_vo : Base_VO
                 for (int i = 0; i < battle_Boss_list.Count; i++)
                 { 
                     dec += battle_Boss_list[i].Item1 + ";" + battle_Boss_list[i].Item2 + ",";
+                }
+                break;
+            case 4:
+                for (int i = 0; i < user_data_settings.Count; i++)
+                {
+                    dec += user_data_settings[i] + ",";
                 }
                 break;
             default:
@@ -170,6 +187,28 @@ public class data_setting_vo : Base_VO
                         }
                     }
                     break;
+                case 4:
+                    bool isTrue = true;
+                    for (int j = 0; j < user_data_settings.Count; j++)
+                    {
+                        if (j == data[i].Item2)
+                        {
+                            isTrue = false;
+                            user_data_settings[j] = data[i].Item4;
+                        }
+                    }
+                    if (isTrue)
+                    {
+                        if (user_data_settings.Count < data[i].Item2)
+                        {
+                            while (user_data_settings.Count <= data[i].Item2)
+                            { 
+                                user_data_settings.Add(1);
+                            }
+                            user_data_settings[data[i].Item2] = data[i].Item4;
+                        } 
+                    }
+                    break;
             }
         }
         MysqlData();
@@ -182,6 +221,7 @@ public class data_setting_vo : Base_VO
             "data_base_setting",
             "data_medicine_setting",
             "data_battle_boss_setting",
+            "data_setting",
         };
     }
 
@@ -192,6 +232,7 @@ public class data_setting_vo : Base_VO
             GetStr(GetData(1)),
             GetStr(GetData(2)),
             GetStr(GetData(3)),
+            GetStr(GetData(4))
         };
     }
 

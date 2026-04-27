@@ -40,6 +40,8 @@ public static class Tool_Battle
         Dictionary<enum_equip_entry_list, int> buffList = new Dictionary<enum_equip_entry_list, int>();
         List<(enum_battle_pet_talent_list,int,int)> talentList = new List<(enum_battle_pet_talent_list, int, int)>();
         Dictionary<int, int> suits = new Dictionary<int, int>();//套装
+        int speed_bonus = 1;
+        if (SumSave.crtHero.job != 1) speed_bonus = 2;
         foreach (var item in SumSave.db_heros)
         {
             if (item.id == SumSave.crtHero.job)
@@ -60,7 +62,7 @@ public static class Tool_Battle
                 dodge += item.initdodge + (item.dodge * SumSave.crtHero.lv / (item.updodge + 1));
                 crit += item.initcrit + (item.crit * SumSave.crtHero.lv / (item.upcrit + 1));
                 critDmg += item.initcritDmg + (item.critDmg * SumSave.crtHero.lv / (item.upcritDmg + 1));
-                battle_speed += item.initspeed + (item.speed * SumSave.crtHero.lv / (item.upspeed + 1));
+                battle_speed = item.initspeed - (item.speed * SumSave.crtHero.lv / (item.upspeed + 1));
                 battle_range += item.initrange + (item.range * SumSave.crtHero.lv / (item.uprange + 1));
             }
         }
@@ -78,7 +80,7 @@ public static class Tool_Battle
                 case enum_talent_offect_list.防御: battle_ac += tool_talent_value(talent, skill_list); battle_mac += tool_talent_value(talent, skill_list); break;
                     
                 case enum_talent_offect_list.攻击速度:
-                    battle_speed+= tool_talent_value(talent, skill_list);break;
+                    battle_speed -= tool_talent_value(talent, skill_list) * speed_bonus; break;
                 case enum_talent_offect_list.物理攻击:
                     dc2 += tool_talent_value(talent, skill_list); break;
                 case enum_talent_offect_list.魔法攻击:
@@ -240,7 +242,7 @@ public static class Tool_Battle
                                     case enum_equip_entry_list.物攻属性:battle_dc+= value;break;
                                     case enum_equip_entry_list.魔攻属性:battle_sc+= value;break;
                                     case enum_equip_entry_list.道攻属性:battle_mc+= value;break;
-                                    case enum_equip_entry_list.攻击速度:battle_speed+= value;break;
+                                    case enum_equip_entry_list.攻击速度:battle_speed-= (value * speed_bonus); break;
                                     case enum_equip_entry_list.攻击范围:battle_range+= value;break;
                                     case enum_equip_entry_list.暴击属性:crit += value;break;
                                     case enum_equip_entry_list.暴击伤害:critDmg+= value;break;
@@ -324,7 +326,7 @@ public static class Tool_Battle
                                     battle_Damage += suit.suit_list[i].Item3;
                                     break;
                                 case Suit_Type.攻击速度:
-                                    battle_speed += suit.suit_list[i].Item3;
+                                    battle_speed -= (suit.suit_list[i].Item3 * speed_bonus);
                                     break;
                                 case Suit_Type.物攻属性:
                                     battle_dc += suit.suit_list[i].Item3;
@@ -407,7 +409,7 @@ public static class Tool_Battle
                                                             battle_Damage += effect_value[1];
                                                             break;
                                                         case Suit_Type.攻击速度:
-                                                            battle_speed += effect_value[1];
+                                                            battle_speed -= (effect_value[1] * speed_bonus);
                                                             break;
                                                         case Suit_Type.物攻属性:
                                                             battle_dc += effect_value[1];
@@ -479,7 +481,7 @@ public static class Tool_Battle
                                                 battle_Damage += effect_value[2];
                                                 break;
                                             case Suit_Type.攻击速度:
-                                                battle_speed += effect_value[2];
+                                                battle_speed -= (effect_value[2] * speed_bonus);
                                                 break;
                                             case Suit_Type.物攻属性:
                                                 battle_dc += effect_value[2];
@@ -558,7 +560,7 @@ public static class Tool_Battle
                             case enum_equip_entry_list.物攻属性: battle_dc += value; break;
                             case enum_equip_entry_list.魔攻属性: battle_sc += value; break;
                             case enum_equip_entry_list.道攻属性: battle_mc += value; break;
-                            case enum_equip_entry_list.攻击速度: battle_speed += value; break;
+                            case enum_equip_entry_list.攻击速度: battle_speed -= (value * speed_bonus); break;
                             case enum_equip_entry_list.攻击范围: battle_range += value; break;
                             case enum_equip_entry_list.暴击属性: crit += value; break;
                             case enum_equip_entry_list.暴击伤害: critDmg += value; break;
@@ -764,7 +766,7 @@ public static class Tool_Battle
         crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus, boss_cd);
         crt.crt_name = SumSave.crtHero.hero_name;
         crt.lv = SumSave.crtHero.lv;
-        crt.exp = SumSave.crtHero.exp;
+        crt.exp = SumSave.crtHero.exp; 
         crt.hero_type = (Hero_Type)SumSave.crtHero.job;
         crt.type = Battle_Game_Type.player;
         crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,

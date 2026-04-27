@@ -35,11 +35,11 @@ public class panel_setting : Panel_Base
         setting_Item_prefab= Battle_Tool.Find_Prefabs<setting_item>("setting_item");
         close=Find<Button>("bg_main/btn_close");
         close.onClick.AddListener(() => { Close_Hide(); });
-        for (int i = 0; i < SumSave.db_sttings.Count; i++)
-        {
-            setting_item item = Instantiate(setting_Item_prefab, crt_setting);
-            item.Init(i, SumSave.db_sttings[i].option_setting.Split(' '), SumSave.crt_settingold.user_setting[i]);
-        }
+        //for (int i = 0; i < SumSave.db_sttings.Count; i++)
+        //{
+        //    setting_item item = Instantiate(setting_Item_prefab, crt_setting);
+        //    item.Init(i, SumSave.db_sttings[i].option_setting.Split(' '), SumSave.crt_settingold.user_setting[i]);
+        //}
         
     }
     /// <summary>

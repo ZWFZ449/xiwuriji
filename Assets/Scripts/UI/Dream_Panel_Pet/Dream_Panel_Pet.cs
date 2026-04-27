@@ -326,7 +326,8 @@ public class Dream_Panel_Pet : Panel_Base
                     case 2: dec += "基础属性\n" + enum_equip_entry_list.物理攻击+" +"+Show_Color.Red(talent.pet_talent_offectvalue*SumSave.crtHero.lv)
                             + "\n" + enum_equip_entry_list.魔法攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv)
                             + "\n" + enum_equip_entry_list.道术攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv)
-                            ; break;
+                            + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")");
+                        ; break;
                     case 3: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + "随机传送一个敌人"; break;
                     case 4: dec += "击杀后追击另一个目标\n每次触发消耗最大Hp的"+Show_Color.Red("10%"); break;
                     case 5: dec += "攻击目标时 "+ Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red("无视防御") + " 效果"; ; break;
@@ -341,10 +342,10 @@ public class Dream_Panel_Pet : Panel_Base
                     case 1:dec += "物理伤害 + " + Show_Color.Red( talent.pet_talent_offectvalue )+ " %"; break;
                     case 2: dec += "魔法伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
                     case 3: dec += "召唤兽伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
-                    case 4: dec += "物理防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv); break;
-                    case 5: dec += "魔法防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv);break;
-                    case 6: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv)+" Hp";break;
-                    case 7: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv) + " Mp"; break;
+                    case 4: dec += "物理防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv) + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")"); break;
+                    case 5: dec += "魔法防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv) + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")"); ; break;
+                    case 6: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv)+" Hp" + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")"); ; break;
+                    case 7: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv) + " Mp" + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")"); ; break;
                     case 8: dec += "受到物理伤害减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
                     case 9: dec += "受到魔法伤害减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
                     case 11: dec += "躲避 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " "; break;

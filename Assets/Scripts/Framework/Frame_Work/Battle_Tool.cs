@@ -27,6 +27,27 @@ public static class Battle_Tool
         SumSave.crt_bags.Get(Obtain_Int.Get(index), maxnumber, isverify);
     }
     /// <summary>
+    /// 判断职业名称
+    /// </summary>
+    /// <returns></returns>
+    public static string Obtain_Talent_Name()
+    {
+        string name = "";
+        if(SumSave.crtHero.job==0||SumSave.crtHero.SelectPos==-1)return name;
+        if (SumSave.crtHero.job != 0)
+        {
+            //
+            for (int i = 0; i < SumSave.db_player_talent_types.Count; i++)
+            {
+                if (SumSave.crtHero.job == SumSave.db_player_talent_types[i].talent_type_job)
+                {
+                    return SumSave.db_player_talent_types[i].talent_type_name[SumSave.crtHero.SelectPos];
+                }
+            }
+        }
+        return name;
+    }
+    /// <summary>
     /// 获取货币
     /// </summary>
     /// <param name="unit">单位</param>

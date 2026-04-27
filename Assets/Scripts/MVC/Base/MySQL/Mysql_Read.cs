@@ -176,9 +176,17 @@ public static class Mysql_Read
              reader.GetInt32(reader.GetOrdinal("battle_range")),
              0,//reader.GetInt32(reader.GetOrdinal("move_speed")),//battle_damage
              0,//reader.GetInt32(reader.GetOrdinal("battle_def")),
-             list, 0,0,0,
+             list, 0, 
+             reader.GetInt32(reader.GetOrdinal("damage_reduction")),
+             0,//reader.GetInt32(reader.GetOrdinal("magic_damage_reduction")),
              reader.GetInt32(reader.GetOrdinal("move_speed"))
              );
+        /*
+         * long battle_maxhp, int battle_maxmp, long hp, int mp, int dc, int dc2, int mac,
+        int mac2, int ac, int ac2, int sc, int sc2, int mc, int mc2, int hit, int dodge, int crit, int critDmg, int hpRegen, int mpRegen,
+        int battle_hp, int battle_mp, int battle_ac, int battle_mac, int battle_dc, int battle_sc, int battle_mc, int battle_speed, int battle_range, int battle_Damage, int battle_def,
+        List<(enum_battle_pet_talent_list, int, int)> buffList,int lucky,int damage_reduction, int magic_damage_reduction,int move_speed
+         */
 #if UNITY_EDITOR
         UI.UI_Manager.I.GetEquipSprite("monster/", item.crt_name);
 #elif UNITY_ANDROID
