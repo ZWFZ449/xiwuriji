@@ -10,19 +10,19 @@ using UnityEngine.UI;
 public class panel_hero_equip : PanelBase
 {
     /// <summary>
-    /// Ó¢ĞÛ×°±¸Ãæ°å
+    /// è‹±é›„è£…å¤‡é¢æ¿
     /// </summary>
     private Transform m_pos_brom;
     /// <summary>
-    /// Ó¢ĞÛ×°±¸Ãæ°å
+    /// è‹±é›„è£…å¤‡é¢æ¿
     /// </summary>
     private GridLayoutGroup  m_grid_hero_equip;
     /// <summary>
-    /// Ó¢ĞÛ×°±¸ÏÔÊ¾ÁĞ±í
+    /// è‹±é›„è£…å¤‡æ˜¾ç¤ºåˆ—è¡¨
     /// </summary>
     private hero_equip_item hero_equip_item_prefab;
 
-    private hero_Resources_item hero_Resources_item_prefab;
+    private hero_Resources_item hero_Resources_item_prefab; 
 
     private Dream_Panel_Bag dream_Panel_Bag;
 
@@ -62,25 +62,25 @@ public class panel_hero_equip : PanelBase
     public void Select_Bag(dream_BagItem item,Panel_BagType bagType)
     {
         m_grid_hero_equip.cellSize= new Vector2(540,1228);
-        Instantiate(hero_equip_item_prefab, m_pos_brom).Init(item,bagType);
-        if (bagType != Panel_BagType.ÒÑ×°±¸)
-        Equip_Compare(item);//×°±¸¶Ô±È
+        Instantiate(hero_equip_item_prefab, m_pos_brom).Init(item,bagType); 
+        if (bagType != Panel_BagType.å·²è£…å¤‡)
+        Equip_Compare(item);//è£…å¤‡å¯¹æ¯”
     }
     /// <summary>
-    /// ×°±¸¶Ô±È
+    /// è£…å¤‡å¯¹æ¯”
     /// </summary>
     /// <param name="item"></param>
     /// <param name="bagType"></param>
     private void Equip_Compare(dream_BagItem item)
     {
-        List<Bag_Base_VO> equips = SumSave.crt_equips.Get(Dream_User_Equip_Type.×°±¸);
+        List<Bag_Base_VO> equips = SumSave.crt_equips.Get(Dream_User_Equip_Type.è£…å¤‡);
         for (int i = 0; i < equips.Count; i++)
         {
             if (equips[i].StdMode == item.Data.StdMode)
             {
                 dream_BagItem bagItem = new dream_BagItem();
                 bagItem.Data = equips[i];
-                Instantiate(hero_equip_item_prefab, m_pos_brom).Init(bagItem, Panel_BagType.Õ¹Ê¾);
+                Instantiate(hero_equip_item_prefab, m_pos_brom).Init(bagItem, Panel_BagType.å±•ç¤º);
             }
         }
     }
