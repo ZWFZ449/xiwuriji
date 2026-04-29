@@ -112,6 +112,7 @@ public  static class Tool_State
 
                     break;
             }
+            dec+="\n"+item.dec;
         }
         return dec;
     }

@@ -188,7 +188,6 @@ namespace MVC
             if (Terget == null) return;
             BaseBattleAttack monster = Terget.GetComponent<BaseBattleAttack>();
             if (monster.oneselfHealthState.isDead) return;//结战斗
-            float damage = Base_Damage(monster);
             int battle_Damage = 0;//真实伤害
             Dictionary<int, db_skill_vo> skill_list = SumSave.crt_skill.Set_Current_skill();
             int skilldamage = 0;
@@ -212,7 +211,7 @@ namespace MVC
                                         {
                                             if (skill == base_skill)
                                             {
-                                                skilldamage+= value;
+                                                skilldamage += value;
                                             }
                                         }
                                     }
@@ -227,9 +226,9 @@ namespace MVC
             if ((Skill_Effect_Type)skill.EffectType == Skill_Effect_Type.单体 || (Skill_Effect_Type)skill.EffectType == Skill_Effect_Type.群体)
             {
                 skilldamage += skill.Power + skill.DefPowers[skill.SetLv()];
-                damage = damage * (skilldamage) / 100;
                 if (skill.skill_damages.Count> skill.SetLv()) battle_Damage = skill.skill_damages[skill.SetLv()];
             }
+            float damage = Base_Damage(monster, skilldamage);
             switch ((Skill_Effect_Type)skill.EffectType)
             {
                 case Skill_Effect_Type.单体:
@@ -239,10 +238,10 @@ namespace MVC
                     List<BattleHealthState> monsterList = FindTheTarget(skill, monster);
                     for (int i= 0; i < monsterList.Count; i++) 
                     {
-                        BaseBattleAttack base_monster = monsterList[i].gameObject.GetComponent<BaseBattleAttack>();
+                        BaseBattleAttack base_monster = monsterList[i].gameObject.GetComponent<BaseBattleAttack>(); 
                         if (base_monster != null)
                         {
-                            int base_damage = Base_Damage(base_monster) * (skilldamage) / 100;
+                            int base_damage = Base_Damage(base_monster, skilldamage);
                             if (base_damage < 0) base_damage = 1;
                             TakeDamage(base_damage, base_monster, battle_Damage);
                         }
@@ -459,11 +458,21 @@ namespace MVC
             }
         }
 
-        private int Base_Damage(BaseBattleAttack monster)
+        private int Base_Damage(BaseBattleAttack monster,int skilldamage=100)
         {
             int damage = 0;
-            damage = defense(monster, data.hero_type);
-
+            switch (data.type)
+            {
+                case Battle_Game_Type.player:
+                case Battle_Game_Type.call:
+                    damage = defense(monster, data.hero_type, skilldamage);
+                    break;
+                case Battle_Game_Type.monster:
+                case Battle_Game_Type.Boss:
+                case Battle_Game_Type.Activity_Monster:
+                    damage = defense(monster, data.data.dc2 > data.data.mc2 ? Hero_Type.战士 : Hero_Type.法师, skilldamage);
+                    break;
+            }
             return damage;
         }
 
@@ -474,7 +483,7 @@ namespace MVC
         /// <param name="type">类型</param>
         /// <param name="isBackstab">是否背刺</param>
         /// <returns></returns>
-        private int defense(BaseBattleAttack monster, Hero_Type type, int isBackstab=1)
+        private int defense(BaseBattleAttack monster, Hero_Type type, int skilldamage = 100)
         {
             int damage = 0;
             int def = 0;
@@ -552,7 +561,7 @@ namespace MVC
                         break;
                 }
             }
-            damage = damage - def;
+            damage = damage * skilldamage / 100 - def;
             if (damage <= 0) damage = 1;
             return damage;
         }
@@ -563,6 +572,14 @@ namespace MVC
             {
                 //传递消息，未命中;
                 exist = true;
+            }
+            else
+            {
+                //传递消息，命中;
+                if (Random.Range(0, 100) > Data.data.hit - monster.Data.data.dodge)
+                { 
+                    exist = true;
+                }
             }
             return exist;
         }

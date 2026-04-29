@@ -175,6 +175,9 @@ public static class Tool_Battle
 
                     //}
                     break;
+               case enum_talent_offect_list.弹道:
+                    AddSkillBuff(talent, skill_list);
+                    break;
             }
 
         }//角色天赋
@@ -297,7 +300,7 @@ public static class Tool_Battle
                 {
                     for (int i = 0; i < suit.suit_list.Count; i++)
                     {
-                        if (suit.suit_list[i].Item1 < item.Value)
+                        if (suit.suit_list[i].Item1 <= item.Value)
                         {
                             switch ((Suit_Type)suit.suit_list[i].Item2)
                             {
@@ -783,7 +786,7 @@ public static class Tool_Battle
     /// <returns></returns>
     public static db_vip Obtain_Vip()
     {
-        db_vip crt_vip = null;
+        if (crt_vip != null) return crt_vip;
         int sum = (int.Parse)(SumSave.crt_global_gift.GetGiftPoints);
         if (sum == 0) return crt_vip;
         for (int i = 0; i < SumSave.db_vip_list.Count; i++)
@@ -1303,7 +1306,7 @@ public static class Tool_Battle
     public static void InitEighted()
     {
         eighteditems.Clear();
-        for (int i = 0; i < System.Enum.GetNames(typeof(enum_equip_quality_list)).Length; i++)
+        for (int i = 0; i < Enum.GetNames(typeof(enum_equip_quality_list)).Length; i++)
         {
             
             WeightedItem item = new WeightedItem(i + 1, QualityWeighted[i]);
@@ -1378,6 +1381,7 @@ public static class Tool_Battle
                                 {
                                     if (bag.Name == "新手剑")
                                     {
+                                        dics_3.Add(1001);
                                         dics_3.Add(1002);
                                         dics_3.Add(1008);
                                         dics_3.Add(1014);

@@ -430,7 +430,7 @@ public class Dream_Panel_Hero : Panel_Base
             {
                 if (lv == 0)
                 {
-                    dec += "\n点击确定开启 "+data.talent_name + "\n";
+                    dec += "点击确定开启 "+data.talent_name + "\n";
                     if (SumSave.crtHero.SelectPos == -1)
                     {
                         dec += Show_Color.Red("重要提醒:仅可选择一个分支提升");
@@ -438,7 +438,7 @@ public class Dream_Panel_Hero : Panel_Base
                 }
                 else
                 {
-                    dec += "\n点击确定提升 " + data.talent_name + "\n";
+                    dec += "点击确定提升 " + data.talent_name + "\n";
                 }
                 Alert.Show(data.talent_name, dec, upLvTalent, data);
 
@@ -474,9 +474,9 @@ public class Dream_Panel_Hero : Panel_Base
             case enum_talent_offect_list.物理攻击:
             case enum_talent_offect_list.魔法攻击:
             case enum_talent_offect_list.道术攻击:
-            case enum_talent_offect_list.防御值:
             case enum_talent_offect_list.躲避:
             case enum_talent_offect_list.命中:
+            case enum_talent_offect_list.防御值:
                 if (data.correlation_skill == -1)
                 {
                     dec += "[被动效果]\n" + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "";
@@ -597,6 +597,17 @@ public class Dream_Panel_Hero : Panel_Base
                     skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
                     dec += "[战斗效果]\n" + "技能 " + Show_Color.Yellow(skill_name) + " 攻击时" + data.talent_offect_value[index] + "%" + "击退敌人";
 
+                }
+                break;
+            case enum_talent_offect_list.弹道:
+                if (data.correlation_skill == -1)
+                {
+                    dec += "[战斗效果]\n" + enum_talent_offect_list.弹道+" * "+ data.talent_offect_value[index];
+                }
+                else
+                {
+                    skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+                    dec += "[战斗效果]\n" + "技能 " + Show_Color.Yellow(skill_name) + " " + enum_talent_offect_list.弹道 + " * " + data.talent_offect_value[index];
                 }
                 break;
         }

@@ -390,23 +390,33 @@ public class PanelBattle : PanelBase
     /// </summary>
     private void crate_monster()
     {
+        IsBoss = true;
+        for (int i = 0; i < monster_list.Count; i++)
+        {
+            if (monster_list[i].GetComponent<BattleHealthState>().isDead)
+            {
+                monster_list[i].SetActive(false);
+                monster_list.RemoveAt(i);
+                i--;
+            }
+            else
+            {
+                if (monster_list[i].GetComponent<BaseBattleAttack>().Data.type == Battle_Game_Type.Boss)
+                {
+                    IsBoss = false;
+                }
+            }
+        }
         //判断是否生成boss
         if (map_crate_boss_condition >= crt_map.map_crate_boss_condition[crt_map.GetMapIntensityDrop - 1])
         {
             if (Meet_maposs_criteria(crt_map.map_boss[crt_map.GetMapIntensityDrop - 1]))
             {
+                if (IsBoss) map_crate_boss_condition = 0;
                 Generate_Boss_Monster(crt_map.map_boss[crt_map.GetMapIntensityDrop - 1]);
             }
         }
-        for (int i = 0; i < monster_list.Count; i++)
-        {
-            if (monster_list[i].GetComponent<BattleHealthState>().isDead)
-            { 
-                monster_list[i].SetActive(false);
-                monster_list.RemoveAt(i);
-                i--; 
-            }
-        }
+      
         int max = (int)MathF.Min(crt_map.map_crate_number_monster[crt_map.GetMapIntensityDrop - 1],
             crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] - monster_list.Count);
         if (max > 0)
@@ -424,50 +434,6 @@ public class PanelBattle : PanelBase
     /// </summary>
     private Dictionary<string,int> Generate_Boss_Time = new Dictionary<string, int>();
 
-    /// <summary>
-    /// 判断是否自动boss
-    /// </summary>
-    private void Auto_Generate_Bossold()
-    {
-        if(!IsBoss)return;
-        for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
-        {
-            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-            if (boss.Item2 > 0)
-            {
-                List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-                if (list.Count == 2)
-                {
-                    if (!Search_Generate_Boss_Time(list[0]))
-                    {
-                        //不存在boss跳过
-                        break;
-                    }
-                    //计算过去了多久
-                    int spanSeconds = Battle_Tool.SettlementTransport(list[1], 2);
-                    //判断是否到了刷新时间
-                    if (Generate_Boss_Time[list[0]] <= spanSeconds)
-                    {
-                        //判断是否满足召唤条件
-                        Need_Condition(common_items_list.Boss召唤卷轴, 1);
-                        if (Return_Condition())
-                        {
-                            Alert_Dec.Show("召唤 " + list[0] + " 成功");
-                            Generate_Boss_Monster(list[0]);
-                            SumSave.crt_setting.battle_Boss_list[i] = (
-                                list[0] + "+" +
-                                UnifiedDateTime.ToString(UnifiedDateTime.FromString(list[1]).AddSeconds(Generate_Boss_Time[list[0]])),
-                                boss.Item2 - 1);
-                            SumSave.crt_setting.MysqlData();
-                        }
-                        return;
-                    }
-                }
-
-            }
-        }
-
-    }
     private void Auto_Generate_Boss()
     {
         if (!IsBoss) return;
@@ -492,7 +458,6 @@ public class PanelBattle : PanelBase
             }
 
         }
-
         for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
         {
             (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
@@ -520,8 +485,6 @@ public class PanelBattle : PanelBase
 
             }
         }
-
-
     }
     /// <summary>
     /// 符合刷新条件
@@ -552,11 +515,32 @@ public class PanelBattle : PanelBase
         if (is_true)
         {
             Tool_Battle.SetBossTime(value, Boss_Time.Item1, Tool_UI.ToStandardFormat(SumSave.nowtime >= DateTime.Now ? SumSave.nowtime : DateTime.Now));
-            //添加boss列表
-            //SumSave.crt_setting.battle_Boss_list.Add(((value + "+" + SumSave.nowtime), 0));
-            //SumSave.crt_setting.MysqlData();
         }
-      
+        if (!is_true)
+        {
+            for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+            {
+                (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+                List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+                if (list.Count == 2)
+                {
+                    if (list[0] == value)//刷新召唤
+                    {
+                        if (int.Parse(list[1]) > 0) 
+                        {
+                            SumSave.crt_setting.battle_Boss_list[i] = (
+                                       list[0] + "+" + (int.Parse(list[1]) - 1),
+                                       boss.Item2);
+                            SumSave.crt_setting.MysqlData();
+                            is_true = true;
+                            break;
+                        }
+                       
+                    }
+                }
+            }
+        }
+
         return is_true;
     }
     /// <summary>
@@ -951,7 +935,10 @@ public class PanelBattle : PanelBase
 
     private bool IsBoss = true;
 
-
+    /// <summary>
+    /// 生成boss
+    /// </summary>
+    /// <param name="specify"></param>
     private void Generate_Boss_Monster(string specify)
     {
         //每次只刷新一个boss

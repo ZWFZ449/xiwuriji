@@ -1,4 +1,5 @@
 using Common;
+using Components;
 using MVC;
 using System;
 using System.Collections;
@@ -45,8 +46,28 @@ public class dream_setting_item : Base_Mono
     }
 
     private void send()
-    { 
-    transform.parent.parent.parent.parent.parent.parent.SendMessage("DreamSetting", currentItem);
+    {
+        if (currentItem.Item1 == 2)
+        {
+            Bag_Base_VO vo = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == currentItem.Item3);
+            if (vo != null)
+            {
+                if (SumSave.crtHero.lv >= vo.need_lv)
+                {
+                    Send_DreamSetting();
+                }else Alert_Dec.Show("等级不足");
+            }
+        }
+        else Send_DreamSetting();
+    }
+
+    /// <summary>
+    /// 设置药品
+    /// </summary>
+    private void Send_DreamSetting()
+    {
+        transform.parent.parent.parent.parent.parent.parent.SendMessage("DreamSetting", currentItem);
+
     }
     /// <summary>
     /// 输入框内容

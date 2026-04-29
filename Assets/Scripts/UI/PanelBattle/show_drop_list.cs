@@ -138,7 +138,7 @@ public class show_drop_list : Base_Mono
                 index++;
                 if (!drop_list.ContainsKey(index))
                 {
-                    drop_list.Add(index, (data.Item2.map_boss[data.Item1] + "\n" + Show_Color.Red("击杀时刻:" + DateTime.Now), new List<Bag_Base_VO>()));
+                    drop_list.Add(index, (data.Item2.map_boss[data.Item1-1] + "\n" + Show_Color.Red("击杀时刻:" + DateTime.Now), new List<Bag_Base_VO>()));
                 }
                 Show_Bag(data.Item2.drop_value, Drop_Type.逐个掉落, data.Item2);
                 Show_Bag(data.Item2.map_drop, Drop_Type.固定掉落, data.Item2);

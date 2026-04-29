@@ -1,4 +1,6 @@
+using Common;
 using MVC;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UI;
@@ -37,8 +39,8 @@ public class panel_hero_equip : PanelBase
         dream_Panel_Bag = UI_Manager.I.GetPanel<Dream_Panel_Bag>();
         hero_equip_item_prefab = Tool_UI.Find_Prefabs<hero_equip_item>("hero_equip_item");
         hero_Resources_item_prefab = Tool_UI.Find_Prefabs<hero_Resources_item>("hero_Resources_item");
-        m_pos_brom = GetComponent<Transform>();
-        m_grid_hero_equip = GetComponent<GridLayoutGroup>();
+        m_pos_brom = Find<Transform>("Scroll View/Viewport/Content");
+        m_grid_hero_equip = m_pos_brom.GetComponent<GridLayoutGroup>();
     }
     protected void Refresh()
     {
@@ -54,14 +56,35 @@ public class panel_hero_equip : PanelBase
     public override void Show()
     {
         base.Show();
-        ClearObject(m_pos_brom,1);
+        ClearObject(m_pos_brom,0);
     }
 
     public void Select_Bag(dream_BagItem item,Panel_BagType bagType)
     {
         m_grid_hero_equip.cellSize= new Vector2(540,1228);
         Instantiate(hero_equip_item_prefab, m_pos_brom).Init(item,bagType);
+        if (bagType != Panel_BagType.已装备)
+        Equip_Compare(item);//装备对比
     }
+    /// <summary>
+    /// 装备对比
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="bagType"></param>
+    private void Equip_Compare(dream_BagItem item)
+    {
+        List<Bag_Base_VO> equips = SumSave.crt_equips.Get(Dream_User_Equip_Type.装备);
+        for (int i = 0; i < equips.Count; i++)
+        {
+            if (equips[i].StdMode == item.Data.StdMode)
+            {
+                dream_BagItem bagItem = new dream_BagItem();
+                bagItem.Data = equips[i];
+                Instantiate(hero_equip_item_prefab, m_pos_brom).Init(bagItem, Panel_BagType.展示);
+            }
+        }
+    }
+
     public void Select_Resources(material_item item, Panel_BagType bagType)
     {
         m_grid_hero_equip.cellSize = new Vector2(1060, 840);

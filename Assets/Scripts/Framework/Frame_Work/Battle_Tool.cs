@@ -41,7 +41,7 @@ public static class Battle_Tool
             {
                 if (SumSave.crtHero.job == SumSave.db_player_talent_types[i].talent_type_job)
                 {
-                    return SumSave.db_player_talent_types[i].talent_type_name[SumSave.crtHero.SelectPos];
+                    return SumSave.db_player_talent_types[i].talent_type_name[SumSave.crtHero.SelectPos-1];
                 }
             }
         }
