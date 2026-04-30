@@ -94,7 +94,7 @@ public class Dream_Panel_Bag : Panel_Base
                 break;
             case Panel_BagType.一键出售:
                 m_curPanel_BagType = Panel_BagType.装备;
-                OneClickSell();
+                Show_Sell();
                 break;
 
             case Panel_BagType.已装备:
@@ -103,10 +103,15 @@ public class Dream_Panel_Bag : Panel_Base
                 break;
         }
     }
+
+    private void Show_Sell()
+    { 
+        Alert.Show("一键出售", "将自动出售背包中所有未锁定的装备\n请检查是否出售", OneClickSell); 
+    }
     /// <summary>
     /// 一键出售
     /// </summary>
-    private void OneClickSell()
+    private void OneClickSell(object obj)
     {
         List<Bag_Base_VO> baglist = SumSave.crt_bags.Get_Bag_List();
         int moeny = 0;//回收金币
