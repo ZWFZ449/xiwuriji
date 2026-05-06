@@ -65,7 +65,7 @@ namespace MVC
                         int login = 0;
                         while (mysqlReader.Read())
                         {
-                            login = mysqlReader.GetInt32(mysqlReader.GetOrdinal("login"));
+                            login = mysqlReader.GetInt32(mysqlReader.GetOrdinal("login"));  
                         }
                         if (login != user_login)
                         {
