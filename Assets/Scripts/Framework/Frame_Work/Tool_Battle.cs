@@ -749,7 +749,7 @@ public static class Tool_Battle
                 {
                     exp_bonus += 20;
                     gold_bonus += 20;
-                    drop_bonus += 10;
+                    drop_bonus += 5; 
                     boss_cd += 5;
                 }
             }

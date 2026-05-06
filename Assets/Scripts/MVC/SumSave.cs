@@ -102,34 +102,12 @@ namespace Common
         /// </summary>
         public static user_setting_type_vo crt_setting_type;
        
-        /// <summary>
-        /// 种植数据
-        /// </summary>
-        public static user_plant_vo crt_plant;
-        /// <summary>
-        /// 自身孵化数据
-        /// </summary>
-        public static db_pet_vo_old crt_hatching;
-        /// <summary>
-        /// 自身探索数据
-        /// </summary>
-        public static user_explore_vo crt_explore;
-        /// <summary>
-        /// 自身宠物
-        /// </summary>
-        public static user_pet_vo crt_pet_Old=new user_pet_vo();
-        /// <summary>
-        /// 自身宠物列表 
-        /// </summary>
-        public static List<db_pet_vo_old> crt_pet_list1=new List<db_pet_vo_old>();
+         
         /// <summary>
         /// 炼丹数据
         /// </summary>
         public static bag_seed_vo crt_seeds;
-        /// <summary>
-        /// 自身小世界数据
-        /// </summary>
-        public static user_world_vo crt_world;
+        
         /// <summary>
         /// 称号提供极品率
         /// </summary>
@@ -159,19 +137,11 @@ namespace Common
         /// <summary>
         /// 自身签到数据
         /// </summary>
-        public static user_signin_vo crt_signin;
-        /// <summary>
-        /// 自身任务引导
-        /// </summary>
-        public static user_greenhand_vo crt_greenhand;
+        public static user_signin_vo crt_signin; 
         /// <summary>
         /// 滚动消息列表
         /// </summary>
-        public static List<(int, string, string)> crt_message_window;
-        /// <summary>
-        /// 自身累计奖励
-        /// </summary>
-        public static user_Accumulatedrewards_vo crt_accumulatedrewards;
+        public static List<(int, string, string)> crt_message_window; 
    
         /// <summary>
         /// 世界boss排行榜
@@ -245,32 +215,7 @@ namespace Common
         /// 读取怪物数据
         /// </summary>
         public static List<crtMaxHeroVO> olddb_monsters;
-        /// <summary>
-        /// 读取植物列表
-        /// </summary>
-        public static List<user_plant_vo> db_plants;
-        /// <summary>
-        /// 读取植物列表
-        /// </summary>
-        public static Dictionary<string, user_plant_vo> db_plants_dic;
-
-        /// <summary>
-        /// 宠物列表
-        /// </summary>
-        public static List<db_pet_vo_old> db_pet_old;
-        /// <summary>
-        /// 宠物字典
-        /// </summary>
-        public static Dictionary<string, db_pet_vo_old> db_pet_dic;
-
-        /// <summary>
-        /// 宠物探索列表
-        /// </summary>
-        public static List<user_pet_explore_vo> db_pet_explore;
-        /// <summary>
-        /// 宠物探索字典
-        /// </summary>
-        public static Dictionary<string, user_pet_explore_vo> db_pet_explore_dic;
+         
         /// <summary>
         /// 种子炼丹列表
         /// </summary>
@@ -302,11 +247,7 @@ namespace Common
         /// <summary>
         /// 收集物品列表
         /// </summary>
-        public static List<db_collect_vo> db_collect_vo;
-        /// <summary>
-        /// 累积奖励列表
-        /// </summary>
-        public static db_Accumulatedrewards_vo db_Accumulatedrewards;
+        public static List<db_collect_vo> db_collect_vo; 
         /// 命运殿堂列表
         /// </summary>
         public static List<db_fate_vo> db_fate_list;
@@ -318,18 +259,7 @@ namespace Common
         /// 造化炉合成列表
         /// </summary>
         public static List<db_formula_vo> db_formula_list;
-        /// <summary>
-        /// 无尽模式奖励表
-        /// </summary>
-        public static List<db_EndlessBattle_vo> db_EndlessBattle_list;
-        /// <summary>
-        /// 特殊物品的强化需求
-        /// </summary>
-        public static List<db_strengthen_need_Vo> db_strengthen_need_list;
-        /// <summary>
-        ///  特殊装备的套装属性
-        /// </summary>
-        public static List<db_equip_suit_vo> db_Equip_Suits;
+        
 
         #endregion
 
@@ -349,17 +279,7 @@ namespace Common
         /// <summary>
         /// 战斗刷新时间
         /// </summary>
-        public static float WaitTime = 5f;
-        /// <summary>
-        /// 大世界新手引导
-        /// </summary>
-        public static Dictionary<int, GreenhandGuide_TotalTaskVO> GreenhandGuide_TotalTasks;
-        /// <summary>
-        /// 邮件列表
-        /// </summary>
-        public static List<db_mail_vo> Db_Mails;
-
-        public static user_mail_vo CrtMail;
+        public static float WaitTime = 5f; 
         /// <summary>
         /// 判断网络开关
         /// </summary>

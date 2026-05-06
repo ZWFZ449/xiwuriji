@@ -89,12 +89,12 @@ public class offect_signin : Base_Mono
         int money = 1000000;
         string dec = "\n " + Show_Color.Red(money) + " " + currency_unit.金币;
         dec += "\n " + common_items_list.Boss召唤卷轴 + "*" + Show_Color.Red(10);
-        Color c = Tool_Battle.IsBuff(common_Buff.月卡) ? GameColors.Uncommon : GameColors.Common;
+        Color c = Tool_Battle.IsBuff(common_Buff.月卡) ? GameColors.Uncommon : GameColors.Common; 
 
         dec += Colorize("\n" + common_Buff.月卡 + "福利\n", c);
         dec += Colorize(enum_equip_entry_list.金币掉落 + "+20%\n", c);
         dec += Colorize(enum_equip_entry_list.经验加成 + "+20%\n", c);
-        dec += Colorize(enum_equip_entry_list.怪物爆率 + "+20%\n", c);
+        dec += Colorize(enum_equip_entry_list.怪物爆率 + "+5%\n", c);
         dec += Colorize("Boss刷新时间" + "-5%\n", c);
         dec += Colorize("提前查阅物品掉落属性\n", c);
         if (crt_vip != null)

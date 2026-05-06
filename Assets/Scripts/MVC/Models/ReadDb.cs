@@ -26,22 +26,7 @@ public static class ReadDb
     public static db_lv_vo Read_lv(MySqlDataReader reader)
     { 
         return new db_lv_vo(reader.GetInt32(reader.GetOrdinal("lv")), reader.GetInt64(reader.GetOrdinal("exp")));
-    }
-    public static db_EndlessBattle_vo Read_EndlessBattle(MySqlDataReader reader)
-    {
-        string[] goods = reader.GetString(reader.GetOrdinal("value")).Split(' ');
-        int neednumber = reader.GetInt32(reader.GetOrdinal("need_number"));
-        int maxnumber= reader.GetInt32(reader.GetOrdinal("max_number"));
-        return new db_EndlessBattle_vo(goods, neednumber, maxnumber);
-    }
-
-    public static db_strengthen_need_Vo Read_needstrengthen(MySqlDataReader reader)
-    {
-        string need_value = reader.GetString(reader.GetOrdinal("need_value"));
-        string[] need_value_list = reader.GetString(reader.GetOrdinal("need_list")).Split('|');
-        int need_lv= reader.GetInt32(reader.GetOrdinal("need_lv"));
-        return new db_strengthen_need_Vo(need_value, need_lv, need_value_list);
-    }
+    } 
     public static db_formula_vo Read_formula(MySqlDataReader reader)
     {
         int _formula_type= reader.GetInt32(reader.GetOrdinal("formula_type"));
@@ -86,33 +71,8 @@ public static class ReadDb
         item.par= reader.GetInt32(reader.GetOrdinal("par"));
         item.isdownloadable = reader.GetInt32(reader.GetOrdinal("isdownloadable"));
         return item;
-    }
-
-
-
-
-
-    public static user_Accumulatedrewards_vo Read_Accumulatedrewards(MySqlDataReader reader)
-    {
-        string _user_value = reader.GetString(reader.GetOrdinal("accumulated_rewards"));
-        int Real_recharge = reader.GetInt32(reader.GetOrdinal("Real_recharge"));
-        int sum_recharge = reader.GetInt32(reader.GetOrdinal("sum_recharge"));
-       return new user_Accumulatedrewards_vo(_user_value, Real_recharge, sum_recharge);
-    }
-
-
-
-    public static db_mail_vo Read_mail(MySqlDataReader reader)
-    {
-        int _mail_id = reader.GetInt32(reader.GetOrdinal("id"));
-        DateTime _mail_time = Convert.ToDateTime(reader.GetString(reader.GetOrdinal("mail_time")));
-        int _mail_par = reader.GetInt32(reader.GetOrdinal("mail_par"));
-        string _uid = reader.GetString(reader.GetOrdinal("uid"));
-        string _user_value = reader.GetString(reader.GetOrdinal("user_value"));
-        string _dec = reader.GetString(reader.GetOrdinal("dec"));
-        int _moeny = reader.GetInt32(reader.GetOrdinal("moeny"));
-        return new db_mail_vo(_mail_id, _mail_time, _mail_par, _uid, _user_value, _dec, _moeny);
-    }
+    } 
+ 
     public static global_promotion_vo Read(MySqlDataReader reader, global_promotion_vo item,string uid)
     {
         string value = reader.GetString(reader.GetOrdinal("promotion_value"));
@@ -154,12 +114,7 @@ public static class ReadDb
             );
         return item;
     }
-    public static user_mail_vo Read(MySqlDataReader reader, user_mail_vo item)
-    {
-        item.user_value = reader.GetString(reader.GetOrdinal("user_value"));
-        item.Init();
-        return item;
-    }
+    
     public static user_player_Buff Read(MySqlDataReader reader, user_player_Buff item)
     {
         item.player_baff = reader.GetString(reader.GetOrdinal("player_Buff"));
@@ -172,38 +127,7 @@ public static class ReadDb
         item.collect_value = reader.GetString(reader.GetOrdinal("collect_value"));
         //item.collect_suit_value = reader.GetString(reader.GetOrdinal("collect_suit_value"));
         return item;
-    }
-
-    public static user_greenhand_vo Read(MySqlDataReader reader, user_greenhand_vo item)
-    {
-        item.user_value = reader.GetString(reader.GetOrdinal("valuelist"));
-        item.crt_task = reader.GetInt32(reader.GetOrdinal("crt_task"));
-        item.Init();
-        return item;
-    }
-    public static GreenhandGuide_TotalTaskVO Read(MySqlDataReader reader, GreenhandGuide_TotalTaskVO item)
-    {
-        item.id = reader.GetInt32(reader.GetOrdinal("id"));
-        item.TaskDesc = reader.GetString(reader.GetOrdinal("TaskDesc"));
-        item.tasktype = (GreenhandGuideTaskType)Enum.Parse(typeof(GreenhandGuideTaskType), reader.GetString(reader.GetOrdinal("tasktype")));
-        item.Award = reader.GetString(reader.GetOrdinal("Award")).Split(';');
-        string[] data = reader.GetString(reader.GetOrdinal("AwardNumber")).Split(';');
-        item.taskorder = reader.GetInt32(reader.GetOrdinal("taskorder"));
-        item.taskid = reader.GetInt32(reader.GetOrdinal("taskid"));
-        item.task_dec_type = item.TaskDesc;
-        item.task_dec_value = reader.GetString(reader.GetOrdinal("task_dec_value"));
-        item.AwardNumber = new int[data.Length];
-        int i = 0;
-        foreach (string value in data)
-        {
-            item.AwardNumber[i] = int.Parse(value);
-            i++;
-        }
-        item.AwardType = reader.GetString(reader.GetOrdinal("AwardType")).Split(';');
-        item.progress = reader.GetInt32(reader.GetOrdinal("progress"));
-        return item;
-    }
-
+    } 
 
     public static bag_seed_vo Read(MySqlDataReader reader, bag_seed_vo item)
     {
@@ -230,13 +154,7 @@ public static class ReadDb
         item.Init(reader.GetString(reader.GetOrdinal("user_value")));
         return item;
     }
-    public static user_explore_vo Read(MySqlDataReader reader, user_explore_vo item)
-    {
-        item.user_value = reader.GetString(reader.GetOrdinal("user_value"));
-        item.Init();
-        return item;
-    }
-   
+    
     public static db_seed_vo Read_seed(MySqlDataReader reader)
     {
         string type = reader.GetString(reader.GetOrdinal("type"));
@@ -263,14 +181,7 @@ public static class ReadDb
         return new db_collect_vo(Name, StdMode, bonuses_type, bonuses_value);
     }
 
-    public static db_equip_suit_vo Read_equip_suit(MySqlDataReader reader)
-    {
-        string equip_name = reader.GetString(reader.GetOrdinal("equip_name"));
-        string[] equip_value = reader.GetString(reader.GetOrdinal("equip_value")).Split('|');
-        string[] equip_uplv = reader.GetString(reader.GetOrdinal("equip_uplv")).Split('|');
-        return new db_equip_suit_vo(equip_name, equip_value, equip_uplv);
-    }
-
+    
     public static user_needlist_vo Read(MySqlDataReader reader, user_needlist_vo item)
     {
         item.store_value = reader.GetString(reader.GetOrdinal("store_value"));
@@ -491,50 +402,9 @@ public static class ReadDb
         #endregion
         item.Init();
         return item;
-    }
+    } 
 
-
-
-    public static user_pet_explore_vo Read_Pass(MySqlDataReader reader, user_pet_explore_vo item)
-    {
-        item.petExploreMapName = reader.GetString(reader.GetOrdinal("petEvent_name"));
-        item.petEvent_reward = reader.GetString(reader.GetOrdinal("petEvent_reward"));
-        item.Init();
-        return item;
-    }
-
-
-    public static user_world_vo Read(MySqlDataReader reader, user_world_vo item)
-    {
-        item.World_Lv = reader.GetInt32(reader.GetOrdinal("World_Lv"));
-        item.user_value = reader.GetString(reader.GetOrdinal("user_value"));
-        item.Init();
-        return item;
-    }
-    public static user_pet_vo Read(MySqlDataReader reader, user_pet_vo item)
-    {
-        //item.pet_value = reader.GetString(reader.GetOrdinal("user_value"));
-        item.Init(reader.GetString(reader.GetOrdinal("user_value")));
-        return item;
-    }
-
-    public static db_pet_vo_old Read(MySqlDataReader reader, db_pet_vo_old item)
-    {
-        item.user_value = reader.GetString(reader.GetOrdinal("user_value"));
-        item.Init();
-        return item;
-    }
- 
-
-
-    public static db_Accumulatedrewards_vo Read_Accumulatedrewards_vo(MySqlDataReader reader)
-    {
-        string pass_value = reader.GetString(reader.GetOrdinal("pass_value"));
-        string signin_value = reader.GetString(reader.GetOrdinal("signin_value"));
-        string fate_value = reader.GetString(reader.GetOrdinal("fate_value"));
-        return new db_Accumulatedrewards_vo( pass_value, signin_value, fate_value) ;
-    }
-
+   
     public static db_vip Read_Vip(MySqlDataReader reader)
     {
         int vip_lv = reader.GetInt32(reader.GetOrdinal("vip_lv"));
@@ -559,41 +429,7 @@ public static class ReadDb
     }
 
 
-
-    public static user_plant_vo Read(MySqlDataReader reader, user_plant_vo item)
-    {
-        item.plantLeve= reader.GetInt32(reader.GetOrdinal("plantLeve"));
-        item.user_value= reader.GetString(reader.GetOrdinal("user_value"));
-        item.Init();
-        return item;
-    }
-    public static user_plant_vo Read_Pass(MySqlDataReader reader, user_plant_vo item)
-    {
-        item.plantName= reader.GetString(reader.GetOrdinal("plantType"));
-        item.plantTime= reader.GetInt32(reader.GetOrdinal("plantTime"));
-        item.HarvestMaterials= reader.GetString(reader.GetOrdinal("HarvestMaterials"));
-        item.harvestnumber = reader.GetInt32(reader.GetOrdinal("harvestnumber"));
-        item.lossnumber = reader.GetInt32(reader.GetOrdinal("lossnumber"));
-        return item; 
-    }
-
-
-    public static db_pet_vo_old Read_Pass(MySqlDataReader reader, db_pet_vo_old item)
-    {
-        item.petName= reader.GetString(reader.GetOrdinal("petName"));
-        item.petEggsName = reader.GetString(reader.GetOrdinal("petEggsName"));
-        item.hatchingTime=reader.GetInt32(reader.GetOrdinal("hatchingTime"));
-        item.hero_type= reader.GetInt32(reader.GetOrdinal("hero_type"));
-        item.crate_value= reader.GetString(reader.GetOrdinal("crate_value"));
-        item.up_value= reader.GetString(reader.GetOrdinal("up_value"));
-        item.up_base_value= reader.GetString(reader.GetOrdinal("up_base_value"));
-        item.hero_talent = reader.GetString(reader.GetOrdinal("hero_talent"));
-        item.pet_explore = reader.GetString(reader.GetOrdinal("pet_explore"));
-        item.GetNumerical();
-        return item;
-    }
  
-
     public static user_pass_vo Read(MySqlDataReader reader, user_pass_vo item)
     {
         item.data_lv = reader.GetInt32(reader.GetOrdinal("pass_lv"));

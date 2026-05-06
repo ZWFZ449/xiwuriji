@@ -12,6 +12,7 @@ namespace MVC
     /// </summary>
     public static class ConfigBattle
     {
+        /*
         /// <summary>
         /// 掉落金币
         /// </summary>
@@ -36,7 +37,7 @@ namespace MVC
         /// <summary>
         ///  读取设置
         /// </summary>
-        public static List<string> LoadSetting(BattleAttack monster, int number)
+        /*public static List<string> LoadSetting(BattleAttack monster, int number)
         {
             user_map_vo map = ArrayHelper.Find(SumSave.read_lose_map, e => e.map_index == monster.Data.map_index);
             if (map == null) return null;
@@ -315,5 +316,8 @@ namespace MVC
             }
         }
 
+    }
+}
+        */
     }
 }

@@ -228,7 +228,7 @@ public class crtMaxHeroVO
     /// <summary>
     /// 携带灵宝属性
     /// </summary>
-    public Dictionary<enum_equip_show_list, int> equip_suit_lists = new Dictionary<enum_equip_show_list, int>();
+    //public Dictionary<enum_equip_show_list, int> equip_suit_lists = new Dictionary<enum_equip_show_list, int>();
 
     /// <summary>
     /// 显示战斗力

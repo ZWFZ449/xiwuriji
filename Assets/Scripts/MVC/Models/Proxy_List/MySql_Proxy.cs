@@ -203,20 +203,7 @@ namespace MVC
                     SumSave.db_pets.Add(Mysql_Read.Read_Pet(mysqlReader));
                 }
             }
-            //        icon.sprite = UI.UI_Manager.I.GetEquipSprite("UI/pet/pet_talent/", value.pet_talent_name);
             
-        }
-        private void ReadDb_Endless()
-        {
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_endlessbattle);
-            SumSave.db_EndlessBattle_list = new List<db_EndlessBattle_vo>();
-            if (mysqlReader.HasRows)
-            {
-                while (mysqlReader.Read())
-                {
-                    SumSave.db_EndlessBattle_list.Add(ReadDb.Read_EndlessBattle(mysqlReader));
-                }
-            }
         }
         /// <summary>
         /// 获得天气
@@ -233,21 +220,7 @@ namespace MVC
                 }
             }
         }
-        /// <summary>
-        /// 读取强化需求列表
-        /// </summary>
-        public void Read_db_strengthen_needlist()
-        {
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_strengthen_needlist);
-            SumSave.db_strengthen_need_list = new List<db_strengthen_need_Vo>();
-            if (mysqlReader.HasRows)
-            {
-                while (mysqlReader.Read())
-                {
-                    SumSave.db_strengthen_need_list.Add(ReadDb.Read_needstrengthen(mysqlReader));
-                }
-            }
-        }
+     
         /// <summary>
         /// 读取造化炉合成列表
         /// </summary>
@@ -270,19 +243,7 @@ namespace MVC
         /// <summary>
         /// 累计奖励
         /// </summary>
-        public void Read_db_Accumulatedrewards()
-        {
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_accumulatedrewards);
-            SumSave.db_Accumulatedrewards = new db_Accumulatedrewards_vo("","","");
-            if (mysqlReader.HasRows)
-            {
-                while (mysqlReader.Read())
-                {
-                    SumSave.db_Accumulatedrewards = ReadDb.Read_Accumulatedrewards_vo(mysqlReader);
-                }
-            }
-        }
-
+       
         /// <summary>
         /// 读取命运殿堂列表
         /// </summary>
@@ -303,17 +264,7 @@ namespace MVC
         /// </summary>
         public void Read_Guide_TotalTask()
         {
-            SumSave.GreenhandGuide_TotalTasks = new Dictionary<int, GreenhandGuide_TotalTaskVO>();
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_basetask);
-            if (mysqlReader.HasRows)
-            {
-                while (mysqlReader.Read())
-                {
-                    GreenhandGuide_TotalTaskVO item = new GreenhandGuide_TotalTaskVO();
-                    item = ReadDb.Read(mysqlReader, item);
-                    SumSave.GreenhandGuide_TotalTasks.Add(item.taskid, item);
-                }
-            }
+           
         }
         /// <summary>
         /// 读取服务器
@@ -485,15 +436,7 @@ namespace MVC
         {
             mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_equip_suit);
 
-            SumSave.db_Equip_Suits = new List<db_equip_suit_vo>();
-
-            if (mysqlReader.HasRows)
-            {
-                while (mysqlReader.Read())
-                {
-                    SumSave.db_Equip_Suits.Add(ReadDb.Read_equip_suit(mysqlReader));
-                }
-            }
+           
 
         }
 
@@ -522,22 +465,7 @@ namespace MVC
         {
             mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_pet_explore);
 
-            SumSave.db_pet_explore = new List<user_pet_explore_vo>();
-
-            if (mysqlReader.HasRows)
-            {
-                while (mysqlReader.Read())
-                {
-                    SumSave.db_pet_explore.Add(ReadDb.Read_Pass(mysqlReader, new user_pet_explore_vo()));
-                }
-            }
-
-            List<user_pet_explore_vo> db_pet_explore = SumSave.db_pet_explore;
-            SumSave.db_pet_explore_dic = new Dictionary<string, user_pet_explore_vo>();
-            for (int i = 0; i < db_pet_explore.Count; i++)
-            {
-                SumSave.db_pet_explore_dic.Add(db_pet_explore[i].petExploreMapName, db_pet_explore[i]);
-            }
+          
 
         }
 
@@ -550,22 +478,7 @@ namespace MVC
         {
             mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_plant);
 
-            SumSave.db_plants = new List<user_plant_vo>();
-
-            if (mysqlReader.HasRows)
-            {
-                while (mysqlReader.Read())
-                {
-                    SumSave.db_plants.Add(ReadDb.Read_Pass(mysqlReader, new user_plant_vo()));
-                }
-            }
-
-            List<user_plant_vo> db_plants = SumSave.db_plants;
-            SumSave.db_plants_dic = new Dictionary<string, user_plant_vo>();
-            for (int i = 0; i < db_plants.Count; i++)
-            {
-                SumSave.db_plants_dic.Add(db_plants[i].plantName, db_plants[i]);
-            }
+           
 
         }
         /// <summary>
