@@ -45,7 +45,6 @@ public class Dream_Panel_Hero : Panel_Base
     {
         base.Initialize();
         m_info_brom=Find<Transform>("bg/show_list/Viewport/Content");
-
         p_info_item_prefab=Tool_UI.Find_Prefabs<info_item>("info_item");
         p_btn_item_prefab=Tool_UI.Find_Prefabs<btn_item>("btn_item");
         p_player_talent_item_prefab = Tool_UI.Find_Prefabs<player_talent_item>("player_talent_item");
@@ -265,7 +264,7 @@ public class Dream_Panel_Hero : Panel_Base
         }
         int index = lv - 1;
         //if (index < 0) index = 0;
-        for (int i = 0; i < data.talent_offect_value.Count; i++) 
+        for (int i = 0; i < data.talent_offect_value.Count-1; i++) 
         {
             dec += "Lv." + (i + 1) + ":" + (index >= i ? Show_Base_Lv_Talent(i, data) : Show_Color.Grey(Show_Base_Lv_Talent(i, data))) + "\n";
         }

@@ -55,6 +55,16 @@ namespace MVC
                 if(mysqlReader == null) return;
                 if (mysqlReader.HasRows)
                 {
+                    int login = 0;
+                    while (mysqlReader.Read())
+                    {
+                        login = mysqlReader.GetInt32(mysqlReader.GetOrdinal("login"));
+                    }
+                    if (login == -1)
+                    {
+                        Game_Omphalos.i.Alert_Info("该用户涉嫌违规操作");
+                        CloseMySqlDB();
+                    }
                     if (user_login == 0)
                     {
                         user_login = tool_Categoryt.Obtain_Random();
@@ -62,11 +72,11 @@ namespace MVC
                     }
                     else
                     {
-                        int login = 0;
-                        while (mysqlReader.Read())
-                        {
-                            login = mysqlReader.GetInt32(mysqlReader.GetOrdinal("login"));  
-                        }
+                        //int login = 0;
+                        //while (mysqlReader.Read())
+                        //{
+                        //    login = mysqlReader.GetInt32(mysqlReader.GetOrdinal("login"));  
+                        //}
                         if (login != user_login)
                         {
                             Game_Omphalos.i.Alert_Info("多开游戏已关闭");
@@ -154,7 +164,7 @@ namespace MVC
             }
         }
 
-        private string[] versions = new string[] {"0.2026.01", "0.2026.02" };
+        private string[] versions = new string[] {"0.2026.03", "0.2026.02" }; 
         /// <summary>
         /// 检测次数
         /// </summary>
@@ -191,7 +201,9 @@ namespace MVC
             {
                 if (versionsnumber >= 3)
                 {
-                    Close_Hide2();
+                    Alert.Show("数据库连接失败", "请更新游戏");
+                    CloseMySqlDB();
+                    return;
                 }
                 versionsnumber++;
                 Alert_Dec.Show("游戏版本不匹配，请更新游戏！");

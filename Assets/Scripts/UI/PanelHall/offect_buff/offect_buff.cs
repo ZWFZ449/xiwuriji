@@ -55,11 +55,12 @@ public class offect_buff : Base_Mono
                     Alert_Dec.Show("请输入正确的数字");
                     return;
                 }
-                Need_Condition(common_Buff.双倍经验卷轴, number);
+                Need_Condition(common_Buff.双倍经验卷轴, number); 
                 if (Return_Condition())
                 {
                     // 激活buff
                     SumSave.crt_user_unit.AddBuff(common_Buff.双倍经验卷轴.ToString(), Tool_UI.ToStandardFormat(SumSave.nowtime), number);
+                    SendNotification(NotiList.Refresh_Max_Hero_Attribute);
                     Alert_Dec.Show("激活成功");
                     Init();
                 }else Alert_Dec.Show("激活失败,材料不足"); 
@@ -87,6 +88,7 @@ public class offect_buff : Base_Mono
             }
         }
         SumSave.crt_user_unit.AddBuff(common_Buff.狂欢.ToString(), Tool_UI.ToStandardFormat(SumSave.nowtime), 24);
+        SendNotification(NotiList.Refresh_Max_Hero_Attribute);
         Init();
     }
 

@@ -266,29 +266,50 @@ public class Dream_Panel_Login : PanelBase
         if (crt_vip != null)
         {
             moeny = spanSeconds * (100 + crt_vip.characterExperience) / 100;
-        }
-        dec += "获得" + currency_unit.金币 + " " + moeny + "\n";
-        Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
-
-        for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
-        {
-            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-            List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-            if (list.Count == 2)
+            for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
             {
-                (int, string) bossid = Tool_Battle.GetBossTime(list[0]);
-                if (bossid.Item2 == "no") continue;
-                int base_time = bossid.Item1 * (100 - crt_vip.monsterHuntingInterval-(Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
-                if (base_time <= 0) base_time = 999999999;
-                int number = spanSeconds / base_time;
-                if (number > 0)
-                { 
-                    dec += "离线获得 " + list[0] + " * " + number + "\n";
-                    SumSave.crt_setting.battle_Boss_list[i] = ( list[0] + "+" + (int.Parse(list[1]) +number),
-                                 boss.Item2);
+                (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+                List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+                if (list.Count == 2)
+                {
+                    (int, string) bossid = Tool_Battle.GetBossTime(list[0]);
+                    if (bossid.Item2 == "no") continue;
+                    int base_time = bossid.Item1 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
+                    if (base_time <= 0) base_time = 999999999;
+                    int number = spanSeconds / base_time;
+                    if (number > 0)
+                    {
+                        dec += "离线获得 " + list[0] + " * " + number + "\n";
+                        SumSave.crt_setting.battle_Boss_list[i] = (list[0] + "+" + (int.Parse(list[1]) + number),
+                                     boss.Item2);
+                    }
                 }
             }
         }
+        else
+        {
+            for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+            {
+                (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+                List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+                if (list.Count == 2)
+                {
+                    (int, string) bossid = Tool_Battle.GetBossTime(list[0]);
+                    if (bossid.Item2 == "no") continue;
+                    int base_time = bossid.Item1 * (100 - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
+                    if (base_time <= 0) base_time = 999999999;
+                    int number = spanSeconds / base_time;
+                    if (number > 0)
+                    {
+                        dec += "离线获得 " + list[0] + " * " + number + "\n";
+                        SumSave.crt_setting.battle_Boss_list[i] = (list[0] + "+" + (int.Parse(list[1]) + number),
+                                     boss.Item2);
+                    }
+                }
+            }
+        }
+        dec += "获得" + currency_unit.金币 + " " + moeny + "\n";
+        Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
         Alert.Show("离线收益", dec);
         SumSave.crt_user_unit.MysqlData();//更新时间戳
         SumSave.crt_setting.MysqlData();

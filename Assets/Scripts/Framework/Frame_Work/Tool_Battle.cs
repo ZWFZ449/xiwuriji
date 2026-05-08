@@ -519,7 +519,7 @@ public static class Tool_Battle
         foreach (var item in skill_list)
         {
             int skill_lv = item.Value.SetLv();
-            if (skill_lv > 0)
+            if (skill_lv >= 0)
             {
                 if (item.Value.Job == -1)
                 {
@@ -533,7 +533,6 @@ public static class Tool_Battle
                         }
                     }
                 }
-
                 if (item.Value.skill_offect_value_list.Count > 0)
                 {
                     foreach (enum_equip_entry_list skill_effect_type in item.Value.skill_offect_value_list.Keys)
@@ -979,11 +978,12 @@ public static class Tool_Battle
         }
 
         crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus);
-        crt.crt_name = skill.show_name;
+        crt.crt_name = "召" + skill.show_name;
         crt.lv = skill.SetLv();
         crt.exp = 0;
         crt.hero_type = (Hero_Type)skill.Effect;
         crt.type = Battle_Game_Type.call;
+        //maxhp = 1; hp = 1; maxmp = 1; mp = 1; 测试
         crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky, damage_reduction, magic_damage_reduction, 0);
         return crt;

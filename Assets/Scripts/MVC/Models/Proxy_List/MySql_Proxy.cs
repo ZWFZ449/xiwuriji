@@ -76,8 +76,6 @@ namespace MVC
             //ReadDb_Endless();
             CloseMySqlDB();
         }
-
-
         /// <summary>
         /// 读取vip列表
         /// </summary>

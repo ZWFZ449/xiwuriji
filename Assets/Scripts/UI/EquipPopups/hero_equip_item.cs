@@ -230,8 +230,8 @@ public class hero_equip_item : Base_Mono
         bags.Add(data.Data);
         Refresh(bags, equips);
         SendNotification(NotiList.Refresh_Max_Hero_Attribute);
-        transform.parent.SendMessage("RefreshMain");
-        Hide();
+        //transform.parent.parent.parent.parent.SendMessage("RefreshMain");
+        Hide(true);
     }
 
     private void Refresh(List<Bag_Base_VO> bags, List<Bag_Base_VO> equips)
@@ -338,7 +338,7 @@ public class hero_equip_item : Base_Mono
         gameObject.SetActive(false);
         if (isRefresh)
         {
-            transform.parent.SendMessage("Refresh");
+            transform.parent.parent.parent.parent.SendMessage("Refresh");
         }
     }
 
@@ -390,9 +390,14 @@ public class hero_equip_item : Base_Mono
         if (data.Data.user_value != null)
         {
             string[] info = data.Data.user_value.Split(' ');
-            int strengthenlv = int.Parse(info[1]);
+            int lucky = int.Parse(info[1]);
             int quilty = int.Parse(info[2]);
             int islock = int.Parse(info[3]);
+            if (lucky > 0 &&( data.Data.StdMode == equip_type_list.武器.ToString() || data.Data.StdMode == equip_type_list.项链.ToString()))
+            {
+                c = GameColors.Alliance;
+                Get().Init(("[幸运] + "+ lucky), c);
+            }
             if (info.Length >= 5)
             {
                 //类型
@@ -523,6 +528,41 @@ public class hero_equip_item : Base_Mono
                         }
                     }
                 }
+                /*
+                
+                if (info.Length >= 6)
+                { 
+                    //宝石
+                    List<string> gem = ArrayHelper.Get_Split<string>(info[5], 'X');
+                    for (int i = 0; i < gem.Count; i++)
+                    {
+                        if (gem[i] != "")
+                        {
+                            List<string> gem_value = ArrayHelper.Get_Split<string>(gem[i], '|');
+                            if (gem_value.Count == 2)
+                            {
+                                if (gem_value[1] != "0")
+                                {
+                                    Bag_Base_VO gem_data = ArrayHelper.Find(SumSave.db_stditems, x => x.Name == gem_value[1]);
+                                    if (gem_data != null)
+                                    {
+                                        Show_Info_Base(gem_data.Shape == int.Parse(gem_value[0]));
+                                    }
+                                }
+                                else
+                                {
+                                    Bag_Base_VO gem_data = ArrayHelper.Find(SumSave.db_stditems, x => x.StdMode == "材料" && x.Shape == int.Parse(gem_value[0]));
+
+                                    if (gem_data != null)
+                                    {
+                                        c = GameColors.Common;
+                                        Get().Init(("[最优宝石] + " + gem_data.Name), c);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } */
             }
         }
         if (data.Data.suit > 0)
@@ -549,6 +589,46 @@ public class hero_equip_item : Base_Mono
                     Get().Init(Info_Suit(suit.suit_list[i]), c);
                 }
             }
+        }
+    }
+
+    private void Show_Info_Base(bool is_gem)
+    {
+        Color c = is_gem ? GameColors.Legendary : GameColors.Common;
+        if (data.Data.hp > 0)
+        {
+            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.生命值, data.Data.hp + (is_gem ? 10 : -10), c);
+        }
+        if (data.Data.mp > 0)
+        {
+            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.魔法值, data.Data.mp + (is_gem ? 5 : -5), c);
+        }
+        if (data.Data.ac > 0 || data.Data.ac2 > 0)
+        {
+            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.物理防御, data.Data.ac + " - " + data.Data.ac2 + (is_gem ? 1 : -1), c);
+        }
+        if (data.Data.mac > 0 || data.Data.mac2 > 0)
+        {
+            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.魔法防御, data.Data.mac + " - " + data.Data.mac2 + (is_gem ? 1 : -1), c);
+        }
+        if (data.Data.dc > 0 || data.Data.dc2 > 0)
+        {
+            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.物理攻击, data.Data.dc + " - " + data.Data.dc2 + (is_gem ? 1 : -1), c);
+        }
+        if (data.Data.mc > 0 || data.Data.mc2 > 0)
+        {
+            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.魔法攻击, data.Data.mc + " - " + data.Data.mc2 + (is_gem ? 1 : -1), c);
+        }
+        if (data.Data.sc > 0 || data.Data.sc2 > 0)
+        {
+            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.道术攻击, data.Data.sc + " - " + data.Data.sc2 + (is_gem ? 1 : -1), c);
         }
     }
     /// <summary>

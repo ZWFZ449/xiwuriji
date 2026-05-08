@@ -73,6 +73,7 @@ public class panel_hero_equip : PanelBase
     /// <param name="bagType"></param>
     private void Equip_Compare(dream_BagItem item)
     {
+        if (SumSave.crt_setting.user_data_settings.Count >= 4 && SumSave.crt_setting.user_data_settings[3] == 0) return; 
         List<Bag_Base_VO> equips = SumSave.crt_equips.Get(Dream_User_Equip_Type.装备);
         for (int i = 0; i < equips.Count; i++)
         {

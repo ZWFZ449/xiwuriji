@@ -24,10 +24,10 @@ public class Slider_item : Base_Mono
         slider.value = value;
     }
 
-    public void Refresh(int value,int max_value,object info)
+    public void Refresh(float value,object info)
     { 
         slider.value = value;
-        slider.maxValue = max_value;
-        this.info.text = info+" "+ slider.value+"/"+slider.maxValue;
+        //slider.maxValue = max_value;
+        this.info.text = info + "";// +" "+ slider.value+"/"+slider.maxValue;
     }
 }

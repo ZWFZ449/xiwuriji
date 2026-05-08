@@ -138,8 +138,14 @@ public class DamageTextManager : MonoBehaviour// MonoSingleton <DamageTextManage
         if (DamageTipsList.Count <= 1)
         {
             GameObject parent = GameObject.FindWithTag("DamageTextPool");
+
             for (int i = 0; i < maxDamageTextNum; i++)
             {
+                ResManger.LoadPrefabInstance("Prefabs/Show/DamageTips", (damageText) =>
+                {
+                    DamageTipsList.Enqueue(damageText);
+                    damageText.SetActive(false);
+                }, parent.transform);
                 //ResManger.LoadPrefabInstance("Show/DamageTips", (damageText) =>
                 //{
                 //    DamageTipsList.Enqueue(damageText);

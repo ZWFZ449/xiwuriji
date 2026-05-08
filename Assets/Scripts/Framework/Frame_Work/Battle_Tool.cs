@@ -161,10 +161,7 @@ public static class Battle_Tool
     public static string GetStr(object o)
     {
         return "'" + o + "'";
-    } 
-
-
-    
+    }  
     /// <summary>
     /// 获取经验
     /// </summary>
@@ -183,6 +180,7 @@ public static class Battle_Tool
                SumSave.crtHero.exp -= SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp;
                SumSave.crtMaxBattle.lv += 1;
                SumSave.crtHero.lv += 1;
+               Game_Omphalos.Refresh(Mysql_Table_Name.Dream_Users);
             }
         }
         SumSave.crtHero.MysqlData();
@@ -977,39 +975,51 @@ public static class Battle_Tool
     /// </summary>
     public static void tool_map()
     {
-        for (int i = 0; i < SumSave.read_lose_map.Count; i++)
+        for (int i = 0; i < SumSave.db_maps.Count; i++)
         {
-            string value= SumSave.read_lose_map[i].ProfitList;
-            string[] values = value.Split('&');
-            if (values.Length > 1)
+            db_map_vo map = SumSave.db_maps[i];
+            List<string> drop_value = new List<string>();
+            if (map.map_intensity_drop.Count > 0)
             {
-                for (int j = 0; j < values.Length; j++)
+                foreach (var item in map.map_intensity_drop.Keys)
                 {
-                    string[] values1 = values[j].Split(' ');
-                    if (values1.Length == 3)
-                    {
-                        if (values1[0] != values1[2])
-                            Debug.Log("配表错误 " + SumSave.read_lose_map[i].map_name + " " + values[j]);
-                        else
-                        {
-                            Bag_Base_VO bag = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == values1[0]);
-                            if (bag == null) Debug.Log("连接错误 与数据库关联错误" + SumSave.read_lose_map[i].map_name + " " + values[j]);//对应的2个表格对不上
-                        }
-                    }
-                    else Debug.Log(SumSave.read_lose_map[i].map_name + " " + values[j]);
+                    drop_value.Add(map.map_intensity_drop[item]);
                 }
             }
-            string[] monsters= SumSave.read_lose_map[i].monster_list.Split(' ');
-            for (int j = 0; j < monsters.Length; j++)
+            drop_value.Add(map.drop_value);
+            drop_value.Add(map.map_drop);
+            for (int j = drop_value.Count - 1; j >= 0; j--)
             {
-                if (monsters[j] != "")
-                {
-                    UI.UI_Manager.I.GetEquipSprite("Prefabs/monsters/", monsters[j]);
-                }
+                Show_Bag(drop_value[j]);
             }
         }
     }
 
+    /// <summary>
+    /// 显示背包
+    /// </summary>
+    /// <param name="bag_name"></param> 
+    private static void Show_Bag(string value)
+    {
+        string[] values = value.Split(';');
+        if (values.Length > 0)
+        {
+            foreach (var drop_value in values)
+            {
+                string[] drop_value_info = drop_value.Split(' ');
+                if (drop_value_info.Length > 1)
+                {
+                    string[] probability = drop_value_info[0].Split('/');
+                    if (probability.Length > 1)
+                    {
+                        if(!int.TryParse(probability[0],out int drop_probability)|| !int.TryParse(probability[1], out int _))
+                        Debug.Log(drop_value);
+                    } 
+                }
+            }
+        }
+
+    }
 
 
 }

@@ -181,10 +181,18 @@ public class data_setting_vo : Base_VO
                 case 3:
                     for (int j = 0; j < battle_Boss_list.Count; j++)
                     {
-                        if (battle_Boss_list[j].Item1 == data[i].Item3)
+                        List<string> list = ArrayHelper.Get_Split<string>(battle_Boss_list[j].Item1, '+');
+                        if (list.Count == 2)
                         {
-                            battle_Boss_list[j] = (data[i].Item3, data[i].Item4);
+                            if (list[0] == data[i].Item3)
+                            { 
+                                battle_Boss_list[j] = (battle_Boss_list[j].Item1, data[i].Item4);
+                            }
                         }
+                        //if (battle_Boss_list[j].Item1 == data[i].Item3)
+                        //{
+                        //    battle_Boss_list[j] = (data[i].Item3, data[i].Item4);
+                        //}
                     }
                     break;
                 case 4:

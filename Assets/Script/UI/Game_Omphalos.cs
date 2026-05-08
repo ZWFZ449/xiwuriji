@@ -153,7 +153,7 @@ namespace MVC
         /// </summary>
         public void archive()
         {
-            Alert_Dec.Show("存档中");
+            //Alert_Dec.Show("存档中");
             SendNotification(NotiList.Mysql_close);
             SendNotification(NotiList.Execute_Write, wirtes);
         }

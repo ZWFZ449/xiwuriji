@@ -166,7 +166,7 @@ public class PanelBattle : PanelBase
                     slider_item.Init(UnityColorPresets.GameColors.ManaBar, UnityColorPresets.GameColors.Common, 0, 100);
                     break;
                 case slider_type.exp:
-                    slider_item.Init(UnityColorPresets.GameColors.EnergyBar, UnityColorPresets.GameColors.Common, 0, 100);
+                    slider_item.Init(UnityColorPresets.GameColors.MagicDamage, UnityColorPresets.GameColors.Common, 0, 100);
                     break;
             }
             slider_list.Add(item, slider_item);
@@ -180,13 +180,13 @@ public class PanelBattle : PanelBase
             switch (item.Key)
             {
                 case slider_type.hp:
-                    item.Value.Refresh(data.Get_hp, (int)SumSave.crtMaxBattle.data.battle_maxhp,item.Key);
+                    item.Value.Refresh(data.Get_hp * 100 / (SumSave.crtMaxBattle.data.battle_maxhp + 1) , item.Key + " " + data.Get_hp + "/" + SumSave.crtMaxBattle.data.battle_maxhp);
                     break;
                 case slider_type.mp:
-                    item.Value.Refresh(data.Get_MP, (int)SumSave.crtMaxBattle.data.battle_maxmp, item.Key);
+                    item.Value.Refresh(data.Get_MP * 100 / (SumSave.crtMaxBattle.data.battle_maxmp + 1) , item.Key + " " + data.Get_MP + "/" + SumSave.crtMaxBattle.data.battle_maxmp);
                     break;
                 case slider_type.exp:
-                    item.Value.Refresh((int)SumSave.crtMaxBattle.exp, (int)SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp, item.Key + "Lv." + SumSave.crtMaxBattle.lv);
+                    item.Value.Refresh(SumSave.crtMaxBattle.exp * 100 / (SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp + 1), item.Key + "Lv." + SumSave.crtMaxBattle.lv + " " + SumSave.crtMaxBattle.exp + "/" + SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp);
                     break;
             }
         }
@@ -202,7 +202,7 @@ public class PanelBattle : PanelBase
             switch (item.Key)
             {
                 case slider_type.exp:
-                    item.Value.Refresh((int)SumSave.crtMaxBattle.exp, (int)SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp, item.Key + "Lv." + SumSave.crtMaxBattle.lv);
+                    item.Value.Refresh(SumSave.crtMaxBattle.exp / (SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp + 1) * 1f, item.Key + "Lv." + SumSave.crtMaxBattle.lv + " " + SumSave.crtMaxBattle.exp + "/" + SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp);
                     break;
             }
         }
@@ -438,26 +438,26 @@ public class PanelBattle : PanelBase
     {
         if (!IsBoss) return;
         if (SumSave.crt_setting.user_data_settings.Count >= 2 && SumSave.crt_setting.user_data_settings[1] == 0) return;
-        for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
-        {
-            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-            if (boss.Item2 > 0)
-            {
-                List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-                if (list.Count == 2)
-                {
-                    //时间召唤
-                    if (Meet_maposs_criteria(list[0]))
-                    {
-                        //判断是否满足召唤条件 开启召唤
-                        Generate_Boss_Monster(list[0]);
-                        return;
-                    }
-                }
+        //for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+        //{
+        //    (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+        //    if (boss.Item2 > 0)
+        //    {
+        //        List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+        //        if (list.Count == 2)
+        //        {
+        //            //时间召唤
+        //            if (Meet_maposs_criteria(list[0])) 
+        //            {
+        //                //判断是否满足召唤条件 开启召唤
+        //                Generate_Boss_Monster(list[0]);
+        //                return;
+        //            }
+        //        }
 
-            }
+        //    }
 
-        }
+        //}
         for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
         {
             (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
@@ -876,7 +876,7 @@ public class PanelBattle : PanelBase
             else
             if (id.Value.EffectType == 6)//召唤
             {
-                GameObject call = ObjectPoolManager.instance.GetObjectFormPool(id.Value.show_name, battle_player_prefab,
+                GameObject call = ObjectPoolManager.instance.GetObjectFormPool("召" +id.Value.show_name, battle_player_prefab,
            GetRandomUVPosition(800), Quaternion.identity, battle_borm.transform);
                 call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(id.Value);
                 player_list.Add(call);
@@ -890,9 +890,9 @@ public class PanelBattle : PanelBase
         Dictionary<int, db_skill_vo> dic = SumSave.crt_skill.Set_Current_skill();
         foreach (var id in dic)
         {
-            if (id.Value.show_name == name)
+            if ("召"+id.Value.show_name == name)
             {
-                GameObject call = ObjectPoolManager.instance.GetObjectFormPool(id.Value.show_name, battle_player_prefab,
+                GameObject call = ObjectPoolManager.instance.GetObjectFormPool("召" + id.Value.show_name, battle_player_prefab,
                GetRandomUVPosition(800), Quaternion.identity, battle_borm.transform);
                 call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(id.Value);
                 player_list.Add(call);
@@ -934,7 +934,6 @@ public class PanelBattle : PanelBase
     }
 
     private bool IsBoss = true;
-
     /// <summary>
     /// 生成boss
     /// </summary>
@@ -950,6 +949,15 @@ public class PanelBattle : PanelBase
         item.GetComponent<BaseBattleAttack>().Data = monster;
         item.transform.SetAsFirstSibling();
         monster_list.Add(item);
+        if (SumSave.crt_setting.user_data_settings.Count >= 3 && SumSave.crt_setting.user_data_settings[2] == 1)
+        {
+            Alert_Dec.Show("集火模式开启");
+            //集火boss
+            foreach (var player in player_list)
+            { 
+                player.GetComponent<BaseBattleAttack>().Set_Target(item.GetComponent<BattleHealthState>());
+            }
+        }
         InitBossSlider(monster);
 
     }

@@ -42,6 +42,11 @@ namespace MVC
                 else Find_Terget();
             }
         }
+
+        public void Set_Target(BattleHealthState target)
+        {
+            Terget = target;
+        }
         private IEnumerator timer()
         {   
             while (true)
@@ -193,7 +198,7 @@ namespace MVC
             foreach (var item in skill_list)
             {
                 int skill_lv = item.Value.SetLv();
-                if (skill_lv > 0)
+                if (skill_lv >= 0)
                 {
                     if (item.Value.skill_offect_value_list.Count > 0)
                     {
@@ -231,9 +236,101 @@ namespace MVC
             switch ((Skill_Effect_Type)skill.EffectType)
             {
                 case Skill_Effect_Type.单体:
-                    TakeDamage((int)damage, monster,battle_Damage);
+                    bool exist = true;
+                    foreach (var item1 in skill.GetBuff)
+                    {
+                        switch (item1.Key)
+                        {
+                            case enum_talent_offect_list.生命:
+                                break;
+                            case enum_talent_offect_list.攻击:
+                                break;
+                            case enum_talent_offect_list.魔法:
+                                break;
+                            case enum_talent_offect_list.道术:
+                                break;
+                            case enum_talent_offect_list.防御:
+                                break;
+                            case enum_talent_offect_list.攻击速度:
+                                break;
+                            case enum_talent_offect_list.物理攻击:
+                                break;
+                            case enum_talent_offect_list.魔法攻击:
+                                break;
+                            case enum_talent_offect_list.道术攻击:
+                                break;
+                            case enum_talent_offect_list.防御值:
+                                break;
+                            case enum_talent_offect_list.躲避:
+                                break;
+                            case enum_talent_offect_list.命中:
+                                break;
+                            case enum_talent_offect_list.技能:
+                                break;
+                            case enum_talent_offect_list.附加攻击:
+                                break;
+                            case enum_talent_offect_list.附加魔法:
+                                break;
+                            case enum_talent_offect_list.附加道术:
+                                break;
+                            case enum_talent_offect_list.附加双防:
+                                break;
+                            case enum_talent_offect_list.附加伤害:
+                                break;
+                            case enum_talent_offect_list.附加回血:
+                                break;
+                            case enum_talent_offect_list.附加攻击范围:
+                                break;
+                            case enum_talent_offect_list.无视防御:
+                                break;
+                            case enum_talent_offect_list.召唤兽:
+                                break;
+                            case enum_talent_offect_list.召唤兽攻击:
+                                break;
+                            case enum_talent_offect_list.召唤兽生命:
+                                break;
+                            case enum_talent_offect_list.召唤兽防御:
+                                break;
+                            case enum_talent_offect_list.召唤兽速度:
+                                break;
+                            case enum_talent_offect_list.召唤兽死亡爆炸:
+                                break;
+                            case enum_talent_offect_list.特殊效果:
+                                break;
+                            case enum_talent_offect_list.临时伤害:
+                                break;
+                            case enum_talent_offect_list.临时防御:
+                                break;
+                            case enum_talent_offect_list.临时速度:
+                                break;
+                            case enum_talent_offect_list.单体改群体:
+                                exist = false;
+                                Buff_range(skill, monster, skilldamage * item1.Value / 100, battle_Damage * item1.Value / 100);
+                                break;
+                            case enum_talent_offect_list.技能攻击个数:
+                                break;
+                            case enum_talent_offect_list.技能概率不消耗蓝:
+                                break;
+                            case enum_talent_offect_list.技能全体伤害:
+                                break;
+                            case enum_talent_offect_list.群体技能攻击范围:
+                                break;
+                            case enum_talent_offect_list.每秒回复全体血量百分比:
+                                break;
+                            case enum_talent_offect_list.攻击击退敌人概率:
+                                break;
+                            case enum_talent_offect_list.弹道:
+                                break;
+                                default:
+                                break;
+                        }
+                    }
+
+                    if(exist) TakeDamage((int)damage, monster, battle_Damage);
+
                     break;
                 case Skill_Effect_Type.群体:
+                     
                     List<BattleHealthState> monsterList = FindTheTarget(skill, monster);
                     for (int i= 0; i < monsterList.Count; i++) 
                     {
@@ -265,6 +362,27 @@ namespace MVC
                     break;
                 default:
                     break;
+            }
+        }
+        /// <summary>
+        /// 群攻
+        /// </summary>
+        /// <param name="skill"></param>
+        /// <param name="monster"></param>
+        /// <param name="skilldamage"></param>
+        /// <param name="battle_Damage"></param>
+        private void Buff_range(db_skill_vo skill,BaseBattleAttack monster, int skilldamage,int battle_Damage)
+        {
+            List<BattleHealthState> monsterList = FindTheTarget(skill, monster);
+            for (int i = 0; i < monsterList.Count; i++)
+            {
+                BaseBattleAttack base_monster = monsterList[i].gameObject.GetComponent<BaseBattleAttack>();
+                if (base_monster != null)
+                {
+                    int base_damage = Base_Damage(base_monster, skilldamage);
+                    if (base_damage < 0) base_damage = 1;
+                    TakeDamage(base_damage, base_monster, battle_Damage);
+                }
             }
         }
         /// <summary>
@@ -641,5 +759,5 @@ namespace MVC
             }
             return value;
         }
-    } 
+    }
 }

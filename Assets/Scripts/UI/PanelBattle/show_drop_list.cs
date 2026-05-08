@@ -227,7 +227,7 @@ public class show_drop_list : Base_Mono
         {
             string[] probability = drop_value_info[0].Split('/');
             if (probability.Length > 1)
-            { 
+            {
                 int random = Random.Range(0, int.Parse(probability[1]));
                 int probability_value = int.Parse(probability[0]);
                 if (type != Drop_Type.逐个掉落) probability_value = probability_value * (100 + SumSave.crtMaxBattle.drop_bonus) / 100;

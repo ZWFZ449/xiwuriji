@@ -223,12 +223,11 @@ public class PanelMian : PanelBase
     private void Base_Show()
     {
         show_equip();
-        Show_hero();
         Show_unit();
     }
-
     public void Show_unit()
     {
+        Show_hero();
         List<long> Units= SumSave.crt_user_unit.Set();
         moeny.text = currency_unit.金币 + " " + Battle_Tool.FormatNumberToChineseUnit(Units[(int)currency_unit.金币]);
         sycee.text = currency_unit.元宝 + " " + Battle_Tool.FormatNumberToChineseUnit(Units[(int)currency_unit.元宝]);

@@ -299,22 +299,30 @@ public class map_show_offect : Base_Mono
             "\nBoss:" + map.map_boss[crt_map.GetMap_Intensity - 1] +
             "\nBoss前置击杀:" + map.map_crate_boss_condition[crt_map.GetMap_Intensity - 1] +
             "\nBoss刷新:" + map.map_boss_cdtime[crt_map.GetMap_Intensity - 1] + "s";
-        for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+        if (map.map_type != 0)
         {
-            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-            List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-            if (list.Count == 2)
+            crt_info = Show_Color.Green("每日一次"); 
+        }
+        else
+        {
+            for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
             {
-                if (list[0] == map.map_boss[crt_map.GetMap_Intensity - 1])
-                    map_info += Show_Color.Green("\n存量 " + list[1]) + "";
+                (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+                List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+                if (list.Count == 2)
+                {
+                    if (list[0] == map.map_boss[crt_map.GetMap_Intensity - 1])
+                        map_info += Show_Color.Green("\n存量 " + list[1]) + "";
+                }
+            }
+            int spanSeconds = Meet_maposs_criteria(map.map_boss[crt_map.GetMap_Intensity - 1]);
+            crt_info = "Boss倒计时:" + Show_Color.Green(ConvertSecondsToHHMMSS(spanSeconds));
+            if (spanSeconds > 0)
+            {
+                StartCoroutine(Game_WaitTime(spanSeconds));
             }
         }
-        int spanSeconds = Meet_maposs_criteria(map.map_boss[crt_map.GetMap_Intensity - 1]);
-        crt_info = "Boss倒计时:" + Show_Color.Green(ConvertSecondsToHHMMSS(spanSeconds));
-        if (spanSeconds > 0)
-        { 
-            StartCoroutine(Game_WaitTime(spanSeconds));
-        }
+        
         base_info.text = map_info + "\n" + crt_info;
     }
     private int Meet_maposs_criteria(string value)
