@@ -22,7 +22,7 @@ public class blacksmith_gem : Base_Mono
 
     private Bag_Base_VO crt_bag;
     /// <summary>
-    /// ±¦Ê¯°²×°Î»ÖÃ
+    /// å®çŸ³å®‰è£…ä½ç½®
     /// </summary>
     private int index;
 
@@ -32,7 +32,7 @@ public class blacksmith_gem : Base_Mono
     private void Awake()
     {
         M_bags_brom = Find<Transform>("bg/bag_list/Viewport/Content");
-        M_gem_btn_brom = Find<Transform>("bg/gems");
+        M_gem_btn_brom = Find<Transform>("bg/gems"); 
         M_icon_brom = Find<Transform>("bg/icon");
         info = Find<TMP_Text>("bg/title_type_info/info");
         dream_BagItem_prefab = Tool_UI.Find_Prefabs<dream_BagItem>("dream_BagItem");
@@ -58,7 +58,7 @@ public class blacksmith_gem : Base_Mono
         Show_Gem();
     }
     /// <summary>
-    /// ÏÔÊ¾±¦Ê¯
+    /// æ˜¾ç¤ºå®çŸ³
     /// </summary>
     private void Show_Gem()
     {
@@ -67,7 +67,7 @@ public class blacksmith_gem : Base_Mono
         string[] info = crt_bag.user_value.Split(' ');
         if (info.Length >= 6)
         {
-            //±¦Ê¯
+            //å®çŸ³
             List<string> gem = ArrayHelper.Get_Split<string>(info[5], 'X');
             for (int i = 0; i < gem.Count; i++)
             {
@@ -88,7 +88,7 @@ public class blacksmith_gem : Base_Mono
                         }
                         else
                         {
-                            Bag_Base_VO gem_data = ArrayHelper.Find(SumSave.db_stditems, x => x.StdMode == "²ÄÁÏ" && x.Shape == int.Parse(gem_value[0]));
+                            Bag_Base_VO gem_data = ArrayHelper.Find(SumSave.db_stditems, x => x.StdMode == "ææ–™" && x.Shape == int.Parse(gem_value[0]));
                             if (gem_data != null)
                             {
                                 select_gem_btn_item gem_btn = Instantiate(select_gem_btn_item_prefab, M_gem_btn_brom);
@@ -102,7 +102,7 @@ public class blacksmith_gem : Base_Mono
         }
     }
     /// <summary>
-    /// ²ğĞ¶±¦Ê¯
+    /// æ‹†å¸å®çŸ³
     /// </summary>
     /// <param name="i"></param>
     /// <param name="gem_btn"></param>
@@ -115,12 +115,12 @@ public class blacksmith_gem : Base_Mono
         select_gem_btn_item_crt = gem_btn;
         select_gem_btn_item_crt.Select_State = true;
         index = gem_btn.index;
-        Alert.Show("²ğĞ¶±¦Ê¯","½«µ±Ç°±¦Ê¯È¡ÏÂ,\nĞèÒª"+ currency_unit.½ğ±Ò+"500w", Disassemble_Gem);
+        Alert.Show("æ‹†å¸å®çŸ³","å°†å½“å‰å®çŸ³å–ä¸‹,\néœ€è¦"+ currency_unit.é‡‘å¸+"500w", Disassemble_Gem);
     }
 
     private void Disassemble_Gem(object arg0)
     {
-        Need_Condition(currency_unit.½ğ±Ò, 5000000);
+        Need_Condition(currency_unit.é‡‘å¸, 5000000);
         if (Return_Condition())
         {
             string[] info = crt_bag.user_value.Split(' ');
@@ -144,7 +144,7 @@ public class blacksmith_gem : Base_Mono
                                 SumSave.crt_bags.Set_Gem_Value(bag_gems);
                                 SumSave.crt_bags.MysqlData();
                                 refresh_gem();
-                                Alert_Dec.Show("±¦Ê¯²ğĞ¶³É¹¦"); 
+                                Alert_Dec.Show("å®çŸ³æ‹†å¸æˆåŠŸ"); 
                                 Show(crt_bag);
                             }
                         }
@@ -157,7 +157,7 @@ public class blacksmith_gem : Base_Mono
     }
 
     /// <summary>
-    /// Ñ¡ÖĞÎ»ÖÃ
+    /// é€‰ä¸­ä½ç½®
     /// </summary>
     /// <param name="index"></param>
     /// <param name="gem_data"></param>
@@ -184,12 +184,12 @@ public class blacksmith_gem : Base_Mono
         }
     }
     /// <summary>
-    /// Ñ¡Ôñ±¦Ê¯
+    /// é€‰æ‹©å®çŸ³
     /// </summary>
     /// <param name="bagItem"></param>
     private void SelectBagResourcesItem(material_item bagItem)
     {
-        if (select_gem_btn_item_crt == null) { Alert_Dec.Show("ÇëÑ¡ÔñÎ»ÖÃ");return; }
+        if (select_gem_btn_item_crt == null) { Alert_Dec.Show("è¯·é€‰æ‹©ä½ç½®");return; }
         string gem = bagItem.GetItemData().Item1;
         string[] info = crt_bag.user_value.Split(' ');
         if (info.Length >= 6)
@@ -211,7 +211,7 @@ public class blacksmith_gem : Base_Mono
                             bag_gems.Remove(gem);
                             SumSave.crt_bags.Set_Gem_Value(bag_gems);
                             SumSave.crt_bags.MysqlData();
-                            Alert_Dec.Show("±¦Ê¯ÏâÇ¶³É¹¦");
+                            Alert_Dec.Show("å®çŸ³é•¶åµŒæˆåŠŸ");
                             refresh_gem();
                             Show(crt_bag);
                         }
