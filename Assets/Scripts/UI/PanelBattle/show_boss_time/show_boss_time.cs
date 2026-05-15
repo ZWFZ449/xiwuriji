@@ -47,9 +47,9 @@ public class show_boss_time : Base_Mono
 
     private void OnEnable()
     {
-        if (SumSave.crtHero.lv <= 20 && !Tool_Battle.IsBuff(common_Buff.ÔÂ¿¨))
+        if (SumSave.crtHero.lv <= 20 && !Tool_Battle.IsBuff(common_Buff.æœˆå¡))  
         {
-            Alert_Dec.Show("µÈ¼¶²»×ã,ÎÞ·¨²é¿´");
+            Alert_Dec.Show("ç­‰çº§ä¸è¶³,æ— æ³•æŸ¥çœ‹");
             gameObject.SetActive(false);
             return;
         }
@@ -72,12 +72,12 @@ public class show_boss_time : Base_Mono
                 {
                     if (list[0] == item.Key)
                     {
-                        value += " ´æÁ¿ " + list[1];
+                        value += " å­˜é‡ " + list[1];
                         break;
                     }
                 }
             }
-            value+= " µ¹¼ÆÊ±:" + ConvertSecondsToHHMMSS(Tool_Battle.Meet_maposs_criteria(item.Key));
+            value+= " å€’è®¡æ—¶:" + ConvertSecondsToHHMMSS(Tool_Battle.Meet_maposs_criteria(item.Key));
             item.Value.SetInfo(value);
         }
 
@@ -96,7 +96,7 @@ public class show_boss_time : Base_Mono
         db_vip crt_vip = Tool_Battle.Obtain_Vip();
         if (crt_vip != null)
         {
-            int base_time = Boss_Time.Item1 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.ÔÂ¿¨) ? 5 : 0)) / 100;
+            int base_time = Boss_Time.Item1 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.æœˆå¡) ? 5 : 0)) / 100;
             if (spanSeconds >= base_time)
             {
                 return 0;
