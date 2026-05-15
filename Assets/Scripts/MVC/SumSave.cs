@@ -25,6 +25,10 @@ namespace Common
         /// </summary>
         public static int par = 1;
         /// <summary>
+        /// 系统版本 安卓苹果
+        /// </summary>
+        public static int system_par = 1;
+        /// <summary>
         /// 验证单次收益 0 灵珠 1历练 2魔丸 3材料获取量 4背包 5仓库 6至尊值（用于掉落绝世装备）
         /// </summary>
         public static List<int> base_setting = new List<int>() { 90000, 90000, 9000, 5000};

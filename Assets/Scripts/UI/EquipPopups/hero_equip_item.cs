@@ -352,15 +352,40 @@ public class hero_equip_item : Base_Mono
         Instantiate(dream_BagItem_prefab, m_dream_bag_brom).Data = data.Data;
         Color c = HexToColor("#ffffff");
         Get().Init(("[" + enum_equip_basetype_list.基础属性 + "]"), c);
+        float hp_coefficient = 1f, mp_coefficient = 1f;
+        switch ((Hero_Type)SumSave.crtHero.job)
+        {
+            case Hero_Type.平民:
+                hp_coefficient = 1f;
+                mp_coefficient = 1f;
+                break;
+            case Hero_Type.战士:
+                hp_coefficient = 1.8f;
+                mp_coefficient = 0.5f;
+                break;
+            case Hero_Type.法师:
+                hp_coefficient = 0.5f;
+                mp_coefficient = 1.8f;
+                break;
+            case Hero_Type.道士:
+                hp_coefficient = 1.2f;
+                mp_coefficient = 1.2f;
+                break;
+            default:
+                break;
+        }
+
         if (data.Data.hp > 0)
         {
+            int hp = (int)(data.Data.hp * hp_coefficient);
             equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.生命值, data.Data.hp, c);
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.生命值, hp, c);
         }
         if (data.Data.mp > 0)
         {
+            int mp = (int)(data.Data.mp * mp_coefficient);
             equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.魔法值, data.Data.mp, c);
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.魔法值, mp, c);
         }
         if (data.Data.ac > 0 || data.Data.ac2 > 0)
         {
@@ -393,10 +418,10 @@ public class hero_equip_item : Base_Mono
             int lucky = int.Parse(info[1]);
             int quilty = int.Parse(info[2]);
             int islock = int.Parse(info[3]);
-            if (lucky > 0 &&( data.Data.StdMode == equip_type_list.武器.ToString() || data.Data.StdMode == equip_type_list.项链.ToString()))
+            if (lucky > 1 &&( data.Data.StdMode == equip_type_list.武器.ToString() || data.Data.StdMode == equip_type_list.项链.ToString()))
             {
-                c = GameColors.Alliance;
-                Get().Init(("[幸运] + "+ lucky), c);
+                c = GameColors.Legendary;
+                Get().Init(("[幸运] + " + (lucky - 1)), c);
             }
             if (info.Length >= 5)
             {
@@ -528,10 +553,10 @@ public class hero_equip_item : Base_Mono
                         }
                     }
                 }
-                /*
-                
                 if (info.Length >= 6)
-                { 
+                {
+                    c= GameColors.PhysicalDamage;
+                    Get().Init("[宝石属性]", c);
                     //宝石
                     List<string> gem = ArrayHelper.Get_Split<string>(info[5], 'X');
                     for (int i = 0; i < gem.Count; i++)
@@ -546,7 +571,7 @@ public class hero_equip_item : Base_Mono
                                     Bag_Base_VO gem_data = ArrayHelper.Find(SumSave.db_stditems, x => x.Name == gem_value[1]);
                                     if (gem_data != null)
                                     {
-                                        Show_Info_Base(gem_data.Shape == int.Parse(gem_value[0]));
+                                        Show_Info_Base(gem_data, gem_data.Shape == int.Parse(gem_value[0]));
                                     }
                                 }
                                 else
@@ -556,13 +581,13 @@ public class hero_equip_item : Base_Mono
                                     if (gem_data != null)
                                     {
                                         c = GameColors.Common;
-                                        Get().Init(("[最优宝石] + " + gem_data.Name), c);
+                                        Get().Init(("[最优宝石]  " + gem_data.Name), c);
                                     }
                                 }
                             }
                         }
                     }
-                } */
+                } 
             }
         }
         if (data.Data.suit > 0)
@@ -592,44 +617,47 @@ public class hero_equip_item : Base_Mono
         }
     }
 
-    private void Show_Info_Base(bool is_gem)
+    private void Show_Info_Base(Bag_Base_VO data,bool is_gem)
     {
-        Color c = is_gem ? GameColors.Legendary : GameColors.Common;
-        if (data.Data.hp > 0)
+        Color c = is_gem ? GameColors.Legendary : GameColors.Healthy;
+        equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
+        string dec="";
+        if (data.hp > 0)
         {
-            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.生命值, data.Data.hp + (is_gem ? 10 : -10), c);
+            dec += enum_equip_entry_list.生命值 + ":" + (data.hp + (is_gem ? 10 : -10));
+            //itemValue.Init(enum_equip_basetype_list.铭文属性, enum_equip_entry_list.生命值, (data.hp + (is_gem ? 10 : -10)), c);
         }
-        if (data.Data.mp > 0)
+        if (data.mp > 0)
         {
-            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.魔法值, data.Data.mp + (is_gem ? 5 : -5), c);
+            dec += enum_equip_entry_list.魔法值 + ":" + (data.mp + (is_gem ? 5 : -5));
+            //itemValue.Init(enum_equip_basetype_list.铭文属性, enum_equip_entry_list.魔法值, data.mp + (is_gem ? 5 : -5), c);
         }
-        if (data.Data.ac > 0 || data.Data.ac2 > 0)
+        if (data.ac > 0 || data.ac2 > 0)
         {
-            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.物理防御, data.Data.ac + " - " + data.Data.ac2 + (is_gem ? 1 : -1), c);
+            dec += enum_equip_entry_list.物理防御 + ":" + (data.ac + " - " + (data.ac2 + (is_gem ? 1 : -1)));
+            //itemValue.Init(enum_equip_basetype_list.铭文属性, enum_equip_entry_list.物理防御, data.ac + " - " + (data.ac2 + (is_gem ? 1 : -1)), c);
         }
-        if (data.Data.mac > 0 || data.Data.mac2 > 0)
+        if (data.mac > 0 || data.mac2 > 0)
         {
-            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.魔法防御, data.Data.mac + " - " + data.Data.mac2 + (is_gem ? 1 : -1), c);
+            dec += enum_equip_entry_list.魔法防御 + ":" + (data.mac + " - " + (data.mac2 + (is_gem ? 1 : -1)));
+            //itemValue.Init(enum_equip_basetype_list.铭文属性, enum_equip_entry_list.魔法防御, data.mac + " - " + (data.mac2 + (is_gem ? 1 : -1)), c);
         }
-        if (data.Data.dc > 0 || data.Data.dc2 > 0)
+        if (data.dc > 0 || data.dc2 > 0)
         {
-            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.物理攻击, data.Data.dc + " - " + data.Data.dc2 + (is_gem ? 1 : -1), c);
+            dec += enum_equip_entry_list.物理攻击 + ":" + (data.dc + " - " + (data.dc2 + (is_gem ? 1 : -1)));
+            //itemValue.Init(enum_equip_basetype_list.铭文属性, enum_equip_entry_list.物理攻击, data.dc + " - " + (data.dc2 + (is_gem ? 1 : -1)), c);
         }
-        if (data.Data.mc > 0 || data.Data.mc2 > 0)
+        if (data.mc > 0 || data.mc2 > 0)
         {
-            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.魔法攻击, data.Data.mc + " - " + data.Data.mc2 + (is_gem ? 1 : -1), c);
+            dec += enum_equip_entry_list.魔法攻击 + ":" + (data.mc + " - " + ((data.mc2 + (is_gem ? 1 : -1))));
+            //itemValue.Init(enum_equip_basetype_list.铭文属性, enum_equip_entry_list.魔法攻击, data.mc + " - " + ((data.mc2 + (is_gem ? 1 : -1))), c);
         }
-        if (data.Data.sc > 0 || data.Data.sc2 > 0)
+        if (data.sc > 0 || data.sc2 > 0)
         {
-            equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.道术攻击, data.Data.sc + " - " + data.Data.sc2 + (is_gem ? 1 : -1), c);
+            dec += enum_equip_entry_list.道术攻击 + ":" + (data.sc + " - " + (data.sc2 + (is_gem ? 1 : -1)));
+            //itemValue.Init(enum_equip_basetype_list.铭文属性, enum_equip_entry_list.道术攻击, data.sc + " - " + (data.sc2 + (is_gem ? 1 : -1)), c);
         }
+        itemValue.Init(data.Name, dec, c);
     }
     /// <summary>
     /// 生成套装信息

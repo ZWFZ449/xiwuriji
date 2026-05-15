@@ -48,15 +48,7 @@ public class pet_Demon : Base_Mono
     private void Base_Show()
     {
         Show_Talent(crt_pet, m_Talent_brom);
-        offect.gameObject.SetActive(false);
-        //ClearObject(m_Talent_brom);
-        //List<db_pet_talent_vo> CrtTalent = crt_pet.GetCrtTalent;
-        //for (int i = 0; i < CrtTalent.Count; i++)
-        //{
-        //    pet_talent_item item = Instantiate(p_talent_item_prefab, m_Talent_brom);
-        //    item.Init(CrtTalent[i]);
-        //    item.GetComponent<Button>().onClick.AddListener(() => { show_Talent(item); });
-        //}
+        offect.gameObject.SetActive(false); 
     }
     /// <summary>
     /// 显示天赋
@@ -215,6 +207,12 @@ public class pet_Demon : Base_Mono
     {
         if (crt_pet.GetCrtTalent.Count >= 20) { Alert_Dec.Show("天赋位已满"); return; }
         if (select_pet == null) return;
+        SendNotification(NotiList.Read_Mysql_Base_Time);
+        if (SumSave.openMysql)
+        {
+            Alert_Dec.Show("网络连接失败");
+            return;
+        }
         SumSave.crt_pet.GetPets.Remove(select_pet);
         int number = select_pet.GetCrtTalent.Count + crt_pet.GetCrtTalent.Count;
         int crt_number = Random.Range(number / 2, (number) / 2 + 2);

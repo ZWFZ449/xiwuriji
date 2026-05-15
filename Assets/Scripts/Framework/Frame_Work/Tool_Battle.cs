@@ -184,6 +184,27 @@ public static class Tool_Battle
         List<Bag_Base_VO> crt_euqip = SumSave.crt_equips.Get(Dream_User_Equip_Type.装备);
         for (int i = 0; i < crt_euqip.Count; i++)  
         {
+            switch ((Hero_Type)SumSave.crtHero.job)
+            {
+                case Hero_Type.平民:
+                    hp += crt_euqip[i].hp;
+                    mp += crt_euqip[i].mp;
+                    break;
+                case Hero_Type.战士:
+                    hp += (int)(crt_euqip[i].hp * 1.8);
+                    mp += (int)(crt_euqip[i].mp * 0.5);
+                    break;
+                case Hero_Type.法师:
+                    hp += (int)(crt_euqip[i].hp * 0.5);
+                    mp += (int)(crt_euqip[i].mp * 1.8);
+                    break;
+                case Hero_Type.道士:
+                    hp += (int)(crt_euqip[i].hp * 1.2);
+                    mp += (int)(crt_euqip[i].mp * 1.2);
+                    break;
+                default:
+                    break;
+            }
             dc += crt_euqip[i].dc;
             dc2 += crt_euqip[i].dc2;
             mac += crt_euqip[i].mac;
@@ -201,6 +222,10 @@ public static class Tool_Battle
             }
             string[] info = crt_euqip[i].user_value.Split(' ');
             int strengthenlv = int.Parse(info[1]);
+            if (strengthenlv > 1 && (crt_euqip[i].StdMode == equip_type_list.武器.ToString() || crt_euqip[i].StdMode == equip_type_list.项链.ToString()))
+            {
+                lucky += strengthenlv - 1; 
+            }
             if (info.Length >= 5)
             {
                 //类型
@@ -285,6 +310,41 @@ public static class Tool_Battle
                                         break;
                                 }
 
+                            }
+                        }
+                    }
+                }
+                if (info.Length >= 6)
+                {
+                    //宝石
+                    List<string> gem = ArrayHelper.Get_Split<string>(info[5], 'X');
+                    for (int j = 0; j < gem.Count; j++)
+                    {
+                        if (gem[j] != "")
+                        {
+                            List<string> gem_value = ArrayHelper.Get_Split<string>(gem[j], '|');
+                            if (gem_value.Count == 2)
+                            {
+                                if (gem_value[1] != "0")
+                                {
+                                    Bag_Base_VO gem_data = ArrayHelper.Find(SumSave.db_stditems, x => x.Name == gem_value[1]);
+                                    if (gem_data != null)
+                                    {
+                                        int state = gem_data.Shape == int.Parse(gem_value[0]) ? 1 : -1;
+                                        dc += gem_data.dc;
+                                        dc2 += (gem_data.dc2 > 0 ? gem_data.dc2 + state : gem_data.dc2); 
+                                        mc += gem_data.mc;
+                                        mc2 += (gem_data.mc2 > 0 ? gem_data.mc2 + state : gem_data.mc2);
+                                        sc += gem_data.sc;
+                                        sc2 += (gem_data.sc2 > 0 ? gem_data.sc2 + state : gem_data.sc2);
+                                        ac += gem_data.ac;
+                                        ac2 +=  (gem_data.ac2 > 0 ? gem_data.ac2 + state : gem_data.ac2);
+                                        mac += gem_data.mac;
+                                        mac2 += (gem_data.mac2 > 0 ? gem_data.mac2 + state : gem_data.mac2);
+                                        hp += gem_data.hp > 0 ? gem_data.hp + (state * 5) : gem_data.hp;
+                                        mp += gem_data.mp > 0 ? gem_data.mp + (state * 5) : gem_data.mp;
+                                    }
+                                }
                             }
                         }
                     }
@@ -518,21 +578,21 @@ public static class Tool_Battle
         
         foreach (var item in skill_list)
         {
-            int skill_lv = item.Value.SetLv();
-            if (skill_lv >= 0)
+            int skill_lv = item.Value.SetLv(); 
+            if (skill_lv >= 0 && item.Value.Job != -1)
             {
-                if (item.Value.Job == -1)
-                {
-                    foreach (var item1 in item.Value.GetBuff.Keys)
-                    {
-                        switch (item1)
-                        {
-                            case enum_talent_offect_list.弹道:
-                                skill_lv += item.Value.GetBuff[item1];
-                                break;
-                        }
-                    }
-                }
+                //if (item.Value.Job == -1)
+                //{
+                //    foreach (var item1 in item.Value.GetBuff.Keys)
+                //    {
+                //        switch (item1)
+                //        {
+                //            case enum_talent_offect_list.弹道:
+                //                skill_lv += item.Value.GetBuff[item1];
+                //                break;
+                //        }
+                //    }
+                //}
                 if (item.Value.skill_offect_value_list.Count > 0)
                 {
                     foreach (enum_equip_entry_list skill_effect_type in item.Value.skill_offect_value_list.Keys)
@@ -600,6 +660,92 @@ public static class Tool_Battle
                 }
             }
         }
+        //被动技能
+        foreach (var item in SumSave.db_skills)
+        {
+            int skill_lv = item.SetLv();
+            if (skill_lv >= 0)
+            {
+                if (item.Job == -1)
+                {
+                    foreach (var item1 in item.GetBuff.Keys)
+                    {
+                        switch (item1)
+                        {
+                            case enum_talent_offect_list.弹道:
+                                skill_lv += item.GetBuff[item1];
+                                break;
+                        }
+                    }
+                    if (item.skill_offect_value_list.Count > 0)
+                    {
+                        foreach (enum_equip_entry_list skill_effect_type in item.skill_offect_value_list.Keys)
+                        {
+                            if (skill_lv >= item.skill_offect_value_list[skill_effect_type].Count - 1)
+                                skill_lv = item.skill_offect_value_list[skill_effect_type].Count - 1;
+                            int value = item.skill_offect_value_list[skill_effect_type][skill_lv];
+                            switch (skill_effect_type)
+                            {
+                                case enum_equip_entry_list.生命值: hp += value; break;
+                                case enum_equip_entry_list.魔法值: mp += value; break;
+                                case enum_equip_entry_list.物理防御: ac += value; ac2 += value; break;
+                                case enum_equip_entry_list.魔法防御: mac += value; mac2 += value; break;
+                                case enum_equip_entry_list.物理攻击: dc += value; dc2 += value; break;
+                                case enum_equip_entry_list.魔法攻击: mc += value; mc2 += value; break;
+                                case enum_equip_entry_list.道术攻击: sc += value; sc2 += value; break;
+
+                                case enum_equip_entry_list.每秒回血: hpRegen += value; break;
+                                case enum_equip_entry_list.每秒回蓝: mpRegen += value; break;
+                                case enum_equip_entry_list.真实伤害: battle_Damage += value; break;
+                                case enum_equip_entry_list.吸收伤害: battle_def += value; break;
+
+                                case enum_equip_entry_list.生命属性: battle_hp += value; break;
+                                case enum_equip_entry_list.魔法属性: battle_mp += value; break;
+                                case enum_equip_entry_list.防御属性: battle_ac += value; break;
+                                case enum_equip_entry_list.魔防属性: battle_mac += value; break;
+                                case enum_equip_entry_list.物攻属性: battle_dc += value; break;
+                                case enum_equip_entry_list.魔攻属性: battle_sc += value; break;
+                                case enum_equip_entry_list.道攻属性: battle_mc += value; break;
+                                case enum_equip_entry_list.攻击速度: battle_speed -= (value * speed_bonus); break;
+                                case enum_equip_entry_list.攻击范围: battle_range += value; break;
+                                case enum_equip_entry_list.暴击属性: crit += value; break;
+                                case enum_equip_entry_list.暴击伤害: critDmg += value; break;
+
+                                case enum_equip_entry_list.烈阳文:
+                                case enum_equip_entry_list.盾护文:
+                                case enum_equip_entry_list.守月文:
+                                case enum_equip_entry_list.幽狼文:
+                                case enum_equip_entry_list.神行文:
+                                case enum_equip_entry_list.怒目文:
+                                case enum_equip_entry_list.震火文:
+                                case enum_equip_entry_list.金刚文:
+                                case enum_equip_entry_list.大愈文:
+                                case enum_equip_entry_list.回春文:
+                                case enum_equip_entry_list.回心文:
+                                case enum_equip_entry_list.峰芒文:
+                                case enum_equip_entry_list.破枪文:
+                                case enum_equip_entry_list.深寒文:
+                                case enum_equip_entry_list.瑶光文:
+                                    break;
+                                case enum_equip_entry_list.幸运: lucky += value; break;
+                                case enum_equip_entry_list.闪避: dodge += value; break;
+                                case enum_equip_entry_list.命中: hit += value; break;
+                                case enum_equip_entry_list.物伤减免: damage_reduction += value; break;
+                                case enum_equip_entry_list.魔伤减免: magic_damage_reduction += value; break;
+                                case enum_equip_entry_list.怪物爆率: drop_bonus += value; break;
+                                case enum_equip_entry_list.极品爆率: quality_bonus += value; break;
+                                case enum_equip_entry_list.经验加成: exp_bonus += value; break;
+                                case enum_equip_entry_list.金币掉落: gold_bonus += value; break;
+                                default:
+                                    break;
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
         //宠物加成
         db_pet_vo pet = SumSave.crt_pet.GetPet;
         if (pet != null)
@@ -771,6 +917,14 @@ public static class Tool_Battle
         crt.exp = SumSave.crtHero.exp; 
         crt.hero_type = (Hero_Type)SumSave.crtHero.job;
         crt.type = Battle_Game_Type.player;
+        if (crt.hero_type == Hero_Type.战士)
+        {
+            battle_speed = Mathf.Max(30, battle_speed);
+        }
+        else
+        { 
+            battle_speed = Mathf.Max(50, battle_speed);
+        }
         crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky,damage_reduction,magic_damage_reduction,0);
         return crt;
@@ -868,6 +1022,36 @@ public static class Tool_Battle
     /// <param name="map_id"></param>
     /// <returns></returns>
     public static (int,string) GetBossTime(string map_id) { return (map_boss_time.ContainsKey(map_id))? map_boss_time[map_id]:(99999,"no"); }
+
+    /// <summary>
+    /// 计算剩余时间
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static int Meet_maposs_criteria(string value)
+    {
+        (int, string) Boss_Time = Tool_Battle.GetBossTime(value);
+        if (Boss_Time.Item2 == "no") return 99999999;
+        int spanSeconds = Battle_Tool.SettlementTransport(Boss_Time.Item2, 2);
+        db_vip crt_vip = Tool_Battle.Obtain_Vip();
+        if (crt_vip != null)
+        {
+            int base_time = Boss_Time.Item1 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
+            if (spanSeconds >= base_time)
+            {
+                return 0;
+            }
+            else return base_time - spanSeconds;
+        }
+        else
+        {
+            if (spanSeconds >= Boss_Time.Item1)
+            {
+                return 0;
+            }
+            else return Boss_Time.Item1 - spanSeconds;
+        }
+    }
     /// <summary>
     /// 更新boss刷新时间
     /// </summary>
@@ -1192,13 +1376,12 @@ public static class Tool_Battle
         entry_inscription_list.Add(enum_equip_entry_list.瑶光文);
         for (int i = 0; i < SumSave.db_skills.Count; i++)
         {
-            if (SumSave.db_skills[i].EffectType != 5 && SumSave.db_skills[i].EffectType != 6)
+            if (SumSave.db_skills[i].EffectType != 5)//&& SumSave.db_skills[i].EffectType != 6召唤
             {
                 Obtain_Weight(SumSave.db_skills[i].id+1000, SumSave.db_skills[i].Weighted);
             }
         }
-        
-    }
+    } 
     /// <summary>
     /// 获取装备属性
     /// </summary>
@@ -1312,6 +1495,27 @@ public static class Tool_Battle
             WeightedItem item = new WeightedItem(i + 1, QualityWeighted[i]);
             eighteditems.Add(item);
         }
+    }
+
+    /// <summary>
+    /// 根据权重分配 数值越大 概率越大
+    /// </summary>
+    /// <param name="list"></param>
+    /// <returns></returns>
+    public static int Obtain_WeightedItem(List<int> list)
+    {
+        List<WeightedItem> eighteditems = new List<WeightedItem>();
+        for (int i = 0; i < list.Count; i++)
+        {
+            WeightedItem item = new WeightedItem(list[i], i + 1);
+            eighteditems.Add(item);
+        }
+
+        WeightedRandomPicker picker = new WeightedRandomPicker(eighteditems);
+        // 获取一个概率
+        WeightedItem selectedItem = picker.GetRandomItem();
+        return selectedItem.Weight;
+
     }
     /// <summary>
     /// 获取装备品质

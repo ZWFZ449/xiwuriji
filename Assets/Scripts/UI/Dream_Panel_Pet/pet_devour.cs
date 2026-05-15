@@ -133,6 +133,12 @@ public class pet_devour : Base_Mono
     {
         db_pet_vo pet = (arg0 as dream_BagItem).Pet_Data;
         if (pet == null) return;
+        SendNotification(NotiList.Read_Mysql_Base_Time);
+        if (SumSave.openMysql)
+        { 
+            Alert_Dec.Show("网络连接失败");
+            return;
+        }
         SumSave.crt_pet.GetPets.Remove(pet);
         int num = 0;
         if (Random.Range(0, 100) < 50)

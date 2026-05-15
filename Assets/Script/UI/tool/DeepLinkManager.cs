@@ -17,7 +17,7 @@ public class DeepLinkManager : MonoBehaviour
         {
             Instance = this;
             Application.deepLinkActivated += OnDeepLinkActivated;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
 
             // 处理冷启动（App 未运行时的点击）
             if (!string.IsNullOrEmpty(Application.absoluteURL))

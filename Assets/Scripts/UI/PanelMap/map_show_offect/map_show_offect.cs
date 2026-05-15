@@ -87,6 +87,12 @@ public class map_show_offect : Base_Mono
     public void Init(base_map_item map)
     {
         crt_map = map;
+        if (SumSave.crtHero.lv < crt_map.GetMap().map_lv && !Tool_Battle.IsBuff(common_Buff.月卡))
+        {
+            Alert_Dec.Show("等级不足,无法查看");
+            Hide();
+            return;
+        }
         Show_Map_Intensity();
         Show_Base_Info();
     }
@@ -119,7 +125,7 @@ public class map_show_offect : Base_Mono
         crt_select_map_lv_item.Selected = true;
         crt_map.Select_Map_Intensity(item.GetMapIntensity);
         Show_Base_Info();
-        //tool_equip();
+        //tool_equip(); 
     }
     /// <summary>
     /// 测试物品

@@ -186,6 +186,14 @@ public class Dream_Panel_Bag : Panel_Base
                 }
                 break;
             case Panel_BagType.宝石:
+                List<string> gems= SumSave.crt_bags.Get_Gem_Value;
+                base_info.text = m_curPanel_BagType + " " + gems.Count + "/120";
+                for (int i = 0; i < gems.Count; i++)
+                {
+                    material_item bagItem = Instantiate(p_material_item_prefab, m_BagItem_brom);
+                    bagItem.Init((gems[i],1));
+                    bagItem.GetComponent<Button>().onClick.AddListener(() => SelectBagResourcesItem(bagItem));
+                }
                 break;
             case Panel_BagType.取出仓库:
                 List<Bag_Base_VO> houselist = SumSave.crt_equips.Get(Dream_User_Equip_Type.仓库);
@@ -196,7 +204,6 @@ public class Dream_Panel_Bag : Panel_Base
                     bagItem.Data = houselist[i];
                     bagItem.GetComponent<Button>().onClick.AddListener(() => SelectBagItem(bagItem));
                 }
-                break;
                 break;
             case Panel_BagType.一键出售:
                 break;

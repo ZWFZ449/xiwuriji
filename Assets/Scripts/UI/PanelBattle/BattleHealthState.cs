@@ -1,4 +1,5 @@
 using MVC;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -87,7 +88,7 @@ public class BattleHealthState : Base_Mono
         if (CurrentHP <= 0)
         {
             StartCoroutine(WaitAndDestory(base_name));
-
+            transform.parent.parent.parent.parent.SendMessage("clearSumhealth", this);
         }
     }
     /// <summary>
@@ -105,9 +106,8 @@ public class BattleHealthState : Base_Mono
     {
         if (gameObject.activeInHierarchy)
         {
-            yield return new WaitForSeconds(0.48f);
+            yield return new WaitForSeconds(0.2f); 
             PushObjectToPool(healthname);
-            transform.parent.parent.parent.parent.SendMessage("clearSumhealth", this);
         }
     }
     /// <summary>

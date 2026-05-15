@@ -1,30 +1,37 @@
 using System;
+using System.Collections.Generic;
 using Common;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 namespace MVC
 {
-
-
     /// <summary>
     ///  用户背包数据Item
     /// </summary>
     public class dream_BagItem : Base_Mono
     {
         private Image item_icon, item_frame, lock_On;
-        //private TMP_Text info;
-        private Transform receive;
+
+        private Text info;
+
+        private Transform receive, m_gem_brom;
+
+        private GameObject Image_text;
+
+        private GridLayoutGroup gridLayoutGroup;
         private void Awake()
         {
             item_icon = Find<Image>("icon");
             item_frame = Find<Image>("frame");
-            //info = Find<TMP_Text>("info/info");
+            info = Find<Text>("info");
             lock_On = Find<Image>("icon/lock");
             receive = Find<Transform>("receive");
             receive.gameObject.SetActive(false);
+            m_gem_brom= Find<Transform>("gem_brom");
+            Image_text = Resources.Load<GameObject>("Prefabs/panel_text/Image_text");
+            gridLayoutGroup = Find<GridLayoutGroup>("gem_brom");
         }
 
 
@@ -71,6 +78,11 @@ namespace MVC
                 if (data.user_value != null)
                 {
                     string[] info_str = data.user_value.Split(' ');
+                    int lucky = int.Parse(info_str[1]);
+                    if (lucky > 1 && (data.StdMode == equip_type_list.武器.ToString() || data.StdMode == equip_type_list.项链.ToString()))
+                    {
+                        info.text = (lucky - 1).ToString();
+                    }
                     int lv = int.Parse(info_str[2]);
                     int islock = int.Parse(info_str[3]);
                     lock_On.gameObject.SetActive(islock == 1);
@@ -84,6 +96,39 @@ namespace MVC
                         item_frame.sprite = UI.UI_Manager.I.GetEquipSprite("UI/frame/", "5");
                         item_frame.color = Color.white;
                         Instantiate(Resources.Load<GameObject>("UI/frame/frame/" + lv), item_frame.transform);
+                        if (info_str.Length >= 6)
+                        {
+                            //RectTransform rectTransform = GetComponent<RectTransform>();
+                            //float width = rectTransform.rect.width;
+                            //Debug.Log("width:" + width);
+                            //gridLayoutGroup.cellSize = new Vector2(width / 3, width / 3);
+                            List<string> gem = ArrayHelper.Get_Split<string>(info_str[5], 'X');
+                            for (int i = 0; i < gem.Count; i++)
+                            {
+                                if (gem[i] != "")
+                                {
+                                    List<string> gem_value = ArrayHelper.Get_Split<string>(gem[i], '|');
+                                    if (gem_value.Count == 2)
+                                    {
+                                        if (gem_value[1] != "0")
+                                        {
+                                            Bag_Base_VO gem_data = ArrayHelper.Find(SumSave.db_stditems, x => x.Name == gem_value[1]);
+                                            if (gem_data != null)
+                                            {
+                                                Instantiate(Image_text, m_gem_brom).GetComponent<Image>().sprite = UI.UI_Manager.I.GetEquipSprite("icon/", gem_data.Name);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Bag_Base_VO gem_data = ArrayHelper.Find(SumSave.db_stditems, x => x.StdMode == "材料" && x.Shape == int.Parse(gem_value[0]));
+                                            GameObject go =Instantiate(Image_text, m_gem_brom);
+                                            go.GetComponent<Image>().sprite = UI.UI_Manager.I.GetEquipSprite("icon/", gem_data.Name);
+                                            go.GetComponent<Image>().color = Color.gray;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

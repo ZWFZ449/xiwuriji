@@ -5,6 +5,8 @@ using UnityEngine;
 public enum common_items_list
 {
     Boss召唤卷轴,
+    鉴定符,
+    祝福油
 }
 
 public enum common_Buff

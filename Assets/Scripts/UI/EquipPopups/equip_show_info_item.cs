@@ -117,4 +117,11 @@ public class equip_show_info_item : Base_Mono
         info.text = "   弹道 " + value + " + " + lv;
         info.color = UnityColorPresets.HexToColor("#ffff00");
     }
+
+    public void Init(string path, string value, Color color)
+    {
+        icon.sprite = UI.UI_Manager.I.GetEquipSprite("icon/", path);
+        info.text = "   " + value;
+        info.color = color;
+    }
 }

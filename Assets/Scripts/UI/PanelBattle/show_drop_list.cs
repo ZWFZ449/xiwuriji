@@ -108,7 +108,7 @@ public class show_drop_list : Base_Mono
                         {
                             if (SumSave.db_maps[i].map_boss[j] == monster.Data.crt_name)//存在列表
                             {
-                                dic_map_drop.Add(monster.Data.crt_name, (1, SumSave.db_maps[i]));
+                                dic_map_drop.Add(monster.Data.crt_name, (j+1, SumSave.db_maps[i]));
                                 break;
                             }
                         }
@@ -139,6 +139,16 @@ public class show_drop_list : Base_Mono
                 if (!drop_list.ContainsKey(index))
                 {
                     drop_list.Add(index, (data.Item2.map_boss[data.Item1-1] + "\n" + Show_Color.Red("击杀时刻:" + DateTime.Now), new List<Bag_Base_VO>()));
+                }
+                if (data.Item2.map_intensity_drop.Count > 0)
+                {
+                    foreach (var item in data.Item2.map_intensity_drop.Keys)
+                    {
+                        if (data.Item1 >= item)
+                        {
+                            Show_Bag(data.Item2.map_intensity_drop[item], Drop_Type.逐个掉落, data.Item2);
+                        }
+                    }
                 }
                 Show_Bag(data.Item2.drop_value, Drop_Type.逐个掉落, data.Item2);
                 Show_Bag(data.Item2.map_drop, Drop_Type.固定掉落, data.Item2);
@@ -198,6 +208,7 @@ public class show_drop_list : Base_Mono
                 break;
             case Drop_Type.固定掉落:
                 int sum = (int)Random.Range(9, 9 + (crt_map.map_id * 2) + (crt_map.map_cd[crt_map.GetMapIntensityDrop - 1] / 10));
+                if (Random.Range(0, 100) < 1) sum *= 2; 
                 while (sum >= drop_list[index].Item2.Count)
                 { 
                     Obtain_Drop(values[Random.Range(0, values.Length)], type);
@@ -294,7 +305,7 @@ public class show_drop_list : Base_Mono
             case Stditem_StdMode_List.勋章:
             case Stditem_StdMode_List.遗物_钳:
             case Stditem_StdMode_List.遗物_足:
-                if (Recycling_judgment(data))
+                if (Recycling_judgment(data)) 
                 {
                     SumSave.crt_bags.Set_Bag_List(data);
                 } 

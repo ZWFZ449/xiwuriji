@@ -99,17 +99,40 @@ public  static class Tool_State
                     if (item.mp > 0) dec += (dec == "" ? "" : "\n") + "魔法回复 " + Show_Color.Green(item.mp) + " ";
                     break;
                 case Stditem_StdMode_List.材料:
-                    dec += item.dec;
                     break;
                 case Stditem_StdMode_List.nothing:
                     break;
                 case Stditem_StdMode_List.货币:
-                    dec += item.dec;
-
                     break;
                 case Stditem_StdMode_List.宝石:
-                    dec += item.dec;
-
+                    if (item.hp > 0)
+                    {
+                        dec += enum_equip_entry_list.生命值 + ":" + item.hp;
+                    }
+                    if (item.mp > 0)
+                    {
+                        dec += enum_equip_entry_list.魔法值 + ":" + item.mp;
+                    }
+                    if (item.ac > 0 || item.ac2 > 0)
+                    {
+                        dec += enum_equip_entry_list.物理防御 + ":" + (item.ac + " - " + (item.ac2 ));
+                    }
+                    if (item.mac > 0 || item.mac2 > 0)
+                    {
+                        dec += enum_equip_entry_list.魔法防御 + ":" + (item.mac + " - " + (item.mac2));
+                    }
+                    if (item.dc > 0 || item.dc2 > 0)
+                    {
+                        dec += enum_equip_entry_list.物理攻击 + ":" + (item.dc + " - " + (item.dc2));
+                    }
+                    if (item.mc > 0 || item.mc2 > 0)
+                    {
+                        dec += enum_equip_entry_list.魔法攻击 + ":" + (item.mc + " - " + (item.mc2 ));
+                    }
+                    if (item.sc > 0 || item.sc2 > 0)
+                    {
+                        dec += enum_equip_entry_list.道术攻击 + ":" + (item.sc + " - " + (item.sc2 ));
+                    }
                     break;
             }
             dec+="\n"+item.dec;

@@ -76,7 +76,7 @@ public enum Mysql_Table_Name
     db_formula,//造化炉合成信息
     db_suit,//套装信息
     db_dec,//具体功能消息
-    versions,//版本信息
+    versions_task,//版本信息
     db_weather,//天气信息
     user_trial_towers,//试炼塔
     user_world_boss_copy1,//世界boss测试
@@ -102,7 +102,7 @@ public enum Mysql_Table_Name
     dream_user_pet,//用户宠物信息
     user_data_settings,//用户设置信息
     dream_user_signin,//用户签到信息
-    db_synthesis,//合成信息
+    db_synthesiss,//合成信息
     db_illustrated,//图鉴信息
     dream_user_illustrated,//用户图鉴信息
     global_battle_info,//全局战斗信息

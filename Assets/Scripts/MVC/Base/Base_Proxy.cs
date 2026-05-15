@@ -172,11 +172,21 @@ namespace MVC
         /// <summary>
         /// 读取版本
         /// </summary>
-        private void QueryVersion()
+        protected void QueryVersion()
         {
+            int system_par = 1;
+#if UNITY_EDITOR
+            system_par = 1;
+#elif UNITY_ANDROID
+        system_par = 1;
+           
+#elif UNITY_IPHONE
+        system_par = 2;
+#endif
 
             SumSave.crt_versions = new user_versions();
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.versions);
+            //mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.versions_task);
+            mysqlReader = MysqlDb.Select(Mysql_Table_Name.versions_task, "id", GetStr(system_par));
             if (mysqlReader == null) return;
             if (mysqlReader.HasRows)
             {

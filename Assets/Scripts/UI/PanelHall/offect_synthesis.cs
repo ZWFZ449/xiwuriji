@@ -23,6 +23,10 @@ public class offect_synthesis : Base_Mono
     /// 合成材料
     /// </summary>
     private List<string> needs = new List<string>();
+    /// <summary>
+    /// 宝石合成材料
+    /// </summary>
+    private List<string> gem_needs = new List<string>();
     private void Awake()
     {
         m_btn_brom=Find<Transform>("btn_list/Viewport/Content");
@@ -88,6 +92,7 @@ public class offect_synthesis : Base_Mono
     {
         db_synthesis_vo needlists = item.Data;
         needs.Clear();
+        gem_needs.Clear();
         string dec = "合成" + needlists.synthesis_name;
         List<string> needlist = ArrayHelper.Get_Split<string>(needlists.synthesis_need,',');
         for (int i = 0; i < needlist.Count; i++)
@@ -109,6 +114,10 @@ public class offect_synthesis : Base_Mono
                         dec += "\n" + need[2] + " * " + 1;
                         needs.Add(need[2]);
                         break;
+                    case "4":
+                        dec += "\n" + need[2] + " * " + 1;
+                        gem_needs.Add(need[2]);
+                            break;
                 }
             }
         }
@@ -122,39 +131,72 @@ public class offect_synthesis : Base_Mono
     private void confirm(object arg0)
     {
         db_synthesis_vo data = (db_synthesis_vo)arg0;
-        List<Bag_Base_VO> equips = SumSave.crt_equips.Get(Dream_User_Equip_Type.装备);
-        List<Bag_Base_VO> bags = new List<Bag_Base_VO>();
-        int number = 0;
-        for (int i = 0; i < needs.Count; i++)
+        if (data.synthesis_type.Contains("宝石"))
         {
-            for (int j = 0; j < equips.Count; j++)
+            List<string> gems = SumSave.crt_bags.Get_Gem_Value;
+            int number = 0;
+            for (int i = 0; i < gem_needs.Count; i++)
             {
-                if (needs[i] == equips[j].Name)
+                for (int j = 0; j < gems.Count; j++)
                 {
-                    number++;
-                    bags.Add(equips[j]);
+                    if (gem_needs[i] == gems[j])
+                    { 
+                        number++;
+                        break;
+                    }
                 }
             }
-        }
-        if (number >= needs.Count)
-        {
-            if (Return_Condition())
+            if (number >= gem_needs.Count)
             {
-                for (int i = 0; i < bags.Count; i++) equips.Remove(bags[i]);
-                SumSave.crt_equips.Set(Dream_User_Equip_Type.装备, equips);
-                SendNotification(NotiList.Refresh_Max_Hero_Attribute);
-                Alert_Dec.Show("合成成功 " + " 获得 " + data.synthesis_name);
-                Bag_Base_VO synthesis_value = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == data.synthesis_name);
-                if (synthesis_value != null)
+                if (Return_Condition())
                 {
-                    string user_value = Tool_Battle.Obtain_Equip(synthesis_value, 1, 1);
-                    Bag_Base_VO synthesis = tool_Categoryt.Read_BaseBag(user_value);
-                    SumSave.crt_bags.Set_Bag_List(synthesis);
+                    for (int i = 0; i < gem_needs.Count; i++)
+                    { 
+                        gems.Remove(gem_needs[i]);
+                    }
+                    gems.Add(data.synthesis_name);
+                    SumSave.crt_bags.Set_Gem_Value(gems);
+                    Alert_Dec.Show("合成成功 " + " 获得 " + data.synthesis_name);
+                } else Alert_Dec.Show("合成失败,材料不足");
+            }
+        }
+        else
+        {
+            List<Bag_Base_VO> equips = SumSave.crt_equips.Get(Dream_User_Equip_Type.装备);
+            List<Bag_Base_VO> bags = new List<Bag_Base_VO>();
+            int number = 0;
+            for (int i = 0; i < needs.Count; i++)
+            {
+                for (int j = 0; j < equips.Count; j++)
+                {
+                    if (needs[i] == equips[j].Name)
+                    {
+                        number++;
+                        bags.Add(equips[j]);
+                    }
                 }
+            }
+            if (number >= needs.Count)
+            {
+                if (Return_Condition())
+                {
+                    for (int i = 0; i < bags.Count; i++) equips.Remove(bags[i]);
+                    SumSave.crt_equips.Set(Dream_User_Equip_Type.装备, equips);
+                    SendNotification(NotiList.Refresh_Max_Hero_Attribute);
+                    Alert_Dec.Show("合成成功 " + " 获得 " + data.synthesis_name);
+                    Bag_Base_VO synthesis_value = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == data.synthesis_name);
+                    if (synthesis_value != null)
+                    {
+                        string user_value = Tool_Battle.Obtain_Equip(synthesis_value, 1, 1);
+                        Bag_Base_VO synthesis = tool_Categoryt.Read_BaseBag(user_value);
+                        SumSave.crt_bags.Set_Bag_List(synthesis);
+                    }
+                }
+                else Alert_Dec.Show("合成失败,材料不足");
             }
             else Alert_Dec.Show("合成失败,材料不足");
         }
-        else Alert_Dec.Show("合成失败,材料不足");
+       
         
 
     }

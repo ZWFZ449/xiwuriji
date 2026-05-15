@@ -1,6 +1,5 @@
 using Common;
 using Components;
-using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -238,10 +237,18 @@ public class Dream_Panel_Login : PanelBase
         TheServerObg.gameObject.SetActive(false);
         if (SumSave.uid != null)
         {
-            PlayerPrefs.SetInt(lastServer, select_par.index);
-            SendNotification(NotiList.User_Login);
-            UI_Manager.I.GetPanel<PanelMian>().Show();
-            Hide();
+            if (SumSave.OpenGame)
+            {
+                PlayerPrefs.SetInt(lastServer, select_par.index);
+                SendNotification(NotiList.User_Login);
+                UI_Manager.I.GetPanel<PanelMian>().Show();
+                Hide();
+            }
+            else
+            {
+                Alert.Show("版本错误", "请升级游戏版本\nqq群976784076");
+            }
+            
         }
 
     }

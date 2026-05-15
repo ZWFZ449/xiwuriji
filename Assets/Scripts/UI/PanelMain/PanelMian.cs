@@ -2,13 +2,11 @@ using Common;
 using Components;
 using MVC;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 public class PanelMian : PanelBase
 {
@@ -307,8 +305,5 @@ public class PanelMian : PanelBase
                 }
             }
         }
-    }
-    private void Update()
-    {
-    }
+    } 
 }

@@ -188,7 +188,7 @@ public static class Program
                 break;
             case Mysql_Table_Name.db_dec:
                 break;
-            case Mysql_Table_Name.versions:
+            case Mysql_Table_Name.versions_task:
                 break;
             case Mysql_Table_Name.db_weather:
                 break;

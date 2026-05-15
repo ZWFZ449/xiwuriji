@@ -68,7 +68,6 @@ namespace MVC
         private void Read_Par_Uid()
         {
             mysqlReader = MysqlDb.SelectWhere(Mysql_Table_Name.global_uid, new string[] { "uid", "par" }, new string[] { "=", "=" }, new string[] { SumSave.uid, SumSave.par.ToString() });
-            //if (mysqlReader == null) return;
             if (mysqlReader.HasRows)
             {
                 while (mysqlReader.Read())

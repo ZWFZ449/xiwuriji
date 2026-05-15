@@ -26,6 +26,8 @@ public class dream_user_bag_VO : Base_VO
     /// </summary>
     private List<Bag_Base_VO> bag_List;
 
+    private List<string> gem_valueS;
+
     private int Bag_page = 120;
 
     public void Init(string bag_valueS,string resources_value,string drug_value,int page)
@@ -42,6 +44,7 @@ public class dream_user_bag_VO : Base_VO
             }
         }
         resources_List.Init(resources_value);
+        gem_valueS = ArrayHelper.Get_Split<string>(drug_value, ';');
         Bag_page = page;
     }
     /// <summary>
@@ -53,7 +56,15 @@ public class dream_user_bag_VO : Base_VO
     {
         return resources_List.Set();
     }
-
+    /// <summary>
+    /// 获取宝石数据
+    /// </summary>
+    public List<string> Get_Gem_Value { get { return gem_valueS; } }
+    /// <summary>
+    /// 写入数据
+    /// </summary>
+    /// <param name="gem_value"></param>
+    public void Set_Gem_Value(List<string> gem_value) { gem_valueS = gem_value; MysqlData(); }
     public void Get(Dictionary<string, int> dec, int maxnumber, bool exist = false)
     {
         resources_List.Get(dec, maxnumber, exist);
@@ -110,9 +121,10 @@ public class dream_user_bag_VO : Base_VO
        {
             GetStr(OnWirte(bag_List)),
             GetStr(resources_List.GetData()),
-            GetStr(""),
+            GetStr(string.Join(";", Get_Gem_Value)),
        };
     }
+
     public override string[] Set_Instace_String()
     {
         Init("", "", "", 120);

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class material_item : Base_Mono
 {
-    private Image item_icon, item_frame;
+    private Image item_icon, item_frame; 
     /// <summary>
     /// 基础信息
     /// </summary>

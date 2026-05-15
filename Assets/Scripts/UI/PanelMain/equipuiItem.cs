@@ -81,7 +81,7 @@ namespace MVC
                 if (data == null) return;
                 dream_BagItem item = Instantiate(BagItemPrefabs, transform);
                 item.Data = data;
-                item.GetComponent<Button>().onClick.AddListener(() => { AudioManager.Instance.playAudio(ClipEnum.购买物品); ShowEquip(); });
+                item.GetComponent<Button>().onClick.AddListener(() => { AudioManager.Instance.playAudio(ClipEnum.购买物品); ShowEquip(); });//
                 crt_bag = item;
             }
             get

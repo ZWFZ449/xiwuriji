@@ -14,7 +14,7 @@ public class DeepLinkBuffer : MonoBehaviour
 
     void Awake()
     {
-        DontDestroyOnLoad(this);
+        //DontDestroyOnLoad(this);
         Application.deepLinkActivated += OnDeepLinkActivated;
 
         // 处理之前缓存的指令
