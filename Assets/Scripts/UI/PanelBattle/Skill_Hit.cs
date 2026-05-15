@@ -35,7 +35,7 @@ namespace MVC
         /// <summary>
         /// 技能移动速度
         /// </summary>
-        private int moveSpeed = 4000;
+        private int moveSpeed = 2500;
         /// <summary>
         /// 回收对象池
         /// </summary>
@@ -105,8 +105,32 @@ namespace MVC
             //moveType = MoveType.Straight;
             moveType = (MoveType)(skill.MoveType);
             hasCollided = false;
+            switch (moveType)
+            {
+                case MoveType.Straight:
+                    MoveStraight();
+                    break;
+
+                case MoveType.Homing:
+                    MoveHoming();
+                    break;
+
+                case MoveType.Curve:
+                    MoveCurve();
+                    break;
+
+                case MoveType.Teleport:
+                    transform.position = new Vector3(target.position.x + PushObjectToPool_skill.offset[0], target.position.y + PushObjectToPool_skill.offset[1], target.position.z);
+                    break;
+                    //yield return StartCoroutine(MoveTeleport());
+                    //yield break; // 结束协程
+                case MoveType.oneselfTeleport:
+                    transform.position = baseBattleAttack.transform.position;
+                    break;
+            }
+
             //开始移动
-            StartCoroutine(Move());
+            //StartCoroutine(Move());
 
         }
         IEnumerator Move()
@@ -153,8 +177,12 @@ namespace MVC
                 Vector2 direction = target.position - transform.position;
                 float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
                 transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                if (Vector3.Distance(transform.position, target.position) <= 15f)
+                {
+                    cause_harm();
+                    On_Destroy();
+                }
             }
-
         }
 
         // 追踪移动
@@ -215,7 +243,8 @@ namespace MVC
             {
                 baseBattleAttack.skill_damage(PushObjectToPool_skill); // 造成10点伤害
             }
-            StartCoroutine(MoveToCenterAndDestroy(target.transform));
+            //StartCoroutine(MoveToCenterAndDestroy(target.transform));
+            hasCollided = true;
             On_Destroy();
         }
         IEnumerator MoveToCenterAndDestroy(Transform playerTransform)
@@ -239,6 +268,20 @@ namespace MVC
         // Update is called once per frame
         void Update()
         {
+            switch (moveType)
+            {
+                case MoveType.Straight:
+                    MoveStraight();
+                    break;
+
+                case MoveType.Homing:
+                    MoveHoming();
+                    break;
+
+                case MoveType.Curve:
+                    MoveCurve();
+                    break;
+            }
             if (target == null)
             {
                 if (!hasCollided) On_Destroy();

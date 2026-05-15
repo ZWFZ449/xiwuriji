@@ -440,6 +440,14 @@ public class PanelBattle : PanelBase
             if (monster_list[i].GetComponent<BattleHealthState>().isDead)
             {
                 monster_list[i].SetActive(false);
+                for (int j = 0; j < player_list.Count; j++)
+                {
+                    //判断目标
+                    if (player_list[i].GetComponent<BaseBattleAttack>().InfoTerget == monster_list[i])
+                    {
+                        player_list[i].GetComponent<BaseBattleAttack>().Lose_Terget();
+                    }
+                }
                 monster_list.RemoveAt(i);
                 i--;
             }

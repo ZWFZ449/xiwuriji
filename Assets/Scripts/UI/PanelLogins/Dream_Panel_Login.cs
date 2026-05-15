@@ -124,7 +124,7 @@ public class Dream_Panel_Login : PanelBase
 #if UNITY_EDITOR
         device = 1;
 #elif UNITY_ANDROID
-            device = 1;
+            device = 3;
 #elif UNITY_IPHONE
             device = 2;
 #endif

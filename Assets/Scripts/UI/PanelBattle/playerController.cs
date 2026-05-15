@@ -23,7 +23,7 @@ public class playerController : BaseBattleAttack
     public override void OnAuto()
     {
         base.OnAuto();
-        if (Terget == null) Find_Terget();
+        if (Terget == null || !Terget.gameObject.activeSelf || Terget.isDead) Find_Terget();
         if (Terget == null) return;
         if (battle_skills != null && battle_skills.Count > 0)
         {

@@ -30,6 +30,11 @@ namespace MVC
         {
             Init();
         }
+        /// <summary>
+        /// 查看目标
+        /// </summary>
+        public BattleHealthState InfoTerget { get { return Terget; } }
+
         private float attack_speed = 0;
         private void Update()
         {
@@ -84,7 +89,7 @@ namespace MVC
                     TergetTag = "Monster";
                     break;
                 case Battle_Game_Type.monster:
-                case Battle_Game_Type.Boss:
+                case Battle_Game_Type.Boss: 
                 case Battle_Game_Type.Activity_Monster:
                     TergetTag="Player";
                     break;
