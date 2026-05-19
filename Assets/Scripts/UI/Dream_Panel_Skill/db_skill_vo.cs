@@ -193,11 +193,11 @@ public class db_skill_vo : Base_VO
     public void GetExp(int exp)
     {
         if (lv < 0) return;//未激活
-        if (lv >= skill_up_lv.Count) return;
+        if (lv >= skill_up_lv.Count-1) return;
         this.exp += exp;
         while (this.exp >= skill_up_lv[lv])
         {
-            if (lv >= skill_up_lv.Count) return;
+            if (lv >= skill_up_lv.Count-1) return;
             this.exp -= skill_up_lv[lv];
             lv++;
         }

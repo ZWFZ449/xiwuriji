@@ -1,5 +1,6 @@
 using Common;
 using Components;
+using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -88,8 +89,7 @@ public class Dream_Panel_Login : PanelBase
         TheServerUP.onClick.AddListener(OnLoginClick);
         //登录
         loginBt = Find<Button>("btn_login");
-        loginBt.onClick.AddListener(Open_function);
-     
+        loginBt.onClick.AddListener(Open_function); 
 
 #if UNITY_EDITOR
 
@@ -233,6 +233,7 @@ public class Dream_Panel_Login : PanelBase
     /// 确认登录
     /// </summary>
     public void Login()
+
     {
         TheServerObg.gameObject.SetActive(false);
         if (SumSave.uid != null)
@@ -279,9 +280,9 @@ public class Dream_Panel_Login : PanelBase
                 List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
                 if (list.Count == 2)
                 {
-                    (int, string) bossid = Tool_Battle.GetBossTime(list[0]);
-                    if (bossid.Item2 == "no") continue;
-                    int base_time = bossid.Item1 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
+                    (int,int, string) bossid = Tool_Battle.GetBossTime(list[0]);
+                    if (bossid.Item3 == "no" || bossid.Item1 != 0) continue;
+                    int base_time = bossid.Item2 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
                     if (base_time <= 0) base_time = 999999999;
                     int number = spanSeconds / base_time;
                     if (number > 0)
@@ -301,9 +302,9 @@ public class Dream_Panel_Login : PanelBase
                 List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
                 if (list.Count == 2)
                 {
-                    (int, string) bossid = Tool_Battle.GetBossTime(list[0]);
-                    if (bossid.Item2 == "no") continue;
-                    int base_time = bossid.Item1 * (100 - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
+                    (int,int, string) bossid = Tool_Battle.GetBossTime(list[0]);
+                    if (bossid.Item3 == "no" || bossid.Item1 != 0) continue;
+                    int base_time = bossid.Item2 * (100 - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
                     if (base_time <= 0) base_time = 999999999;
                     int number = spanSeconds / base_time;
                     if (number > 0)
@@ -320,6 +321,7 @@ public class Dream_Panel_Login : PanelBase
         Alert.Show("离线收益", dec);
         SumSave.crt_user_unit.MysqlData();//更新时间戳
         SumSave.crt_setting.MysqlData();
+        Game_Omphalos.i.archive();
     }
     public override void Show()
     {

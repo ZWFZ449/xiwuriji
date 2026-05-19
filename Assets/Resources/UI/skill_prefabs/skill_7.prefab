@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c3f106a78e1aa142b294d8d1a41114b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Gif: {fileID: 11400000, guid: 78973cbf48878194a9815d1db18b028d, type: 2}
+  Gif: {fileID: 11400000, guid: e9f63e49c273c3f4db144556109950a8, type: 2}
   giftype: 1
 --- !u!114 &-7311561032441383021
 MonoBehaviour:

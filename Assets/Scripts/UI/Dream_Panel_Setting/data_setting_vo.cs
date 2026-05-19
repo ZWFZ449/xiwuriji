@@ -70,7 +70,7 @@ public class data_setting_vo : Base_VO
             GetStr(GetData(1)),
             GetStr(GetData(2)),
             GetStr(GetData(3)),
-            GetStr(""),
+            GetStr(GetData(4)),
             GetStr("")
         };
     }
@@ -112,7 +112,7 @@ public class data_setting_vo : Base_VO
         {
             for (int i = 0; i < SumSave.db_sttings.Count; i++)
             {
-                dec += 1 + ",";
+                dec += SumSave.db_sttings[i].setting_type + ",";
             }
         }
         return dec;
@@ -207,7 +207,7 @@ public class data_setting_vo : Base_VO
                     }
                     if (isTrue)
                     {
-                        if (user_data_settings.Count < data[i].Item2)
+                        if (user_data_settings.Count <= data[i].Item2)
                         {
                             while (user_data_settings.Count <= data[i].Item2)
                             { 

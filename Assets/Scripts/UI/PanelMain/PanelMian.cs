@@ -106,6 +106,7 @@ public class PanelMian : PanelBase
         {
             global_info_item global_info_item = Instantiate(global_info_item_prefab, m_global_info_brom);
             global_info_item.gameObject.SetActive(false);
+            global_info_item.GetComponent<Button>().onClick.AddListener(() => { Show_Info(global_info_item); });
             dec_items.Add(global_info_item);
         }
     }
@@ -191,7 +192,6 @@ public class PanelMian : PanelBase
         {
             global_info_item global_info_item = dec_items[0];
             global_info_item.SetInfo(SumSave.global_battle_info[i-1]);
-            global_info_item.GetComponent<Button>().onClick.AddListener(() => { Show_Info(global_info_item); });
             global_info_item.gameObject.SetActive(true);
             global_info_item.transform.SetAsLastSibling();
             dec_items.RemoveAt(0);
@@ -205,6 +205,11 @@ public class PanelMian : PanelBase
     /// <param name="global_info_item"></param>
     private void Show_Info(global_info_item global_info_item)
     {
+        if (SumSave.crt_setting.user_data_settings.Count >= 5 && SumSave.crt_setting.user_data_settings[4] == 0)
+        {
+            Alert_Dec.Show("已关闭属性提示");
+            return;
+        } 
         List<string> info = ArrayHelper.Get_Split<string>(global_info_item.data.value, ';');
         if (info.Count == 2)
         {

@@ -174,7 +174,7 @@ public class playerController : BaseBattleAttack
             On_Skill(skill);
         else
         {
-            while (number >= 1)
+            while (number > 0)
             {
                 number--;
                 On_Skill(skill);
@@ -212,8 +212,8 @@ public class playerController : BaseBattleAttack
 
     private void On_Skill(db_skill_vo skill)
     {
-        if(Terget==null) return;
-        if (!Terget.gameObject.activeInHierarchy) return;
+        if (Terget == null) return;
+        if (!Terget.gameObject.activeInHierarchy || Terget.isDead) return; 
         if (!dic.ContainsKey(skill))
         {
             GameObject skill_prefabs = Resources.Load<GameObject>("UI/skill_prefabs/skill_" + skill.id);// skill.id); 
@@ -228,7 +228,16 @@ public class playerController : BaseBattleAttack
         {
             go.AddComponent<Skill_Hit>();
         }
-        go.GetComponent<Skill_Hit>().SetTargetPosition(this, skill, Terget.transform);
+        go.GetComponent<Skill_Hit>().SetTargetPosition(this, skill, Terget);
+
+        if (skill.MoveType == 0)//剑气类技能
+        {
+            terget_attack_number++;
+            if (terget_attack_number - 10 > Terget.attack_number)//打了20个 对方一个没吃到 不在同一个明面
+            {
+                skill_damage(skill);
+            }
+        }
     }
 
 }

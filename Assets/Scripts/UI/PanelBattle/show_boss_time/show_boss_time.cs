@@ -4,6 +4,7 @@ using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,10 +17,15 @@ public class show_boss_time : Base_Mono
     private Dictionary<string, info_time_item> dic_info_time_item = new Dictionary<string, info_time_item>();
 
     private Button close;
+    /// <summary>
+    /// 显示boss积分
+    /// </summary>
+    private TMP_Text Boss_unit_info;
     private void Awake()
     {
         m_boss_time_brom = Find<Transform>("boss_time_brom/Viewport/Content");
         info_time_item_prefab = Tool_UI.Find_Prefabs<info_time_item>("info_time_item");
+        Boss_unit_info= Find<TMP_Text>("boss_unit_info");
         close = Find<Button>("close_button");
         close.onClick.AddListener(() => { gameObject.SetActive(false); });
         Init();
@@ -60,6 +66,10 @@ public class show_boss_time : Base_Mono
     }
     private void Info()
     {
+        List<long> Units = SumSave.crt_user_unit.Set();
+
+        Boss_unit_info.text = currency_unit.Boss积分 + " " + Battle_Tool.FormatNumberToChineseUnit(Units[(int)currency_unit.Boss积分]);
+
         foreach (KeyValuePair<string, info_time_item> item in dic_info_time_item)
         {
             string value = item.Key;
@@ -87,30 +97,6 @@ public class show_boss_time : Base_Mono
         yield return new WaitForSeconds(1f);
         Info();
         StartCoroutine(UpdateBossTime());
-    }
-    private int Meet_maposs_criteria(string value)
-    {
-        (int, string) Boss_Time = Tool_Battle.GetBossTime(value);
-        if (Boss_Time.Item2 == "no") return 99999999;
-        int spanSeconds = Battle_Tool.SettlementTransport(Boss_Time.Item2, 2);
-        db_vip crt_vip = Tool_Battle.Obtain_Vip();
-        if (crt_vip != null)
-        {
-            int base_time = Boss_Time.Item1 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
-            if (spanSeconds >= base_time)
-            {
-                return 0;
-            }
-            else return base_time - spanSeconds;
-        }
-        else
-        {
-            if (spanSeconds >= Boss_Time.Item1)
-            {
-                return 0;
-            }
-            else return Boss_Time.Item1 - spanSeconds;
-        }
     }
 
 }

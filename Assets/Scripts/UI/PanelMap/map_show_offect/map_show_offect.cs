@@ -125,7 +125,7 @@ public class map_show_offect : Base_Mono
         crt_select_map_lv_item.Selected = true;
         crt_map.Select_Map_Intensity(item.GetMapIntensity);
         Show_Base_Info();
-        //tool_equip(); 
+        tool_equip(); 
     }
     /// <summary>
     /// 测试物品
@@ -133,7 +133,7 @@ public class map_show_offect : Base_Mono
     private void tool_equip()
 
     {
-        return;
+        //return;
         //测试模式
         foreach (var item in drop_dic)
         {
@@ -321,7 +321,7 @@ public class map_show_offect : Base_Mono
                         map_info += Show_Color.Green("\n存量 " + list[1]) + "";
                 }
             }
-            int spanSeconds = Meet_maposs_criteria(map.map_boss[crt_map.GetMap_Intensity - 1]);
+            int spanSeconds = Tool_Battle.Meet_maposs_criteria(map.map_boss[crt_map.GetMap_Intensity - 1]);
             crt_info = "Boss倒计时:" + Show_Color.Green(ConvertSecondsToHHMMSS(spanSeconds));
             if (spanSeconds > 0)
             {
@@ -331,29 +331,6 @@ public class map_show_offect : Base_Mono
         
         base_info.text = map_info + "\n" + crt_info;
     }
-    private int Meet_maposs_criteria(string value)
-    {
-        (int, string) Boss_Time = Tool_Battle.GetBossTime(value);
-        if (Boss_Time.Item2 == "no") return 99999999;
-        int spanSeconds = Battle_Tool.SettlementTransport(Boss_Time.Item2, 2);
-        db_vip crt_vip = Tool_Battle.Obtain_Vip();
-        if (crt_vip != null)
-        {
-            int base_time = Boss_Time.Item1 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
-            if (spanSeconds >= base_time)
-            {
-                return 0;
-            }else return base_time - spanSeconds;
-        }
-        else
-        {
-            if (spanSeconds >= Boss_Time.Item1)
-            {
-                return 0;
-            }else return Boss_Time.Item1 - spanSeconds;
-        } 
-    }
-
 
     private IEnumerator Game_WaitTime(int time)
     {

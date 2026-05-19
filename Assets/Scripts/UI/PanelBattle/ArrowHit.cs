@@ -20,7 +20,7 @@ public class ArrowHit : MonoBehaviour
         GameObject go = ObjectPoolManager.instance.GetObjectFormPool(skill.show_name, ArrowPrefabs, new Vector3(transform.position.x, transform.position.y), Quaternion.identity, transform);
 
         Skill_Hit projectile = go.GetComponent<Skill_Hit>();
-        projectile.SetTargetPosition(baseBattle, skill, monster.transform);
+        projectile.SetTargetPosition(baseBattle, skill, monster);
     }
 
 }

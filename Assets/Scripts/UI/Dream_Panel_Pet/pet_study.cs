@@ -17,11 +17,15 @@ public class pet_study : Base_Mono
     private btn_item p_btn_item_prefab;
 
     private Button close;
+
     db_pet_vo crt_pet;
+
+    private pet_study_offect_specify m_study_offect_specify;
     private enum btn_type
     {
         兽诀,
         高级兽诀,
+        指定兽诀
     }
     private void Awake()
     {
@@ -31,6 +35,7 @@ public class pet_study : Base_Mono
         p_btn_item_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
         close = Find<Button>("close_button");
         close.onClick.AddListener(() => { gameObject.SetActive(false);transform.parent.gameObject.SetActive(false); });
+        m_study_offect_specify = Find<pet_study_offect_specify>("offect_specify");
         Init();
     }
 
@@ -172,15 +177,7 @@ public class pet_study : Base_Mono
     /// <param name="btn_item"></param>
     private void OnClick_btn(btn_item btn_item)
     {
-        SendNotification(NotiList.Read_Mysql_Base_Time);
-        if (SumSave.openMysql)
-        {
-            Alert_Dec.Show("网络连接失败");
-            return;
-        }
-        Need_Condition((btn_type)btn_item.index, 1);
-        if (!Return_Condition()) { Alert_Dec.Show("物品不足");return; }
-        
+       
         int pet_talent_level = 1;
         switch ((btn_type)btn_item.index)
         {
@@ -190,16 +187,30 @@ public class pet_study : Base_Mono
             case btn_type.高级兽诀:
                 pet_talent_level = 2;
                 break;
+            case btn_type.指定兽诀:
+                specify();
+                return;
             default:
                 break;
         }
-        
+        SendNotification(NotiList.Read_Mysql_Base_Time);
+        if (SumSave.openMysql)
+        {
+            Alert_Dec.Show("网络连接失败");
+            return;
+        }
+        Clear_Condition();
+        Need_Condition((btn_type)btn_item.index, 1);
+        if (!Return_Condition()) { Alert_Dec.Show("物品不足");return; }
         List<db_pet_talent_vo> list_vo = ArrayHelper.FindAll(SumSave.db_pet_talents, e => e.pet_talent_level == pet_talent_level);
         List<db_pet_talent_vo> CrtTalent = crt_pet.GetCrtTalent;
         if (list_vo.Count > 0)
         {
             db_pet_talent_vo talent = Obtain_Talent(CrtTalent, list_vo);
-            if (talent == null) { Alert_Dec.Show("似乎什么都没有发生"); return; } 
+            if (talent == null) { Alert_Dec.Show("似乎什么都没有发生"); return; }
+            int index = 1;
+            if (crt_pet.pet_id >= 8) index = 2;
+            if (crt_pet.pet_id >= 10) index = 3;
             if (m_Talent_brom.childCount < 5)//数量低于5个
             {
                 if (Random.Range(0, 100) >= m_Talent_brom.childCount * 20)
@@ -210,17 +221,34 @@ public class pet_study : Base_Mono
                 else
                 {
                     //替换
-                    CrtTalent[Random.Range(crt_pet.pet_id >= 8 ? 2 : 1, CrtTalent.Count)] = talent;
+                    CrtTalent[Random.Range(index, CrtTalent.Count)] = talent;
                 }
             }
             else
-                CrtTalent[Random.Range(crt_pet.pet_id >= 8 ? 2 : 1, CrtTalent.Count)] = talent;
+                CrtTalent[Random.Range(index, CrtTalent.Count)] = talent;
             Alert_Dec.Show("获得天赋" + talent.pet_talent_name);
             SumSave.crt_pet.MysqlData();
             Game_Omphalos.i.archive();
             transform.parent.parent.SendMessage("update_pet");
+            SendNotification(NotiList.Refresh_Max_Hero_Attribute);
             Base_Show();
         }
+    }
+    /// <summary>
+    /// 刷新显示
+    /// </summary>
+    protected void update_specify()
+    {
+        transform.parent.parent.SendMessage("update_pet");
+        Base_Show();
+    }
+    /// <summary>
+    /// 显示指定筛选
+    /// </summary>
+    private void specify()
+    {
+        m_study_offect_specify.gameObject.SetActive(true);
+        m_study_offect_specify.Init(crt_pet);
     }
 
     private db_pet_talent_vo Obtain_Talent(List<db_pet_talent_vo> CrtTalent, List<db_pet_talent_vo> list)

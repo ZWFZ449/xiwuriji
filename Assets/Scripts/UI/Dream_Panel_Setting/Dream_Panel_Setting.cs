@@ -136,7 +136,7 @@ public class Dream_Panel_Setting : Panel_Base
                 for (int i = 0; i < SumSave.db_sttings.Count; i++)
                 {
                     dream_setting_item dream_setting_item = Instantiate(dream_setting_item_prefab, m_setting_btn_borm);
-                    dream_setting_item.Init(i, SumSave.db_sttings[i], settings.Count > i ? settings[i] : 1);
+                    dream_setting_item.Init(i, SumSave.db_sttings[i], settings.Count > i ? settings[i] : SumSave.db_sttings[i].setting_type);
                 }
                 break;
         }

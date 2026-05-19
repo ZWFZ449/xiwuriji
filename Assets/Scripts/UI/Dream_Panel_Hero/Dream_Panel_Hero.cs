@@ -623,6 +623,7 @@ public class Dream_Panel_Hero : Panel_Base
         int lv = Obtain_Talent_Lv(data.talent_name);
         int index = lv;
         if (index <= 0) index = 0;
+        Clear_Condition();
         if (SumSave.crtHero.SelectPos == -1)
         {
             if (data.talent_need_lv == 0)
@@ -691,6 +692,7 @@ public class Dream_Panel_Hero : Panel_Base
     {
         int index = lv;
         if(index<=0) index = 0;
+        Clear_Condition();
         Need_Condition(data.ralent_need_uplv_value[index], data.ralent_need_uplv[index]);
         if (Return_Condition())
         {

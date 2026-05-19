@@ -145,6 +145,7 @@ namespace MVC
             Instantiate(Resources.Load<GameObject>("UI/frame/frame/" + 6), item_frame.transform);
             Instantiate(Resources.Load<GameObject>("UI/Prefabs/panel_pet/" + pet_data.pet_id), item_frame.transform);
             item_icon.gameObject.SetActive(false);
+            info.text = Pet_Data.GetCrtTalent.Count.ToString();
             if (pet_data.crt_name != pet_data.pet_name)
             {
                 item_icon.gameObject.SetActive(true);

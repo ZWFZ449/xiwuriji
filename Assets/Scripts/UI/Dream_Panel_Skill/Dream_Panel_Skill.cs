@@ -153,6 +153,7 @@ public class Dream_Panel_Skill : Panel_Base
         }
         if (number > 0)
         {
+            Clear_Condition();
             Need_Condition(crt_skill.show_name, number);
             if (Return_Condition())
             {
@@ -170,6 +171,7 @@ public class Dream_Panel_Skill : Panel_Base
     /// <param name="arg0"></param>
     private void activate_skill(object arg0)
     {
+        Clear_Condition();
         Need_Condition(crt_skill.show_name, 1);
         if (Return_Condition())
         {

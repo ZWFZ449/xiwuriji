@@ -115,7 +115,7 @@ namespace MVC
         protected bool Return_Condition()
         {
 #if UNITY_EDITOR
-            //return true;
+            return true;
 #elif UNITY_ANDROID
 #elif UNITY_IPHONE
 #endif
@@ -195,7 +195,13 @@ namespace MVC
             if (!dic.ContainsKey(keys.ToString())) dic.Add(keys.ToString(), value);
             else dic[keys.ToString()] += value;
         }
-
+        /// <summary>
+        /// 清空需求
+        /// </summary>
+        protected void Clear_Condition()
+        { 
+            dic.Clear();
+        }
 
         #region old
 

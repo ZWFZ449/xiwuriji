@@ -62,6 +62,7 @@ public class offect_blacksmith : Base_Mono
             Alert_Dec.Show("网络连接失败");
             return;
         }
+        Clear_Condition();
         switch (crt_type)
         {
             case blacksmith_type.鉴定装备:

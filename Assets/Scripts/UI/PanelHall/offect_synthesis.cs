@@ -93,6 +93,7 @@ public class offect_synthesis : Base_Mono
         db_synthesis_vo needlists = item.Data;
         needs.Clear();
         gem_needs.Clear();
+        Clear_Condition();
         string dec = "合成" + needlists.synthesis_name;
         List<string> needlist = ArrayHelper.Get_Split<string>(needlists.synthesis_need,',');
         for (int i = 0; i < needlist.Count; i++)

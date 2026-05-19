@@ -8,6 +8,7 @@ using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Dream_Panel_Pet : Panel_Base
 {
@@ -18,7 +19,9 @@ public class Dream_Panel_Pet : Panel_Base
         放生,
         学习,
         吞噬,
-        炼妖
+        炼妖,
+        一键学习,
+        继承,
     }
     private Transform m_info_brom, m_btn_brom, m_Talent_brom,m_icon_brom;
 
@@ -60,6 +63,8 @@ public class Dream_Panel_Pet : Panel_Base
     /// </summary>
     private pet_Demon crt_demon;
 
+    private pet_inheritance crt_inheritance;
+
     private Image offect;
     public override void Hide()
     {
@@ -72,7 +77,7 @@ public class Dream_Panel_Pet : Panel_Base
         panelMian = UI_Manager.I.GetPanel<PanelMian>();
         dream_Panel_Bag = UI_Manager.I.GetPanel<Dream_Panel_Bag>();
         m_icon_brom = Find<Transform>("bg/offect_list/icon");
-        m_btn_brom = Find<Transform>("bg/battle_btn_list");
+        m_btn_brom = Find<Transform>("bg/battle_btn_list/Scroll View/Viewport/Content");
         m_info_brom = Find<Transform>("bg/offect_list/show_list/Viewport/Content");
         p_info_item_prefab = Tool_UI.Find_Prefabs<info_item>("info_item");
         p_btn_item_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
@@ -86,6 +91,7 @@ public class Dream_Panel_Pet : Panel_Base
         crt_study = Find<pet_study>("offect/pet_study");
         crt_devour= Find<pet_devour>("offect/pet_devour");
         crt_demon = Find<pet_Demon>("offect/pet_Demon");
+        crt_inheritance= Find<pet_inheritance>("offect/pet_inheritance");
     }
     /// <summary>
     /// 初始化获得装备列表
@@ -126,11 +132,13 @@ public class Dream_Panel_Pet : Panel_Base
                 btn_list.Add(replace_state.上阵);
                 btn_list.Add(replace_state.改名);
                 btn_list.Add(replace_state.放生);
+                btn_list.Add(replace_state.一键学习);
                 break;
             case Panel_BagType.已装备:
                 btn_list.Add(replace_state.学习);
                 btn_list.Add(replace_state.吞噬);
                 btn_list.Add(replace_state.炼妖);
+                btn_list.Add(replace_state.继承);
                 break;
             case Panel_BagType.展示:
                 break;
@@ -214,8 +222,87 @@ public class Dream_Panel_Pet : Panel_Base
                 crt_demon.gameObject.SetActive(true);
                 crt_demon.Init(crt_pet);
                 break;
+           case replace_state.一键学习:
+                Alert.Show("一键学习", "自动消耗 兽诀 将当前宠物天赋提升到5星?", confirm_Anto_Study, null);
+                break;
+            case replace_state.继承:
+                offect.gameObject.SetActive(true);
+                crt_inheritance.gameObject.SetActive(true);
+                crt_inheritance.Init(crt_pet);
+                break;
         }
     }
+    /// <summary>
+    /// 一键学习
+    /// </summary>
+    /// <param name="arg0"></param>
+    private void confirm_Anto_Study(object arg0)
+    {
+        StartCoroutine(Anto_petStudy());
+    }
+
+    private IEnumerator Anto_petStudy()
+    {
+        Clear_Condition();
+        while (crt_pet.GetCrtTalent.Count < 5)
+        {
+            Need_Condition("兽诀", 1);
+            if (!Return_Condition())
+            { 
+                Alert_Dec.Show("物品不足"); 
+                yield break;
+            }
+            OnClick_btn();
+            yield return new WaitForSeconds(1f);
+        }
+        Alert_Dec.Show("学习完成");
+        Game_Omphalos.i.archive();
+        Refresh();
+    }
+
+    private void OnClick_btn()
+    { 
+        int pet_talent_level = 1; 
+        List<db_pet_talent_vo> list_vo = ArrayHelper.FindAll(SumSave.db_pet_talents, e => e.pet_talent_level == pet_talent_level);
+        List<db_pet_talent_vo> CrtTalent = crt_pet.GetCrtTalent;
+        if (list_vo.Count > 0)
+        {
+            db_pet_talent_vo talent = Obtain_Talent(CrtTalent, list_vo);
+            if (talent == null) { Alert_Dec.Show("似乎什么都没有发生"); return; }
+            if (CrtTalent.Count < 5)//数量低于5个
+            {
+                if (Random.Range(0, 100) >= m_Talent_brom.childCount * 20)
+                {
+                    //新增
+                    CrtTalent.Add(talent);
+                }
+                else
+                {
+                    //替换
+                    CrtTalent[Random.Range(crt_pet.pet_id >= 8 ? 2 : 1, CrtTalent.Count)] = talent;
+                }
+            }
+            else
+                CrtTalent[Random.Range(crt_pet.pet_id >= 8 ? 2 : 1, CrtTalent.Count)] = talent;
+            update_pet();
+            Alert_Dec.Show("获得天赋" + talent.pet_talent_name);
+            SumSave.crt_pet.MysqlData();
+        }
+    }
+
+    private db_pet_talent_vo Obtain_Talent(List<db_pet_talent_vo> CrtTalent, List<db_pet_talent_vo> list)
+    {
+        db_pet_talent_vo talent = list[Random.Range(0, list.Count)];
+        int number = 0;
+        while (CrtTalent.Contains(talent) && number < 1000)
+        {
+            talent = list[Random.Range(0, list.Count)];
+            number++;
+        }
+        if (number >= 1000) talent = null;
+        return talent;
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -240,7 +327,6 @@ public class Dream_Panel_Pet : Panel_Base
     {
         ShowInfo();
     }
-
     /// <summary>
     /// 显示信息
     /// </summary>
@@ -273,7 +359,6 @@ public class Dream_Panel_Pet : Panel_Base
             item.Init(CrtTalent[i]);
             item.GetComponent<Button>().onClick.AddListener(() => { show_Talent(item); });
         }
-
     }
     /// <summary>
     ///  显示天赋
@@ -306,7 +391,6 @@ public class Dream_Panel_Pet : Panel_Base
         /// 2.7招架
         /// 2.8反击
         /// 2.10技能释放消耗减少
-
         /// 3特殊
         /// 1 增加生命上限
         /// 2 增加基础属性
@@ -318,7 +402,6 @@ public class Dream_Panel_Pet : Panel_Base
         /// 8 连击效果提升
         switch (talent.pet_talent_type)
         {
-
             case 3:
                 switch ((talent.pet_talent_offect))
                 {

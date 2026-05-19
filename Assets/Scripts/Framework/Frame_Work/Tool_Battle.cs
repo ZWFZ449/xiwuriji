@@ -268,8 +268,8 @@ public static class Tool_Battle
                                     case enum_equip_entry_list.防御属性:battle_ac+= value;break;
                                     case enum_equip_entry_list.魔防属性:battle_mac+= value;break;
                                     case enum_equip_entry_list.物攻属性:battle_dc+= value;break;
-                                    case enum_equip_entry_list.魔攻属性:battle_sc+= value;break;
-                                    case enum_equip_entry_list.道攻属性:battle_mc+= value;break;
+                                    case enum_equip_entry_list.魔攻属性:battle_mc+= value;break;
+                                    case enum_equip_entry_list.道攻属性:battle_sc+= value;break;
                                     case enum_equip_entry_list.攻击速度:battle_speed-= (value * speed_bonus); break;
                                     case enum_equip_entry_list.攻击范围:battle_range+= value;break;
                                     case enum_equip_entry_list.暴击属性:crit += value;break;
@@ -919,10 +919,34 @@ public static class Tool_Battle
         crt.type = Battle_Game_Type.player;
         if (crt.hero_type == Hero_Type.战士)
         {
+            if (SumSave.crtHero.SelectPos == 3)//暴君 极限25点
+            {
+                if (battle_speed < 30)
+                {
+                    battle_speed = Mathf.Max(25, 30 - ((30 - battle_speed) / 8));
+                }
+                else
+                battle_speed = Mathf.Max(30, battle_speed);
+            }
+            else
             battle_speed = Mathf.Max(30, battle_speed);
         }
         else
-        { 
+        {
+            if (crt.hero_type == Hero_Type.法师)
+            {
+                if (SumSave.crtHero.SelectPos == 3)//暴君 极限25点
+                {
+                    if (battle_speed < 50)
+                    {
+                        battle_speed = Mathf.Max(40, 50 - ((50 - battle_speed) / 12));
+                    }
+                    else
+                        battle_speed = Mathf.Max(50, battle_speed);
+                }
+                else
+                    battle_speed = Mathf.Max(50, battle_speed);
+            }else
             battle_speed = Mathf.Max(50, battle_speed);
         }
         crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
@@ -989,27 +1013,30 @@ public static class Tool_Battle
             }
         }
     }
+    /// <summary>
+    /// 刷新boss时间 boss名称
+    ///（int，int，string）（地图类型，需求时间，记录最新时间）
+    /// </summary>
 
-
-    private static Dictionary<string, (int,string)> map_boss_time = new Dictionary<string, (int, string)>();
+    private static Dictionary<string, (int, int, string)> map_boss_time = new Dictionary<string, (int, int, string)>();
     /// <summary>
     /// 读取boss刷新时间
     /// </summary>
     public static void Carte_Read_Boss_Time()
     {
-        Dictionary<string, (int,string)> dic = new Dictionary<string, (int, string)>();
+        Dictionary<string, (int,int,string)> dic = new Dictionary<string, (int,int, string)>();
         DateTime now = SumSave.nowtime >= DateTime.Now ? SumSave.nowtime : DateTime.Now;
         string value = Tool_UI.ToStandardFormat(now);
         for (int i = 0; i < SumSave.db_maps.Count; i++)
         {
-            if (SumSave.db_maps[i].map_type == 0)
+            if (SumSave.db_maps[i].map_type == 0||true)
             {
                 for (int j = 0; j < SumSave.db_maps[i].map_boss.Count; j++)
                 {
                     if (!dic.ContainsKey(SumSave.db_maps[i].map_boss[j]))
                     {
                         //dic.Add(SumSave.db_maps[i].map_boss[j], new Dictionary<int, string>());
-                        dic[SumSave.db_maps[i].map_boss[j]] = (SumSave.db_maps[i].map_boss_cdtime[j], value);
+                        dic[SumSave.db_maps[i].map_boss[j]] = (SumSave.db_maps[i].map_type, SumSave.db_maps[i].map_boss_cdtime[j], value);
                     }
                 }
             }
@@ -1021,7 +1048,7 @@ public static class Tool_Battle
     /// </summary>
     /// <param name="map_id"></param>
     /// <returns></returns>
-    public static (int,string) GetBossTime(string map_id) { return (map_boss_time.ContainsKey(map_id))? map_boss_time[map_id]:(99999,"no"); }
+    public static (int,int,string) GetBossTime(string map_id) { return (map_boss_time.ContainsKey(map_id))? map_boss_time[map_id]:(0,99999,"no"); }
 
     /// <summary>
     /// 计算剩余时间
@@ -1030,13 +1057,13 @@ public static class Tool_Battle
     /// <returns></returns>
     public static int Meet_maposs_criteria(string value)
     {
-        (int, string) Boss_Time = Tool_Battle.GetBossTime(value);
-        if (Boss_Time.Item2 == "no") return 99999999;
-        int spanSeconds = Battle_Tool.SettlementTransport(Boss_Time.Item2, 2);
+        (int,int, string) Boss_Time = GetBossTime(value);
+        if (Boss_Time.Item3 == "no") return 99999999;
+        int spanSeconds = Battle_Tool.SettlementTransport(Boss_Time.Item3, 2);
         db_vip crt_vip = Tool_Battle.Obtain_Vip();
         if (crt_vip != null)
         {
-            int base_time = Boss_Time.Item1 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
+            int base_time = Boss_Time.Item2 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
             if (spanSeconds >= base_time)
             {
                 return 0;
@@ -1045,11 +1072,11 @@ public static class Tool_Battle
         }
         else
         {
-            if (spanSeconds >= Boss_Time.Item1)
+            if (spanSeconds >= Boss_Time.Item2)
             {
                 return 0;
             }
-            else return Boss_Time.Item1 - spanSeconds;
+            else return Boss_Time.Item2 - spanSeconds; 
         }
     }
     /// <summary>
@@ -1058,9 +1085,9 @@ public static class Tool_Battle
     /// <param name="map_id"></param>
     /// <param name="time"></param>
     /// <param name="value"></param>
-    public static void SetBossTime(string map_id, int time, string value)
-    { 
-        map_boss_time[map_id] = (time, value);
+    public static void SetBossTime(string map_id,string value)
+    {
+        map_boss_time[map_id] = (map_boss_time[map_id].Item1, map_boss_time[map_id].Item2, value);
     }
     /// <summary>
     /// 创建召唤战斗数据
@@ -1167,7 +1194,7 @@ public static class Tool_Battle
         crt.exp = 0;
         crt.hero_type = (Hero_Type)skill.Effect;
         crt.type = Battle_Game_Type.call;
-        //maxhp = 1; hp = 1; maxmp = 1; mp = 1; 测试
+        //maxhp = 1; hp = 1; maxmp = 1; mp = 1; //测试
         crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky, damage_reduction, magic_damage_reduction, 0);
         return crt;
@@ -1478,7 +1505,7 @@ public static class Tool_Battle
     /// <summary>
     /// 获取权重比例
     /// </summary>
-    private static int[] QualityWeighted = new int[] { 5000, 3000, 2000, 1500, 500, 200, 50, 10, 10, 10 };
+    private static int[] QualityWeighted = new int[] { 5000, 3000, 2000, 1500, 500, 100, 50, 10, 10, 10 };
     /// <summary>
     /// 权重列表
     /// </summary>
@@ -1528,7 +1555,14 @@ public static class Tool_Battle
         WeightedRandomPicker picker = new WeightedRandomPicker(eighteditems);
         // 获取一个概率
         WeightedItem selectedItem = picker.GetRandomItem();
+#if UNITY_EDITOR
+        //return 6;
+#elif UNITY_ANDROID
         
+           
+#elif UNITY_IPHONE
+        
+#endif
         return int.Parse( selectedItem.prizedraw.ToString());
     }
     /// <summary>
@@ -1546,7 +1580,22 @@ public static class Tool_Battle
         if (entry_coefficient_list == null) Obtain_Init_Entry_Coefficient_list();
         if (entry_inscription_list == null) Obtain_Init_Entry_Inscription_list();
         string user_value = bag.Name;
-        //强化等级
+        if (bag.StdMode == Stditem_StdMode_List.项链.ToString())
+        {
+            if (quality >= 6)
+            {
+                if (Random.Range(0, 100) < 10)
+                {
+                    lv++;
+                    if (Random.Range(0, 1000) < 1)
+                    {
+                        //lv++;
+                    }
+                    islock = 1;
+                }
+            }
+        }
+        //幸运等级
         user_value += " " + lv;
         //品质
         user_value += " " + quality;

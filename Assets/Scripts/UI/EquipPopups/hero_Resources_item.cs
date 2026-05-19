@@ -62,6 +62,7 @@ public class hero_Resources_item : Base_Mono
             Bag_Base_VO bag = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == data.Item1);
             if (bag != null)
             {
+                Clear_Condition();
                 Need_Condition(data.Item1, data.Item2);
                 if (Return_Condition())
                 {

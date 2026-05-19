@@ -212,7 +212,8 @@ public class PanelBattle : PanelBase
             switch (item.Key)
             {
                 case slider_type.exp:
-                    item.Value.Refresh(SumSave.crtMaxBattle.exp / (SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp + 1) * 1f, item.Key + "Lv." + SumSave.crtMaxBattle.lv + " " + SumSave.crtMaxBattle.exp + "/" + SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp);
+                    float value= SumSave.crtMaxBattle.exp * 100 / (SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp + 1);
+                    item.Value.Refresh(value, item.Key + "Lv." + SumSave.crtMaxBattle.lv + " " + SumSave.crtMaxBattle.exp + "/" + SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp);
                     break;
             }
         }
@@ -290,6 +291,7 @@ public class PanelBattle : PanelBase
     /// <param name="type"></param>
     protected void Use_Medicine(medicineType type)
     {
+        Clear_Condition();
         Need_Condition(medicine_list[type].GetBag.Name, 1);
         if (Return_Condition())
         {
@@ -382,7 +384,7 @@ public class PanelBattle : PanelBase
     private void Init()
     {
         open_crate_monster = true;
-        if (crt_map.map_type != 0)
+        if (crt_map.map_type != 0 && limited_time <= 0)
         {
             limited_time = 60f;//限时地图
         }
@@ -390,7 +392,7 @@ public class PanelBattle : PanelBase
         boss_slider.gameObject.SetActive(false);
         InitMap();
         crate_player();
-        crate_monster();
+        crate_monster(true);
         autoreply();
         StartCoroutine(Game_WaitTime(crt_map.map_cd[crt_map.GetMapIntensityDrop - 1]));
         StartCoroutine(Game_BossTime(1f));
@@ -432,31 +434,15 @@ public class PanelBattle : PanelBase
     /// <summary>
     /// 初始化怪物
     /// </summary>
-    private void crate_monster()
+    private void crate_monster(bool isInit = false)
     {
         IsBoss = true;
         for (int i = 0; i < monster_list.Count; i++)
         {
-            if (monster_list[i].GetComponent<BattleHealthState>().isDead)
+            BaseBattleAttack attack = monster_list[i].GetComponent<BaseBattleAttack>();
+            if (attack != null && attack.Data.type == Battle_Game_Type.Boss)
             {
-                monster_list[i].SetActive(false);
-                for (int j = 0; j < player_list.Count; j++)
-                {
-                    //判断目标
-                    if (player_list[i].GetComponent<BaseBattleAttack>().InfoTerget == monster_list[i])
-                    {
-                        player_list[i].GetComponent<BaseBattleAttack>().Lose_Terget();
-                    }
-                }
-                monster_list.RemoveAt(i);
-                i--;
-            }
-            else
-            {
-                if (monster_list[i].GetComponent<BaseBattleAttack>().Data.type == Battle_Game_Type.Boss)
-                {
-                    IsBoss = false;
-                }
+                IsBoss = false;
             }
         }
         //判断是否生成boss
@@ -468,9 +454,17 @@ public class PanelBattle : PanelBase
                 Generate_Boss_Monster(crt_map.map_boss[crt_map.GetMapIntensityDrop - 1]);
             }
         }
-      
-        int max = (int)MathF.Min(crt_map.map_crate_number_monster[crt_map.GetMapIntensityDrop - 1],
-            crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] - monster_list.Count);
+        int max = 0;
+        if (isInit)
+        {
+            max = crt_map.map_crate_number_monster[crt_map.GetMapIntensityDrop - 1];
+        }
+        else
+        {
+            max = (int)MathF.Min(crt_map.map_add_number_monster[crt_map.GetMapIntensityDrop - 1],
+                    crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] - monster_list.Count);
+        }
+        
         if (max > 0)
         { 
             for (int i = 0; i < max; i++) Generate_Monster();
@@ -486,10 +480,13 @@ public class PanelBattle : PanelBase
     /// </summary>
     private Dictionary<string,int> Generate_Boss_Time = new Dictionary<string, int>();
 
+    private int boss_index = 0;
+
     private void Auto_Generate_Boss()
     {
         if (!IsBoss) return;
         if (SumSave.crt_setting.user_data_settings.Count >= 2 && SumSave.crt_setting.user_data_settings[1] == 0) return;
+        if (crt_map.map_type != 0) return;
         //for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
         //{
         //    (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
@@ -510,7 +507,8 @@ public class PanelBattle : PanelBase
         //    }
 
         //}
-        for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+        if (boss_index >= SumSave.crt_setting.battle_Boss_list.Count) boss_index = 0;
+        for (int i = boss_index; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
         {
             (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
             if (boss.Item2 > 0)
@@ -518,9 +516,25 @@ public class PanelBattle : PanelBase
                 List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
                 if (list.Count == 2)
                 {
-                    //物品召唤
+                    if (Meet_maposs_criteria(list[0]))//刷新cd到了召唤
+                    {
+                        Clear_Condition();
+                        Need_Condition(common_items_list.Boss召唤卷轴, 1);
+                        if (Return_Condition())
+                        {
+                            Alert_Dec.Show("召唤 " + list[0] + " 成功");
+                            //判断是否满足召唤条件 开启召唤
+                            Generate_Boss_Monster(list[0]);
+                            SumSave.crt_setting.battle_Boss_list[i] = (boss.Item1,
+                                boss.Item2 - 1);
+                            SumSave.crt_setting.MysqlData();
+                            return;
+                        }
+                       
+                    }
                     if (int.Parse(list[1]) > 0)
                     {
+                        Clear_Condition();
                         Need_Condition(common_items_list.Boss召唤卷轴, 1);
                         if (Return_Condition())
                         {
@@ -537,6 +551,7 @@ public class PanelBattle : PanelBase
 
             }
         }
+        boss_index = 0;//都没有符合条件 重新开始循环
     }
     /// <summary>
     /// 符合刷新条件
@@ -546,50 +561,54 @@ public class PanelBattle : PanelBase
     {
         if (!IsBoss) return false;
         bool is_true = false;
-        (int, string) Boss_Time = Tool_Battle.GetBossTime(value);
-        if (Boss_Time.Item2 == "no") return false;
-        int spanSeconds = Battle_Tool.SettlementTransport(Boss_Time.Item2 , 2);
+        (int,int, string) Boss_Time = Tool_Battle.GetBossTime(value);
+        if (Boss_Time.Item3 == "no") return false;
+        int spanSeconds = Battle_Tool.SettlementTransport(Boss_Time.Item3 , 2);
         db_vip crt_vip = Tool_Battle.Obtain_Vip();
         if (crt_vip != null)
         {
-            if (spanSeconds >= Boss_Time.Item1 * (100 - crt_vip.monsterHuntingInterval-(Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100)
+            if (spanSeconds >= Boss_Time.Item2 * (100 - crt_vip.monsterHuntingInterval-(Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100)
             {
                 is_true = true;
             }
         }
         else
         {
-            if (spanSeconds >= Boss_Time.Item1)
+            if (spanSeconds >= Boss_Time.Item2)
             { 
                 is_true = true;
             }
         }
         if (is_true)
         {
-            Tool_Battle.SetBossTime(value, Boss_Time.Item1, Tool_UI.ToStandardFormat(SumSave.nowtime >= DateTime.Now ? SumSave.nowtime : DateTime.Now));
+            Tool_Battle.SetBossTime(value,Tool_UI.ToStandardFormat(SumSave.nowtime >= DateTime.Now ? SumSave.nowtime : DateTime.Now)); 
         }
         if (!is_true)
         {
-            for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+            if (value == crt_map.map_boss[crt_map.GetMapIntensityDrop - 1])
             {
-                (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-                List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-                if (list.Count == 2)
+                for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
                 {
-                    if (list[0] == value)//刷新召唤
+                    (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+                    List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+                    if (list.Count == 2)
                     {
-                        if (int.Parse(list[1]) > 0) 
+                        if (list[0] == value)//刷新召唤
                         {
-                            SumSave.crt_setting.battle_Boss_list[i] = (
-                                       list[0] + "+" + (int.Parse(list[1]) - 1),
-                                       boss.Item2);
-                            SumSave.crt_setting.MysqlData();
-                            is_true = true;
-                            break;
+                            if (int.Parse(list[1]) > 0)
+                            {
+                                SumSave.crt_setting.battle_Boss_list[i] = (
+                                           list[0] + "+" + (int.Parse(list[1]) - 1),
+                                           boss.Item2);
+                                SumSave.crt_setting.MysqlData();
+                                is_true = true;
+                                break;
+                            }
+
                         }
-                       
                     }
                 }
+
             }
         }
 
@@ -681,7 +700,6 @@ public class PanelBattle : PanelBase
                 {
                     Alert.Show("梦想", baseBattleAttack.Data.crt_name + "\n要去追逐梦想啦,跑路咯");
                     monster_list.Remove(health.gameObject);
-                    health.Clear();
                     return;
                 }
             }
@@ -691,7 +709,6 @@ public class PanelBattle : PanelBase
                 case Battle_Game_Type.call:
 
                     player_list.Remove(health.gameObject);
-                    health.Clear();
                     if (player_list.Count == 0)
                     {
                         //战斗失败
@@ -715,13 +732,12 @@ public class PanelBattle : PanelBase
                     {
                         AddBossStringData(baseBattleAttack.Data.crt_name);
                     }
-                    health.Clear();
                     break;
             }
         } 
         else Debug.Log("丢失脚本");
     }
-    /// <summary>
+    /// <summary> 
     /// 首次击杀后写入可以召唤列表
     /// </summary>
     /// <param name="value"></param>
@@ -731,9 +747,10 @@ public class PanelBattle : PanelBase
         for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
         {
             (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-            if (boss.Item1.Contains(value))
+            List<string> boss_name = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+            if (boss_name.Count == 2)
             {
-                return;
+                if (boss_name[0] == value) return;//已经存在
             }
         }
         SumSave.crt_setting.battle_Boss_list.Add((value + "+" + 0, 0));
@@ -804,9 +821,15 @@ public class PanelBattle : PanelBase
     private void Drop(BaseBattleAttack monster)
     {
         int exp = (int)monster.Data.exp * (100 + SumSave.crtMaxBattle.exp_bonus) / 100;
+        if (SumSave.crtHero.lv >= 50)
+        {
+            if (monster.Data.lv <= SumSave.crtHero.lv - 10) 
+            {
+                exp = exp / 10;
+            }
+        }
         Show_Info("击杀 " + monster.Data.crt_name + " 获得经验 " + exp);
         //掉落收益
-
         Add_Exp(exp); 
         AdditionalIncome(monster);
         Show_Info( show_drop_list.Init(monster));
@@ -1037,6 +1060,7 @@ public class PanelBattle : PanelBase
                 player.GetComponent<BaseBattleAttack>().Set_Target(item.GetComponent<BattleHealthState>());
             }
         }
+        boss_index++;
         InitBossSlider(monster);
 
     }

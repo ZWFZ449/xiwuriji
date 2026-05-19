@@ -72,6 +72,10 @@ public class db_pet_vo
     {
         add_attr = (ac, mac, dc, mc, sc);
     }
+    public void SetAddAttr((int, int, int, int, int) values)
+    {
+        add_attr = values;
+    }
     public List<db_pet_talent_vo> GetCrtTalent { get { return crt_talents; } }
 
 }

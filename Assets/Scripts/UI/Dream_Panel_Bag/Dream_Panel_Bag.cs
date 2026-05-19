@@ -167,7 +167,9 @@ public class Dream_Panel_Bag : Panel_Base
             case Panel_BagType.装备:
             case Panel_BagType.存入仓库:
                 List<Bag_Base_VO> baglist = SumSave.crt_bags.Get_Bag_List();
-                base_info.text = m_curPanel_BagType + " " + baglist.Count + "/120";
+                if (m_curPanel_BagType == Panel_BagType.存入仓库)
+                    base_info.text = m_curPanel_BagType + " " + baglist.Count + "/" + SumSave.crt_equips.GetPage;
+                else base_info.text = m_curPanel_BagType + " " + baglist.Count + "/" + SumSave.crt_bags.Get_Page;
                 for (int i = 0; i < baglist.Count; i++)
                 {
                     dream_BagItem bagItem = Instantiate(p_bagItem_prefab, m_BagItem_brom);
@@ -177,7 +179,7 @@ public class Dream_Panel_Bag : Panel_Base
                 break;
             case Panel_BagType.材料:
                 List<(string, int)> resources_list = SumSave.crt_bags.Set();
-                base_info.text = m_curPanel_BagType + " " + resources_list.Count + "/120";
+                base_info.text = m_curPanel_BagType + " " + resources_list.Count + "/" + SumSave.crt_bags.Get_Page;
                 for (int i = 0; i < resources_list.Count; i++)
                 {
                     material_item bagItem = Instantiate(p_material_item_prefab, m_BagItem_brom);

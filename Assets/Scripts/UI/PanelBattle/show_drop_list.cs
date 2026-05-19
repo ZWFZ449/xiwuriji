@@ -359,6 +359,28 @@ public class show_drop_list : Base_Mono
             dic.Add("获取 "  + data.Name + " 失败,背包已满;");
             return false;
         }
+        if (data.StdMode == Stditem_StdMode_List.项链.ToString())
+        {
+            string[] infos = data.user_value.Split(' '); 
+            int lucky = 1;
+            if (infos.Length > 2)
+            {
+                lucky = int.Parse(infos[1]);
+                if (lucky > 1)
+                {
+                    dic.Add(Show_Color.Red("获取 " + (enum_equip_quality_list)(int.Parse(infos[2])) + " " + data.Name + ""));
+                    return true;
+                }
+            }
+        }
+        if (SumSave.crt_setting.user_data_settings.Count >= 6 && SumSave.crt_setting.user_data_settings[5] == 1)//回收非本职业
+        {
+            if (data.job != SumSave.crtHero.job && data.job != 0)
+            {
+                recycle(data, true);
+                return false;
+            }
+        }
         string[] info_str = data.user_value.Split(' ');
         if (info_str.Length > 2)
         {
@@ -381,22 +403,40 @@ public class show_drop_list : Base_Mono
                     }
                     else
                     {
-                        int moeny = data.price;
-                        dic.Add("回收 " + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.金币 + " * " + moeny);
-                        Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
-                        if (lv >= 5)
-                        {
-                            int sycee = 0;
-                            sycee += data.need_lv / 7 * (lv - 5) + 1;
-                            dic.Add("回收 " + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.元宝 + " * "+ sycee);
-                            Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, sycee, Obtain_Int.Add_unit(sycee));
-                        }
+                        recycle(data);
+                        //int moeny = data.price;
+                        //dic.Add("回收 " + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.金币 + " * " + moeny);
+                        //Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
+                        //if (lv >= 5)
+                        //{
+                        //    int sycee = 0;
+                        //    sycee += data.need_lv / 7 * (lv - 5) + 1;
+                        //    dic.Add("回收 " + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.元宝 + " * "+ sycee);
+                        //    Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, sycee, Obtain_Int.Add_unit(sycee));
+                        //}
                         return exist;
                     }
                 }
             }
         }
        return exist;
+    }
+
+    private void recycle(Bag_Base_VO data,bool exist=false)
+    {
+        int moeny = data.price;
+        string[] info_str = data.user_value.Split(' ');
+        int lv = 1;
+        if (info_str.Length > 2) lv = int.Parse(info_str[2]);
+        dic.Add( (exist?"职业回收" :"回收 ") + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.金币 + " * " + moeny);
+        Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
+        if (lv >= 5)
+        {
+            int sycee = 0;
+            sycee += data.need_lv / 7 * (lv - 5) + 1;
+            dic.Add((exist ? "职业回收" : "回收 ") + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.元宝 + " * " + sycee); 
+            Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, sycee, Obtain_Int.Add_unit(sycee));
+        }
     }
 
     private void OnClick(dream_BagItem item)

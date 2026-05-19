@@ -20,6 +20,14 @@ public class BattleHealthState : Base_Mono
     /// 当前生命值和魔法值
     /// </summary>
     private long currentHP, currentMP;
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    private bool is_Dead = false;
+    /// <summary>
+    /// 被攻击次数
+    /// </summary>
+    public int attack_number = 0;
 
     private long CurrentHP { set{ currentHP = value; Show_Info(); } get { return currentHP; } }
     private long CurrentMP { set { currentMP = value; Show_Info(); } get { return currentMP; } }
@@ -45,9 +53,14 @@ public class BattleHealthState : Base_Mono
         }
 
     }
+
+    public string GetBaseName()
+    {
+        return base_name + " " + CurrentHP;
+    }
     public void Clear()
     {
-        StopAllCoroutines();
+        //StopAllCoroutines();
         PushObjectToPool(GetComponent<BaseBattleAttack>().Data.crt_name);
     }
     /// <summary>
@@ -57,6 +70,8 @@ public class BattleHealthState : Base_Mono
     /// <param name="_maxMP"></param>
     public void Init(long _maxHP, int _maxMP,string _base_name)
     {
+        is_Dead = true;
+        attack_number = 0;
         maxHP = _maxHP;
         maxMP = _maxMP;
         CurrentHP = maxHP;
@@ -82,13 +97,16 @@ public class BattleHealthState : Base_Mono
     public void TakeDamage(int damage,DamageEnum type = DamageEnum.普通伤害)
     {
         if (CurrentHP <= 0) return;
+        attack_number++;
         CurrentHP -= damage;
         Hurt(damage, type);
         circularHealthBar.ChangeHealth(CurrentHP);
         if (CurrentHP <= 0)
         {
-            StartCoroutine(WaitAndDestory(base_name));
+            is_Dead = false;
+            //StartCoroutine(WaitAndDestory(base_name));
             transform.parent.parent.parent.parent.SendMessage("clearSumhealth", this);
+            PushObjectToPool(base_name);
         }
     }
     /// <summary>
@@ -122,7 +140,7 @@ public class BattleHealthState : Base_Mono
     /// <summary>
     /// 判定死亡
     /// </summary>
-    public bool isDead { get { return CurrentHP <= 0; } }
+    public bool isDead { get { return CurrentHP <= 0 && is_Dead; } }
 
     public int Get_MP { get { return (int)CurrentMP; } } 
 

@@ -22,6 +22,10 @@ namespace MVC
         /// 目标
         /// </summary>
         protected BattleHealthState Terget;
+        /// <summary>
+        /// 目标被攻击次数
+        /// </summary>
+        protected int terget_attack_number;
 
         private Text base_name;
 
@@ -38,16 +42,15 @@ namespace MVC
         private float attack_speed = 0;
         private void Update()
         {
-            if (data != null)//判断是否有怪物
+            if (data != null)
             {
-                if (Terget != null)
+                if (Terget != null)//判断是否有怪物
                 {
-                    if (Terget.isDead  || !Terget.gameObject.activeInHierarchy) Find_Terget();
+                    if (Terget.isDead ||!Terget.gameObject.activeInHierarchy) Find_Terget();
                 }
                 else Find_Terget();
             }
         }
-
         public void Set_Target(BattleHealthState target)
         {
             Terget = target;
@@ -80,7 +83,8 @@ namespace MVC
         /// </summary>
         protected virtual void Find_Terget()
         {
-            Terget= null;
+            terget_attack_number = 0;
+            Terget = null;
             string TergetTag = "null";
             switch (data.type)
             {
@@ -158,6 +162,7 @@ namespace MVC
         public void base_Init()
         {
             base_name.text = data.crt_name;
+            if (Terget != null) Terget = null;//重置目标
             switch (data.type)
             {
                 case Battle_Game_Type.player:

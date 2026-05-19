@@ -120,6 +120,7 @@ public class blacksmith_gem : Base_Mono
 
     private void Disassemble_Gem(object arg0)
     {
+        Clear_Condition();
         Need_Condition(currency_unit.金币, 5000000);
         if (Return_Condition())
         {

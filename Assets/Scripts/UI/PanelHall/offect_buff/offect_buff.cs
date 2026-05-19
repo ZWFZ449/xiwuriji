@@ -55,6 +55,7 @@ public class offect_buff : Base_Mono
                     Alert_Dec.Show("请输入正确的数字");
                     return;
                 }
+                Clear_Condition();
                 Need_Condition(common_Buff.双倍经验卷轴, number); 
                 if (Return_Condition())
                 {

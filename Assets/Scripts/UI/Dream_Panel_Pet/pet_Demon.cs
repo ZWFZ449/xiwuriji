@@ -216,6 +216,11 @@ public class pet_Demon : Base_Mono
         SumSave.crt_pet.GetPets.Remove(select_pet);
         int number = select_pet.GetCrtTalent.Count + crt_pet.GetCrtTalent.Count;
         int crt_number = Random.Range(number / 2, (number) / 2 + 2);
+#if UNITY_EDITOR
+        crt_number = 16;
+#elif UNITY_ANDROID
+#elif UNITY_IPHONE
+#endif
         if (crt_number >= crt_pet.GetCrtTalent.Count)
         {
             crt_number -= crt_pet.GetCrtTalent.Count;
@@ -257,6 +262,7 @@ public class pet_Demon : Base_Mono
         SumSave.crt_pet.GetPets.Remove(pet);
         int number = pet.GetCrtTalent.Count + crt_pet.GetCrtTalent.Count;
         int crt_number = Random.Range(number / 2, (number) / 2 + 2);
+
         if (crt_number >= crt_pet.GetCrtTalent.Count)
         {
             crt_number -= crt_pet.GetCrtTalent.Count;
