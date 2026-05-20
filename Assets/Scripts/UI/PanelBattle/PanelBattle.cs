@@ -835,9 +835,7 @@ public class PanelBattle : PanelBase
         Show_Info( show_drop_list.Init(monster));
         switch (monster.Data.type)
         {
-            //case Battle_Game_Type.monster://基础掉落
             case Battle_Game_Type.Boss://boss掉落
-                //Game_Omphalos.global_battle_info("击杀 " + monster.Data.crt_name);
                 Battle_Tool.Dream_Obtain_Unit(currency_unit.Boss积分, 1, Obtain_Int.Add_unit(1));
                 AddSkill();
                 Close_BossSlider();
@@ -1050,6 +1048,8 @@ public class PanelBattle : PanelBase
             GetRandomUVPosition(2000), Quaternion.identity, battle_borm.transform);
         item.GetComponent<BaseBattleAttack>().Data = monster;
         item.transform.SetAsFirstSibling();
+        item.GetComponent<Button>().onClick.RemoveAllListeners();
+        item.GetComponent<Button>().onClick.AddListener(() => { lock_target(item); });
         monster_list.Add(item);
         if (SumSave.crt_setting.user_data_settings.Count >= 3 && SumSave.crt_setting.user_data_settings[2] == 1)
         {
@@ -1102,11 +1102,27 @@ public class PanelBattle : PanelBase
             GetRandomUVPosition(2000), Quaternion.identity, battle_borm.transform);
         item.GetComponent<BaseBattleAttack>().Data = monster;
         item.transform.SetAsFirstSibling();
+        item.GetComponent<Button>().onClick.RemoveAllListeners();
+        item.GetComponent<Button>().onClick.AddListener(() => { lock_target(item); });
         monster_list.Add(item);
         //测试掉落
         //show_drop_list.Init(crt_map, monster.type);
 
     }
+    /// <summary>
+    /// 锁定目标
+    /// </summary>
+    /// <param name="item"></param>
+    private void lock_target(GameObject item)
+    {
+        Alert_Dec.Show("手动集火模式开启");
+        //集火boss
+        foreach (var player in player_list)
+        {
+            player.GetComponent<BaseBattleAttack>().Set_Target(item.GetComponent<BattleHealthState>());
+        }
+    }
+
     /// <summary>
     /// 生成半径内随机坐标
     /// </summary>

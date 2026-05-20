@@ -435,9 +435,9 @@ public static class Tool_Battle
                             {
                                 if (illustrated_list.ContainsKey(value[0]))
                                 {
-                                    if (int.Parse( value[1] )== illustrated_list[value[0]])//达成条件
+                                    if (int.Parse( value[1] )<= illustrated_list[value[0]])//达成条件
                                     {
-                                        if (effect.Count >= i)
+                                        if (effect.Count > i)
                                         {
                                             List<string> crt_effect = ArrayHelper.Get_Split<string>(effect[i], '&');
                                             foreach (var item1 in crt_effect)
@@ -1211,7 +1211,7 @@ public static class Tool_Battle
         int value = 0;
         if (talent.Item1.correlation_skill == -1)
         {
-            value += talent.Item1.talent_offect_value[talent.Item2];
+            value += talent.Item1.talent_offect_value[talent.Item2 - 1];
         }
         else
         {
