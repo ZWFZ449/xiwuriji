@@ -125,7 +125,7 @@ public class map_show_offect : Base_Mono
         crt_select_map_lv_item.Selected = true;
         crt_map.Select_Map_Intensity(item.GetMapIntensity);
         Show_Base_Info();
-        tool_equip(); 
+        //tool_equip();  
     }
     /// <summary>
     /// 测试物品
@@ -133,7 +133,7 @@ public class map_show_offect : Base_Mono
     private void tool_equip()
 
     {
-        //return;
+        return;
         //测试模式
         foreach (var item in drop_dic)
         {
