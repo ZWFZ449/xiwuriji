@@ -696,11 +696,18 @@ public class PanelBattle : PanelBase
             SumSave.crt_illustrated.Add_illustrated_list(baseBattleAttack.Data.crt_name);
             if (baseBattleAttack.Data.type == Battle_Game_Type.Boss)
             {
-                if (Random.Range(0, 100) < 2)
+                if (!Tool_Battle.Is_first_Boss_Kill(baseBattleAttack.Data.crt_name))
                 {
-                    Alert.Show("梦想", baseBattleAttack.Data.crt_name + "\n要去追逐梦想啦,跑路咯");
-                    monster_list.Remove(health.gameObject);
-                    return;
+                    if (Random.Range(0, 100) < 2)
+                    {
+                        Alert.Show("梦想", baseBattleAttack.Data.crt_name + "\n要去追逐梦想啦,跑路咯\n接受我的馈赠吧\n" + common_items_list.鉴定符 + " * 1");
+                        int number = 1;
+                        int random = Random.Range(1, 1000);
+                        int maxnumber = number + Random.Range(1, 1000);
+                        Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.鉴定符, new int[] { number + random, random }), maxnumber);
+                        monster_list.Remove(health.gameObject);
+                        return;
+                    }
                 }
             }
             switch (baseBattleAttack.Data.type)
@@ -743,18 +750,20 @@ public class PanelBattle : PanelBase
     /// <param name="value"></param>
     private void AddBossStringData(string value)
     {
-
-        for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+        if (Tool_Battle.Is_first_Boss_Kill(value))
         {
-            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-            List<string> boss_name = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-            if (boss_name.Count == 2)
-            {
-                if (boss_name[0] == value) return;//已经存在
-            }
+            SumSave.crt_setting.battle_Boss_list.Add((value + "+" + 0, 0));
+            SumSave.crt_setting.MysqlData();
         }
-        SumSave.crt_setting.battle_Boss_list.Add((value + "+" + 0, 0));
-        SumSave.crt_setting.MysqlData();
+        //for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+        //{
+        //    (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+        //    List<string> boss_name = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+        //    if (boss_name.Count == 2)
+        //    {
+        //        if (boss_name[0] == value) return;//已经存在
+        //    }
+        //}
     }
     /// <summary>
     /// 获取额外收益

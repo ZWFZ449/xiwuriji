@@ -11,8 +11,8 @@ using Components;
 public enum Map_Btn_list
 { 
    野外地图,
-   每日副本,
    个人Boss,
+   每日副本,
    中州秘境,
    返回战斗
 }
@@ -158,7 +158,7 @@ public class PanelMap : PanelBase
 
                 foreach (var item in base_map_item_dic.Values)
                 {
-                    item.gameObject.SetActive(item.GetMap().map_type == btn_item.index);
+                    item.gameObject.SetActive(satisfy_Need(item, btn_item.index));
                 }
                 break;
             case Map_Btn_list.返回战斗:
@@ -170,6 +170,20 @@ public class PanelMap : PanelBase
                 break;
         }
 
+    }
+
+    private bool satisfy_Need(base_map_item item,int index)
+    {
+        bool exist = false;
+        if (item.GetMap().map_type == index)
+        {
+            if (item.GetMap().map_lv <= SumSave.crtHero.lv || Tool_Battle.IsBuff(common_Buff.月卡))
+            { 
+                exist = true;
+                return exist;
+            }
+        }
+        return exist;
     }
 
     public override void Show()

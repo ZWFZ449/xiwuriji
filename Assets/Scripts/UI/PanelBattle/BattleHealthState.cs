@@ -60,7 +60,13 @@ public class BattleHealthState : Base_Mono
     }
     public void Clear()
     {
-        //StopAllCoroutines();
+        for (int i = transform.childCount - 1; i >= 2; i--)//清空区域内按钮
+        {
+            if (transform.GetChild(i).GetComponent<Skill_Hit>() != null)
+            {
+                transform.GetChild(i).GetComponent<Skill_Hit>().On_Destroy();
+            }
+        } 
         PushObjectToPool(GetComponent<BaseBattleAttack>().Data.crt_name);
     }
     /// <summary>

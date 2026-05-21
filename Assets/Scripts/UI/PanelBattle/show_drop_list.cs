@@ -208,7 +208,11 @@ public class show_drop_list : Base_Mono
                 break;
             case Drop_Type.固定掉落:
                 int sum = (int)Random.Range(9, 9 + (crt_map.map_id * 2) + (crt_map.map_cd[crt_map.GetMapIntensityDrop - 1] / 10));
-                if (Random.Range(0, 100) < 1) sum *= 2; 
+                if (Tool_Battle.Is_first_Boss_Kill(crt_map.map_boss[crt_map.GetMapIntensityDrop - 1])) sum *= 2;
+                else
+                {
+                    if (Random.Range(0, 100) < 1) sum *= 2;
+                }
                 while (sum >= drop_list[index].Item2.Count)
                 { 
                     Obtain_Drop(values[Random.Range(0, values.Length)], type);

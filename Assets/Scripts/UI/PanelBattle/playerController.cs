@@ -83,6 +83,11 @@ public class playerController : BaseBattleAttack
     private IEnumerator On_Attack(db_skill_vo skill)
     {
         int number = 1;
+#if UNITY_EDITOR
+        number = 10;
+#elif UNITY_ANDROID
+#elif UNITY_IPHONE
+#endif
         foreach (var item in skill.GetBuff.Keys)
         {
             switch (item)

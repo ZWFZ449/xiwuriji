@@ -1116,12 +1116,12 @@ public static class Tool_Battle
         ac2 = (int)SumSave.crtMaxBattle.data.ac2 * (power) / 100;
         mac = (int)SumSave.crtMaxBattle.data.mac * (power) / 100;
         mac2 = (int)SumSave.crtMaxBattle.data.mac2 * (power) / 100;
-        dc = (int)SumSave.crtMaxBattle.data.dc * (power) / 100;
-        dc2 = (int)SumSave.crtMaxBattle.data.dc2 * (power) / 100;
+        dc = (int)SumSave.crtMaxBattle.data.sc * (power) / 100;
+        dc2 = (int)SumSave.crtMaxBattle.data.sc2 * (power) / 100;
         sc = (int)SumSave.crtMaxBattle.data.sc * (power) / 100;
         sc2 = (int)SumSave.crtMaxBattle.data.sc2 * (power) / 100;
-        mc = (int)SumSave.crtMaxBattle.data.mc * (power) / 100;
-        mc2 = (int)SumSave.crtMaxBattle.data.mc2 * (power) / 100;
+        mc = (int)SumSave.crtMaxBattle.data.sc * (power) / 100;
+        mc2 = (int)SumSave.crtMaxBattle.data.sc2 * (power) / 100;
         hit = (int)SumSave.crtMaxBattle.data.hit * (power) / 100;
         dodge = (int)SumSave.crtMaxBattle.data.dodge * (power) / 100;
         crit = (int)SumSave.crtMaxBattle.data.crit * (power) / 100;
@@ -1139,7 +1139,7 @@ public static class Tool_Battle
         battle_range = (int)SumSave.crtMaxBattle.data.battle_range * (power) / 100;
         battle_Damage = (int)SumSave.crtMaxBattle.data.battle_Damage * (power) / 100 + skill.skill_damages[lv];//真实伤害
         battle_def = (int)SumSave.crtMaxBattle.data.battle_def * (power) / 100;
-        lucky = (int)SumSave.crtMaxBattle.data.lucky * (power) / 100;
+        //lucky = (int)SumSave.crtMaxBattle.data.lucky * (power) / 100;
         damage_reduction = (int)SumSave.crtMaxBattle.data.damage_reduction * (power) / 100;
         magic_damage_reduction = (int)SumSave.crtMaxBattle.data.magic_damage_reduction * (power) / 100;
         Dictionary<enum_talent_offect_list, int> buff = skill.GetBuff;
@@ -1225,6 +1225,24 @@ public static class Tool_Battle
             }
         }
         return value;
+    }
+    /// <summary>
+    /// 判断首杀 true 是
+    /// </summary>
+    /// <param name="name"></param>
+    public static bool Is_first_Boss_Kill(string value)
+    {
+        bool exist= false;
+        for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+        {
+            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+            List<string> boss_name = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+            if (boss_name.Count == 2)
+            {
+                if (boss_name[0] == value) return exist;//已经存在
+            }
+        }
+        return !exist;
     }
     /// <summary>
     /// 添加技能buff

@@ -76,7 +76,7 @@ namespace MVC
             cause_harm();
         }
 
-        private void On_Destroy(float _lifeTime = 0)
+        public void On_Destroy(float _lifeTime = 0)
         {
             PushObjectToPool(PushObjectToPool_skill.show_name);
         }

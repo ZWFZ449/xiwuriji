@@ -17,7 +17,8 @@ public class offect_blacksmith : Base_Mono
     鉴定装备,
     幸运祝福,
     镶嵌宝石,
-    拆卸宝石
+    拆卸宝石,
+    幸运转移,
     }
 
     private TMP_Text info, need_info;
@@ -114,6 +115,9 @@ public class offect_blacksmith : Base_Mono
             case blacksmith_type.拆卸宝石:
                 crt_gem.gameObject.SetActive(true);
                 crt_gem.Show(crt_bag);
+                break;
+            case blacksmith_type.幸运转移:
+                SelecttransferBagluckyItem();
                 break;
         }
     }
@@ -280,8 +284,76 @@ public class offect_blacksmith : Base_Mono
                     }
                 }
                 break;
+            case blacksmith_type.幸运转移:
+                need_info.text = "幸运转移消耗2000元宝";
+                List<Bag_Base_VO> equips = SumSave.crt_equips.Get(Dream_User_Equip_Type.装备);
+                for (int i= 0; i < equips.Count; i++)
+                {
+                    if (equips[i].StdMode == equip_type_list.武器.ToString())
+                    {
+                        for (int j= 0; j < baglist.Count; j++) 
+                        {
+                            if (baglist[j].StdMode == equips[i].StdMode && baglist[j].need_lv == equips[i].need_lv)
+                            {
+                                if (baglist[j].user_value != null)
+                                {
+                                    string[] info = baglist[j].user_value.Split(' ');
+                                    int lv = int.Parse(info[2]);
+                                    if (lv >= 6)
+                                    {
+                                        dream_BagItem bagItem = Instantiate(dream_BagItem_prefab, m_bags_brom);
+                                        bagItem.Data = baglist[j];
+                                        bagItem.GetComponent<Button>().onClick.AddListener(() => Select_Bag(bagItem.Data));
+                                    }
+                                }
+                            }
+                        }
+                        return;
+                    }
+                }
+                Alert_Dec.Show("当前没有可以幸运转移的装备");
+                break;
         }
+    } 
+    /// <summary>
+    /// 幸运转移
+    /// </summary>
+    /// <param name="bag_Base_VO">穿戴</param>
+    /// <param name="data">背包装备</param>
+    private void SelecttransferBagluckyItem( )
+    {
+        List<Bag_Base_VO> equips = SumSave.crt_equips.Get(Dream_User_Equip_Type.装备);
+        for (int i = 0; i < equips.Count; i++)
+        {
+            if (equips[i].StdMode == crt_bag.StdMode && equips[i].need_lv == crt_bag.need_lv)
+            {
+                Bag_Base_VO equip = equips[i];
+                int lucky = 1;
+                if (equip.user_value != null)
+                {
+                    Clear_Condition();
+                    Need_Condition(currency_unit.元宝, 2000);
+                    if (Return_Condition())
+                    {
+                        string[] equipinfo = equip.user_value.Split(' ');
+                        string[] baginfo = crt_bag.user_value.Split(' ');
+                        lucky = int.Parse(equipinfo[1]);
+                        equipinfo[1] = baginfo[1];
+                        equip.user_value = Battle_Tool.Equip_User_Value(equipinfo);
+                        baginfo[1] = lucky.ToString();
+                        crt_bag.user_value = Battle_Tool.Equip_User_Value(baginfo);
+                        Update_Info(true);
+                        Alert_Dec.Show("幸运转移成功");
+                        return;
+                    }
+                    else Alert_Dec.Show("元宝不足");
+                }else Alert_Dec.Show("当前装备不可以进行幸运转移");
+                return;
+            }
+        }
+        Alert_Dec.Show("当前装备不可以进行幸运转移");
     }
+
     /// <summary>
     /// 强化幸运
     /// </summary>
