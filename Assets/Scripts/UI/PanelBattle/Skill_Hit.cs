@@ -76,6 +76,11 @@ namespace MVC
             cause_harm();
         }
 
+        private void OnDestroy()
+        {
+            On_Destroy();
+        }
+
         public void On_Destroy(float _lifeTime = 0)
         {
             PushObjectToPool(PushObjectToPool_skill.show_name);
@@ -335,6 +340,11 @@ namespace MVC
                 case MoveType.Curve:
                     MoveCurve();
                     break;
+            }
+            if (target == null)
+            { 
+                Debug.Log("目标为空");
+                On_Destroy();
             }
             //if (!(target != null && target.gameObject.activeInHierarchy && !target.isDead))
             //{

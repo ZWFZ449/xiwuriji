@@ -125,104 +125,106 @@ public class pet_study_offect_specify : Base_Mono
     /// <param name="item"></param>
     private void show_Talent(pet_talent_item item)
     {
-        db_pet_talent_vo talent = item.GetTalentValue;
-        string dec = talent.pet_talent_name + "\n";
-        /// <summary>
-        /// 触发类型 
-        /// 1作用自身
-        /// 1.1物理伤害百分比
-        /// 1.2魔法伤害百分比
-        /// 1.3召唤兽伤害百分比
-        /// 1.4物理防御
-        /// 1.5魔法防御
-        /// 1.6回复hp
-        /// 1.7回复mp
-        /// 1.8减少物理伤害%
-        /// 1.9减少魔法伤害%
-        /// 1.11增加躲避    
-        /// 2战斗触发
-        /// 2.1连击  
-        /// 2.2忽视物理防御
-        /// 2.3忽视魔法防御
-        /// 2.4忽视召唤兽防御
-        /// 2.5反镇
-        /// 2.6防爆
-        /// 2.7招架
-        /// 2.8反击
-        /// 2.10技能释放消耗减少
+        string dec = Tool_Battle.show_Talent(item);
+        Alert.Show(item.GetTalentValue.pet_talent_name, dec);
+        //db_pet_talent_vo talent = item.GetTalentValue;
+        //string dec = talent.pet_talent_name + "\n";
+        ///// <summary>
+        ///// 触发类型 
+        ///// 1作用自身
+        ///// 1.1物理伤害百分比
+        ///// 1.2魔法伤害百分比
+        ///// 1.3召唤兽伤害百分比
+        ///// 1.4物理防御
+        ///// 1.5魔法防御
+        ///// 1.6回复hp
+        ///// 1.7回复mp
+        ///// 1.8减少物理伤害%
+        ///// 1.9减少魔法伤害%
+        ///// 1.11增加躲避    
+        ///// 2战斗触发
+        ///// 2.1连击  
+        ///// 2.2忽视物理防御
+        ///// 2.3忽视魔法防御
+        ///// 2.4忽视召唤兽防御
+        ///// 2.5反镇
+        ///// 2.6防爆
+        ///// 2.7招架
+        ///// 2.8反击
+        ///// 2.10技能释放消耗减少
 
-        /// 3特殊
-        /// 1 增加生命上限
-        /// 2 增加基础属性
-        /// 3 概率随机传送一个敌人
-        /// 4 击杀后追击另一个目标
-        /// 5 攻击无视防御
-        /// 6 攻击概率10倍
-        /// 7 攻击概率斩杀
-        /// 8 连击效果提升
-        switch (talent.pet_talent_type)
-        {
+        ///// 3特殊
+        ///// 1 增加生命上限
+        ///// 2 增加基础属性
+        ///// 3 概率随机传送一个敌人
+        ///// 4 击杀后追击另一个目标
+        ///// 5 攻击无视防御
+        ///// 6 攻击概率10倍
+        ///// 7 攻击概率斩杀
+        ///// 8 连击效果提升
+        //switch (talent.pet_talent_type)
+        //{
 
-            case 3:
-                switch ((talent.pet_talent_offect))
-                {
-                    case 1: dec += "生命上限 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
-                    case 2:
-                        dec += "基础属性\n" + enum_equip_entry_list.物理攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv)
-                        + "\n" + enum_equip_entry_list.魔法攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv)
-                        + "\n" + enum_equip_entry_list.道术攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv)
-                        ; break;
-                    case 3: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + "随机传送一个敌人"; break;
-                    case 4: dec += "击杀后追击另一个目标\n每次触发消耗最大Hp的" + Show_Color.Red("10%"); break;
-                    case 5: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red("无视防御") + " 效果"; ; break;
-                    case 6: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red(" 伤害 * " + talent.pet_talent_offectvalue) + " 效果"; break;
-                    case 7: dec += "攻击目标时 当目标血量低于" + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 时 触发 " + Show_Color.Red("斩杀") + " 效果"; break;
-                    case 8: dec += "连击效果提升 " + Show_Color.Red(talent.pet_talent_offecttype + "%"); break;
-                }
-                break;
-            case 1:
-                switch ((talent.pet_talent_offect))
-                {
-                    case 1: dec += "物理伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
-                    case 2: dec += "魔法伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
-                    case 3: dec += "召唤兽伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
-                    case 4: dec += "物理防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv); break;
-                    case 5: dec += "魔法防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv); break;
-                    case 6: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv) + " Hp"; break;
-                    case 7: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv) + " Mp"; break;
-                    case 8: dec += "受到物理伤害减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
-                    case 9: dec += "受到魔法伤害减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
-                    case 11: dec += "躲避 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " "; break;
+        //    case 3:
+        //        switch ((talent.pet_talent_offect))
+        //        {
+        //            case 1: dec += "生命上限 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
+        //            case 2:
+        //                dec += "基础属性\n" + enum_equip_entry_list.物理攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv)
+        //                + "\n" + enum_equip_entry_list.魔法攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv)
+        //                + "\n" + enum_equip_entry_list.道术攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv)
+        //                ; break;
+        //            case 3: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + "随机传送一个敌人"; break;
+        //            case 4: dec += "击杀后追击另一个目标\n每次触发消耗最大Hp的" + Show_Color.Red("10%"); break;
+        //            case 5: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red("无视防御") + " 效果"; ; break;
+        //            case 6: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red(" 伤害 * " + talent.pet_talent_offectvalue) + " 效果"; break;
+        //            case 7: dec += "攻击目标时 当目标血量低于" + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 时 触发 " + Show_Color.Red("斩杀") + " 效果"; break;
+        //            case 8: dec += "连击效果提升 " + Show_Color.Red(talent.pet_talent_offecttype + "%"); break;
+        //        }
+        //        break;
+        //    case 1:
+        //        switch ((talent.pet_talent_offect))
+        //        {
+        //            case 1: dec += "物理伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
+        //            case 2: dec += "魔法伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
+        //            case 3: dec += "召唤兽伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
+        //            case 4: dec += "物理防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv); break;
+        //            case 5: dec += "魔法防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv); break;
+        //            case 6: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv) + " Hp"; break;
+        //            case 7: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv) + " Mp"; break;
+        //            case 8: dec += "受到物理伤害减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
+        //            case 9: dec += "受到魔法伤害减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
+        //            case 11: dec += "躲避 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " "; break;
 
-                    default:
-                        break;
-                }
-                break;
-            case 2:
-                switch ((talent.pet_talent_offect))
-                {
-                    case 1:
-                        dec += "攻击目标时 " + Show_Color.Red((Hero_Type)(talent.pet_talent_job)) + " 职业 "
-                            //+ (talent.pet_talent_job == 3 ? "(召唤兽)" : "")
-                            + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"; break;
-                    case 2:
-                    case 3:
-                    case 4:
-                        dec += "攻击目标时 " + Show_Color.Red((Hero_Type)(talent.pet_talent_offect - 1)) + " 职业 "
-                            //+ (talent.pet_talent_offect == 4 ? "(召唤兽)" : "")
-                            + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 忽视 " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv) + " 防御"; break;
-                    case 5:
-                        dec += "受到伤害时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 反震 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"; break;
-                    case 6: dec += "受到攻击时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 降低 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 暴击概率"; break;
-                    case 7: dec += "受到伤害时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 降低 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"; break;
-                    case 8: dec += "受到攻击时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 反弹 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"; break;
-                    case 10: dec += "技能释放消耗减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
-                }
-                break;
-            default:
-                break;
-        }
-        Alert.Show(talent.pet_talent_name, dec);
+        //            default:
+        //                break;
+        //        }
+        //        break;
+        //    case 2:
+        //        switch ((talent.pet_talent_offect))
+        //        {
+        //            case 1:
+        //                dec += "攻击目标时 " + Show_Color.Red((Hero_Type)(talent.pet_talent_job)) + " 职业 "
+        //                    //+ (talent.pet_talent_job == 3 ? "(召唤兽)" : "")
+        //                    + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"; break;
+        //            case 2:
+        //            case 3:
+        //            case 4:
+        //                dec += "攻击目标时 " + Show_Color.Red((Hero_Type)(talent.pet_talent_offect - 1)) + " 职业 "
+        //                    //+ (talent.pet_talent_offect == 4 ? "(召唤兽)" : "")
+        //                    + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 忽视 " + Show_Color.Red(talent.pet_talent_offectvalue * SumSave.crtHero.lv) + " 防御"; break;
+        //            case 5:
+        //                dec += "受到伤害时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 反震 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"; break;
+        //            case 6: dec += "受到攻击时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 降低 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 暴击概率"; break;
+        //            case 7: dec += "受到伤害时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 降低 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"; break;
+        //            case 8: dec += "受到攻击时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 反弹 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"; break;
+        //            case 10: dec += "技能释放消耗减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
+        //        }
+        //        break;
+        //    default:
+        //        break;
+        //}
+        //Alert.Show(talent.pet_talent_name, dec);
     }
 
 

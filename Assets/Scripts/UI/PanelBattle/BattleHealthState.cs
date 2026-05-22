@@ -60,13 +60,14 @@ public class BattleHealthState : Base_Mono
     }
     public void Clear()
     {
-        for (int i = transform.childCount - 1; i >= 2; i--)//清空区域内按钮
-        {
-            if (transform.GetChild(i).GetComponent<Skill_Hit>() != null)
-            {
-                transform.GetChild(i).GetComponent<Skill_Hit>().On_Destroy();
-            }
-        } 
+        //for (int i = transform.childCount - 1; i >= 2; i--)//清空区域内按钮
+        //{
+        //    if (transform.GetChild(i).GetComponent<Skill_Hit>() != null)
+        //    {
+        //        //Debug.Log("删除技能");
+        //        transform.GetChild(i).GetComponent<Skill_Hit>().On_Destroy();
+        //    }
+        //} 
         PushObjectToPool(GetComponent<BaseBattleAttack>().Data.crt_name);
     }
     /// <summary>
@@ -79,7 +80,7 @@ public class BattleHealthState : Base_Mono
         is_Dead = true;
         attack_number = 0;
         maxHP = _maxHP;
-        maxMP = _maxMP;
+        maxMP = _maxMP + 1;
         CurrentHP = maxHP;
         CurrentMP = maxMP;
         base_name = _base_name;
@@ -112,7 +113,8 @@ public class BattleHealthState : Base_Mono
             is_Dead = false;
             //StartCoroutine(WaitAndDestory(base_name));
             transform.parent.parent.parent.parent.SendMessage("clearSumhealth", this);
-            PushObjectToPool(base_name);
+            Clear();
+            //PushObjectToPool(base_name);
         }
     }
     /// <summary>

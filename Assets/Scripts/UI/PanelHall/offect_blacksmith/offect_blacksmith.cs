@@ -19,6 +19,7 @@ public class offect_blacksmith : Base_Mono
     镶嵌宝石,
     拆卸宝石,
     幸运转移,
+    洗炼装备,
     }
 
     private TMP_Text info, need_info;
@@ -119,14 +120,74 @@ public class offect_blacksmith : Base_Mono
             case blacksmith_type.幸运转移:
                 SelecttransferBagluckyItem();
                 break;
+            case blacksmith_type.洗炼装备:
+                Need_Condition(currency_unit.Boss积分, 100);
+                if (Return_Condition())
+                {
+                    refined_equip();
+                    Update_Info(true);
+                    SelectBagItem(crt_bag);
+                }
+                break;
         }
+    }
+    /// <summary>
+    /// 洗炼装备
+    /// </summary>
+    private void refined_equip()
+    {
+        string[] info = crt_bag.user_value.Split(' ');
+        string user_value = Tool_Battle.Obtain_Equip(crt_bag, 1, int.Parse(info[2]));
+        string[] user_values= user_value.Split(' ');
+        string[] info_list= info[4].Split('X');
+        string[] user_value_list = user_values[4].Split('X');
+        string result = "";
+        for (int i = 0; i < user_value_list.Length; i++)
+        {
+            bool exist = true;
+            string[] entry = user_value_list[i].Split('|');
+            for (int j = 0; j < entry.Length; j++)
+            {
+                string[] entry_arr = entry[j].Split(',');
+                if (entry_arr.Length > 1)
+                {
+                    if (int.Parse(entry_arr[0]) >= 1000)
+                    {
+                        exist = false;
+                        break;
+                    }
+                }
+            }
+            if (exist) result += (result == "" ? "" : "X") + user_value_list[i];
+        }
+        for (int i = 0; i < info_list.Length; i++)
+        {
+            bool exist = false;
+            string[] entry = info_list[i].Split('|');
+            for (int j = 0; j < entry.Length; j++)
+            {
+                string[] entry_arr = entry[j].Split(',');
+                if (entry_arr.Length > 1)
+                {
+                    if (int.Parse(entry_arr[0]) >= 1000)
+                    {
+                        exist = true;
+                        break;
+                    }
+
+                }
+            }
+            if (exist) result += "X" + info_list[i];
+        }
+        info[4] = result;
+        crt_bag.user_value = Battle_Tool.Equip_User_Value(info);
     }
 
     private List<int> appraisal_list;
     /// <summary>
     /// 鉴定
     /// </summary>
-    private void appraisal()
+    private void appraisal() 
     {
         List<int> list = new List<int>() { 1000, 500, 50 };
         int number = Tool_Battle.Obtain_WeightedItem(list);
@@ -235,6 +296,7 @@ public class offect_blacksmith : Base_Mono
         switch (index)
         {
             case blacksmith_type.鉴定装备:
+            case blacksmith_type.洗炼装备:
                 for (int i = 0; i < baglist.Count; i++)
                 {
                     if (baglist[i].need_lv >= 30)
@@ -393,13 +455,22 @@ public class offect_blacksmith : Base_Mono
         if (crt_bag.user_value != null)
         {
             string[] info = crt_bag.user_value.Split(' ');
-            if (info.Length >= 6)
+            switch (crt_type)
             {
-                need_info.text = "需求" + common_items_list.鉴定符 + " *  10";
+                case blacksmith_type.鉴定装备:
+                    if (info.Length >= 6)
+                    {
+                        need_info.text = "需求" + common_items_list.鉴定符 + " *  10";
+                    }
+                    else
+                        need_info.text = "需求" + common_items_list.鉴定符 + " *  2";
+                    break;
+                case blacksmith_type.洗炼装备:
+                    need_info.text = "需求" + currency_unit.Boss积分 + " *  100";
+                    break;
             }
-            else
-                need_info.text = "需求" + common_items_list.鉴定符 + " *  2";
-        } 
+           
+        }
     }
 
     private void SelectBagGemItem(Bag_Base_VO bagItem)

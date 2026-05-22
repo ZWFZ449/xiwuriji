@@ -830,13 +830,13 @@ public class PanelBattle : PanelBase
     private void Drop(BaseBattleAttack monster)
     {
         int exp = (int)monster.Data.exp * (100 + SumSave.crtMaxBattle.exp_bonus) / 100;
-        if (SumSave.crtHero.lv >= 50)
-        {
-            if (monster.Data.lv <= SumSave.crtHero.lv - 10) 
-            {
-                exp = exp / 10;
-            }
-        }
+        //if (SumSave.crtHero.lv >= 50)
+        //{
+        //    if (monster.Data.lv <= SumSave.crtHero.lv - 10) 
+        //    {
+        //        exp = exp / 10;
+        //    }
+        //}
         Show_Info("击杀 " + monster.Data.crt_name + " 获得经验 " + exp);
         //掉落收益
         Add_Exp(exp); 

@@ -2023,7 +2023,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 320, y: 180}
-  m_Spacing: {x: 80, y: 120}
+  m_Spacing: {x: 80, y: 60}
   m_Constraint: 1
   m_ConstraintCount: 1
 --- !u!114 &2454444333759549901
@@ -2661,11 +2661,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6012182569214328686, guid: 79b6298020aad59419827e026996dfe0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000013828
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6012182569214328686, guid: 79b6298020aad59419827e026996dfe0, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000013351
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6012182569214328686, guid: 79b6298020aad59419827e026996dfe0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
