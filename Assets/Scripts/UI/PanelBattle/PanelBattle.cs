@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using Components;
 using MVC;
@@ -231,7 +232,7 @@ public class PanelBattle : PanelBase
     private void InitMedicine()
     {
         medicine_list = new Dictionary<medicineType, medicineitem>();
-        List<(string, int)> crt_bag_resources = SumSave.crt_bags.Set();
+        List<(string, ObscuredInt )> crt_bag_resources = SumSave.crt_bags.Set();
         
         for (int i = 0; i < Enum.GetNames(typeof(medicineType)).Length; i++)
         {
@@ -262,7 +263,7 @@ public class PanelBattle : PanelBase
     /// </summary>
     private void refresh_Medicine()
     {
-        List<(string, int)> crt_bag_resources = SumSave.crt_bags.Set();
+        List<(string, ObscuredInt )> crt_bag_resources = SumSave.crt_bags.Set();
         int number = -1;
         foreach (medicineType item in medicine_list.Keys)
         {
@@ -481,7 +482,6 @@ public class PanelBattle : PanelBase
     private Dictionary<string,int> Generate_Boss_Time = new Dictionary<string, int>();
 
     private int boss_index = 0;
-
     private void Auto_Generate_Boss()
     {
         if (!IsBoss) return;
@@ -700,11 +700,16 @@ public class PanelBattle : PanelBase
                 {
                     if (Random.Range(0, 100) < 2)
                     {
-                        Alert.Show("梦想", baseBattleAttack.Data.crt_name + "\n要去追逐梦想啦,跑路咯\n接受我的馈赠吧\n" + common_items_list.鉴定符 + " * 1");
-                        int number = 1;
-                        int random = Random.Range(1, 1000);
-                        int maxnumber = number + Random.Range(1, 1000);
-                        Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.鉴定符, new int[] { number + random, random }), maxnumber);
+                        Alert.Show("梦想", baseBattleAttack.Data.crt_name + "\n要去追逐梦想啦,跑路咯\n接受我的买路钱吧\n" + currency_unit.元宝+" * 10");
+
+                        ObscuredLong moeny = 10;
+                        Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, moeny, Obtain_Int.Add_unit(moeny));
+
+                        //ObscuredInt  number = 1;
+                        //ObscuredInt  random = Random.Range(1, 1000);
+                        //ObscuredInt  maxnumber = number + Random.Range(1, 1000);
+                        //Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.鉴定符, new ObscuredInt [] { number + random, random }), maxnumber);
+
                         monster_list.Remove(health.gameObject);
                         return;
                     }
@@ -755,15 +760,6 @@ public class PanelBattle : PanelBase
             SumSave.crt_setting.battle_Boss_list.Add((value + "+" + 0, 0));
             SumSave.crt_setting.MysqlData();
         }
-        //for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
-        //{
-        //    (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-        //    List<string> boss_name = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-        //    if (boss_name.Count == 2)
-        //    {
-        //        if (boss_name[0] == value) return;//已经存在
-        //    }
-        //}
     }
     /// <summary>
     /// 获取额外收益

@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using MVC;
 using System.Collections.Generic;
@@ -5,17 +6,18 @@ using UnityEngine;
 
 public class bag_Resources_vo : Base_VO
 {
-    private List<(string,int)> list = new List<(string,int)>();
-    private List<(string, int)> verify_list = new List<(string, int)>();
-    private int index = -1;
-    public void Init(string value)
+    private List<(string,ObscuredInt)> list = new List<(string,ObscuredInt)>();
+    private List<(string, ObscuredInt)> verify_list = new List<(string, ObscuredInt)>();
+    private ObscuredInt index = -1;
+    public void Init(ObscuredString _value)
     {
         index = Random.Range(1, 1000);
-        list = new List<(string, int)>();
+        list = new List<(string, ObscuredInt)>();
+        string value = _value;
         string[] artifact_value_array = value.Split(',');
         if (artifact_value_array.Length >= 1)
         {
-            for (int i = 0; i < artifact_value_array.Length; i++)
+            for (ObscuredInt i = 0; i < artifact_value_array.Length; i++)
             {
                 string[] artifact_array = artifact_value_array[i].Split(' ');
                 if (artifact_array.Length > 1)
@@ -30,7 +32,7 @@ public class bag_Resources_vo : Base_VO
     /// 读取标准
     /// </summary>
     /// <returns></returns>
-    public List<(string, int)> Set()
+    public List<(string, ObscuredInt)> Set()
     {
         return list;
     }
@@ -38,7 +40,7 @@ public class bag_Resources_vo : Base_VO
     /// 传入参数
     /// </summary>
     /// <param name="list"></param>
-    public void Get(Dictionary<string, int> dec,int maxnumber,bool exist = false)
+    public void Get(Dictionary<string, ObscuredInt> dec,ObscuredInt maxnumber,bool exist = false)
     {
         bool crate_state = false;
         //验证数据

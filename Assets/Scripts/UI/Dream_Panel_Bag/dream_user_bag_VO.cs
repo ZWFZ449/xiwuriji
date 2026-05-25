@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using MVC;
 using System.Collections;
@@ -28,7 +29,7 @@ public class dream_user_bag_VO : Base_VO
 
     private List<string> gem_valueS;
 
-    private int Bag_page = 120;
+    private ObscuredInt Bag_page = 120;
 
     public void Init(string bag_valueS,string resources_value,string drug_value,int page)
     {
@@ -52,7 +53,7 @@ public class dream_user_bag_VO : Base_VO
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public List<(string, int)> Set()
+    public List<(string, ObscuredInt)> Set()
     {
         return resources_List.Set();
     }
@@ -65,7 +66,7 @@ public class dream_user_bag_VO : Base_VO
     /// </summary>
     /// <param name="gem_value"></param>
     public void Set_Gem_Value(List<string> gem_value) { gem_valueS = gem_value; MysqlData(); }
-    public void Get(Dictionary<string, int> dec, int maxnumber, bool exist = false)
+    public void Get(Dictionary<string, ObscuredInt> dec, ObscuredInt maxnumber, bool exist = false)
     {
         resources_List.Get(dec, maxnumber, exist);
         Game_Omphalos.Refresh(Mysql_Table_Name.dream_user_bag);
@@ -92,7 +93,7 @@ public class dream_user_bag_VO : Base_VO
         MysqlData();
     }
 
-    public int Get_Page { get { return Bag_page; } }
+    public ObscuredInt Get_Page { get { return Bag_page; } }
     public void Set_Bag_List(List<Bag_Base_VO> bag)
     {
         bag_List = bag;

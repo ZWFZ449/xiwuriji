@@ -188,6 +188,10 @@ public class dream_user_skill_vo : Base_VO
     {
         return user_current_skill;
     }
+    public Dictionary<int, db_skill_vo> Set_Sum_Current_skill()
+    {
+        return user_sum_skill;
+    }
     /// <summary>
     /// 激活技能
     /// </summary>

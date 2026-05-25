@@ -1,4 +1,5 @@
 
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using MVC;
 using MySql.Data.MySqlClient;
@@ -139,11 +140,11 @@ public static class Mysql_Read
         return item;
     }
 
-    public static crtMaxBattleVO Read_Monster(MySqlDataReader reader)
+    public static crtMaxBattleVO Read_Monster(MySqlDataReader reader) 
     {
 
-        crtMaxBattleVO item = new crtMaxBattleVO(0, 0, 0, 0);
-        List<(enum_battle_pet_talent_list, int, int)> list = new List<(enum_battle_pet_talent_list, int, int)>();
+        crtMaxBattleVO item = new crtMaxBattleVO(0, 0, 0, 0, 0);
+        List<(enum_battle_pet_talent_list, ObscuredInt, ObscuredInt)> list = new List<(enum_battle_pet_talent_list, ObscuredInt, ObscuredInt)>();
         item.id = reader.GetInt32(reader.GetOrdinal("id"));
         item.crt_name = reader.GetString(reader.GetOrdinal("monster_name"));// SumSave.crtHero.hero_name;
         item.lv = reader.GetInt32(reader.GetOrdinal("lv"));

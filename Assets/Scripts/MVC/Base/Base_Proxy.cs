@@ -43,6 +43,8 @@ namespace MVC
             MysqlDb = new MysqlDbAccess();
             User_Login();
         }
+
+        private bool isClose = false;
         /// <summary>
         /// 验证数据
         /// </summary>
@@ -63,6 +65,7 @@ namespace MVC
                     if (login == -1)
                     {
                         Game_Omphalos.i.Alert_Info("该用户涉嫌违规操作");
+                        isClose = true;
                         CloseMySqlDB();
                     }
                     if (user_login == 0)
@@ -79,6 +82,7 @@ namespace MVC
                         //}
                         if (login != user_login)
                         {
+                            isClose = true;
                             Game_Omphalos.i.Alert_Info("多开游戏已关闭");
                             CloseMySqlDB();
                         }
@@ -134,6 +138,7 @@ namespace MVC
             if (MysqlDb.MysqlClose) return;
             QueryTime();
             QueryVersion();
+            if (isClose) return;
             if (wirtes.Count > 0)
             {
                 for (int i = 0; i < wirtes.Count; i++)

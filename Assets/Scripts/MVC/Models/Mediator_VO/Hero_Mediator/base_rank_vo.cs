@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Common;
+using CodeStage.AntiCheat.ObscuredTypes;
 
 namespace MVC
 {
@@ -11,11 +12,11 @@ namespace MVC
         /// <summary>
         /// 几区
         /// </summary>
-        public int ranking_server;
+        public ObscuredInt ranking_server;
         /// <summary>
         /// 排名
         /// </summary>
-        public int ranking_index;
+        public ObscuredInt ranking_index;
 
         public string Uid;
 
@@ -50,9 +51,9 @@ namespace MVC
         /// <summary>
         /// 等级
         /// </summary>
-        public int Ranking_lv;
+        public ObscuredInt Ranking_lv;
 
-        public int lv
+        public ObscuredInt lv
         {
             get { return Ranking_lv; }
 
@@ -61,9 +62,9 @@ namespace MVC
         /// <summary>
         /// 战力
         /// </summary>
-        public int Ranking_value;
+        public ObscuredInt Ranking_value;
 
-        public int value
+        public ObscuredInt value
         {
             get { return Ranking_value; }
 

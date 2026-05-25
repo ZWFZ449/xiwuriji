@@ -343,7 +343,7 @@ namespace MVC
             }
             if (target == null)
             { 
-                Debug.Log("目标为空");
+                //Debug.Log("目标为空");
                 On_Destroy();
             }
             //if (!(target != null && target.gameObject.activeInHierarchy && !target.isDead))

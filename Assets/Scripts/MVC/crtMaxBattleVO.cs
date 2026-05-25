@@ -1,7 +1,9 @@
 
+using CodeStage.AntiCheat.ObscuredTypes;
+
 public class crtMaxBattleVO
 {
-    public int id;
+    public ObscuredInt  id;
     /// <summary>
     /// 名称
     /// </summary>
@@ -19,31 +21,31 @@ public class crtMaxBattleVO
     /// <summary>
     /// 等级
     /// </summary>
-    public int lv;
+    public ObscuredInt lv;
     /// <summary>
     /// 经验加成
     /// </summary>
-    public readonly int exp_bonus;
+    public readonly ObscuredInt  exp_bonus;
     /// <summary>
     /// 金币加成
     /// </summary>
-    public readonly int gold_bonus;
+    public readonly ObscuredInt  gold_bonus;
     /// <summary>
     /// 掉落加成
     /// </summary>
-    public readonly int drop_bonus;
+    public readonly ObscuredInt  drop_bonus;
     /// <summary>
     /// 品质加成
     /// </summary>
-    public readonly int quality_bonus;
+    public readonly ObscuredInt  quality_bonus;
 
-    public readonly int boss_cd;
+    public readonly ObscuredInt  boss_cd;
 
     /// <summary>
     /// 属性
     /// </summary>
     public FinalBattleValueVO data;
-    public crtMaxBattleVO(int exp_bonus, int gold_bonus, int drop_bonus ,int quality_bonus ,int boss_cd = 0)
+    public crtMaxBattleVO(ObscuredInt  exp_bonus, ObscuredInt  gold_bonus, ObscuredInt  drop_bonus ,ObscuredInt  quality_bonus ,ObscuredInt  boss_cd)
     { 
         this.exp_bonus= exp_bonus;
         this.gold_bonus = gold_bonus;

@@ -1,4 +1,5 @@
 
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 
 
@@ -12,7 +13,7 @@ namespace MVC
         /// <summary>
         /// 
         /// </summary>
-        public readonly int hp, mp, ac, ac2, mac, mac2, dc, dc2, sc, sc2, mc, mc2; 
+        public readonly ObscuredInt hp, mp, ac, ac2, mac, mac2, dc, dc2, sc, sc2, mc, mc2; 
         /// <summary>
         /// 物品名称
         /// </summary>
@@ -24,15 +25,15 @@ namespace MVC
         /// <summary>
         /// 物品类型
         /// </summary>
-        public int Shape;
+        public ObscuredInt Shape;
         /// <summary>
         /// 需求等级
         /// </summary>
-        public int need_lv;
+        public ObscuredInt need_lv;
         /// <summary>
         /// 物品等级
         /// </summary>
-        public int equip_lv;
+        public ObscuredInt equip_lv;
         /// <summary>
         /// 需求职业 -1通用 0战士 1法师 2道士
         /// </summary>
@@ -40,26 +41,26 @@ namespace MVC
         /// <summary>
         /// 售价
         /// </summary>
-        public int price;        
+        public ObscuredInt price;        
         /// <summary>
         /// 属性 防御
         /// </summary>
-        public int defmin;
+        public ObscuredInt defmin;
         /// <summary>
         /// 属性 防御
         /// </summary>
-        public int defmax;
-        public int macdefmin;
-        public int macdefmax;
-        public int damgemin;
-        public int damagemax;
-        public int magicmin;
-        public int magicmax;
+        public ObscuredInt defmax;
+        public ObscuredInt macdefmin;
+        public ObscuredInt macdefmax;
+        public ObscuredInt damgemin;
+        public ObscuredInt damagemax;
+        public ObscuredInt magicmin;
+        public ObscuredInt magicmax;
         public string dec;
         /// <summary>
         /// 套装
         /// </summary>
-        public int suit;
+        public ObscuredInt suit;
         /// <summary>
         /// 套装名称
         /// </summary>
@@ -70,8 +71,8 @@ namespace MVC
         /// 判断值 1 名称 2 强化等级 3品质 4附加值 5套装6锁定
         /// </summary>
         private string User_value;
-        //int hp, mp, ac, ac2, mac, mac2, dc, dc2, sc, sc2, mc, mc2;
-        public Bag_Base_VO(int hp,int mp,int ac,int ac2,int mac,int mac2,int dc,int dc2,int sc,int sc2,int mc,int mc2)
+        //ObscuredInt hp, mp, ac, ac2, mac, mac2, dc, dc2, sc, sc2, mc, mc2;
+        public Bag_Base_VO(ObscuredInt hp,ObscuredInt mp,ObscuredInt ac,ObscuredInt ac2,ObscuredInt mac,ObscuredInt mac2,ObscuredInt dc,ObscuredInt dc2,ObscuredInt sc,ObscuredInt sc2,ObscuredInt mc,ObscuredInt mc2)
         { 
             this.hp = hp;
             this.mp = mp;

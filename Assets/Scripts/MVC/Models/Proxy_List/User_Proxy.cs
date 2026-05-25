@@ -62,6 +62,8 @@ namespace MVC
             CloseMySqlDB();
             if (isLogin) Game_Omphalos.i.archive();
         }
+
+        private int id;
         /// <summary>
         /// 创建用户数据
         /// </summary>
@@ -72,6 +74,7 @@ namespace MVC
             {
                 while (mysqlReader.Read())
                 {
+                    id = mysqlReader.GetInt32(mysqlReader.GetOrdinal("id"));
                     SumSave.uid = mysqlReader.GetString(mysqlReader.GetOrdinal("par_uid"));
                 }
             }
@@ -84,6 +87,16 @@ namespace MVC
                 //Debug.Log("uid:" + SumSave.uid);
             }
         }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        public void Delete()
+        {
+            OpenMySqlDB();
+            MysqlDb.Delete(Mysql_Table_Name.global_uid, new string[] { "par_uid", "par" }, new string[] { GetStr(SumSave.uid), GetStr(SumSave.par) });
+            CloseMySqlDB();
+        }
+
 
         private void Read_Instace()
         {

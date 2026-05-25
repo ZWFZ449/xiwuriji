@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using MVC;
 using System;
@@ -316,17 +317,17 @@ public class show_drop_list : Base_Mono
                 break;
             case Stditem_StdMode_List.消耗品:
             case Stditem_StdMode_List.材料:
-                int number = 1;
-                int random = Random.Range(1, 1000);
-                int maxnumber = number + Random.Range(1, 1000);
+                ObscuredInt  number = 1;
+                ObscuredInt  random = Random.Range(1, 1000);
+                ObscuredInt  maxnumber = number + Random.Range(1, 1000);
                 dic.Add("获得 " + data.Name + " * " + number);
-                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, data.Name, new int[] { number + random, random }), maxnumber);
+                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, data.Name, new ObscuredInt [] { number + random, random }), maxnumber);
                 break;
             case Stditem_StdMode_List.nothing:
                 break;
             case Stditem_StdMode_List.货币:
                 currency_unit unit = Tool_State.ToEnum(data.Name, currency_unit.金币);
-                int moeny = 1;
+                ObscuredLong moeny = 1;
                 switch (unit)
                 {
                     case currency_unit.金币:
@@ -385,6 +386,23 @@ public class show_drop_list : Base_Mono
                 return false;
             }
         }
+        if (SumSave.crt_setting.user_data_settings.Count >= 7 && SumSave.crt_setting.user_data_settings[6] == 1)//保留20级以上的需求为0的装备
+        {
+            if (data.job  == 0 && data.need_lv >= 20)
+            {
+                string[] infos = data.user_value.Split(' ');
+                int lv  = 1;
+                if (infos.Length > 2)
+                {
+                    lv = int.Parse(infos[2]);
+                    if (lv >= 6)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
         string[] info_str = data.user_value.Split(' ');
         if (info_str.Length > 2)
         {

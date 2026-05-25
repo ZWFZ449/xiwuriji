@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Common;
 using System;
 using Components;
+using CodeStage.AntiCheat.ObscuredTypes;
 
 namespace MVC
 {
@@ -121,7 +122,7 @@ namespace MVC
 #endif
             bool exist = false;
             Dictionary<string, long> keys = dic;
-            Dictionary<string, int> bagdic = new Dictionary<string, int>();
+            Dictionary<string, ObscuredInt > bagdic = new Dictionary<string, ObscuredInt >();
             long count = 0;
             List<long> currency_unit_list = new List<long>(new long[Enum.GetNames(typeof(currency_unit)).Length]);
             List<long> listunit = SumSave.crt_user_unit.Set();
@@ -146,7 +147,7 @@ namespace MVC
                     }
                     if (isneed)
                     {
-                        List<(string, int)> list = SumSave.crt_bags.Set();
+                        List<(string, ObscuredInt )> list = SumSave.crt_bags.Set();
                         for (int i = 0; i < list.Count; i++)
                         {
                             if (item == list[i].Item1)
@@ -204,102 +205,6 @@ namespace MVC
         }
 
         #region old
-
-
-        /// <summary>
-        /// 消耗物品
-        /// </summary>
-        /// <param name="keys"></param>
-        /// <returns></returns>
-        protected bool RefreshConsumables_old()
-        {
-#if UNITY_EDITOR
-            //return true;
-#elif UNITY_ANDROID
-#elif UNITY_IPHONE
-#endif
-            bool exist = false;
-            Dictionary<string, long> keys = dic;
-            Dictionary<string, int> bagdic = new Dictionary<string, int>();
-            long count = 0;
-            //0灵珠 1历练 2元宝 3灵气4离线积分5试炼积分
-            List<long> currency_unit_list = new List<long> { 0, 0, 0, 0, 0, 0 };
-            List<long> listunit = SumSave.crt_user_unit.Set();
-
-            foreach (string item in keys.Keys)
-            {
-                bool isneed = true;//下一个
-                if (isneed)
-                {
-                    for (int i = 0; i < Enum.GetNames(typeof(currency_unit)).Length; i++)
-                    {
-                        if (item == ((currency_unit)i).ToString())
-                        {
-                            if (listunit[i] >= Mathf.Abs(keys[item]))
-                            {
-                                currency_unit_list[i] += (long)Mathf.Abs(keys[item]);
-                                count++;
-                                isneed = false;
-                                // continue;
-                                break;
-                            }
-                        }
-                    }
-                    if (isneed)
-                    {
-                        List<(string, int)> list = SumSave.crt_bag_resources.Set();
-                        for (int i = 0; i < list.Count; i++)
-                        {
-                            if (item == list[i].Item1)
-                            {
-                                if (list[i].Item2 >= Mathf.Abs(keys[item]))
-                                {
-                                    if (!bagdic.ContainsKey(item))
-                                    {
-                                        bagdic.Add(item, (int)-Mathf.Abs(keys[item]));
-                                        count++;
-                                    }
-                                    isneed = false;
-                                    break;
-                                    //continue;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (count == keys.Count)
-            {
-                for (int i = 0; i < currency_unit_list.Count; i++)
-                {
-                    if (currency_unit_list[i] > 0)
-                    {
-                        switch ((currency_unit)i)
-                        {
-                            case currency_unit.金币:
-                            case currency_unit.元宝:
-                            case currency_unit.Boss积分:
-                            case currency_unit.离线积分:
-                            case currency_unit.试炼积分:
-                            case currency_unit.灵气:
-                                SumSave.crt_user_unit.verify_data((currency_unit)i, -currency_unit_list[i]);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-                if (bagdic.Count > 0)
-                {
-                    SumSave.crt_bag_resources.Get(bagdic, 1);
-                    Game_Omphalos.i.Wirte_ResourcesList(Emun_Resources_List.material_value, SumSave.crt_bag_resources.GetData());
-                }
-            }
-            exist = count == keys.Count;
-            dic.Clear();
-            return exist;
-
-        }
         /// <summary>
         /// 随机获得天气并写入
         /// </summary>

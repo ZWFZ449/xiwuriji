@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using Components;
 using MVC;
@@ -77,11 +78,11 @@ public class offect_Fame : Base_Mono
                                 }
                                 break;
                             case 3:
-                                int number = int.Parse(gift_values[2]);
-                                int random = Random.Range(1, 1000);
-                                int maxnumber = number + Random.Range(1, 1000);
+                                ObscuredInt number = int.Parse(gift_values[2]);
+                                ObscuredInt  random = Random.Range(1, 1000);
+                                ObscuredInt  maxnumber = number + Random.Range(1, 1000);
                                 Alert_Dec.Show("获得  " + gift_values[1] + " * " + number);
-                                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, gift_values[1], new int[] { number + random, random }), maxnumber);
+                                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, gift_values[1], new ObscuredInt [] { number + random, random }), maxnumber);
                                 break;
                             default:
                                 break;

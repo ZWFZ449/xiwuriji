@@ -614,7 +614,7 @@ namespace MVC
                     SumSave.db_maps.Add(Read_Mysql.Read(mysqlReader));
                 }
             }
-            ArrayHelper.Ascending(SumSave.db_maps, e => e.map_lv);
+            //ArrayHelper.Ascending(SumSave.db_maps, e => e.map_lv);
             //Battle_Tool.tool_map();
             Tool_Battle.Carte_Read_Boss_Time();
             //Carte_Read_Boss_Time();

@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,37 +10,37 @@ public readonly struct FinalBattleValueVO
     /// 最终属性
     /// </summary>
     public readonly long battle_maxhp;
-    public readonly int battle_maxmp;
+    public readonly ObscuredInt battle_maxmp;
 
     /// <summary>
     /// 基础属性
     /// </summary>
     public readonly long hp, mp;
-    public readonly int dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2;
+    public readonly ObscuredInt dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2;
     /// <summary>
     /// 二级属性
     /// </summary>
-    public readonly int hit, dodge, crit, critDmg;
+    public readonly ObscuredInt hit, dodge, crit, critDmg;
     /// <summary>
     /// 百分比属性
     /// </summary>
-    public readonly int battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def;
+    public readonly ObscuredInt battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def;
     /// <summary>
     /// 移动速度
     /// </summary>
-    public readonly int move_speed;
+    public readonly ObscuredInt move_speed;
     /// <summary>
     /// 回复
     /// </summary>
-    public readonly int hpRegen, mpRegen;
+    public readonly ObscuredInt hpRegen, mpRegen;
     /// <summary>
     /// buff效果
     /// </summary>
-    public readonly List<(enum_battle_pet_talent_list,int,int)> buffList;
+    public readonly List<(enum_battle_pet_talent_list,ObscuredInt,ObscuredInt)> buffList;
     /// <summary>
     /// 幸运
     /// </summary>
-    public readonly int lucky, damage_reduction, magic_damage_reduction;
+    public readonly ObscuredInt lucky, damage_reduction, magic_damage_reduction;
 
     /// <summary>
     /// 初始化
@@ -79,10 +80,10 @@ public readonly struct FinalBattleValueVO
     /// <param name="lucky">幸运</param>
     /// <param name="damage_reduction">伤害减免</param>
     /// <param name="magic_damage_reduction">魔法伤害减免</param>
-    public FinalBattleValueVO(long battle_maxhp, int battle_maxmp, long hp, int mp, int dc, int dc2, int mac,
-        int mac2, int ac, int ac2, int sc, int sc2, int mc, int mc2, int hit, int dodge, int crit, int critDmg, int hpRegen, int mpRegen,
-        int battle_hp, int battle_mp, int battle_ac, int battle_mac, int battle_dc, int battle_sc, int battle_mc, int battle_speed, int battle_range, int battle_Damage, int battle_def,
-        List<(enum_battle_pet_talent_list, int, int)> buffList,int lucky,int damage_reduction, int magic_damage_reduction,int move_speed)
+    public FinalBattleValueVO(long battle_maxhp, ObscuredInt battle_maxmp, long hp, ObscuredInt mp, ObscuredInt dc, ObscuredInt dc2, ObscuredInt mac,
+        ObscuredInt mac2, ObscuredInt ac, ObscuredInt ac2, ObscuredInt sc, ObscuredInt sc2, ObscuredInt mc, ObscuredInt mc2, ObscuredInt hit, ObscuredInt dodge, ObscuredInt crit, ObscuredInt critDmg, ObscuredInt hpRegen, ObscuredInt mpRegen,
+        ObscuredInt battle_hp, ObscuredInt battle_mp, ObscuredInt battle_ac, ObscuredInt battle_mac, ObscuredInt battle_dc, ObscuredInt battle_sc, ObscuredInt battle_mc, ObscuredInt battle_speed, ObscuredInt battle_range, ObscuredInt battle_Damage, ObscuredInt battle_def,
+        List<(enum_battle_pet_talent_list, ObscuredInt, ObscuredInt)> buffList,ObscuredInt lucky,ObscuredInt damage_reduction, ObscuredInt magic_damage_reduction,ObscuredInt move_speed)
     { 
         this.battle_maxhp = battle_maxhp;
         this.battle_maxmp = battle_maxmp;

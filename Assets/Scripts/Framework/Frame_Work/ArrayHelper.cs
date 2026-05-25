@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -296,6 +297,29 @@ namespace Common
             {
                 if (item != "")
                     list.Add((T)Convert.ChangeType(item, typeof(T)));
+            }
+            return list;
+        }
+
+        public static List<ObscuredInt> Get_Split(string array, char split)
+        {
+            List<ObscuredInt> list = new List<ObscuredInt>();
+            string[] str = array.Split(split);
+            foreach (var item in str)
+            {
+                if (item != "")
+                    list.Add(int.Parse(item));
+            }
+            return list;
+        }
+        public static List<ObscuredLong> Get_SplitLong(string array, char split)
+        {
+            List<ObscuredLong> list = new List<ObscuredLong>();
+            string[] str = array.Split(split);
+            foreach (var item in str)
+            {
+                if (item != "")
+                    list.Add(long.Parse(item));
             }
             return list;
         }

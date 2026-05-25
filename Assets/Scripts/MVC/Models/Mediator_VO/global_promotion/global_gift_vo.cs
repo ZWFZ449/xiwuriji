@@ -1,24 +1,22 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
-using MVC;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using MVC; 
 
 public class global_gift_vo : Base_VO
 {
-    public int gift_id;
+    public ObscuredInt gift_id;
 
-    public int gift_type;
+    public ObscuredInt gift_type;
 
-    public int gift_par;
+    public ObscuredInt gift_par;
     private string gift_selectkey;
     private string gift_value;
 
-    private int gift_state;
+    private ObscuredInt gift_state;
 
-    private int GiftPoints;
+    private ObscuredInt GiftPoints;
 
-    public void Init(int gift_id, int gift_type,int gift_par,string gift_selectkey, string gift_value, int gift_state,int GiftPoints)
+    public void Init(ObscuredInt gift_id, ObscuredInt gift_type,ObscuredInt gift_par,string gift_selectkey, string gift_value, ObscuredInt gift_state,ObscuredInt GiftPoints)
     { 
         this.gift_id = gift_id;
         this.gift_type = gift_type;
@@ -52,13 +50,13 @@ public class global_gift_vo : Base_VO
     /// <summary>
     /// 领取状态
     /// </summary>
-    public int GetGiftState { get { return gift_state; } } 
+    public ObscuredInt GetGiftState { get { return gift_state; } } 
     /// <summary>
     /// 获取礼物积分
     /// </summary>
-    public int GetGiftPoints { get { return GiftPoints; } }
+    public ObscuredInt GetGiftPoints { get { return GiftPoints; } }
 
-    public void SetGiftValue(int value)
+    public void SetGiftValue(ObscuredInt value)
     {
         gift_state = value;
         MysqlData();

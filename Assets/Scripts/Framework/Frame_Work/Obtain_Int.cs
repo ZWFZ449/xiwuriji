@@ -1,28 +1,29 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// 获取int类型值
+/// 获取ObscuredInt类型值
 /// </summary>
 public static class Obtain_Int 
 {
     /// <summary>
     /// 获取指针类型值
     /// </summary>
-    private static Dictionary<int,int[]> dic = new Dictionary<int, int[]>();
+    private static Dictionary<ObscuredInt,ObscuredInt[]> dic = new Dictionary<ObscuredInt, ObscuredInt[]>();
     /// <summary>
     /// 获取物品指针
     /// </summary>
-    private static Dictionary<int, object> resources = new Dictionary<int, object>();
+    private static Dictionary<ObscuredInt, object> resources = new Dictionary<ObscuredInt, object>();
     /// <summary>
     /// 
     /// </summary>
     /// <param name="key"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static int Add(int key, object resources_name, int[] value)
+    public static ObscuredInt Add(ObscuredInt key, object resources_name, ObscuredInt[] value)
     {
-        int index = key;
+        ObscuredInt index = key;
         if (!dic.ContainsKey(key))
         {
             dic.Add(key, value);
@@ -52,13 +53,13 @@ public static class Obtain_Int
     }
 
     /// <summary>
-    /// 获取int类型值
+    /// 获取ObscuredInt类型值
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
-    public static Dictionary<string,int> Get(int key)
+    public static Dictionary<string,ObscuredInt> Get(ObscuredInt key)
     {
-        Dictionary<string, int> valuePairs = new Dictionary<string, int>();
+        Dictionary<string, ObscuredInt> valuePairs = new Dictionary<string, ObscuredInt>();
         valuePairs.Add(resources[key].ToString(), dic[key][0] - dic[key][1]);
         dic.Remove(key);
         resources.Remove(key);

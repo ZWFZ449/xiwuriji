@@ -83,11 +83,9 @@ public class hero_Resources_item : Base_Mono
         gameObject.SetActive(false);
         if (isRefresh)
         {
-            transform.parent.SendMessage("Refresh");
+            transform.parent.parent.parent.parent.SendMessage("Refresh"); 
         }
     }
-
-
     /// <summary>
     /// 初始化
     /// </summary>

@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 using static UnityColorPresets;
 using TMPro;
 using UnityEngine;
+using CodeStage.AntiCheat.ObscuredTypes;
 
 public class offect_signin : Base_Mono
 {
@@ -36,15 +37,15 @@ public class offect_signin : Base_Mono
             SumSave.crt_signin.Clear();
             SumSave.crt_signin.MysqlData();
             Alert_Dec.Show("签到成功");
-            int money = 1000000;
+            ObscuredLong money = 1000000;
             SumSave.crt_global_gift.SetGiftPoints(2);
             string dec = "获得 " + Show_Color.Red(2) + " 荣耀积分";
             dec += "\n获得" + Show_Color.Red(money) + " " + currency_unit.金币;
             Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, money, Obtain_Int.Add_unit(money));
-            int number = 10;
-            int random = Random.Range(1, 1000);
-            int maxnumber = number + Random.Range(1, 1000);
-            Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.Boss召唤卷轴, new int[] { number + random, random }), maxnumber);
+            ObscuredInt  number = 10;
+            ObscuredInt  random = Random.Range(1, 1000);
+            ObscuredInt  maxnumber = number + Random.Range(1, 1000);
+            Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.Boss召唤卷轴, new ObscuredInt [] { number + random, random }), maxnumber);
             dec += "\n获得" + Show_Color.Red(number) + " " + common_items_list.Boss召唤卷轴;
             if (Tool_Battle.IsBuff(common_Buff.月卡))
             {
@@ -60,7 +61,7 @@ public class offect_signin : Base_Mono
                 Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, (crt_vip.characterExperience * 20), Obtain_Int.Add_unit((crt_vip.characterExperience * 20)));
                 random = Random.Range(1, 1000);
                 maxnumber = crt_vip.characterExperience + Random.Range(1, 1000);
-                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.Boss召唤卷轴, new int[] { crt_vip.characterExperience + random, random }), maxnumber);
+                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.Boss召唤卷轴, new ObscuredInt [] { crt_vip.characterExperience + random, random }), maxnumber);
                 pet_list pet = (pet_list)(crt_vip.vip_lv - 1);
                 SumSave.crt_pet.AddPet(pet);
                 dec += Colorize("\n获得 灵宠 " + pet.ToString() + "\n", GameColors.Uncommon);
@@ -88,7 +89,7 @@ public class offect_signin : Base_Mono
     private void init()
     {
         info.text = "签到奖励";
-        int money = 1000000;
+        ObscuredInt  money = 1000000;
         string dec = "\n " + Show_Color.Red(money) + " " + currency_unit.金币;
         dec += "\n " + common_items_list.Boss召唤卷轴 + "*" + Show_Color.Red(10);
         Color c = Tool_Battle.IsBuff(common_Buff.月卡) ? GameColors.Uncommon : GameColors.Common; 

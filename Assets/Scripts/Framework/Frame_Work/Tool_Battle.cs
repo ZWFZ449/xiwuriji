@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using MVC;
 using System;
@@ -30,15 +31,15 @@ public static class Tool_Battle
     /// <returns></returns>
     public static crtMaxBattleVO InitPlayerMaxBattle()
     {
-        int exp_bonus = 0, gold_bonus = 0, drop_bonus = 0, quality_bonus = 0,boss_cd=0;
-        int maxhp = 0, maxmp = 0;
-        int battle_hp = 0, battle_mp = 0, battle_ac = 0, battle_mac = 0, battle_dc = 0, battle_sc = 0, battle_mc = 0, battle_speed = 0, battle_range = 0, battle_Damage = 0, battle_def = 0;
-        int hp = 0, mp = 0, dc = 0, dc2 = 0, mac = 0, mac2 = 0, ac = 0, ac2 = 0, sc = 0, sc2 = 0, mc = 0, mc2 = 0;
-        int hit = 0, dodge = 0, crit = 0, critDmg = 100;
-        int hpRegen = 0, mpRegen = 0;
-        int lucky = 0, damage_reduction=0,magic_damage_reduction=0;
+        ObscuredInt exp_bonus = 0, gold_bonus = 0, drop_bonus = 0, quality_bonus = 0,boss_cd=0;
+        ObscuredInt maxhp = 0, maxmp = 0;
+        ObscuredInt battle_hp = 0, battle_mp = 0, battle_ac = 0, battle_mac = 0, battle_dc = 0, battle_sc = 0, battle_mc = 0, battle_speed = 0, battle_range = 0, battle_Damage = 0, battle_def = 0;
+        ObscuredInt hp = 0, mp = 0, dc = 0, dc2 = 0, mac = 0, mac2 = 0, ac = 0, ac2 = 0, sc = 0, sc2 = 0, mc = 0, mc2 = 0;
+        ObscuredInt hit = 0, dodge = 0, crit = 0, critDmg = 100;
+        ObscuredInt hpRegen = 0, mpRegen = 0;
+        ObscuredInt lucky = 0, damage_reduction=0,magic_damage_reduction=0;
         Dictionary<enum_equip_entry_list, int> buffList = new Dictionary<enum_equip_entry_list, int>();
-        List<(enum_battle_pet_talent_list,int,int)> talentList = new List<(enum_battle_pet_talent_list, int, int)>();
+        List<(enum_battle_pet_talent_list, ObscuredInt, ObscuredInt)> talentList = new List<(enum_battle_pet_talent_list, ObscuredInt, ObscuredInt)>();
         Dictionary<int, int> suits = new Dictionary<int, int>();//套装
         int speed_bonus = 1;
         if (SumSave.crtHero.job != 1) speed_bonus = 2;
@@ -66,7 +67,7 @@ public static class Tool_Battle
                 battle_range += item.initrange + (item.range * SumSave.crtHero.lv / (item.uprange + 1));
             }
         }
-        Dictionary<int, db_skill_vo> skill_list = SumSave.crt_skill.Set_Current_skill();
+        Dictionary<int, db_skill_vo> skill_list = SumSave.crt_skill.Set_Sum_Current_skill(); 
         //初始化临时buff
         foreach (var item in skill_list) item.Value.ClearBuff();
         foreach (var talent in SumSave.crtHero.talent)
@@ -191,16 +192,16 @@ public static class Tool_Battle
                     mp += crt_euqip[i].mp;
                     break;
                 case Hero_Type.战士:
-                    hp += (int)(crt_euqip[i].hp * 1.8);
-                    mp += (int)(crt_euqip[i].mp * 0.5);
+                    hp += (ObscuredInt)(crt_euqip[i].hp * 1.8);
+                    mp += (ObscuredInt)(crt_euqip[i].mp * 0.5);
                     break;
                 case Hero_Type.法师:
-                    hp += (int)(crt_euqip[i].hp * 0.5);
-                    mp += (int)(crt_euqip[i].mp * 1.8);
+                    hp += (ObscuredInt)(crt_euqip[i].hp * 0.5);
+                    mp += (ObscuredInt)(crt_euqip[i].mp * 1.8);
                     break;
                 case Hero_Type.道士:
-                    hp += (int)(crt_euqip[i].hp * 1.2);
-                    mp += (int)(crt_euqip[i].mp * 1.2);
+                    hp += (ObscuredInt)(crt_euqip[i].hp * 1.2);
+                    mp += (ObscuredInt)(crt_euqip[i].mp * 1.2);
                     break;
                 default:
                     break;
@@ -502,7 +503,7 @@ public static class Tool_Battle
                         }
                         break;
                     case Illustrated_Type.装备图鉴:
-                        int number = 0;
+                        ObscuredInt number = 0;
                         for (int i = 0; i < list.Count; i++)
                         {
                             if (illustrated_list.ContainsKey(list[i])) number++;
@@ -578,7 +579,7 @@ public static class Tool_Battle
         
         foreach (var item in skill_list)
         {
-            int skill_lv = item.Value.SetLv(); 
+            ObscuredInt skill_lv = item.Value.SetLv(); 
             if (skill_lv >= 0 && item.Value.Job != -1)
             {
                 //if (item.Value.Job == -1)
@@ -599,7 +600,7 @@ public static class Tool_Battle
                     {
                         if (skill_lv >= item.Value.skill_offect_value_list[skill_effect_type].Count - 1)
                             skill_lv = item.Value.skill_offect_value_list[skill_effect_type].Count - 1;
-                        int value = item.Value.skill_offect_value_list[skill_effect_type][skill_lv];
+                        ObscuredInt value = item.Value.skill_offect_value_list[skill_effect_type][skill_lv];
                         switch (skill_effect_type)
                         {
                             case enum_equip_entry_list.生命值: hp += value; break;
@@ -663,7 +664,7 @@ public static class Tool_Battle
         //被动技能
         foreach (var item in SumSave.db_skills)
         {
-            int skill_lv = item.SetLv();
+            ObscuredInt skill_lv = item.SetLv();
             if (skill_lv >= 0)
             {
                 if (item.Job == -1)
@@ -683,7 +684,7 @@ public static class Tool_Battle
                         {
                             if (skill_lv >= item.skill_offect_value_list[skill_effect_type].Count - 1)
                                 skill_lv = item.skill_offect_value_list[skill_effect_type].Count - 1;
-                            int value = item.skill_offect_value_list[skill_effect_type][skill_lv];
+                            ObscuredInt value = item.skill_offect_value_list[skill_effect_type][skill_lv];
                             switch (skill_effect_type)
                             {
                                 case enum_equip_entry_list.生命值: hp += value; break;
@@ -755,8 +756,8 @@ public static class Tool_Battle
             dc += 1;
             mc += 1;
             sc += 1;
-            (int,int,int,int,int) pet_attr = pet.GetCrtAttr;
-            (int, int, int, int, int) pet_add_attr = pet.GetAddAttr;
+            (ObscuredInt,ObscuredInt,ObscuredInt,ObscuredInt,ObscuredInt) pet_attr = pet.GetCrtAttr;
+            (ObscuredInt, ObscuredInt, ObscuredInt, ObscuredInt, ObscuredInt) pet_add_attr = pet.GetAddAttr;
             List<db_pet_talent_vo> talent_list = pet.GetCrtTalent;
             Bag_Base_VO bag = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == pet.pet_name);
             ac2 += bag.ac2 + pet_attr.Item1 + pet_add_attr.Item1;
@@ -766,19 +767,19 @@ public static class Tool_Battle
             sc2 += bag.sc2 + pet_attr.Item5 + pet_add_attr.Item5;
             foreach (var talent in talent_list)
             {
-                (enum_battle_pet_talent_list, int, int) D = (enum_battle_pet_talent_list.任意门, 0, 0);
-                int lv = (int)MathF.Min(60, SumSave.crtHero.lv);
+                (enum_battle_pet_talent_list, ObscuredInt, ObscuredInt) D = (enum_battle_pet_talent_list.任意门, 0, 0);
+                ObscuredInt lv = (ObscuredInt)MathF.Min(60, SumSave.crtHero.lv);
                 switch (talent.pet_talent_type)
                 {
                     
                     case 3:
                         switch ((talent.pet_talent_offect))
                         {
-                            case 1: battle_hp+=(int)(talent.pet_talent_offectvalue) ; break;
+                            case 1: battle_hp+=(ObscuredInt)(talent.pet_talent_offectvalue) ; break;
                             case 2:
-                                dc2+= (int)(talent.pet_talent_offectvalue * lv);
-                                mc2 += (int)(talent.pet_talent_offectvalue * lv);
-                                sc2 += (int)(talent.pet_talent_offectvalue * lv); break;
+                                dc2+= (ObscuredInt)(talent.pet_talent_offectvalue * lv);
+                                mc2 += (ObscuredInt)(talent.pet_talent_offectvalue * lv);
+                                sc2 += (ObscuredInt)(talent.pet_talent_offectvalue * lv); break;
                            case 3: D = new (enum_battle_pet_talent_list.任意门, talent.pet_talent_offecttype,1);
                                 if(!talentList.Contains(D)) talentList.Add(D); break;
                             case 4:
@@ -799,23 +800,23 @@ public static class Tool_Battle
                         {
 
                             case 1:
-                                battle_dc+= (int)(talent.pet_talent_offectvalue); break;
+                                battle_dc+= (ObscuredInt)(talent.pet_talent_offectvalue); break;
                             case 2: 
-                                battle_mc+= (int)(talent.pet_talent_offectvalue); break;
+                                battle_mc+= (ObscuredInt)(talent.pet_talent_offectvalue); break;
                             //case 3: dec += "召唤兽伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
                             case 4:
-                                ac2+= (int)(talent.pet_talent_offectvalue * lv);break;
+                                ac2+= (ObscuredInt)(talent.pet_talent_offectvalue * lv);break;
                             case 5: 
-                                mac2+= (int)(talent.pet_talent_offectvalue * lv); break;
+                                mac2+= (ObscuredInt)(talent.pet_talent_offectvalue * lv); break;
                             case 6:
-                                hpRegen += (int)(talent.pet_talent_offectvalue * lv); break;
+                                hpRegen += (ObscuredInt)(talent.pet_talent_offectvalue * lv); break;
                             case 7: 
-                                mpRegen += (int)(talent.pet_talent_offectvalue * lv); break;
+                                mpRegen += (ObscuredInt)(talent.pet_talent_offectvalue * lv); break;
                             case 8:
-                                damage_reduction+= (int)(talent.pet_talent_offectvalue); break;
+                                damage_reduction+= (ObscuredInt)(talent.pet_talent_offectvalue); break;
                             case 9:
-                                magic_damage_reduction += (int)(talent.pet_talent_offectvalue); break;
-                            case 11: dodge +=(int)(talent.pet_talent_offectvalue) ; break;
+                                magic_damage_reduction += (ObscuredInt)(talent.pet_talent_offectvalue); break;
+                            case 11: dodge +=(ObscuredInt)(talent.pet_talent_offectvalue) ; break;
                             default:
                                 break;
                         }
@@ -824,21 +825,21 @@ public static class Tool_Battle
                         switch ((talent.pet_talent_offect))
                         {
                             case 1:
-                                D = ((enum_battle_pet_talent_list)(talent.pet_talent_job + 6), talent.pet_talent_offecttype, (int)talent.pet_talent_offectvalue);
+                                D = ((enum_battle_pet_talent_list)(talent.pet_talent_job + 6), talent.pet_talent_offecttype, (ObscuredInt)talent.pet_talent_offectvalue);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
                             case 2:
                             case 3:
                             case 4:
-                                D = ((enum_battle_pet_talent_list)(talent.pet_talent_offect + 8), talent.pet_talent_offecttype, (int)talent.pet_talent_offectvalue * lv);
+                                D = ((enum_battle_pet_talent_list)(talent.pet_talent_offect + 8), talent.pet_talent_offecttype, (ObscuredInt)talent.pet_talent_offectvalue * lv);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
                             case 5:
                             case 6: 
                             case 7: 
                             case 8: 
-                                D = ((enum_battle_pet_talent_list)(talent.pet_talent_offect + 8), talent.pet_talent_offecttype, (int)talent.pet_talent_offectvalue);
+                                D = ((enum_battle_pet_talent_list)(talent.pet_talent_offect + 8), talent.pet_talent_offecttype, (ObscuredInt)talent.pet_talent_offectvalue);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
                             case 10:
-                                D = (enum_battle_pet_talent_list.慧根, talent.pet_talent_offecttype, (int)talent.pet_talent_offectvalue);
+                                D = (enum_battle_pet_talent_list.慧根, talent.pet_talent_offecttype, (ObscuredInt)talent.pet_talent_offectvalue);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
                         }
                         break;
@@ -858,7 +859,7 @@ public static class Tool_Battle
             }
             if (exist)
             {
-                for (int i = 0; i < talentList.Count; i++)
+                for (ObscuredInt i = 0; i < talentList.Count; i++)
                 {
                     if (talentList[i].Item1 == enum_battle_pet_talent_list.连击 || talentList[i].Item1 == enum_battle_pet_talent_list.法连 || talentList[i].Item1 == enum_battle_pet_talent_list.道连)
                     {
@@ -876,10 +877,10 @@ public static class Tool_Battle
             boss_cd += crt_vip.monsterHuntingInterval;
         }
         List<(string, string, int)> buffs = SumSave.crt_user_unit.GetBuff;
-        for (int i = 0; i < buffs.Count; i++)
+        for (ObscuredInt i = 0; i < buffs.Count; i++)
         {
-            int spanSeconds = Battle_Tool.SettlementTransport(buffs[i].Item2, 3);
-            int time = buffs[i].Item3 - spanSeconds;//剩余时间
+            ObscuredInt spanSeconds = Battle_Tool.SettlementTransport(buffs[i].Item2, 3);
+            ObscuredInt time = buffs[i].Item3 - spanSeconds;//剩余时间
             if (time > 0|| buffs[i].Item3>=99999)
             {
                 if (buffs[i].Item1 == common_Buff.狂欢.ToString())
@@ -992,7 +993,7 @@ public static class Tool_Battle
         /// 7 攻击概率斩杀
         /// 8 连击效果提升
 
-        int lv = (int)MathF.Min(SumSave.crtHero.lv, 60);
+        ObscuredInt lv = (ObscuredInt)MathF.Min(SumSave.crtHero.lv, 60);
         switch (talent.pet_talent_type)
         {
             case 3:
@@ -1070,7 +1071,7 @@ public static class Tool_Battle
     public static db_vip Obtain_Vip()
     {
         if (crt_vip != null) return crt_vip;
-        int sum = (int.Parse)(SumSave.crt_global_gift.GetGiftPoints);
+        ObscuredInt sum = (int.Parse)(SumSave.crt_global_gift.GetGiftPoints);
         if (sum == 0) return crt_vip;
         for (int i = 0; i < SumSave.db_vip_list.Count; i++)
         {
@@ -1109,7 +1110,7 @@ public static class Tool_Battle
     /// </summary>
     public static void Crate_Vip()
     {
-        int sum = (int.Parse)(SumSave.crt_global_gift.GetGiftPoints);
+        ObscuredInt sum = (int.Parse)(SumSave.crt_global_gift.GetGiftPoints);
         if (sum == 0) return;
         for (int i = 0; i < SumSave.db_vip_list.Count; i++)
         {
@@ -1121,27 +1122,27 @@ public static class Tool_Battle
     }
     /// <summary>
     /// 刷新boss时间 boss名称
-    ///（int，int，string）（地图类型，需求时间，记录最新时间）
+    ///（ObscuredInt，ObscuredInt，string）（地图类型，需求时间，记录最新时间）
     /// </summary>
 
-    private static Dictionary<string, (int, int, string)> map_boss_time = new Dictionary<string, (int, int, string)>();
+    private static Dictionary<string, (ObscuredInt, ObscuredInt, string)> map_boss_time = new Dictionary<string, (ObscuredInt, ObscuredInt, string)>();
     /// <summary>
     /// 读取boss刷新时间
     /// </summary>
     public static void Carte_Read_Boss_Time()
     {
-        Dictionary<string, (int,int,string)> dic = new Dictionary<string, (int,int, string)>();
+        Dictionary<string, (ObscuredInt,ObscuredInt,string)> dic = new Dictionary<string, (ObscuredInt,ObscuredInt, string)>();
         DateTime now = SumSave.nowtime >= DateTime.Now ? SumSave.nowtime : DateTime.Now;
         string value = Tool_UI.ToStandardFormat(now);
         for (int i = 0; i < SumSave.db_maps.Count; i++)
         {
             if (SumSave.db_maps[i].map_type == 0||true)
             {
-                for (int j = 0; j < SumSave.db_maps[i].map_boss.Count; j++)
+                for (ObscuredInt j = 0; j < SumSave.db_maps[i].map_boss.Count; j++)
                 {
                     if (!dic.ContainsKey(SumSave.db_maps[i].map_boss[j]))
                     {
-                        //dic.Add(SumSave.db_maps[i].map_boss[j], new Dictionary<int, string>());
+                        //dic.Add(SumSave.db_maps[i].map_boss[j], new Dictionary<ObscuredInt, string>());
                         dic[SumSave.db_maps[i].map_boss[j]] = (SumSave.db_maps[i].map_type, SumSave.db_maps[i].map_boss_cdtime[j], value);
                     }
                 }
@@ -1154,22 +1155,22 @@ public static class Tool_Battle
     /// </summary>
     /// <param name="map_id"></param>
     /// <returns></returns>
-    public static (int,int,string) GetBossTime(string map_id) { return (map_boss_time.ContainsKey(map_id))? map_boss_time[map_id]:(0,99999,"no"); }
+    public static (ObscuredInt,ObscuredInt,string) GetBossTime(string map_id) { return (map_boss_time.ContainsKey(map_id))? map_boss_time[map_id]:(0,99999,"no"); }
 
     /// <summary>
     /// 计算剩余时间
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static int Meet_maposs_criteria(string value)
+    public static ObscuredInt Meet_maposs_criteria(string value)
     {
-        (int,int, string) Boss_Time = GetBossTime(value);
+        (ObscuredInt,ObscuredInt, string) Boss_Time = GetBossTime(value);
         if (Boss_Time.Item3 == "no") return 99999999;
-        int spanSeconds = Battle_Tool.SettlementTransport(Boss_Time.Item3, 2);
+        ObscuredInt spanSeconds = Battle_Tool.SettlementTransport(Boss_Time.Item3, 2);
         db_vip crt_vip = Tool_Battle.Obtain_Vip();
         if (crt_vip != null)
         {
-            int base_time = Boss_Time.Item2 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
+            ObscuredInt base_time = Boss_Time.Item2 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
             if (spanSeconds >= base_time)
             {
                 return 0;
@@ -1202,52 +1203,68 @@ public static class Tool_Battle
     /// <returns></returns>
     public static crtMaxBattleVO Crate_Call(db_skill_vo skill)
     {
-        int exp_bonus = 0, gold_bonus = 0, drop_bonus = 0, quality_bonus = 0;
-        int maxhp = 0, maxmp = 0;
-        int battle_hp = 0, battle_mp = 0, battle_ac = 0, battle_mac = 0, battle_dc = 0, battle_sc = 0, battle_mc = 0, battle_speed = 0, battle_range = 0, battle_Damage = 0, battle_def = 0;
-        int hp = 0, mp = 0, dc = 0, dc2 = 0, mac = 0, mac2 = 0, ac = 0, ac2 = 0, sc = 0, sc2 = 0, mc = 0, mc2 = 0;
-        int hit = 0, dodge = 0, crit = 0, critDmg = 100;
-        int hpRegen = 0, mpRegen = 0;
-        int lucky = 0, damage_reduction = 0, magic_damage_reduction = 0;
-        List<(enum_battle_pet_talent_list, int, int)> talentList = new List<(enum_battle_pet_talent_list, int, int)>();
+        ObscuredInt exp_bonus = 0, gold_bonus = 0, drop_bonus = 0, quality_bonus = 0;
+        ObscuredInt maxhp = 0, maxmp = 0;
+        ObscuredInt battle_hp = 0, battle_mp = 0, battle_ac = 0, battle_mac = 0, battle_dc = 0, battle_sc = 0, battle_mc = 0, battle_speed = 0, battle_range = 0, battle_Damage = 0, battle_def = 0;
+        ObscuredInt hp = 0, mp = 0, dc = 0, dc2 = 0, mac = 0, mac2 = 0, ac = 0, ac2 = 0, sc = 0, sc2 = 0, mc = 0, mc2 = 0;
+        ObscuredInt hit = 0, dodge = 0, crit = 0, critDmg = 100;
+        ObscuredInt hpRegen = 0, mpRegen = 0;
+        ObscuredInt lucky = 0, damage_reduction = 0, magic_damage_reduction = 0;
+        List<(enum_battle_pet_talent_list, ObscuredInt, ObscuredInt)> talentList = new List<(enum_battle_pet_talent_list, ObscuredInt, ObscuredInt)>();
         //str += "召唤 " + Show_Color.Set_String(crt_skill.show_name, color_list) + "\n继承" + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + " %属性" + " ", color_list);
         //if (crt_skill.skill_damages.Count > 0) str += "[召唤兽伤害] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
-        int lv = Mathf.Min(skill.DefPowers.Count - 1, skill.SetLv());
-        int power = (skill.Power + skill.DefPowers[lv]);
-        maxhp = (int)SumSave.crtMaxBattle.data.battle_maxhp * (power) / 100;
-        maxmp = (int)SumSave.crtMaxBattle.data.battle_maxmp * (power) / 100;
-        hp = (int)SumSave.crtMaxBattle.data.battle_hp * (power) / 100;
-        mp = (int)SumSave.crtMaxBattle.data.battle_mp * (power) / 100;
-        ac = (int)SumSave.crtMaxBattle.data.ac * (power) / 100;
-        ac2 = (int)SumSave.crtMaxBattle.data.ac2 * (power) / 100;
-        mac = (int)SumSave.crtMaxBattle.data.mac * (power) / 100;
-        mac2 = (int)SumSave.crtMaxBattle.data.mac2 * (power) / 100;
-        dc = (int)SumSave.crtMaxBattle.data.sc * (power) / 100;
-        dc2 = (int)SumSave.crtMaxBattle.data.sc2 * (power) / 100;
-        sc = (int)SumSave.crtMaxBattle.data.sc * (power) / 100;
-        sc2 = (int)SumSave.crtMaxBattle.data.sc2 * (power) / 100;
-        mc = (int)SumSave.crtMaxBattle.data.sc * (power) / 100;
-        mc2 = (int)SumSave.crtMaxBattle.data.sc2 * (power) / 100;
-        hit = (int)SumSave.crtMaxBattle.data.hit * (power) / 100;
-        dodge = (int)SumSave.crtMaxBattle.data.dodge * (power) / 100;
-        crit = (int)SumSave.crtMaxBattle.data.crit * (power) / 100;
-        critDmg = (int)SumSave.crtMaxBattle.data.critDmg * (power) / 100;
-        hpRegen = (int)SumSave.crtMaxBattle.data.hpRegen * (power) / 100;
-        mpRegen = (int)SumSave.crtMaxBattle.data.mpRegen * (power) / 100;
-        battle_hp = (int)SumSave.crtMaxBattle.data.battle_hp * (power) / 100;
-        battle_mp = (int)SumSave.crtMaxBattle.data.battle_mp * (power) / 100;
-        battle_ac = (int)SumSave.crtMaxBattle.data.battle_ac * (power) / 100;
-        battle_mac = (int)SumSave.crtMaxBattle.data.battle_mac * (power) / 100;
-        battle_dc = (int)SumSave.crtMaxBattle.data.battle_dc * (power) / 100;
-        battle_sc = (int)SumSave.crtMaxBattle.data.battle_sc * (power) / 100;
-        battle_mc = (int)SumSave.crtMaxBattle.data.battle_mc * (power) / 100;
-        battle_speed = (int)SumSave.crtMaxBattle.data.battle_speed;
-        battle_range = (int)SumSave.crtMaxBattle.data.battle_range * (power) / 100;
-        battle_Damage = (int)SumSave.crtMaxBattle.data.battle_Damage * (power) / 100 + skill.skill_damages[lv];//真实伤害
-        battle_def = (int)SumSave.crtMaxBattle.data.battle_def * (power) / 100;
-        //lucky = (int)SumSave.crtMaxBattle.data.lucky * (power) / 100;
-        damage_reduction = (int)SumSave.crtMaxBattle.data.damage_reduction * (power) / 100;
-        magic_damage_reduction = (int)SumSave.crtMaxBattle.data.magic_damage_reduction * (power) / 100;
+        ObscuredInt lv = Mathf.Min(skill.DefPowers.Count - 1, skill.SetLv());
+        ObscuredInt power = (skill.Power + skill.DefPowers[lv]);
+        maxhp = (ObscuredInt)SumSave.crtMaxBattle.data.battle_maxhp * (power) / 100;
+        maxmp = (ObscuredInt)SumSave.crtMaxBattle.data.battle_maxmp * (power) / 100;
+        hp = (ObscuredInt)SumSave.crtMaxBattle.data.battle_maxhp * (power) / 100;
+        mp = (ObscuredInt)SumSave.crtMaxBattle.data.battle_maxmp * (power) / 100;
+        ac = (ObscuredInt)SumSave.crtMaxBattle.data.ac * (power) / 100;
+        ac2 = (ObscuredInt)SumSave.crtMaxBattle.data.ac2 * (power) / 100;
+        mac = (ObscuredInt)SumSave.crtMaxBattle.data.mac * (power) / 100;
+        mac2 = (ObscuredInt)SumSave.crtMaxBattle.data.mac2 * (power) / 100;
+        dc = (ObscuredInt)SumSave.crtMaxBattle.data.sc * (power) / 100;
+        dc2 = (ObscuredInt)SumSave.crtMaxBattle.data.sc2 * (power) / 100;
+        sc = (ObscuredInt)SumSave.crtMaxBattle.data.sc * (power) / 100;
+        sc2 = (ObscuredInt)SumSave.crtMaxBattle.data.sc2 * (power) / 100;
+        mc = (ObscuredInt)SumSave.crtMaxBattle.data.sc * (power) / 100;
+        mc2 = (ObscuredInt)SumSave.crtMaxBattle.data.sc2 * (power) / 100;
+        hit = (ObscuredInt)SumSave.crtMaxBattle.data.hit * (power) / 100;
+        dodge = (ObscuredInt)SumSave.crtMaxBattle.data.dodge * (power) / 100;
+        crit = (ObscuredInt)SumSave.crtMaxBattle.data.crit * (power) / 100;
+        critDmg = (ObscuredInt)SumSave.crtMaxBattle.data.critDmg * (power) / 100;
+        hpRegen = (ObscuredInt)SumSave.crtMaxBattle.data.hpRegen * (power) / 100;
+        mpRegen = (ObscuredInt)SumSave.crtMaxBattle.data.mpRegen * (power) / 100;
+        battle_hp = (ObscuredInt)SumSave.crtMaxBattle.data.battle_hp * (power) / 100;
+        battle_mp = (ObscuredInt)SumSave.crtMaxBattle.data.battle_mp * (power) / 100;
+        battle_ac = (ObscuredInt)SumSave.crtMaxBattle.data.battle_ac * (power) / 100;
+        battle_mac = (ObscuredInt)SumSave.crtMaxBattle.data.battle_mac * (power) / 100;
+        battle_dc = (ObscuredInt)SumSave.crtMaxBattle.data.battle_sc * (power) / 100;
+        battle_sc = (ObscuredInt)SumSave.crtMaxBattle.data.battle_sc * (power) / 100;
+        battle_mc = (ObscuredInt)SumSave.crtMaxBattle.data.battle_sc * (power) / 100;
+        battle_speed = (ObscuredInt)SumSave.crtMaxBattle.data.battle_speed;
+        battle_range = (ObscuredInt)SumSave.crtMaxBattle.data.battle_range * (power) / 100;
+        battle_Damage = (ObscuredInt)SumSave.crtMaxBattle.data.battle_Damage * (power) / 100 + skill.skill_damages[lv];//真实伤害
+        battle_def = (ObscuredInt)SumSave.crtMaxBattle.data.battle_def * (power) / 100;
+        //lucky = (ObscuredInt)SumSave.crtMaxBattle.data.lucky * (power) / 100;
+        dc2 += skill.skill_damages[lv];
+        sc2 += skill.skill_damages[lv];
+        mc2 += skill.skill_damages[lv];
+        switch (skill.id)
+        {
+            case 17://骷髅
+                maxhp += 500;
+                ac2 += 30; mac2+=30;dc2 += 30; sc2 += 30; mc2+=30;
+                break;
+            case 19://狗
+                maxhp += 1000;
+                sc2 += 60; mc2 += 60; dc2 += 60; sc2 += 60; mc2 += 60;
+                break;
+            default:
+                break;
+        }
+        damage_reduction = (ObscuredInt)SumSave.crtMaxBattle.data.damage_reduction * (power) / 100;
+        magic_damage_reduction = (ObscuredInt)SumSave.crtMaxBattle.data.magic_damage_reduction * (power) / 100;
         Dictionary<enum_talent_offect_list, int> buff = skill.GetBuff;
         foreach (var item in buff.Keys)
         {
@@ -1255,13 +1272,9 @@ public static class Tool_Battle
             {
                 
                 case enum_talent_offect_list.命中: hit += buff[item]; break;
-                    break;
                 case enum_talent_offect_list.召唤兽攻击:dc2+= buff[item]; sc2+= buff[item];mc2 += buff[item]; break;
-                    break;
                 case enum_talent_offect_list.召唤兽生命:maxhp += buff[item]; break;
-                    break;
                 case enum_talent_offect_list.召唤兽防御:ac2 += buff[item]; mac2 += buff[item]; break;
-                    break;
                 case enum_talent_offect_list.召唤兽速度:
                     battle_speed-= buff[item];
                     break;
@@ -1292,9 +1305,18 @@ public static class Tool_Battle
                 case enum_talent_offect_list.弹道:
                     break;
             }
-        }
-
-        crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus);
+        } 
+        ac = ac * (100 + battle_ac) / 100;
+        ac2 = ac2 * (100 + battle_ac) / 100;
+        mac = mac * (100 + battle_mac) / 100;
+        mac2 = mac2 * (100 + battle_mac) / 100; 
+        dc = dc * (100 + battle_dc) / 100;
+        dc2 = dc2 * (100 + battle_dc) / 100;
+        sc = sc * (100 + battle_sc) / 100;
+        sc2 = sc2 * (100 + battle_sc) / 100;
+        mc = mc * (100 + battle_mc) / 100;
+        mc2 = mc2 * (100 + battle_mc) / 100;
+        crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus, 0);
         crt.crt_name = "召" + skill.show_name;
         crt.lv = skill.SetLv();
         crt.exp = 0;
@@ -1326,7 +1348,7 @@ public static class Tool_Battle
                 skill_lv = item.Value.SetLv();
                 if (item.Value.id == talent.Item1.correlation_skill)
                 {
-                    value += talent.Item1.talent_offect_value[talent.Item2] * skill_lv;
+                    value += talent.Item1.talent_offect_value[talent.Item2 - 1] * skill_lv;
                 }
             }
         }
@@ -1341,7 +1363,7 @@ public static class Tool_Battle
         bool exist= false;
         for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
         {
-            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+            (string, ObscuredInt) boss = SumSave.crt_setting.battle_Boss_list[i];
             List<string> boss_name = ArrayHelper.Get_Split<string>(boss.Item1, '+');
             if (boss_name.Count == 2)
             {
@@ -1359,7 +1381,7 @@ public static class Tool_Battle
     private static void AddSkillBuff((db_player_talent_vo, int) talent, Dictionary<int, db_skill_vo> skill_list,bool isSkill=false)
     {
         int value = 0;
-        value += talent.Item1.talent_offect_value[talent.Item2];
+        value += talent.Item1.talent_offect_value[talent.Item2-1];
         if (talent.Item1.correlation_skill == -1)
         {
             foreach (var item in skill_list)
@@ -1371,7 +1393,7 @@ public static class Tool_Battle
         {
             foreach (var item in skill_list)
             {
-                int skill_lv = item.Value.SetLv();
+                ObscuredInt skill_lv = item.Value.SetLv();
                 if (item.Value.id == talent.Item1.correlation_skill)
                 {
                     item.Value.AddBuff((enum_talent_offect_list)(talent.Item1.talent_offect), value * (isSkill ? skill_lv : 1));
@@ -1408,7 +1430,7 @@ public static class Tool_Battle
         Regex regex = new Regex(@"^[\w\u4e00-\u9fa5]+$");
         return regex.IsMatch(input);
     }
-    private static void Obtain_enum_equip_entry_list(enum_equip_entry_list entry,int value)
+    private static void Obtain_enum_equip_entry_list(enum_equip_entry_list entry,ObscuredInt value)
     { 
     
     }
@@ -1525,7 +1547,7 @@ public static class Tool_Battle
         entry_inscription_list.Add(enum_equip_entry_list.破枪文);
         entry_inscription_list.Add(enum_equip_entry_list.深寒文);
         entry_inscription_list.Add(enum_equip_entry_list.瑶光文);
-        for (int i = 0; i < SumSave.db_skills.Count; i++)
+        for (ObscuredInt i = 0; i < SumSave.db_skills.Count; i++)
         {
             if (SumSave.db_skills[i].EffectType != 5)//&& SumSave.db_skills[i].EffectType != 6召唤
             {
@@ -1537,7 +1559,7 @@ public static class Tool_Battle
     /// 获取装备属性
     /// </summary>
     /// <returns></returns>
-    public static int Equip_Skill_eight()
+    public static ObscuredInt Equip_Skill_eight()
     {
         if (equip_eighteditems.Count == 0) Obtain_Init_Entry_Inscription_list();
         WeightedRandomPicker picker = new WeightedRandomPicker(equip_eighteditems);
@@ -1546,7 +1568,7 @@ public static class Tool_Battle
 
         return int.Parse(selectedItem.prizedraw.ToString());
     }
-    private static void Obtain_Weight(object seed_name, int weight)
+    private static void Obtain_Weight(object seed_name, ObscuredInt weight)
     {
         WeightedItem weightedItem = new WeightedItem(seed_name,weight);
         equip_eighteditems.Add(weightedItem);
@@ -1568,16 +1590,16 @@ public static class Tool_Battle
     /// <param name="dics"></param>
     /// <param name="type"></param>
     /// <param name="value"></param>
-    private static void Obtain_value<T>(Dictionary<T, int> dics,T type,int value = 1,bool exist=true,List<T> lists = null)
+    private static void Obtain_value<T>(Dictionary<T, int> dics,T type, int value = 1,bool exist=true,List<T> lists = null)
     {
         if (exist)
         {
-            if (!dics.ContainsKey(type)) dics.Add(type, 0);
+            if (!dics.ContainsKey(type)) dics.Add(type, 0); 
             dics[type] += value;
         }
         else
         {
-            int number = 0;
+            ObscuredInt number = 0;
             while (dics.ContainsKey(type))
             { 
                 type = Obtain_Enum_list<T>(lists);
@@ -1597,7 +1619,7 @@ public static class Tool_Battle
     /// <param name="index"></param>
     /// <param name="maxnumber"></param>
     /// <param name="isverify"></param>
-    public static void Obtain_Resources(int index, in int maxnumber, bool isverify = false)
+    public static void Obtain_Resources(int index, in ObscuredInt maxnumber, bool isverify = false)
     {
         SumSave.crt_bags.Get(Obtain_Int.Get(index), maxnumber, isverify);
     }
@@ -1608,7 +1630,7 @@ public static class Tool_Battle
     /// <param name="unit">类型</param>
     /// <param name="value">值</param>
     /// <param name="state">状态1可加成2直接获取</param>
-    public static int Obtain_Unit(currency_unit unit, int value, int state = 1)
+    public static ObscuredInt Obtain_Unit(currency_unit unit, ObscuredInt value, int state = 1)
     {
         if (state == 1)
         {
@@ -1629,7 +1651,7 @@ public static class Tool_Battle
     /// <summary>
     /// 获取权重比例
     /// </summary>
-    private static int[] QualityWeighted = new int[] { 5000, 3000, 2000, 1500, 500, 100, 50, 10, 10, 10 };
+    private static ObscuredInt[] QualityWeighted = new ObscuredInt[] { 5000, 3000, 2000, 1500, 500, 100, 50, 10, 10, 10 };
     /// <summary>
     /// 权重列表
     /// </summary>
@@ -1642,7 +1664,6 @@ public static class Tool_Battle
         eighteditems.Clear();
         for (int i = 0; i < Enum.GetNames(typeof(enum_equip_quality_list)).Length; i++)
         {
-            
             WeightedItem item = new WeightedItem(i + 1, QualityWeighted[i]);
             eighteditems.Add(item);
         }
@@ -1653,7 +1674,7 @@ public static class Tool_Battle
     /// </summary>
     /// <param name="list"></param>
     /// <returns></returns>
-    public static int Obtain_WeightedItem(List<int> list)
+    public static ObscuredInt Obtain_WeightedItem(List<int> list)
     {
         List<WeightedItem> eighteditems = new List<WeightedItem>();
         for (int i = 0; i < list.Count; i++)
@@ -1673,7 +1694,7 @@ public static class Tool_Battle
     /// </summary>
     /// <param name="boss"></param>
     /// <returns></returns>
-    public static int Quality()
+    public static ObscuredInt Quality()
     {
         if (eighteditems.Count == 0) InitEighted();
         WeightedRandomPicker picker = new WeightedRandomPicker(eighteditems);
@@ -1808,7 +1829,7 @@ public static class Tool_Battle
             exist = true;
             if (dics_3.Count > 0)
             {
-                for (int i = 0; i < dics_3.Count; i++)
+                for (ObscuredInt i = 0; i < dics_3.Count; i++)
                 {
                     if (exist)
                     {
@@ -1846,7 +1867,7 @@ public static class Tool_Battle
     /// </summary>
     /// <param name="pet"></param>
     /// <returns></returns>
-    public static string Obtain_Pet(int index,int crate_skill_random=0)
+    public static string Obtain_Pet(ObscuredInt index, int crate_skill_random =0)
     {
         db_pet_vo base_pet = ArrayHelper.Find(SumSave.db_pets, (item) => item.pet_id == index);
         db_pet_vo pet = new db_pet_vo(base_pet.pet_id, base_pet.pet_name, base_pet.pet_ac, base_pet.pet_mac, base_pet.pet_dc, base_pet.pet_mc, base_pet.pet_sc, base_pet.pet_talent, base_pet.pet_scale);
@@ -1854,12 +1875,12 @@ public static class Tool_Battle
         string user_value = pet.pet_id + ","+pet.pet_name + "," + pet.pet_name + ",";
         user_value += Random.Range(1, pet.pet_ac / 3) + "X" + Random.Range(1, pet.pet_mac / 3) + "X"
             + Random.Range(1, pet.pet_dc / 3) + "X" + Random.Range(1, pet.pet_mc / 3) + "X" + Random.Range(1, pet.pet_sc / 3) + ",";
-        for (int i = 0; i < 5; i++)
+        for (ObscuredInt i = 0; i < 5; i++)
         {
             user_value += Random.Range(0, pet.pet_id + 5) + (i== 4 ? "," : "X");
         }
         //添加技能 多个技能X分隔
-        int skill_random = Random.Range(1, pet.pet_id / 3 + 1);
+        ObscuredInt skill_random = Random.Range(1, pet.pet_id / 3 + 1);
         if (crate_skill_random > 0) skill_random = crate_skill_random;
         user_value += pet.pet_talent;
         if (skill_random > 0)
@@ -1874,15 +1895,15 @@ public static class Tool_Battle
     /// </summary>
     /// <param name="max"></param>
     /// <returns></returns>
-    private static string Radom_Talent(int max)
+    private static string Radom_Talent(ObscuredInt max)
     { 
         string value = "";
         List<db_pet_talent_vo> list = ArrayHelper.FindAll(SumSave.db_pet_talents, e => e.pet_talent_level == 1);
         List<db_pet_talent_vo> list1 = ArrayHelper.FindAll(SumSave.db_pet_talents, e => e.pet_talent_level == 2);
         string random = "";
-        for (int i = 0; i < max; i++)
+        for (ObscuredInt i = 0; i < max; i++)
         {
-            int number = 0;
+            ObscuredInt number = 0;
             if (Random.Range(0, 100) < 20)
             {
                 random = list1[Random.Range(0, list1.Count)].pet_talent_name;

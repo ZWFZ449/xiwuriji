@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using Components;
 using MVC;
@@ -178,7 +179,7 @@ public class Dream_Panel_Bag : Panel_Base
                 }
                 break;
             case Panel_BagType.材料:
-                List<(string, int)> resources_list = SumSave.crt_bags.Set();
+                List<(string,ObscuredInt )> resources_list = SumSave.crt_bags.Set();
                 base_info.text = m_curPanel_BagType + " " + resources_list.Count + "/" + SumSave.crt_bags.Get_Page;
                 for (int i = 0; i < resources_list.Count; i++)
                 {

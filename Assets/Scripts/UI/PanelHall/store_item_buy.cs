@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using Components;
 using MVC;
@@ -66,9 +67,9 @@ public class store_item_buy : Base_Mono
             }
             else
             {
-                int random = Random.Range(1, 1000);
-                int maxnumber = number + Random.Range(1, 1000);
-                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, buy_title.ItemName, new int[] { number + random, random }), maxnumber);
+                ObscuredInt  random = Random.Range(1, 1000);
+                ObscuredInt  maxnumber = number + Random.Range(1, 1000);
+                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, buy_title.ItemName, new ObscuredInt[] { number + random, random }), maxnumber);
                 Alert_Dec.Show("购买成功获得 " + buy_title.ItemName + " * " + number);
             }
             

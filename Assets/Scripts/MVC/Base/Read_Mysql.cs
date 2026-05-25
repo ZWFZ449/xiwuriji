@@ -1,4 +1,5 @@
 
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using MVC;
 using MySql.Data.MySqlClient;
@@ -11,10 +12,10 @@ public class Read_Mysql
 
     public static db_base_par Read_base_par(MySqlDataReader reader)
     {
-        int _index = reader.GetInt32(reader.GetOrdinal("par"));
+        ObscuredInt _index = reader.GetInt32(reader.GetOrdinal("par"));
         DateTime opentime = Convert.ToDateTime(reader.GetString(reader.GetOrdinal("time")));
-        int openstate = reader.GetInt32(reader.GetOrdinal("openstate"));
-        int device = reader.GetInt32(reader.GetOrdinal("device"));
+        ObscuredInt openstate = reader.GetInt32(reader.GetOrdinal("openstate"));
+        ObscuredInt device = reader.GetInt32(reader.GetOrdinal("device"));
         string par_name = reader.GetString(reader.GetOrdinal("show_name"));
         return new db_base_par(_index, opentime, openstate, device, par_name);
 
@@ -27,16 +28,16 @@ public class Read_Mysql
         //    reader.GetInt32(reader.GetOrdinal("map_lv"));
         //ArrayHelper.Get_Split<string>(reader.GetString(reader.GetOrdinal("map_monster")), ',');
         //ArrayHelper.Get_Split<string>(reader.GetString(reader.GetOrdinal("map_boss")), ',');
-        //    ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("map_boss_cdtime")), ',');
+        //    ArrayHelper.Get_Split<ObscuredInt>(reader.GetString(reader.GetOrdinal("map_boss_cdtime")), ',');
         //ArrayHelper.Get_Split<float>(reader.GetString(reader.GetOrdinal("map_cd")), ',');
         //reader.GetString(reader.GetOrdinal("map_base_drop"));
         //reader.GetString(reader.GetOrdinal("map_drop"));
         //reader.GetString(reader.GetOrdinal("drop_value"));
-        //ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("map_crate_number_monster")), ',');
-        //ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("map_max_number_monster")), ',');
-        //ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("map_add_number_monster")), ',');
+        //ArrayHelper.Get_Split<ObscuredInt>(reader.GetString(reader.GetOrdinal("map_crate_number_monster")), ',');
+        //ArrayHelper.Get_Split<ObscuredInt>(reader.GetString(reader.GetOrdinal("map_max_number_monster")), ',');
+        //ArrayHelper.Get_Split<ObscuredInt>(reader.GetString(reader.GetOrdinal("map_add_number_monster")), ',');
         //reader.GetString(reader.GetOrdinal("map_intensity_drop"));
-        //ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("map_crate_boss_condition")), ',');
+        //ArrayHelper.Get_Split<ObscuredInt>(reader.GetString(reader.GetOrdinal("map_crate_boss_condition")), ',');
         return new db_map_vo
             (reader.GetInt32(reader.GetOrdinal("id")),
             reader.GetString(reader.GetOrdinal("map_name")),
@@ -44,16 +45,16 @@ public class Read_Mysql
             reader.GetInt32(reader.GetOrdinal("map_lv")),
             ArrayHelper.Get_Split<string>(reader.GetString(reader.GetOrdinal("map_monster")), ','),
             ArrayHelper.Get_Split<string>(reader.GetString(reader.GetOrdinal("map_boss")), ','),
-            ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("map_boss_cdtime")), ','),
+            ArrayHelper.Get_Split(reader.GetString(reader.GetOrdinal("map_boss_cdtime")), ','),
             ArrayHelper.Get_Split<float>(reader.GetString(reader.GetOrdinal("map_cd")), ','),
             reader.GetString(reader.GetOrdinal("map_base_drop")),
             reader.GetString(reader.GetOrdinal("map_drop")),
             reader.GetString(reader.GetOrdinal("drop_value")),
-            ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("map_crate_number_monster")), ','),
-            ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("map_max_number_monster")), ','),
-            ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("map_add_number_monster")), ','),
+            ArrayHelper.Get_Split(reader.GetString(reader.GetOrdinal("map_crate_number_monster")), ','),
+            ArrayHelper.Get_Split(reader.GetString(reader.GetOrdinal("map_max_number_monster")), ','),
+            ArrayHelper.Get_Split(reader.GetString(reader.GetOrdinal("map_add_number_monster")), ','),
             reader.GetString(reader.GetOrdinal("map_intensity_drop")),
-            ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("map_crate_boss_condition")), ',')
+            ArrayHelper.Get_Split(reader.GetString(reader.GetOrdinal("map_crate_boss_condition")), ',')
 
             );
     }
@@ -93,62 +94,62 @@ public class Read_Mysql
     public static db_Hero_VO Read_Hero(MySqlDataReader reader)
     {
         /*
-         * public readonly int id;
+         * public readonly ObscuredInt id;
     public readonly string type;
-    public readonly int inithp;
-    public readonly int hp;
-    public readonly int uphp;
-    public readonly int initmp;
-    public readonly int mp;
-    public readonly int upmp;
-    public readonly int initac;
-    public readonly int ac;
-    public readonly int upac;
-    public readonly int initmac;
-    public readonly int mac;
-    public readonly int upmac;
-    public readonly int initdc;
-    public readonly int dc;
-    public readonly int updc;
-    public readonly int initdc2;
-    public readonly int dc2;
-    public readonly int updc2;
-    public readonly int initsc;
-    public readonly int sc;
-    public readonly int upsc;
-    public readonly int initsc2;
-    public readonly int sc2;
-    public readonly int upsc2;
-    public readonly int initmc;
-    public readonly int mc;
-    public readonly int upmc;
-    public readonly int initmc2;
-    public readonly int mc2;
-    public readonly int upmc2;
-    public readonly int inithit;
-    public readonly int hit;
-    public readonly int uphit;
-    public readonly int initdodge;
-    public readonly int dodge;
-    public readonly int updodge;
-    public readonly int initcrit;
-    public readonly int crit;
-    public readonly int upcrit;
-    public readonly int initcritDmg;
-    public readonly int critDmg;
-    public readonly int upcritDmg;
-    public readonly int initmac2;
-    public readonly int mac2;
-    public readonly int upmac2;
-    public readonly int initac2;
-    public readonly int ac2;
-    public readonly int upac2;
-    public readonly int initspeed;
-    public readonly int speed;
-    public readonly int upspeed;
-    public readonly int intrange;
-    public readonly int range;
-    public readonly int uprange;
+    public readonly ObscuredInt inithp;
+    public readonly ObscuredInt hp;
+    public readonly ObscuredInt uphp;
+    public readonly ObscuredInt initmp;
+    public readonly ObscuredInt mp;
+    public readonly ObscuredInt upmp;
+    public readonly ObscuredInt initac;
+    public readonly ObscuredInt ac;
+    public readonly ObscuredInt upac;
+    public readonly ObscuredInt initmac;
+    public readonly ObscuredInt mac;
+    public readonly ObscuredInt upmac;
+    public readonly ObscuredInt initdc;
+    public readonly ObscuredInt dc;
+    public readonly ObscuredInt updc;
+    public readonly ObscuredInt initdc2;
+    public readonly ObscuredInt dc2;
+    public readonly ObscuredInt updc2;
+    public readonly ObscuredInt initsc;
+    public readonly ObscuredInt sc;
+    public readonly ObscuredInt upsc;
+    public readonly ObscuredInt initsc2;
+    public readonly ObscuredInt sc2;
+    public readonly ObscuredInt upsc2;
+    public readonly ObscuredInt initmc;
+    public readonly ObscuredInt mc;
+    public readonly ObscuredInt upmc;
+    public readonly ObscuredInt initmc2;
+    public readonly ObscuredInt mc2;
+    public readonly ObscuredInt upmc2;
+    public readonly ObscuredInt inithit;
+    public readonly ObscuredInt hit;
+    public readonly ObscuredInt uphit;
+    public readonly ObscuredInt initdodge;
+    public readonly ObscuredInt dodge;
+    public readonly ObscuredInt updodge;
+    public readonly ObscuredInt initcrit;
+    public readonly ObscuredInt crit;
+    public readonly ObscuredInt upcrit;
+    public readonly ObscuredInt initcritDmg;
+    public readonly ObscuredInt critDmg;
+    public readonly ObscuredInt upcritDmg;
+    public readonly ObscuredInt initmac2;
+    public readonly ObscuredInt mac2;
+    public readonly ObscuredInt upmac2;
+    public readonly ObscuredInt initac2;
+    public readonly ObscuredInt ac2;
+    public readonly ObscuredInt upac2;
+    public readonly ObscuredInt initspeed;
+    public readonly ObscuredInt speed;
+    public readonly ObscuredInt upspeed;
+    public readonly ObscuredInt intrange;
+    public readonly ObscuredInt range;
+    public readonly ObscuredInt uprange;
 
          */
         return new db_Hero_VO(reader.GetInt32(reader.GetOrdinal("id")), 

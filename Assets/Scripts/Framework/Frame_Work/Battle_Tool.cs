@@ -7,6 +7,7 @@ using System;
 using System.Security.Cryptography;
 using Random = UnityEngine.Random;
 using Components;
+using CodeStage.AntiCheat.ObscuredTypes;
 /// <summary>
 /// 战斗工具类
 /// </summary>
@@ -22,7 +23,7 @@ public static class Battle_Tool
     /// <param name="resources_name">名称</param>
     /// <param name="index">数量指针</param>
     /// <param name="isverify">是否取消检测</param>
-    public static void Obtain_Resources(int index, in int maxnumber, bool isverify = false)
+    public static void Obtain_Resources(ObscuredInt index, in ObscuredInt maxnumber, bool isverify = false)
     {
         SumSave.crt_bags.Get(Obtain_Int.Get(index), maxnumber, isverify);
     }
@@ -37,7 +38,7 @@ public static class Battle_Tool
         if (SumSave.crtHero.job != 0)
         {
             //
-            for (int i = 0; i < SumSave.db_player_talent_types.Count; i++)
+            for (ObscuredInt i = 0; i < SumSave.db_player_talent_types.Count; i++)
             {
                 if (SumSave.crtHero.job == SumSave.db_player_talent_types[i].talent_type_job)
                 {
@@ -52,15 +53,15 @@ public static class Battle_Tool
     /// </summary>
     /// <param name="unit">单位</param>
     /// <param name="value">值</param>
-    public static void Dream_Obtain_Unit(currency_unit unit, long value,string verification)
+    public static void Dream_Obtain_Unit(currency_unit unit, ObscuredLong value,string verification)
     {
-        List<long> list = ArrayHelper.Get_Split<long>(verification, ',');
+        List<ObscuredLong> list = ArrayHelper.Get_SplitLong(verification, ',');
         if (value == list[0] - list[1])
         {
             SumSave.crt_user_unit.verify_data(unit, value);
         }
     }
-    public static void Dream_Obtain_Resources(int index, in int maxnumber, bool isverify = false)
+    public static void Dream_Obtain_Resources(ObscuredInt index, in ObscuredInt maxnumber, bool isverify = false)
     {
         SumSave.crt_bags.Get(Obtain_Int.Get(index), maxnumber, isverify);
     }
@@ -84,7 +85,7 @@ public static class Battle_Tool
     public static string Equip_User_Value(string[] infos)
     {
         string user_value = "";
-        for(int i= 0; i < infos.Length; i++)
+        for(ObscuredInt i= 0; i < infos.Length; i++)
         {
             user_value+=(user_value == "" ? "" : " ") + infos[i];
         }
@@ -106,7 +107,7 @@ public static class Battle_Tool
     {
         base_life_types = new Dictionary<int, int>();
 
-        for (int i = 0; i < SumSave.old_crt_hero.tianming_Platform.Length; i++)
+        for (ObscuredInt i = 0; i < SumSave.old_crt_hero.tianming_Platform.Length; i++)
         {
             if (base_life_types.ContainsKey(SumSave.old_crt_hero.tianming_Platform[i]))
             {
@@ -119,11 +120,11 @@ public static class Battle_Tool
         }
     }
 
-    public static int Judging_Five_Elements(int[] life_type,int[] tagert_life)
+    public static ObscuredInt Judging_Five_Elements(int[] life_type,int[] tagert_life)
     {
-        int value = 0;
-        for (int i = 0; i < life_type.Length; i++)
-            for (int j = 0; j < tagert_life.Length; j++)
+        ObscuredInt value = 0;
+        for (ObscuredInt i = 0; i < life_type.Length; i++)
+            for (ObscuredInt j = 0; j < tagert_life.Length; j++)
             {
 
             }
@@ -134,9 +135,9 @@ public static class Battle_Tool
     /// </summary>
     /// <param name="base_value"></param>
     /// <returns></returns>
-    public static int Alchemy_limit(int base_value)
+    public static ObscuredInt Alchemy_limit(ObscuredInt base_value)
     {
-        int value = base_value / 10;
+        ObscuredInt value = base_value / 10;
         if (SumSave.crt_MaxHero_okd.Lv >= 30) 
         {
             value += (SumSave.crt_MaxHero_okd.Lv - 20) / 2 * base_value / 100;
@@ -148,7 +149,7 @@ public static class Battle_Tool
     /// 测试随机数
     /// </summary>
     /// <returns></returns>
-    public static int random()
+    public static ObscuredInt random()
     {
         return Random.Range(100, 200);
     }
@@ -167,7 +168,7 @@ public static class Battle_Tool
     /// </summary>
     /// <param name="exp"></param>
     /// <param name="state">1为打怪收益2为确定性收益</param>
-    public static void Obtain_Exp(long exp,int state=1)
+    public static void Obtain_Exp(long exp, int state =1)
     {
         SumSave.crtMaxBattle.exp += exp;
         SumSave.crtHero.exp += exp;
@@ -191,9 +192,9 @@ public static class Battle_Tool
     /// </summary>
     /// <param name="index">1经验 2历练3月卡</param>
     /// <returns></returns>
-    public static int IsBuff(int index)
+    public static ObscuredInt IsBuff(ObscuredInt index)
     {
-        int base_value = 0;
+        ObscuredInt base_value = 0;
 
         foreach (var item in SumSave.crt_player_buff.player_Buffs)
         {
@@ -221,13 +222,13 @@ public static class Battle_Tool
     /// <param name="time">记录时间</param>
     /// <param name="type">获取 1分钟 2秒钟3小时 4天</param>
     /// <returns></returns>
-    public static int SettlementTransport(string time, int type = 1)
+    public static ObscuredInt SettlementTransport(string time, int type = 1)
     {
         if (time == null || time == "") return -1;
 
         TimeSpan span;
-        int spanNumber = 0;
-        int value = 0;
+        ObscuredInt spanNumber = 0;
+        ObscuredInt value = 0;
         span = SumSave.nowtime - Convert.ToDateTime(time);
         if (type == 1)//计算分钟
             spanNumber = span.Minutes + span.Hours * 60 + span.Days * 60 * 24 + value;
@@ -254,13 +255,13 @@ public static class Battle_Tool
     /// <param name="time2">时间2</param>
     /// <param name="type">获取 1分钟 2秒钟3小时 4天</param>
     /// <returns></returns>
-    public static int SettlementTransport(string time, string time2, int type = 1 )
+    public static ObscuredInt SettlementTransport(string time, string time2, int type = 1 )
     {
         if (time == null || time == "") return -1;
 
         TimeSpan span;
 
-        int spanNumber = 0;
+        ObscuredInt spanNumber = 0;
         span = Convert.ToDateTime(time) - Convert.ToDateTime(time2);
         if (type == 1)//计算分钟
             spanNumber = span.Minutes + span.Hours * 60 + span.Days * 60 * 24;
@@ -305,10 +306,10 @@ public static class Battle_Tool
                 BuffAcquisition(result_list,num);
                 break;
             case 2:
-                int random= Random.Range(1, 100);
-                int number= int.Parse(result_list[1]) * num;
-                int maxnumber = number + Random.Range(1, 100);
-                Obtain_Resources(Obtain_Int.Add(1, result_list[0], new int[] { number + random, random }), maxnumber);
+                ObscuredInt random= Random.Range(1, 100);
+                ObscuredInt number= int.Parse(result_list[1]) * num;
+                ObscuredInt maxnumber = number + Random.Range(1, 100);
+                Obtain_Resources(Obtain_Int.Add(1, result_list[0], new ObscuredInt[] { number + random, random }), maxnumber);
                 break;
             case 3:
                 SumSave.crt_user_unit.verify_data(currency_unit.金币, int.Parse(result_list[1]) * num);
@@ -337,7 +338,7 @@ public static class Battle_Tool
     /// <summary>
     /// 获得buff
     /// </summary>
-    private static void BuffAcquisition(string[] result_list,int num)
+    private static void BuffAcquisition(string[] result_list,ObscuredInt num)
     {
         switch (result_list[0])
         {
@@ -419,10 +420,10 @@ public static class Battle_Tool
                 AddBuff(result_list[0], 3f, 1,int.Parse(result_list[1]) * num);
                 break;
             default:
-                int random = Random.Range(1, 100);
-                int number = int.Parse(result_list[1]) * num;
-                int maxnumber = number + Random.Range(1, 100);
-                Obtain_Resources(Obtain_Int.Add(1, result_list[0], new int[] { number + random, random }), maxnumber);
+                ObscuredInt random = Random.Range(1, 100);
+                ObscuredInt number = int.Parse(result_list[1]) * num;
+                ObscuredInt maxnumber = number + Random.Range(1, 100);
+                Obtain_Resources(Obtain_Int.Add(1, result_list[0], new ObscuredInt[] { number + random, random }), maxnumber);
                 //Obtain_Resources(result_list[0], int.Parse(result_list[1]) * num);//获取奖励
                 break;
         }
@@ -430,7 +431,7 @@ public static class Battle_Tool
     /// <summary>
     /// 添加BUff
     /// </summary>
-    private static void AddBuff(string _buy_item, float effect, int icon ,int buy_num = 1)
+    private static void AddBuff(string _buy_item, float effect, int icon , int buy_num = 1)
     {
         if (SumSave.crt_player_buff.player_Buffs.ContainsKey(_buy_item))
         {
@@ -535,7 +536,7 @@ public static class Battle_Tool
         bool exist = false;
         if (SumSave.user_ranks.lists.Count < 50)
         {
-            for (int i = 0; i < SumSave.user_ranks.lists.Count; i++)
+            for (ObscuredInt i = 0; i < SumSave.user_ranks.lists.Count; i++)
             {
                 if (SumSave.user_ranks.lists[i].uid == SumSave.crt_user.uid)
                 {
@@ -562,7 +563,7 @@ public static class Battle_Tool
         else if (SumSave.user_ranks.lists.Count >= 50) //50个榜已满,且自身战力大于榜上最低的一名
         {
             //自身在排行榜内 刷新属性
-            for (int i = 0; i < SumSave.user_ranks.lists.Count; i++)
+            for (ObscuredInt i = 0; i < SumSave.user_ranks.lists.Count; i++)
             {
                 if (SumSave.user_ranks.lists[i].uid == SumSave.crt_user.uid)
                 {
@@ -597,7 +598,7 @@ public static class Battle_Tool
     /// </summary>
     /// <param name="life_type"></param>
     /// <returns></returns>
-    public static int battle_life_bonus(int life_type)
+    public static ObscuredInt battle_life_bonus(ObscuredInt life_type)
     { 
      return life_bonus[life_type];
     }
@@ -630,7 +631,7 @@ public static class Battle_Tool
         base_crt.unit = Random.Range(crt.Lv * 5, crt.Lv * 10) + 1;
 
         //标准战斗系数
-        int coefficient = 1;
+        ObscuredInt coefficient = 1;
         if (Random.Range(0, 100) < 10)
         {
             coefficient = 2;
@@ -690,7 +691,7 @@ public static class Battle_Tool
             }
             if (SumSave.crt_MaxHero_okd.Lv >= 40)
             {
-                int lv = (SumSave.crt_MaxHero_okd.Lv - 30) / 10;
+                ObscuredInt lv = (SumSave.crt_MaxHero_okd.Lv - 30) / 10;
                 coefficient = lv;
                 
             }
@@ -779,7 +780,7 @@ public static class Battle_Tool
     /// <param name="map"></param>
     /// <param name="trial_storey">挂机难度</param>
     /// <returns></returns>
-    public static crtMaxHeroVO crate_monster(crtMaxHeroVO crt, user_map_vo map, int trial_storey)
+    public static crtMaxHeroVO crate_monster(crtMaxHeroVO crt, user_map_vo map, ObscuredInt trial_storey)
     {
         crtMaxHeroVO base_crt = new crtMaxHeroVO();
         base_crt.map_index = map.map_index;
@@ -802,7 +803,7 @@ public static class Battle_Tool
         base_crt.unit = Random.Range(crt.Lv * 5, crt.Lv * 10) + 1;
 
         //标准战斗系数
-        int coefficient = 1;
+        ObscuredInt coefficient = 1;
         if (Random.Range(0, 100) < 10)
         {
             coefficient = 2;
@@ -900,11 +901,11 @@ public static class Battle_Tool
     /// <param name="map"></param>
     /// <param name="SecretRealm_lv"></param>
     /// <returns></returns>
-    public static crtMaxHeroVO crate_SecretRealm_monster(crtMaxHeroVO crt, user_map_vo map, int SecretRealm_lv)
+    public static crtMaxHeroVO crate_SecretRealm_monster(crtMaxHeroVO crt, user_map_vo map, ObscuredInt SecretRealm_lv)
     {
         crtMaxHeroVO base_crt = new crtMaxHeroVO();
         base_crt.map_index = map.map_index;
-        int life= Random.Range(0, 5);
+        ObscuredInt life= Random.Range(0, 5);
         base_crt.life_types[life] = (SecretRealm_lv + 2) / 2;
         base_crt.life[life] = map.need_lv * 2 * (100 + life_bonus[base_crt.life_types[life]]) / 100 * SecretRealm_lvs[SecretRealm_lv] / 20;
         base_crt.Monster_Lv = map.map_type;
@@ -975,7 +976,7 @@ public static class Battle_Tool
     /// </summary>
     public static void tool_map()
     {
-        for (int i = 0; i < SumSave.db_maps.Count; i++)
+        for (ObscuredInt i = 0; i < SumSave.db_maps.Count; i++)
         {
             db_map_vo map = SumSave.db_maps[i];
             List<string> drop_value = new List<string>();
@@ -988,7 +989,7 @@ public static class Battle_Tool
             }
             drop_value.Add(map.drop_value);
             drop_value.Add(map.map_drop);
-            for (int j = drop_value.Count - 1; j >= 0; j--)
+            for (ObscuredInt j = drop_value.Count - 1; j >= 0; j--)
             {
                 Show_Bag(drop_value[j]);
             }

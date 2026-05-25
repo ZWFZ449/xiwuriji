@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using MVC;
 using UnityEngine;
@@ -29,7 +30,7 @@ public class Hero_VO : Base_VO
     /// <summary>
     /// 角色等级
     /// </summary>
-    public int hero_Lv;
+    public ObscuredInt hero_Lv;
     /// <summary>
     /// 角色经验
     /// </summary>
@@ -58,11 +59,11 @@ public class Hero_VO : Base_VO
     /// <summary>
     /// 英雄资源 转生 强化
     /// </summary>
-    public int[] hero_material_list;
+    public ObscuredInt[] hero_material_list;
     /// <summary>
     /// 天命台
     /// </summary>
-    public int[] tianming_Platform;
+    public ObscuredInt[] tianming_Platform;
 
 
     /// <summary>
@@ -86,9 +87,9 @@ public class Hero_VO : Base_VO
     /// </summary>
    public void InitDestinyTower(string str)
     {
-        tianming_Platform = new int[5];
+        tianming_Platform = new ObscuredInt[5];
         string[] tianming = str.Split(' ');
-        for (int i = 0; i < tianming.Length; i++)
+        for (ObscuredInt i = 0; i < tianming.Length; i++)
         {
             tianming_Platform[i] = int.Parse(tianming[i]);
         }
@@ -101,7 +102,7 @@ public class Hero_VO : Base_VO
     {
         string[] str = hero_value.Split(',');
         bool isHave = true ;
-        for (int i = 0; i < str.Length; i++)
+        for (ObscuredInt i = 0; i < str.Length; i++)
         {
             string[] str1 = str[i].Split('|');
             if(str1[0]== hero_pos)
@@ -150,12 +151,12 @@ public class Hero_VO : Base_VO
     /// <summary>
     /// 刷新天命台属性
     /// </summary>
-    public  int[]  Uptianming_Platform()
+    public  ObscuredInt[]  Uptianming_Platform()
     {
-        int[] tianming = new int[5];
-        for (int i = 0; i < tianming.Length; i++)
+        ObscuredInt[] tianming = new ObscuredInt[5];
+        for (ObscuredInt i = 0; i < tianming.Length; i++)
         {
-            int index = Random.Range(0, 5);
+            ObscuredInt index = Random.Range(0, 5);
             tianming[i] = index;
         }
         return tianming;
@@ -166,8 +167,8 @@ public class Hero_VO : Base_VO
     public void InitTianming_Platform()
     {
 
-        tianming_Platform = new int[5];
-        for (int i = 0; i < tianming_Platform.Length; i++)
+        tianming_Platform = new ObscuredInt[5];
+        for (ObscuredInt i = 0; i < tianming_Platform.Length; i++)
         {
             tianming_Platform[i] = i;
         }

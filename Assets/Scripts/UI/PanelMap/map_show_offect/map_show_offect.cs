@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using Components;
 using MVC;
@@ -168,10 +169,10 @@ public class map_show_offect : Base_Mono
                 break;
             case Stditem_StdMode_List.消耗品:
             case Stditem_StdMode_List.材料:
-                int number = 1;
-                int random = Random.Range(1, 1000);
-                int maxnumber = number + Random.Range(1, 1000);
-                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, data.Name, new int[] { number + random, random }), maxnumber);
+                ObscuredInt  number = 1;
+                ObscuredInt  random = Random.Range(1, 1000);
+                ObscuredInt  maxnumber = number + Random.Range(1, 1000);
+                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, data.Name, new ObscuredInt [] { number + random, random }), maxnumber);
                 break;
             case Stditem_StdMode_List.nothing:
                 break;

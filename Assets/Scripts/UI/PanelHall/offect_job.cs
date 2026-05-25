@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using Components;
 using MVC;
@@ -72,9 +73,9 @@ public class offect_job : Base_Mono
             foreach (var item in dic.Keys)
             {
                 dec+= "\n"+ item + " " + dic[item];
-                int random = Random.Range(1, 1000);
-                int maxnumber = dic[item] + Random.Range(1, 1000);
-                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, item, new int[] { dic[item] + random, random }), maxnumber);
+                ObscuredInt  random = Random.Range(1, 1000);
+                ObscuredInt  maxnumber = dic[item] + Random.Range(1, 1000);
+                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, item, new ObscuredInt [] { dic[item] + random, random }), maxnumber);
             }
             SumSave.crtHero.talent.Clear();
             SumSave.crtHero.SelectPos = -1;
@@ -129,9 +130,9 @@ public class offect_job : Base_Mono
             foreach (var item in dic.Keys)
             {
                 dec += "\n" + item + " " + dic[item];
-                int random = Random.Range(1, 1000);
-                int maxnumber = dic[item] + Random.Range(1, 1000);
-                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, item, new int[] { dic[item] + random, random }), maxnumber);
+                ObscuredInt  random = Random.Range(1, 1000);
+                ObscuredInt  maxnumber = dic[item] + Random.Range(1, 1000);
+                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, item, new ObscuredInt [] { dic[item] + random, random }), maxnumber);
             }
             SumSave.crtHero.talent.Clear();
             SumSave.crtHero.SelectPos = -1;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using MVC;
 using MySql.Data.MySqlClient;
@@ -16,10 +17,10 @@ public static class ReadDb
 
     public static db_weather Read_weather(MySqlDataReader reader)
     {
-        int _weather_index= reader.GetInt32(reader.GetOrdinal("weather_index"));
+        ObscuredInt _weather_index= reader.GetInt32(reader.GetOrdinal("weather_index"));
         string _weather_type= reader.GetString(reader.GetOrdinal("weather_type"));
         string _life_value= reader.GetString(reader.GetOrdinal("life_value"));
-        int _probability= reader.GetInt32(reader.GetOrdinal("probability"));
+        ObscuredInt _probability= reader.GetInt32(reader.GetOrdinal("probability"));
         return new db_weather(_weather_index, _weather_type, _life_value, _probability);
     }
 
@@ -29,7 +30,7 @@ public static class ReadDb
     } 
     public static db_formula_vo Read_formula(MySqlDataReader reader)
     {
-        int _formula_type= reader.GetInt32(reader.GetOrdinal("formula_type"));
+        ObscuredInt _formula_type= reader.GetInt32(reader.GetOrdinal("formula_type"));
         string _formula_result= reader.GetString(reader.GetOrdinal("formula_result"));
         string _formula_need= reader.GetString(reader.GetOrdinal("formula_need"));
         return new db_formula_vo(_formula_type, _formula_result, _formula_need);
@@ -39,8 +40,8 @@ public static class ReadDb
     public static db_suit_vo Read_suit(MySqlDataReader reader)
     {
         string _suit_name = reader.GetString(reader.GetOrdinal("suit_name"));
-        int _suit_number = reader.GetInt32(reader.GetOrdinal("suit_number"));
-        int _suit_type = reader.GetInt32(reader.GetOrdinal("suit_type"));
+        ObscuredInt _suit_number = reader.GetInt32(reader.GetOrdinal("suit_number"));
+        ObscuredInt _suit_type = reader.GetInt32(reader.GetOrdinal("suit_type"));
         return new db_suit_vo(_suit_name, _suit_number, _suit_type, reader.GetString(reader.GetOrdinal("suit_value")));
     }
 
@@ -48,16 +49,16 @@ public static class ReadDb
 
     public static user_world_boss Read_world_boss(MySqlDataReader reader)
     {
-        int _damage = reader.GetInt32(reader.GetOrdinal("damage"));
+        ObscuredInt _damage = reader.GetInt32(reader.GetOrdinal("damage"));
         DateTime _datetime = Convert.ToDateTime(reader.GetString(reader.GetOrdinal("datetime")));
-        int _par = reader.GetInt32(reader.GetOrdinal("par"));
+        ObscuredInt _par = reader.GetInt32(reader.GetOrdinal("par"));
         string _uid = reader.GetString(reader.GetOrdinal("uid"));
         return new user_world_boss(_damage, _datetime, _par, _uid);
     }
 
     public static db_fate_vo Read_fate(MySqlDataReader reader)
     {
-        int _fate_id = reader.GetInt32(reader.GetOrdinal("fate_index"));
+        ObscuredInt _fate_id = reader.GetInt32(reader.GetOrdinal("fate_index"));
         string _fate_value = reader.GetString(reader.GetOrdinal("fate_value"));
         return new db_fate_vo(_fate_id, _fate_value);
     }
@@ -76,7 +77,7 @@ public static class ReadDb
     public static global_promotion_vo Read(MySqlDataReader reader, global_promotion_vo item,string uid)
     {
         string value = reader.GetString(reader.GetOrdinal("promotion_value"));
-        int moeny= reader.GetInt32(reader.GetOrdinal("promotion_moeny"));
+        ObscuredInt moeny= reader.GetInt32(reader.GetOrdinal("promotion_moeny"));
         item.Init(value, moeny,"uid", uid);
         return item;
     }
@@ -141,7 +142,7 @@ public static class ReadDb
 
     public static db_signin_vo Read_signin(MySqlDataReader reader)
     {
-        int _index = reader.GetInt32(reader.GetOrdinal("index"));
+        ObscuredInt _index = reader.GetInt32(reader.GetOrdinal("index"));
         string _value = reader.GetString(reader.GetOrdinal("value"));
         return new db_signin_vo(_index, _value);
     }
@@ -158,17 +159,17 @@ public static class ReadDb
     public static db_seed_vo Read_seed(MySqlDataReader reader)
     {
         string type = reader.GetString(reader.GetOrdinal("type"));
-        int sequence = reader.GetInt32(reader.GetOrdinal("sequence"));
+        ObscuredInt sequence = reader.GetInt32(reader.GetOrdinal("sequence"));
         string seed_name = reader.GetString(reader.GetOrdinal("seed_name"));
         string seed_formula = reader.GetString(reader.GetOrdinal("seed_formula"));
         string pill = reader.GetString(reader.GetOrdinal("pill"));
         string formula = reader.GetString(reader.GetOrdinal("formula"));
         string pill_effect = reader.GetString(reader.GetOrdinal("pill_effect"));
-        int Weight = reader.GetInt32(reader.GetOrdinal("Weight"));
-        int seed_number = reader.GetInt32(reader.GetOrdinal("seed_number"));
-        int rule = reader.GetInt32(reader.GetOrdinal("rule"));
-        int dicdictionary_index = reader.GetInt32(reader.GetOrdinal("dicdictionary_index"));
-        int limit = reader.GetInt32(reader.GetOrdinal("limit"));
+        ObscuredInt Weight = reader.GetInt32(reader.GetOrdinal("Weight"));
+        ObscuredInt seed_number = reader.GetInt32(reader.GetOrdinal("seed_number"));
+        ObscuredInt rule = reader.GetInt32(reader.GetOrdinal("rule"));
+        ObscuredInt dicdictionary_index = reader.GetInt32(reader.GetOrdinal("dicdictionary_index"));
+        ObscuredInt limit = reader.GetInt32(reader.GetOrdinal("limit"));
         return new db_seed_vo(type, sequence, seed_name, seed_formula, pill, formula, pill_effect, Weight, seed_number, rule,dicdictionary_index, limit);
     }
 
@@ -190,16 +191,13 @@ public static class ReadDb
         item.user_value= reader.GetString(reader.GetOrdinal("user_value"));
         item.Init();
         return item;
-    }
-
-
-
+    } 
     public static db_hall_vo Read(MySqlDataReader reader, db_hall_vo item)
     {
         string otainlist= reader.GetString(reader.GetOrdinal("otainlist"));
         item.otainlist_btn = new System.Collections.Generic.List<string>();
         string[] otainlist_btn = otainlist.Split(' ');
-        for (int i = 0; i < otainlist_btn.Length; i++)
+        for (ObscuredInt i = 0; i < otainlist_btn.Length; i++)
         { 
             item.otainlist_btn.Add(otainlist_btn[i]);
         }
@@ -207,7 +205,7 @@ public static class ReadDb
         string otainpanel= reader.GetString(reader.GetOrdinal("otainpanel"));
         item.otainpanel = new System.Collections.Generic.List<string>();
         string[] otainpanel_btn = otainpanel.Split(' ');
-        for (int i = 0; i < otainpanel_btn.Length; i++)
+        for (ObscuredInt i = 0; i < otainpanel_btn.Length; i++)
         { 
             item.otainpanel.Add(otainpanel_btn[i]);
         }
@@ -215,7 +213,7 @@ public static class ReadDb
         string maplist= reader.GetString(reader.GetOrdinal("maplist"));
         item.maplist_btn = new System.Collections.Generic.List<string>();
         string[] maplist_btn = maplist.Split(' ');
-        for (int i = 0; i < maplist_btn.Length; i++)
+        for (ObscuredInt i = 0; i < maplist_btn.Length; i++)
         { 
             item.maplist_btn.Add(maplist_btn[i]);
         }
@@ -223,7 +221,7 @@ public static class ReadDb
         string mappanel= reader.GetString(reader.GetOrdinal("mappanel"));
         item.mappanel = new System.Collections.Generic.List<string>();
         string[] mappanel_btn = mappanel.Split(' ');
-        for (int i = 0; i < mappanel_btn.Length; i++)
+        for (ObscuredInt i = 0; i < mappanel_btn.Length; i++)
         { 
             item.mappanel.Add(mappanel_btn[i]);
         }
@@ -231,7 +229,7 @@ public static class ReadDb
         string herolist= reader.GetString(reader.GetOrdinal("herolist"));
         item.herolist_btn = new System.Collections.Generic.List<string>();
         string[] herolist_btn = herolist.Split(' ');
-        for (int i = 0; i < herolist_btn.Length; i++)
+        for (ObscuredInt i = 0; i < herolist_btn.Length; i++)
         { 
             item.herolist_btn.Add(herolist_btn[i]);
         }
@@ -239,90 +237,12 @@ public static class ReadDb
         string heropanel= reader.GetString(reader.GetOrdinal("heropanel"));
         item.heropanel = new System.Collections.Generic.List<string>();
         string[] heropanel_btn = heropanel.Split(' ');
-        for (int i = 0; i < heropanel_btn.Length; i++)
+        for (ObscuredInt i = 0; i < heropanel_btn.Length; i++)
         { 
             item.heropanel.Add(heropanel_btn[i]);
         }
         return item;
-    }
-
-
-    public static db_lv_vo_old Read(MySqlDataReader reader, db_lv_vo_old item)
-    {
-        string hero_lv_exp = reader.GetString(reader.GetOrdinal("hero_lv_exp"));
-        item.hero_lv_list = new System.Collections.Generic.List<long>();
-        string[] hero_lv_exp_list = hero_lv_exp.Split(' ');
-        for (int i = 0; i < hero_lv_exp_list.Length; i++)
-        {
-            item.hero_lv_list.Add(Convert.ToInt64(hero_lv_exp_list[i]));
-        }
-        string word_lv_exp= reader.GetString(reader.GetOrdinal("word_lv_exp"));
-        item.world_lv_list_dic = new Dictionary<int, List<(string, int)>>();
-        string[] word_lv_exp_list = word_lv_exp.Split('&');
-        for (int i = 0; i < word_lv_exp_list.Length; i++)
-        {
-            if(!item.world_lv_list_dic.ContainsKey(i))item.world_lv_list_dic.Add(i, new List<(string, int)>());
-            if (word_lv_exp_list[i] != "")
-            {
-                string[] word_lv_exp_list2 = word_lv_exp_list[i].Split(',');
-                for (int j = 0; j < word_lv_exp_list2.Length; j++)
-                {
-                    if (word_lv_exp_list2[j] != "")
-                    { 
-                        string[] word_lv_exp_list3 = word_lv_exp_list2[j].Split(' ');
-                        if (word_lv_exp_list3.Length == 2)
-                        item.world_lv_list_dic[i].Add((word_lv_exp_list3[0], Convert.ToInt32(word_lv_exp_list3[1])));
-                    }
-                }
-
-            }
-           
-        }
-        string world_offect_list = reader.GetString(reader.GetOrdinal("world_offect_list"));
-        item.world_offect_list = new System.Collections.Generic.List<int>();
-        string[] world_offect_list2 = world_offect_list.Split(' ');
-        for (int i = 0; i < world_offect_list2.Length; i++)
-        { 
-            item.world_offect_list.Add(Convert.ToInt32(world_offect_list2[i]));
-        }
-        string word_lv_max_value= reader.GetString(reader.GetOrdinal("word_lv_max_value"));
-        item.word_lv_max_value = new System.Collections.Generic.List<int>();
-        string[] word_lv_max_value2 = word_lv_max_value.Split(' ');
-        for (int i = 0; i < word_lv_max_value2.Length; i++)
-        {
-            item.word_lv_max_value.Add(Convert.ToInt32(word_lv_max_value2[i]));
-        }
-        string limitation_value = reader.GetString(reader.GetOrdinal("limitation_value"));
-        string[] limitation_value2 = limitation_value.Split(',');
-        for (int i = 0; i < limitation_value2.Length; i++)
-        {
-            if(limitation_value2[i] != "")
-            SumSave.base_setting.Add(int.Parse(limitation_value2[i]));
-        }
-        string unitvalue = reader.GetString(reader.GetOrdinal("unit_value"));
-        string[] unitvalue2 = unitvalue.Split(',');
-        for (int i = 0; i < unitvalue2.Length; i++)
-        {
-            if (unitvalue2[i] != "")
-                SumSave.base_settin_uint.Add(long.Parse(unitvalue2[i]));
-        }
-        return item;
-    }
-    public static db_store_vo Read(MySqlDataReader reader)
-    {
-        int store_Type = reader.GetInt32(reader.GetOrdinal("StoreType"));
-        string ItemName = reader.GetString(reader.GetOrdinal("ItemName"));
-        int ItemPrice = reader.GetInt32(reader.GetOrdinal("ItemPrice"));
-        int ItemMaxQuantity= reader.GetInt32(reader.GetOrdinal("ItemMaxQuantity"));
-        string unit = reader.GetString(reader.GetOrdinal("unit"));
-        string[] dis= reader.GetString(reader.GetOrdinal("discount")).Split(' ');
-        (int,int) discount= (0,0);
-        if (dis.Length ==2)
-        {
-            discount = (int.Parse(dis[0]) , int.Parse(dis[1]));
-        }
-        return new db_store_vo(store_Type, ItemName, ItemPrice, unit, discount, ItemMaxQuantity);
-    }
+    } 
     public static user_illustrated_vo Read_illustrated(MySqlDataReader reader)
     {
         user_illustrated_vo item = new user_illustrated_vo();
@@ -333,7 +253,7 @@ public static class ReadDb
 
     public static db_achievement_VO Read_achievement_VO(MySqlDataReader reader)
     {
-        int achievement_type = reader.GetInt32(reader.GetOrdinal("achieve_type"));
+        ObscuredInt achievement_type = reader.GetInt32(reader.GetOrdinal("achieve_type"));
         string achievement_value = reader.GetString(reader.GetOrdinal("achieve_value"));
         string achievement_need = reader.GetString(reader.GetOrdinal("achieve_need"));
         string[] achievement_show_lv = reader.GetString(reader.GetOrdinal("achieve_show_lv")).Split('|');
@@ -361,15 +281,15 @@ public static class ReadDb
         //    string[] lv = item.achievement_lvs.Split("|");
         //    List<string[]> expList = new List<string[]>();  //expList[0][0]为第一词条的名称 expList[0][1]为第一词条的值 依次类推
         //    List<string[]> lvList = new List<string[]>();
-        //    for (int j = 0; j < lv.Length; j++)
+        //    for (ObscuredInt j = 0; j < lv.Length; j++)
         //    {
         //        expList.Add(str[j].Split(" "));
         //        lvList.Add(lv[j].Split(" "));
         //    }
         //    if (Common.SumSave.db_Achievement_dic.Count != expList.Count)
         //    {
-        //        int temp = 0; //从17开始需要 跳过3个索引
-        //        for (int i = 0; i < Common.SumSave.db_Achievement_dic.Count - 3; i++) //这里可以直接减去3个雪域地图
+        //        ObscuredInt temp = 0; //从17开始需要 跳过3个索引
+        //        for (ObscuredInt i = 0; i < Common.SumSave.db_Achievement_dic.Count - 3; i++) //这里可以直接减去3个雪域地图
         //        {
         //            if (i == 17 || i == 18 || i == 19) { temp = 3; }//部分玩家没有雪域地图
         //            if (Common.SumSave.db_Achievement_dic[i + temp].achievement_value != expList[i][0])
@@ -381,7 +301,7 @@ public static class ReadDb
         //    }
         //    else
         //    {
-        //        for (int i = 0; i < Common.SumSave.db_Achievement_dic.Count; i++)
+        //        for (ObscuredInt i = 0; i < Common.SumSave.db_Achievement_dic.Count; i++)
         //        {
         //            if (Common.SumSave.db_Achievement_dic[i].achievement_value != expList[i][0])
         //            {
@@ -393,7 +313,7 @@ public static class ReadDb
 
         //    item.achievement_exp = "";
         //    item.achievement_lvs = "";
-        //    for (int i = 0; i < str.Length; i++)
+        //    for (ObscuredInt i = 0; i < str.Length; i++)
         //    {
         //        item.achievement_exp += i == 0 ? expList[i][0] + " " + expList[i][1] : "|" + expList[i][0] + " " + expList[i][1];
         //        item.achievement_lvs += i == 0 ? lvList[i][0] + " " + lvList[i][1] : "|" + lvList[i][0] + " " + lvList[i][1];
@@ -407,21 +327,21 @@ public static class ReadDb
    
     public static db_vip Read_Vip(MySqlDataReader reader)
     {
-        int vip_lv = reader.GetInt32(reader.GetOrdinal("vip_lv"));
+        ObscuredInt vip_lv = reader.GetInt32(reader.GetOrdinal("vip_lv"));
         string vip_name = reader.GetString(reader.GetOrdinal("vip_name"));
-        int vip_exp = reader.GetInt32(reader.GetOrdinal("vip_exp"));
-        int experienceBonus = reader.GetInt32(reader.GetOrdinal("experienceBonus"));
-        int lingzhuIncome = reader.GetInt32(reader.GetOrdinal("lingzhuIncome"));
-        int equipmentExplosionRate = reader.GetInt32(reader.GetOrdinal("equipmentExplosionRate"));
-        int characterExperience = reader.GetInt32(reader.GetOrdinal("characterExperience"));
-        int monsterHuntingInterval = reader.GetInt32(reader.GetOrdinal("monsterHuntingInterval"));
-        int hpRecovery = reader.GetInt32(reader.GetOrdinal("hpRecovery"));
-        int manaRegeneration = reader.GetInt32(reader.GetOrdinal("manaRegeneration"));
-        int goodFortune = reader.GetInt32(reader.GetOrdinal("goodFortune"));
-        int strengthenCosts = reader.GetInt32(reader.GetOrdinal("strengthenCosts"));
-        int offlineInterval = reader.GetInt32(reader.GetOrdinal("offlineInterval"));
-        int signInIncome = reader.GetInt32(reader.GetOrdinal("signInIncome"));
-        int whippingCorpses = reader.GetInt32(reader.GetOrdinal("whippingCorpses"));
+        ObscuredInt vip_exp = reader.GetInt32(reader.GetOrdinal("vip_exp"));
+        ObscuredInt experienceBonus = reader.GetInt32(reader.GetOrdinal("experienceBonus"));
+        ObscuredInt lingzhuIncome = reader.GetInt32(reader.GetOrdinal("lingzhuIncome"));
+        ObscuredInt equipmentExplosionRate = reader.GetInt32(reader.GetOrdinal("equipmentExplosionRate"));
+        ObscuredInt characterExperience = reader.GetInt32(reader.GetOrdinal("characterExperience"));
+        ObscuredInt monsterHuntingInterval = reader.GetInt32(reader.GetOrdinal("monsterHuntingInterval"));
+        ObscuredInt hpRecovery = reader.GetInt32(reader.GetOrdinal("hpRecovery"));
+        ObscuredInt manaRegeneration = reader.GetInt32(reader.GetOrdinal("manaRegeneration"));
+        ObscuredInt goodFortune = reader.GetInt32(reader.GetOrdinal("goodFortune"));
+        ObscuredInt strengthenCosts = reader.GetInt32(reader.GetOrdinal("strengthenCosts"));
+        ObscuredInt offlineInterval = reader.GetInt32(reader.GetOrdinal("offlineInterval"));
+        ObscuredInt signInIncome = reader.GetInt32(reader.GetOrdinal("signInIncome"));
+        ObscuredInt whippingCorpses = reader.GetInt32(reader.GetOrdinal("whippingCorpses"));
         string gift_value = reader.GetString(reader.GetOrdinal("gift_value"));
         return new db_vip(vip_lv, vip_name, vip_exp, experienceBonus, lingzhuIncome, equipmentExplosionRate, characterExperience
             , monsterHuntingInterval, hpRecovery, manaRegeneration, goodFortune, strengthenCosts, offlineInterval, signInIncome,
@@ -467,268 +387,13 @@ public static class ReadDb
         string[] Artifact_open_needs = reader.GetString(reader.GetOrdinal("Artifact_open_need")).Split('&');
         string[] arrifact_needs = reader.GetString(reader.GetOrdinal("Artifact_need")).Split('&');
         string[] arrifact_effects = reader.GetString(reader.GetOrdinal("Artifact_effect")).Split('&');
-        int arrifact_type = reader.GetInt32(reader.GetOrdinal("Artifact_type"));
+        ObscuredInt arrifact_type = reader.GetInt32(reader.GetOrdinal("Artifact_type"));
         string Artifact_dec = reader.GetString(reader.GetOrdinal("Artifact_dec"));
-        int Artifact_MaxLv = reader.GetInt32(reader.GetOrdinal("Artifact_MaxLv"));
+        ObscuredInt Artifact_MaxLv = reader.GetInt32(reader.GetOrdinal("Artifact_MaxLv"));
         return new db_artifact_vo(arrifact_name, Artifact_open_needs, arrifact_needs, arrifact_effects, arrifact_type, Artifact_dec, Artifact_MaxLv);
     }
 
-
-    public static user_base_setting_vo Read(MySqlDataReader reader, user_base_setting_vo item)
-    {
-        item.user_value = reader.GetString(reader.GetOrdinal("setting_value"));
-        item.Init();
-        return item;
-    }
-
-    public static user_setting_type_vo Read(MySqlDataReader reader, user_setting_type_vo item)
-    {
-        item.id_setting = reader.GetInt32(reader.GetOrdinal("id"));
-        item.type_setting = reader.GetString(reader.GetOrdinal("setting_type"));
-        item.option_setting= reader.GetString(reader.GetOrdinal("setting_value"));
-        return item;
-    }
-    public static user_base_Resources_vo Read(MySqlDataReader reader, user_base_Resources_vo item)
-    {
-        item.now_time = Convert.ToDateTime(reader.GetString(reader.GetOrdinal("now_time")));
-        item.user_map_index= reader.GetString(reader.GetOrdinal("user_map_index"));
-        item.skill_value = reader.GetString(reader.GetOrdinal("skill_value"));
-        item.house_value = reader.GetString(reader.GetOrdinal("house_value"));
-        item.bag_value = reader.GetString(reader.GetOrdinal("bag_value"));
-        item.material_value = reader.GetString(reader.GetOrdinal("material_value"));
-        item.equip_value = reader.GetString(reader.GetOrdinal("equip_value"));
-        string page= reader.GetString(reader.GetOrdinal("page_value"));
-        string[] page_value = page.Split(' ');
-        item.pages= new int[page_value.Length];
-        for (int i = 0; i < page_value.Length; i++)
-        {
-            item.pages[i] = int.Parse(page_value[i]);
-        }
-        return item;
-    }
-    public static Hero_VO Read(MySqlDataReader reader, Hero_VO item)
-    {
-        item.hero_name = reader.GetValue(reader.GetOrdinal("hero_name")).ToString();
-        item.hero_lv = reader.GetString(reader.GetOrdinal("hero_lv"));
-        item.hero_Lv = int.Parse(item.hero_lv);
-        item.hero_exp= reader.GetString(reader.GetOrdinal("hero_exp"));
-        item.hero_Exp = long.Parse(item.hero_exp);
-        
-
-        item.hero_value= reader.GetString(reader.GetOrdinal("hero_value"));
-        item.hero_material= reader.GetString(reader.GetOrdinal("hero_material"));
-        string[] hero_material_array = item.hero_material.Split(' ');
-        item.hero_material_list = new int[hero_material_array.Length];
-        for (int i = 0; i < hero_material_array.Length; i++)
-        { 
-            item.hero_material_list[i] = int.Parse(hero_material_array[i]);
-        }
-
-        string[] hero_lv_array = reader.GetString(reader.GetOrdinal("hero_pos")).Split('|');
-        item.hero_pos = hero_lv_array[0];
-        item.tianming_Platform = new int[5];
-        if (hero_lv_array.Length<2)
-        {
-
-            item.InitTianming_Platform();
-        }
-        else
-        {
-            item.InitDestinyTower(hero_lv_array[1]);
-        }
-
-        return item;
-    }
-    public static db_hero_vo Read(MySqlDataReader reader, db_hero_vo item)
-    {
-        item.hero_name = reader.GetString(reader.GetOrdinal("show_name"));
-        item.hero_type = reader.GetInt32(reader.GetOrdinal("hero_type"));
-        string crate_value = reader.GetString(reader.GetOrdinal("crate_value"));
-        string[] crate_value_array = crate_value.Split(' ');
-        item.crate_value = new int[crate_value_array.Length];
-        for (int i = 0; i < crate_value_array.Length; i++)
-        { 
-            item.crate_value[i] = int.Parse(crate_value_array[i]);
-        }
-        string up_base_value = reader.GetString(reader.GetOrdinal("up_base_value"));
-        string[] up_base_value_array = up_base_value.Split(' ');
-        item.up_base_value= new int[up_base_value_array.Length];
-        for (int i = 0; i < up_base_value_array.Length; i++)
-        { 
-            item.up_base_value[i] = int.Parse(up_base_value_array[i]);
-        }
-        string up_value= reader.GetString(reader.GetOrdinal("up_value"));
-        string[] up_value_array = up_value.Split(' ');
-        item.up_value= new int[up_value_array.Length];
-        for (int i = 0; i < up_value_array.Length; i++)
-        {
-            item.up_value[i] = int.Parse(up_value_array[i]);
-        }
-        return item;
-    }
-    public static user_map_vo Read(MySqlDataReader reader,user_map_vo item)
-    {
-        item.map_index = reader.GetInt32(reader.GetOrdinal("map_index"));
-        item.map_name= reader.GetString(reader.GetOrdinal("map_name"));
-        item.map_type = reader.GetInt32(reader.GetOrdinal("map_type"));
-        item.need_lv = reader.GetInt32(reader.GetOrdinal("need_lv"));
-        item.need_Required = reader.GetString(reader.GetOrdinal("need_Required"));
-        item.ProfitList = reader.GetString(reader.GetOrdinal("ProfitList"));
-        item.monster_list = reader.GetString(reader.GetOrdinal("monster_list"));
-        item.map_life= reader.GetInt32(reader.GetOrdinal("map_life"));
-        item.Independent_Drop = reader.GetString(reader.GetOrdinal("Independent_Drop"));
-        return item;
-    }
-
-    public static Bag_Base_VO Read(MySqlDataReader reader, Bag_Base_VO item)
-    {
-        item.Name = reader.GetString(reader.GetOrdinal("Name"));
-        item.StdMode= reader.GetString(reader.GetOrdinal("StdMode"));
-        item.need_lv= reader.GetInt32(reader.GetOrdinal("need_lv"));
-        item.equip_lv= reader.GetInt32(reader.GetOrdinal("equip_lv"));
-        item.price= reader.GetInt32(reader.GetOrdinal("price"));
-        //item.hp= reader.GetInt32(reader.GetOrdinal("hp"));
-        //item.mp= reader.GetInt32(reader.GetOrdinal("mp"));
-        item.defmin= reader.GetInt32(reader.GetOrdinal("defmin"));
-        item.defmax= reader.GetInt32(reader.GetOrdinal("defmax"));
-        item.macdefmin= reader.GetInt32(reader.GetOrdinal("macdefmin"));
-        item.macdefmax= reader.GetInt32(reader.GetOrdinal("macdefmax"));
-        item.damgemin= reader.GetInt32(reader.GetOrdinal("damgemin"));
-        item.damagemax= reader.GetInt32(reader.GetOrdinal("damagemax"));
-        item.magicmin= reader.GetInt32(reader.GetOrdinal("magicmin"));
-        item.magicmax= reader.GetInt32(reader.GetOrdinal("magicmax"));
-        item.dec= reader.GetString(reader.GetOrdinal("dec"));
-        item.suit= reader.GetInt32(reader.GetOrdinal("suit"));
-        item.suit_name= reader.GetString(reader.GetOrdinal("suit_name"));
-        item.suit_dec= reader.GetString(reader.GetOrdinal("suit_dec"));
-        return item;
-    }
-    public static crtMaxHeroVO Read(MySqlDataReader reader, crtMaxHeroVO item)
-    {
-        item.show_name = reader.GetString(reader.GetOrdinal("show_name"));
-        item.index= reader.GetInt32(reader.GetOrdinal("index"));
-        item.Lv= reader.GetInt32(reader.GetOrdinal("Lv"));
-        item.Exp= reader.GetInt32(reader.GetOrdinal("Exp"));
-        item.icon= reader.GetString(reader.GetOrdinal("icon"));
-        item.MaxHP= reader.GetInt32(reader.GetOrdinal("MaxHP"));
-        item.MaxMp= reader.GetInt32(reader.GetOrdinal("MaxMp"));
-        item.internalforceMP= reader.GetInt32(reader.GetOrdinal("internalforceMP"));
-        item.EnergyMp= reader.GetInt32(reader.GetOrdinal("EnergyMp"));
-        item.DefMin= reader.GetInt32(reader.GetOrdinal("DefMin"));
-        item.DefMax= reader.GetInt32(reader.GetOrdinal("DefMax")); 
-        item.MagicDefMin= reader.GetInt32(reader.GetOrdinal("MagicDefMin"));
-        item.MagicDefMax= reader.GetInt32(reader.GetOrdinal("MagicDefMax"));
-        item.damageMin= reader.GetInt32(reader.GetOrdinal("damageMin"));
-        item.damageMax= reader.GetInt32(reader.GetOrdinal("damageMax"));
-        item.MagicdamageMin= reader.GetInt32(reader.GetOrdinal("MagicdamageMin"));
-        item.MagicdamageMax= reader.GetInt32(reader.GetOrdinal("MagicdamageMax"));
-        item.hit= reader.GetInt32(reader.GetOrdinal("hit"));
-        item.dodge= reader.GetInt32(reader.GetOrdinal("dodge"));
-        item.penetrate= reader.GetInt32(reader.GetOrdinal("penetrate"));
-        item.block= reader.GetInt32(reader.GetOrdinal("block"));
-        item.crit_rate= reader.GetInt32(reader.GetOrdinal("crit_rate"));
-        item.crit_damage= reader.GetInt32(reader.GetOrdinal("crit_damage"));
-        item.double_damage= reader.GetInt32(reader.GetOrdinal("double_damage"));
-        item.Lucky= reader.GetInt32(reader.GetOrdinal("Lucky"));
-        item.Real_harm= reader.GetInt32(reader.GetOrdinal("Real_harm"));
-        item.Damage_Reduction= reader.GetInt32(reader.GetOrdinal("Damage_Reduction"));
-        item.Damage_absorption= reader.GetInt32(reader.GetOrdinal("Damage_absorption"));
-        item.resistance= reader.GetInt32(reader.GetOrdinal("resistance"));
-        item.move_speed= reader.GetInt32(reader.GetOrdinal("move_speed"));
-        item.attack_speed= reader.GetInt32(reader.GetOrdinal("attack_speed"));
-        item.attack_distance = reader.GetInt32(reader.GetOrdinal("attack_distance"));
-        item.bonus_Hp= reader.GetInt32(reader.GetOrdinal("bonus_Hp"));
-        item.bonus_Mp= reader.GetInt32(reader.GetOrdinal("bonus_Mp"));
-        item.bonus_Damage = reader.GetInt32(reader.GetOrdinal("bonus_Damage"));
-        item.bonus_MagicDamage= reader.GetInt32(reader.GetOrdinal("bonus_MagicDamage"));
-        item.bonus_Def= reader.GetInt32(reader.GetOrdinal("bonus_Def"));
-        item.bonus_MagicDef= reader.GetInt32(reader.GetOrdinal("bonus_MagicDef"));
-        item.Heal_Hp= reader.GetInt32(reader.GetOrdinal("Heal_Hp"));
-        item.Heal_Mp= reader.GetInt32(reader.GetOrdinal("Heal_Mp"));
-        return item;
-    }
-    public static base_skill_vo Read(MySqlDataReader reader, base_skill_vo item)
-    {
-        item.skillname = reader.GetString(reader.GetOrdinal("skill_name")); 
-        item.skill_type = reader.GetInt32(reader.GetOrdinal("skill_type"));
-        item.skill_damage_type = reader.GetInt32(reader.GetOrdinal("skill_damage_type"));
-        item.skilllv = 1; 
-        item.skill_max_lv = reader.GetInt32(reader.GetOrdinal("skill_max_lv"));
-        item.skill_life = reader.GetInt32(reader.GetOrdinal("skill_need_exp"));
-        string skill_need_coefficient= reader.GetString(reader.GetOrdinal("skill_need_coefficient"));
-        string[] skill_need_coefficient_array = skill_need_coefficient.Split(' ');
-        item.skill_need_coefficient = new System.Collections.Generic.List<int>();
-        if (skill_need_coefficient_array.Length > 0)
-        {
-            for (int i = 0; i < skill_need_coefficient_array.Length; i++)
-            {
-                item.skill_need_coefficient.Add(int.Parse(skill_need_coefficient_array[i]));
-            }
-        }
-        string skill_need_state= reader.GetString(reader.GetOrdinal("skill_need_state"));
-        string[] skill_need_state_array = skill_need_state.Split('*');
-        item.skill_need_state = new System.Collections.Generic.List<(int, string)>();
-        if (skill_need_state_array.Length > 0)
-        {
-            for (int i = 0; i < skill_need_state_array.Length; i++)
-            {
-                string[] splits=skill_need_state_array[i].Split(' ');
-                if (splits.Length > 1)
-                {
-                    (int, string) temp = (int.Parse(splits[0]), splits[1]);
-                    item.skill_need_state.Add(temp);
-                }
-            }
-        }
-        string skill_open_type = reader.GetString(reader.GetOrdinal("skill_open_type"));
-        string[] skill_open_type_array = skill_open_type.Split(' ');
-        item.skill_open_type = new System.Collections.Generic.List<int>();
-        if (skill_open_type_array.Length > 0)
-        {
-            for (int i = 0; i < skill_open_type_array.Length; i++)
-            { 
-                item.skill_open_type.Add(int.Parse(skill_open_type_array[i]));
-            }
-        }
-
-        string skill_open_value= reader.GetString(reader.GetOrdinal("skill_open_value")); 
-        string[] skill_open_value_array = skill_open_value.Split(' ');
-        item.skill_open_value = new System.Collections.Generic.List<int>();
-        if (skill_open_value_array.Length > 0)
-        {
-            for (int i = 0; i < skill_open_value_array.Length; i++)
-            { 
-                item.skill_open_value.Add(int.Parse(skill_open_value_array[i]));
-            }
-        }
-        string skill_pos_type = reader.GetString(reader.GetOrdinal("skill_pos_type"));
-        string[] skill_pos_type_array = skill_pos_type.Split(' ');
-        item.skill_pos_type = new System.Collections.Generic.List<int>();
-        if (skill_pos_type_array.Length > 1)
-        {
-            for (int i = 0; i < skill_pos_type_array.Length; i++)
-            { 
-                item.skill_pos_type.Add(int.Parse(skill_pos_type_array[i]));
-            }
-        }
-        string skill_pos_value= reader.GetString(reader.GetOrdinal("skill_pos_value"));
-        string[] skill_pos_value_array = skill_pos_value.Split(' ');
-        item.skill_pos_value = new System.Collections.Generic.List<int>();
-        if (skill_pos_value_array.Length > 1)
-        {
-            for (int i = 0; i < skill_pos_value_array.Length; i++)
-            { 
-                item.skill_pos_value.Add(int.Parse(skill_pos_value_array[i]));
-            }
-        }
-        item.skill_damage = reader.GetInt32(reader.GetOrdinal("skill_damage"));
-        item.skill_power = reader.GetInt32(reader.GetOrdinal("skill_power"));
-        item.skill_suit_type = reader.GetInt32(reader.GetOrdinal("skill_suit_type"));
-        item.skill_suit_value = reader.GetInt32(reader.GetOrdinal("skill_suit_value"));
-        item.skill_spell= reader.GetInt32(reader.GetOrdinal("skill_spell"));
-        item.skill_cd = reader.GetInt32(reader.GetOrdinal("skill_cd")) / 60f;
-        item.skill_state= reader.GetInt32(reader.GetOrdinal("skill_state"));
-        return item;
-    } 
+     
+     
 
 }

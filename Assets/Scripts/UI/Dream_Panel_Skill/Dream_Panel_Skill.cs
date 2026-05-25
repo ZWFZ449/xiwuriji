@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using Components;
 using MVC;
@@ -138,8 +139,8 @@ public class Dream_Panel_Skill : Panel_Base
     /// <param name="arg0"></param>
     private void upLv_skill(object arg0)
     {
-        List<(string, int)> lists = SumSave.crt_bags.Set();
-        int number = 0;
+        List<(string, ObscuredInt )> lists = SumSave.crt_bags.Set();
+        int  number = 0;
         if (lists.Count > 0)
         {
             foreach (var item in lists)
@@ -188,7 +189,7 @@ public class Dream_Panel_Skill : Panel_Base
     {
         ClearObject(p_btn_brom);
         //未激活
-        int lv= crt_skill.SetLv();
+        int lv = crt_skill.SetLv();
         for (int i = 0; i < Enum.GetNames(typeof(Skill_Btn_Type)).Length; i++)
         {
             bool exist = false;
@@ -307,7 +308,7 @@ public class Dream_Panel_Skill : Panel_Base
         ShowBtn();
         #region 显示每个等级的效果
         //显示每个等级的效果
-        //for (int i = 0; i < crt_skill.DefPowers.Count; i++)
+        //for (ObscuredInt  i = 0; i < crt_skill.DefPowers.Count; i++)
         //{
         //    string str = ""; 
         //    Show_Color_list color_list = Show_Color_list.orange;
@@ -429,9 +430,9 @@ public class Dream_Panel_Skill : Panel_Base
         //                    str += entry + " " + Show_Color.Set_String(crt_skill.skill_offect_value_list[entry][i] + "%",color_list) + ";";
         //                    break;
         //                default:
-        //                    if ((int)entry > 1000)
+        //                    if ((ObscuredInt )entry > 1000)
         //                    {
-        //                        db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, (x) => x.id == ((int)entry - 1000));
+        //                        db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, (x) => x.id == ((ObscuredInt )entry - 1000));
         //                        if (skill != null)
         //                        {
         //                            str += "\n" + skill.show_name + " 技能效果 + " + Show_Color.Set_String(crt_skill.skill_offect_value_list[entry][i] + "%", color_list) + ";";
@@ -462,7 +463,7 @@ public class Dream_Panel_Skill : Panel_Base
 
         Color color_list = UnityColorPresets.HexToColor("ffffff");
         string str = "";
-        int lv= crt_skill.SetLv();
+        int lv = crt_skill.SetLv();
         int talent_lv = 0;
         if (lv == -1) str += "未激活\n";
         else
@@ -584,7 +585,7 @@ public class Dream_Panel_Skill : Panel_Base
                     }
                 }
             }
-            //for (int i = 0; i < crt_skill.skill_offect_value_list.Count; i++)
+            //for (ObscuredInt  i = 0; i < crt_skill.skill_offect_value_list.Count; i++)
             //{
             //    if (i < lv) color_list = Show_Color_list.yellow;
             //    foreach (enum_equip_entry_list entry in crt_skill.skill_offect_value_list.Keys)
@@ -675,9 +676,9 @@ public class Dream_Panel_Skill : Panel_Base
             //                str += entry + " " + Show_Color.Set_String(crt_skill.skill_offect_value_list[entry][i] + "%", color_list) + ";";
             //                break;
             //            default:
-            //                if ((int)entry > 1000)
+            //                if ((ObscuredInt )entry > 1000)
             //                {
-            //                    db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, (x) => x.id == ((int)entry - 1000));
+            //                    db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, (x) => x.id == ((ObscuredInt )entry - 1000));
             //                    if (skill != null)
             //                    {
             //                        str += "\n" + skill.show_name + " 技能效果 + " + Show_Color.Set_String(crt_skill.skill_offect_value_list[entry][i] + "%", color_list) + ";";
@@ -735,7 +736,7 @@ public class Dream_Panel_Skill : Panel_Base
                 break;
             case Skill_Effect_Type.召唤:
                 str += "召唤 " + Show_Color.Set_String(crt_skill.show_name, color_list) + "\n继承" + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + " %属性" + " ", color_list);
-                if (crt_skill.skill_damages.Count > 0) str += "[召唤兽伤害] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
+                if (crt_skill.skill_damages.Count > 0) str += "\n[召唤兽伤害] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
                 break;
             case Skill_Effect_Type.护盾:
                 str += "生成 " + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + (crt_skill.Effect == 1 ? " 双防御" : "% 双免伤") + " ", color_list);
