@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -112,10 +113,12 @@ public class PanelBattle : PanelBase
 
     private Button btn_boss_time;
 
+    private Button btn_bag;
+
     private TMP_Text boss_time_text;
     protected override void Awake()
     {
-        closeButton = Find<Button>("info/close_button");
+        closeButton = Find<Button>("info/info/close_button");
         closeButton.onClick.AddListener(() => { Hide(); });
         Initialize();
     }
@@ -141,8 +144,8 @@ public class PanelBattle : PanelBase
         battle_monster_prefab = Resources.Load<GameObject>("UI/Prefabs/battle_monsters");
         battle_Boss_monster_prefab = Resources.Load<GameObject>("UI/Prefabs/battle_Boss_monsters");
         battle_player_prefab = Resources.Load<GameObject>("UI/Prefabs/battle_players"); 
-        m_medicine_borm = Find<Transform>("info/medicine_list");
-        m_skill_borm = Find<Transform>("info/skill_list");
+        m_medicine_borm = Find<Transform>("info/info/medicine_list");
+        m_skill_borm = Find<Transform>("skill_list");//info/skill_list
         Medicineitem_prefab = Tool_UI.Find_Prefabs<medicineitem>("medicineitem");
         skill_offect_item_prefab = Tool_UI.Find_Prefabs<skill_offect_item>("skill_offect_item");
         show_drop_list = Find<show_drop_list>("show_drop_list");
@@ -155,6 +158,8 @@ public class PanelBattle : PanelBase
         btn_boss_time = Find<Button>("info/btn_show_time");
         btn_boss_time.onClick.AddListener(() => { boss_time.gameObject.SetActive(true); });
         boss_time_text = Find<TMP_Text>("info/btn_show_time/info");
+        btn_bag= Find<Button>("info/info/btn_bag");
+        btn_bag.onClick.AddListener(() => { UI_Manager.I.GetPanel<Dream_Panel_Bag>().Show(); });
         InitMedicine();
         InitSlider();
         InitBoss();

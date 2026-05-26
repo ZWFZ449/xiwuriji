@@ -141,7 +141,7 @@ public class medicineitem : Base_Mono
     {
         medicine_number--;
         number_Text.text = medicine_number.ToString();
-        transform.parent.parent.parent.SendMessage("Use_Medicine", Type);
+        transform.parent.parent.parent.parent.SendMessage("Use_Medicine", Type);
     }
     /// <summary>
     /// 获取药品效果
