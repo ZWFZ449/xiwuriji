@@ -97,6 +97,12 @@ namespace MVC
             CloseMySqlDB();
         }
 
+        public void Account(string v)
+        {
+            OpenMySqlDB();
+            MysqlDb.InsertInto(Mysql_Table_Name.global_account, new string[] { GetStr(0), GetStr(SumSave.uid), GetStr(v) });
+            CloseMySqlDB();
+        }
 
         private void Read_Instace()
         {

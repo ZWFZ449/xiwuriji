@@ -112,4 +112,5 @@ public enum Mysql_Table_Name
     global_gift,//全局礼物
     history_global_gift,//历史全局礼物
     global_uid,//全局uid
+    global_account,//全局账号
 }

@@ -40,7 +40,8 @@ namespace MVC
                 NotiList.Read_global_promotion,
                 NotiList.Add_global_promotion,
                 NotiList.Read_Global_Gift,
-                NotiList.Delete
+                NotiList.Delete,
+                NotiList.Account
 
 
             };
@@ -73,11 +74,14 @@ namespace MVC
                 case NotiList.Read_Global_Gift:
                     user.Read_Global_Gift(data.ToString());
                     break;
-                    case NotiList.Add_global_promotion:
+                case NotiList.Add_global_promotion:
                     user.Add_global_promotion(data);
                     break;
-                    case NotiList.Delete:
+                case NotiList.Delete:
                     user.Delete();
+                    break;
+               case NotiList.Account:
+                    user.Account(data.ToString()); 
                     break;
                 default:
                     break;

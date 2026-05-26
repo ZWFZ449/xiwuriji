@@ -178,7 +178,7 @@ namespace MVC
         }
         public void Delete(string dec)
         { 
-          SendNotification(NotiList.Delete,SumSave.nowtime+" "+SumSave.crt_user.uid+" "+  dec);
+          SendNotification(NotiList.Account, SumSave.nowtime+" "+SumSave.crt_user.uid+" "+  dec);
         }
 
         /// <summary>
