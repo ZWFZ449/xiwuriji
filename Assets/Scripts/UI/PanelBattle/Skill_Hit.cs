@@ -245,7 +245,6 @@ namespace MVC
         void MoveHoming()
         {
             if (target == null) return;
-
             Vector3 direction = (target.transform.position - transform.position).normalized;
             transform.position += direction * moveSpeed * Time.deltaTime;
 
@@ -298,13 +297,14 @@ namespace MVC
             {
                 On_Destroy();
                 return;
-            } 
+            }
             BaseBattleAttack healthState = target.GetComponent<BaseBattleAttack>();
             if (healthState != null)
             {
                 baseBattleAttack.skill_damage(PushObjectToPool_skill); // 造成10点伤害
             }
             hasCollided = true;
+            On_Destroy();
         }
         void Update()
         {
