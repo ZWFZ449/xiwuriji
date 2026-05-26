@@ -35,7 +35,7 @@ namespace MVC
         /// <summary>
         /// 技能移动速度
         /// </summary>
-        private int moveSpeed = 2500;
+        private int moveSpeed = 3000;
         /// <summary>
         /// 回收对象池
         /// </summary>
@@ -294,14 +294,17 @@ namespace MVC
         private void cause_harm()
         {
             if (hasCollided) return;
-            if (target == null) return;
+            if (target == null || moveType == MoveType.Straight)
+            {
+                On_Destroy();
+                return;
+            } 
             BaseBattleAttack healthState = target.GetComponent<BaseBattleAttack>();
             if (healthState != null)
             {
                 baseBattleAttack.skill_damage(PushObjectToPool_skill); // 造成10点伤害
             }
             hasCollided = true;
-            On_Destroy();
         }
         void Update()
         {

@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using MVC;
 using System.Collections.Generic;
@@ -7,9 +8,9 @@ public class data_global_gift_vo : Base_VO
 {
      private List<string> giftS;
 
-    private int gift_points;
+    private ObscuredInt gift_points;
 
-    private int verification_gift_points, verification;
+    private ObscuredInt verification_gift_points, verification;
 
     public void Init(List<string> giftS,int gift_points)
     { 
@@ -82,12 +83,12 @@ public class data_global_gift_vo : Base_VO
     /// <summary>
     /// 获取累充 切断变量
     /// </summary>
-    public string GetGiftPoints { get { return gift_points.ToString(); } }
+    public ObscuredInt GetGiftPoints { get { return gift_points; } }
     /// <summary>
     /// 写入累充金额
     /// </summary>
     /// <param name="value"></param>
-    public void SetGiftPoints(int value)
+    public void SetGiftPoints(ObscuredInt value)
     {
         if (verification == verification_gift_points - gift_points)
         {

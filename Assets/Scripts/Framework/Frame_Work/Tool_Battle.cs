@@ -1071,7 +1071,7 @@ public static class Tool_Battle
     public static db_vip Obtain_Vip()
     {
         if (crt_vip != null) return crt_vip;
-        ObscuredInt sum = (int.Parse)(SumSave.crt_global_gift.GetGiftPoints);
+        ObscuredInt sum = (SumSave.crt_global_gift.GetGiftPoints);
         if (sum == 0) return crt_vip;
         for (int i = 0; i < SumSave.db_vip_list.Count; i++)
         {
@@ -1110,7 +1110,7 @@ public static class Tool_Battle
     /// </summary>
     public static void Crate_Vip()
     {
-        ObscuredInt sum = (int.Parse)(SumSave.crt_global_gift.GetGiftPoints);
+        ObscuredInt sum = (SumSave.crt_global_gift.GetGiftPoints);
         if (sum == 0) return;
         for (int i = 0; i < SumSave.db_vip_list.Count; i++)
         {

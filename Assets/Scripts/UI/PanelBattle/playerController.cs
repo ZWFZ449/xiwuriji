@@ -237,11 +237,7 @@ public class playerController : BaseBattleAttack
 
         if (skill.MoveType == 0)//剑气类技能
         {
-            terget_attack_number++;
-            if (terget_attack_number - 10 > Terget.attack_number)//打了20个 对方一个没吃到 不在同一个明面
-            {
-                skill_damage(skill);
-            }
+            skill_damage(skill);  
         }
     }
 

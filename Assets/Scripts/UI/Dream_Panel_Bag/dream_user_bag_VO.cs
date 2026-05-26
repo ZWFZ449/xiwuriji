@@ -94,6 +94,16 @@ public class dream_user_bag_VO : Base_VO
     }
 
     public ObscuredInt Get_Page { get { return Bag_page; } }
+
+    /// <summary>
+    /// 扩容背包
+    /// </summary>
+    /// <param name="page"></param>
+    public void Set_Page(ObscuredInt page)
+    { 
+        Bag_page = page;
+        MysqlData();
+    }
     public void Set_Bag_List(List<Bag_Base_VO> bag)
     {
         bag_List = bag;
@@ -113,6 +123,7 @@ public class dream_user_bag_VO : Base_VO
             "bag_value",
             "resources_value",
             "drug_value",
+            "page_value",
         };
     }
 
@@ -123,6 +134,7 @@ public class dream_user_bag_VO : Base_VO
             GetStr(OnWirte(bag_List)),
             GetStr(resources_List.GetData()),
             GetStr(string.Join(";", Get_Gem_Value)),
+            GetStr(Bag_page)
        };
     }
 

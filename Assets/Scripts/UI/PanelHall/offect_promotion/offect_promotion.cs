@@ -61,8 +61,9 @@ public class offect_promotion : Base_Mono
     {
         if (crt_input_offect.GetInput != "")
         {
-            SendNotification(NotiList.Read_Global_Gift, crt_input_offect.GetInput);
-            rename_confirm(crt_input_offect.GetInput);
+            string key = crt_input_offect.GetInput.Split('&')[0];
+            SendNotification(NotiList.Read_Global_Gift, key);
+            rename_confirm(key);
         }
         else Alert_Dec.Show("请输入不含特殊符号的内容");
     }
@@ -150,8 +151,9 @@ public class offect_promotion : Base_Mono
                 switch (int.Parse(gift_values[0]))
                 {
                     case 0://金币
-                        Battle_Tool.Dream_Obtain_Unit((currency_unit)int.Parse(gift_values[1]), int.Parse(gift_values[2]), Obtain_Int.Add_unit(int.Parse(gift_values[2])));
-                        Alert_Dec.Show("获得 "+ (currency_unit)int.Parse(gift_values[1])+"：" + gift_values[2]);
+                        ObscuredLong moeny = int.Parse(gift_values[2]);
+                        Battle_Tool.Dream_Obtain_Unit((currency_unit)int.Parse(gift_values[1]), moeny, Obtain_Int.Add_unit(moeny));
+                        Alert_Dec.Show("获得 "+ (currency_unit)int.Parse(gift_values[1])+": " + moeny);
                         break;
                     case 1:
                         pet_list pet = Tool_State.ToEnum(gift_values[1], pet_list.麋鹿);

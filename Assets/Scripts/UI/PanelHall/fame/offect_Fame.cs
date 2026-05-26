@@ -47,7 +47,7 @@ public class offect_Fame : Base_Mono
     {
         if (vip != null)
         {
-            if ((int.Parse)(SumSave.crt_global_gift.GetGiftPoints) >= vip.vip_exp)
+            if ((SumSave.crt_global_gift.GetGiftPoints) >= vip.vip_exp)
             {
                 SumSave.crt_global_gift.SetGiftS(vip.vip_name);
                 List<string> list = ArrayHelper.Get_Split<string>(vip.gift_value, ',');
@@ -97,7 +97,7 @@ public class offect_Fame : Base_Mono
 
     private void init()
     {
-        int sum = (int.Parse)(SumSave.crt_global_gift.GetGiftPoints);
+        ObscuredInt sum = (SumSave.crt_global_gift.GetGiftPoints);
         for (int i = 0; i < SumSave.db_vip_list.Count; i++)
         { 
             btn_item btn = Instantiate(btn_item_prefab, m_btn_brom);
@@ -116,7 +116,7 @@ public class offect_Fame : Base_Mono
     /// <param name="btn"></param>
     private void OnClick(btn_item btn)
     {
-        int sum = (int.Parse)(SumSave.crt_global_gift.GetGiftPoints);
+        ObscuredInt sum = SumSave.crt_global_gift.GetGiftPoints;
         for (int i = 0; i < SumSave.db_vip_list.Count; i++)
         {
             if (btn.index == SumSave.db_vip_list[i].vip_lv)

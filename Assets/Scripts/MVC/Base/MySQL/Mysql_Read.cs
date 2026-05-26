@@ -308,7 +308,7 @@ public static class Mysql_Read
         item.hero_name= mysqlReader.GetString(mysqlReader.GetOrdinal("hero_name"));
         item.job= mysqlReader.GetInt32(mysqlReader.GetOrdinal("job"));
         item.lv= mysqlReader.GetInt32(mysqlReader.GetOrdinal("lv"));
-        item.exp= mysqlReader.GetInt32(mysqlReader.GetOrdinal("exp"));
+        item.exp= mysqlReader.GetInt64(mysqlReader.GetOrdinal("exp"));
         List<string> talents = ArrayHelper.Get_Split<string>(mysqlReader.GetString(mysqlReader.GetOrdinal("talent")), ';');
         item.talent = new List<(db_player_talent_vo, int)>();
         for (int i = 0; i < talents.Count; i++)

@@ -236,11 +236,97 @@ namespace MVC
                     }
                 }
             }
+
             //真实伤害
             if ((Skill_Effect_Type)skill.EffectType == Skill_Effect_Type.单体 || (Skill_Effect_Type)skill.EffectType == Skill_Effect_Type.群体)
             {
                 skilldamage += skill.Power + skill.DefPowers[skill.SetLv()];
                 if (skill.skill_damages.Count> skill.SetLv()) battle_Damage = skill.skill_damages[skill.SetLv()];
+            }
+            foreach (var item1 in skill.GetBuff.Keys)
+            {
+                switch (item1)
+                {
+                    case enum_talent_offect_list.生命:
+                        break;
+                    case enum_talent_offect_list.攻击:
+                        break;
+                    case enum_talent_offect_list.魔法:
+                        break;
+                    case enum_talent_offect_list.道术:
+                        break;
+                    case enum_talent_offect_list.防御:
+                        break;
+                    case enum_talent_offect_list.攻击速度:
+                        break;
+                    case enum_talent_offect_list.物理攻击:
+                        break;
+                    case enum_talent_offect_list.魔法攻击:
+                        break;
+                    case enum_talent_offect_list.道术攻击:
+                        break;
+                    case enum_talent_offect_list.防御值:
+                        break;
+                    case enum_talent_offect_list.躲避:
+                        break;
+                    case enum_talent_offect_list.命中:
+                        break;
+                    case enum_talent_offect_list.技能:
+                        break;
+                    case enum_talent_offect_list.附加攻击:
+                        break;
+                    case enum_talent_offect_list.附加魔法:
+                        break;
+                    case enum_talent_offect_list.附加道术:
+                        break;
+                    case enum_talent_offect_list.附加双防:
+                        break;
+                    case enum_talent_offect_list.附加伤害:
+                        skilldamage += skill.GetBuff[item1];
+                        break;
+                    case enum_talent_offect_list.附加回血:
+                        break;
+                    case enum_talent_offect_list.附加攻击范围:
+                        break;
+                    case enum_talent_offect_list.无视防御:
+                        break;
+                    case enum_talent_offect_list.召唤兽:
+                        break;
+                    case enum_talent_offect_list.召唤兽攻击:
+                        break;
+                    case enum_talent_offect_list.召唤兽生命:
+                        break;
+                    case enum_talent_offect_list.召唤兽防御:
+                        break;
+                    case enum_talent_offect_list.召唤兽速度:
+                        break;
+                    case enum_talent_offect_list.召唤兽死亡爆炸:
+                        break;
+                    case enum_talent_offect_list.特殊效果:
+                        break;
+                    case enum_talent_offect_list.临时伤害:
+                        break;
+                    case enum_talent_offect_list.临时防御:
+                        break;
+                    case enum_talent_offect_list.临时速度:
+                        break;
+                    case enum_talent_offect_list.单体改群体:
+                        break;
+                    case enum_talent_offect_list.技能攻击个数:
+                        break;
+                    case enum_talent_offect_list.技能概率不消耗蓝:
+                        break;
+                    case enum_talent_offect_list.技能全体伤害:
+                        break;
+                    case enum_talent_offect_list.群体技能攻击范围:
+                        break;
+                    case enum_talent_offect_list.每秒回复全体血量百分比:
+                        break;
+                    case enum_talent_offect_list.攻击击退敌人概率:
+                        break;
+                    case enum_talent_offect_list.弹道:
+                        break;
+                }
             }
             float damage = Base_Damage(monster, skilldamage);
             switch ((Skill_Effect_Type)skill.EffectType)

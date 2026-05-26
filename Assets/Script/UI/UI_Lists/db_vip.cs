@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using MVC;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,66 +9,66 @@ public class db_vip : Base_VO
     /// <summary>
     /// VIP等级
     /// </summary>
-    public readonly int vip_lv;
+    public readonly ObscuredInt  vip_lv;
     public readonly string vip_name;
     /// <summary>
     /// VIP经验
     /// </summary>
-    public readonly int vip_exp;
+    public readonly ObscuredInt  vip_exp;
     /// <summary>
     /// 经验加成 100
     /// </summary>
-    public readonly int experienceBonus;
+    public readonly ObscuredInt  experienceBonus;
     /// <summary>
     /// 金币收益 106
     /// </summary>
-    public readonly int lingzhuIncome;
+    public readonly ObscuredInt  lingzhuIncome;
     /// <summary>
     /// 装备爆率 107
     /// </summary>
-    public readonly int equipmentExplosionRate;
+    public readonly ObscuredInt  equipmentExplosionRate;
     /// <summary>
     /// boss卷轴 103
     /// </summary>
-    public readonly int characterExperience;
+    public readonly ObscuredInt  characterExperience;
     /// <summary>
     /// boss刷新减少 116
     /// </summary>
-    public readonly int monsterHuntingInterval;
+    public readonly ObscuredInt  monsterHuntingInterval;
     /// <summary>
     /// 生命回复 8
     /// </summary>
-    public readonly int hpRecovery;
+    public readonly ObscuredInt  hpRecovery;
     /// <summary>
     /// 法力回复 9
     /// </summary>
-    public readonly int manaRegeneration;
+    public readonly ObscuredInt  manaRegeneration;
     /// <summary>
     /// 幸运 15
     /// </summary>
-    public readonly int goodFortune;
+    public readonly ObscuredInt  goodFortune;
     /// <summary>
     /// 强化费用 520
     /// </summary>
-    public readonly int strengthenCosts;
+    public readonly ObscuredInt  strengthenCosts;
     /// <summary>
     /// 离线间隔 521
     /// </summary>
-    public readonly int offlineInterval;
+    public readonly ObscuredInt  offlineInterval;
     /// <summary>
     /// 签到收益 522
     /// </summary>
-    public readonly int signInIncome;
+    public readonly ObscuredInt  signInIncome;
     /// <summary>
     /// 鞭尸(双倍奖励) 506 
     /// </summary>
-    public readonly int whippingCorpses;
+    public readonly ObscuredInt  whippingCorpses;
     /// <summary>
     /// 灵气上限 508
     /// </summary>
     public readonly string gift_value;
 
-    public db_vip(int vip_lv, string vip_name, int vip_exp, int experienceBonus, int lingzhuIncome, int equipmentExplosionRate, int characterExperience, int monsterHuntingInterval, int hpRecovery, int manaRegeneration, int goodFortune, int strengthenCosts, int offlineInterval, int signInIncome, int whippingCorpses, string gift_value)
+    public db_vip(ObscuredInt  vip_lv, string vip_name, ObscuredInt  vip_exp, ObscuredInt  experienceBonus, ObscuredInt  lingzhuIncome, ObscuredInt  equipmentExplosionRate, ObscuredInt  characterExperience, ObscuredInt  monsterHuntingInterval, ObscuredInt  hpRecovery, ObscuredInt  manaRegeneration, ObscuredInt  goodFortune, ObscuredInt  strengthenCosts, ObscuredInt  offlineInterval, ObscuredInt  signInIncome, ObscuredInt  whippingCorpses, string gift_value)
     {
         this.vip_lv = vip_lv;
         this.vip_name = vip_name;

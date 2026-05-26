@@ -115,8 +115,8 @@ public class Dream_Panel_Bag : Panel_Base
     private void OneClickSell(object obj)
     {
         List<Bag_Base_VO> baglist = SumSave.crt_bags.Get_Bag_List();
-        int moeny = 0;//回收金币
-        int sycee = 0;//回收元宝
+        ObscuredLong moeny = 0;//回收金币
+        ObscuredLong sycee = 0;//回收元宝
         for (int i = 0; i < baglist.Count; i++)
         {
             string[] info_str = baglist[i].user_value.Split(' ');

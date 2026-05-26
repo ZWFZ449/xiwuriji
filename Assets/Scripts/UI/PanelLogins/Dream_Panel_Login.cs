@@ -120,9 +120,9 @@ public class Dream_Panel_Login : PanelBase
         }
         TheServerObg.gameObject.SetActive(true);
         ClearObject(TheServerList);
-        int device = 1;
+        int device = 4;
 #if UNITY_EDITOR
-        device = 1;
+        device = 2;
 #elif UNITY_ANDROID
             device = 3;
 #elif UNITY_IPHONE

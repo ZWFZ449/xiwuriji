@@ -202,10 +202,7 @@ public class Dream_Panel_Pet : Panel_Base
 
                 break;
             case replace_state.放生:
-                List<db_pet_vo> lists = SumSave.crt_pet.GetPets;
-                lists.Remove(crt_pet);
-                SumSave.crt_pet.SetPets = lists;
-                Refresh();
+                Alert.Show("放生", "是否确定放生" + crt_pet.crt_name + "?", confirm_release, null);
                 break;
             case replace_state.学习:
                 offect.gameObject.SetActive(true);
@@ -232,6 +229,15 @@ public class Dream_Panel_Pet : Panel_Base
                 break;
         }
     }
+
+    private void confirm_release(object arg0)
+    {
+        List<db_pet_vo> lists = SumSave.crt_pet.GetPets;
+        lists.Remove(crt_pet);
+        SumSave.crt_pet.SetPets = lists;
+        Refresh();
+    }
+
     /// <summary>
     /// 一键学习
     /// </summary>

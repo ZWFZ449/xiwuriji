@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using MVC;
 using System.Collections;
@@ -71,7 +72,13 @@ public class dream_user_equip_VO : Base_VO
     /// <summary>
     /// 获取页数
     /// </summary>
-    public int GetPage { get { return Page; } }
+    public ObscuredInt GetPage { get { return Page; } }
+
+    public void SetPage(ObscuredInt page)
+    { 
+        Page = page;
+        MysqlData();
+    }
 
     public void Set(Dream_User_Equip_Type type, List<Bag_Base_VO> list)
     {
