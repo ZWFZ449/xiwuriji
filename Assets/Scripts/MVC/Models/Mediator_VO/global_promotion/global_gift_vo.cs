@@ -36,7 +36,7 @@ public class global_gift_vo : Base_VO
         GetStr(SumSave.nowtime),
         GetStr(gift_id),
         GetStr(gift_type),
-        //GetStr(gift_par), 
+        GetStr(gift_par), 
         GetStr(gift_selectkey),
         GetStr(gift_value),
         GetStr(GiftPoints)

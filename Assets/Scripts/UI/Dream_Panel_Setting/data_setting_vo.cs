@@ -16,7 +16,11 @@ public class data_setting_vo : Base_VO
     /// </summary>
     public List<(int, int)> battle_base_list = new List<(int, int)>();
 
-    public List<(string,int)> battle_Boss_list = new List<(string,int)>();
+    public List<(string,int)> battle_Boss_list1 = new List<(string,int)>();
+    /// <summary>
+    /// boss集合 1名称 2存量 3boss设置量
+    /// </summary>
+    public Dictionary<string, (int, int)> Boss_list = new Dictionary<string, (int, int)>();
     /// <summary>
     /// 0音效 1自动召唤 2自动集火boss
     /// </summary>
@@ -54,7 +58,15 @@ public class data_setting_vo : Base_VO
             if (arr.Count == 2)
             { 
                 (string, int) data = (arr[0], int.Parse(arr[1]));
-                this.battle_Boss_list.Add(data); 
+                //this.battle_Boss_list.Add(data);
+                List<string> datalist = ArrayHelper.Get_Split<string>(data.Item1, '+');
+                if (datalist.Count == 2)
+                {
+                    if (!Boss_list.ContainsKey(datalist[0]))
+                    { 
+                        Boss_list.Add(datalist[0], (int.Parse(datalist[1]), data.Item2));
+                    }
+                }
             }
         }
         this.user_data_settings = ArrayHelper.Get_Split<int>(user_data_settings, ',');
@@ -136,9 +148,9 @@ public class data_setting_vo : Base_VO
                 }
                 break;
             case 3:
-                for (int i = 0; i < battle_Boss_list.Count; i++)
+                foreach (var item in Boss_list)
                 { 
-                    dec += battle_Boss_list[i].Item1 + ";" + battle_Boss_list[i].Item2 + ",";
+                    dec += item.Key + "+" + item.Value.Item1 + ";" + item.Value.Item2 + ",";
                 }
                 break;
             case 4:
@@ -178,21 +190,14 @@ public class data_setting_vo : Base_VO
                         }
                     }
                     break;
-                case 3:
-                    for (int j = 0; j < battle_Boss_list.Count; j++)
+                case 3: 
+                    if (!Boss_list.ContainsKey(data[i].Item3))
                     {
-                        List<string> list = ArrayHelper.Get_Split<string>(battle_Boss_list[j].Item1, '+');
-                        if (list.Count == 2)
-                        {
-                            if (list[0] == data[i].Item3)
-                            { 
-                                battle_Boss_list[j] = (battle_Boss_list[j].Item1, data[i].Item4);
-                            }
-                        }
-                        //if (battle_Boss_list[j].Item1 == data[i].Item3)
-                        //{
-                        //    battle_Boss_list[j] = (data[i].Item3, data[i].Item4);
-                        //}
+                        Boss_list.Add(data[i].Item3, (data[i].Item2, data[i].Item4));
+                    }
+                    else
+                    { 
+                        Boss_list[data[i].Item3] = (Boss_list[data[i].Item3].Item1, data[i].Item4);
                     }
                     break;
                 case 4:

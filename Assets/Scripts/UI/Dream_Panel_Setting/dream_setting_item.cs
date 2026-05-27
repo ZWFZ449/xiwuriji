@@ -141,7 +141,7 @@ public class dream_setting_item : Base_Mono
     /// </summary>
     /// <param name="boss"></param>
     /// <param name="input"></param>
-    public void Init(string boss, int input = 0)
+    public void Init(string boss,int value, int input = 0)
     {
         dropdown.options.Clear();
         dropdown_list = new List<string>();
@@ -149,7 +149,7 @@ public class dream_setting_item : Base_Mono
         unit.text = "次";
         dropdown_list.Add("自动召唤击杀 " + Show_Color.Red(boss) + " 次数:");
         dropdown.AddOptions(dropdown_list);
-        currentItem = (3, 3, boss, input);
+        currentItem = (3, value, boss, input);
         inputField.text = input.ToString();
         IsOpen(true);
     }

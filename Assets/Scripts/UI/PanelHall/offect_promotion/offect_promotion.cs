@@ -38,6 +38,7 @@ public class offect_promotion : Base_Mono
         {
             SumSave.crt_global_gift.SetGiftPoints(SumSave.crt_global_promotion.GetPromotion_moeny);
             SumSave.crt_global_promotion.SetPromotion_moeny(-SumSave.crt_global_promotion.GetPromotion_moeny);
+            Game_Omphalos.i.archive();
             Init();
             Alert_Dec.Show("领取推荐收益成功");
         }
@@ -61,18 +62,21 @@ public class offect_promotion : Base_Mono
     {
         if (crt_input_offect.GetInput != "")
         {
-            string key = crt_input_offect.GetInput.Split('&')[0];
+            string key = crt_input_offect.GetInput.Split('_')[0];
             SendNotification(NotiList.Read_Global_Gift, key);
             rename_confirm(key);
         }
         else Alert_Dec.Show("请输入不含特殊符号的内容");
     }
+
+    bool is_state = true;
     /// <summary>
     /// 领取确认
     /// </summary>
     /// <param name="arg0"></param>
     private void rename_confirm(string key)
     {
+
         //领取礼包
         if (SumSave.global_gift == null)
         {
@@ -84,7 +88,7 @@ public class offect_promotion : Base_Mono
             Alert_Dec.Show("无效礼包");
             return;
         }
-        bool exist = false;
+        if (!is_state) { Alert_Dec.Show("当前操作过于频繁,请稍后操作"); return; }
         if (SumSave.global_gift.gift_type == 1)//全局
         {
             if (SumSave.global_gift.gift_par == SumSave.par || SumSave.global_gift.gift_par == -1)//通用礼包
@@ -98,7 +102,6 @@ public class offect_promotion : Base_Mono
                     }
                     else
                     {
-                        exist = true;
                         SumSave.crt_global_gift.SetGiftS(key);
                         Sift_value(SumSave.global_gift.GetGiftValue);
                     }
@@ -123,25 +126,15 @@ public class offect_promotion : Base_Mono
                         SendNotification(NotiList.Add_global_promotion, (SumSave.crt_global_promotion.GetPromotion_value, SumSave.global_gift.GetGiftPoints / 10));
                     }
                 }
-                exist= true;
                 Sift_value(SumSave.global_gift.GetGiftValue);
                 //清空领取
             }
         }
-        if (exist)
-        {
-            //写入历史领取
-            Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto,
-          Mysql_Table_Name.history_global_gift, SumSave.global_gift.Set_Instace_String()); 
-            crt_input_offect.gameObject.SetActive(false);
-            Game_Omphalos.i.archive();
-            //Alert_Dec.Show("礼包领取成功");
-        }
-       
     }
 
     private void Sift_value(string gift_value)
     {
+        is_state = false;
         List<string> list = ArrayHelper.Get_Split<string>(gift_value, ',');
         for (int i = 0; i < list.Count; i++)
         {
@@ -188,6 +181,12 @@ public class offect_promotion : Base_Mono
                 }
             }
         }
+        Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto,
+         Mysql_Table_Name.history_global_gift, SumSave.global_gift.Set_Instace_String());
+        crt_input_offect.gameObject.SetActive(false);
+        Game_Omphalos.i.archive();
+        is_state = true;
+
     }
     /// <summary>
     /// 初始化

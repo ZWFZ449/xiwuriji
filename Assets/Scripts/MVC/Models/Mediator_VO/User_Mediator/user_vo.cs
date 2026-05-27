@@ -121,12 +121,12 @@ public class user_vo : Base_VO
         for (int i = 0; i < list.Count; i++)
         {
             //原始数据未发生改变
-            if (list[i] + index == verify_list[i])
+            if (list[i] + index != verify_list[i])
             {
+                Game_Omphalos.i.Delete(_index + " 显示数据 " + list[i] + " 验证值 " + index + " " + verify_list[i]);
+                return;
             }
-            else Game_Omphalos.i.Delete(_index + " 显示数据 " + list[i] + " 验证值 " + index + " " + verify_list[i]);
         }
-
         list[(int)_index] += value;
         verify_list[(int)_index] += value;
         MysqlData();

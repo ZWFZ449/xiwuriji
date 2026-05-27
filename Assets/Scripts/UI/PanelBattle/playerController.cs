@@ -46,7 +46,7 @@ public class playerController : BaseBattleAttack
     /// <param name="item"></param>
     /// <param name="index"></param>
     /// <returns></returns>
-    private bool Select_Skill(skill_offect_item skill,int index)
+    private bool Select_Skill(db_skill_vo skill,int index)
     {
         if (oneselfHealthState.Get_MP >= skill.Get_Mp)
         {
@@ -68,11 +68,11 @@ public class playerController : BaseBattleAttack
             }
 
             oneselfHealthState.Set_Mp = mp;
-            StartCoroutine(On_Attack(skill.GetData));
+            StartCoroutine(On_Attack(skill));
             skill_index++;
             return true;
         }
-        else Alert_Dec.Show("MP不足,释放" + skill.GetData.show_name + "失败");
+        else Alert_Dec.Show("MP不足,释放" + skill.show_name + "失败");
         return false;
     }
     /// <summary>

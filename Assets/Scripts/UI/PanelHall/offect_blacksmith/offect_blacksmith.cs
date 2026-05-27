@@ -460,6 +460,30 @@ public class offect_blacksmith : Base_Mono
                 case blacksmith_type.鉴定装备:
                     if (info.Length >= 6)
                     {
+                        List<string> gem = ArrayHelper.Get_Split<string>(info[5], 'X');
+                        for (int i = 0; i < gem.Count; i++)
+                        {
+                            if (gem[i] != "")
+                            {
+                                List<string> gem_value = ArrayHelper.Get_Split<string>(gem[i], '|');
+                                if (gem_value.Count == 2)
+                                {
+                                    if (gem_value[1] != "0")
+                                    {
+                                        Bag_Base_VO gem_data = ArrayHelper.Find(SumSave.db_stditems, x => x.Name == gem_value[1]);
+                                        if (gem_data != null)
+                                        {
+                                            Alert.Show("鉴定提醒", "当前装备已镶嵌宝石,进行鉴定将导致宝石损坏,请合理安排");
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                       
+                                    }
+                                }
+                            }
+                        }
                         need_info.text = "需求" + common_items_list.鉴定符 + " *  10";
                     }
                     else

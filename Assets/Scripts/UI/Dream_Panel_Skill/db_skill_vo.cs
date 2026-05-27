@@ -107,6 +107,10 @@ public class db_skill_vo : Base_VO
     /// 攻击范围
     /// </summary>
     public readonly int scope;
+    /// <summary>
+    /// 技能消耗魔法
+    /// </summary>
+    public int Get_Mp { get { return spells[SetLv() >= 0 ? SetLv() : 0]; ; } }
 
     public db_skill_vo(int id, string show_name, int EffectType, int Effect, string spells, int Power, 
         string DefPowers, string skill_damages, string skill_offect_value, int Job, int Delay,List<int> skill_up_lv,int need_lv,int Weighted,int MoveType,

@@ -51,6 +51,7 @@ public class bag_Resources_vo : Base_VO
             {
                 //验证数据
                 Game_Omphalos.i.Delete(list[i].Item1 + " 显示数据 " + list[i].Item2 + " 验证值 " + index + " " + verify_list[i].Item2);
+                return;
             }
         }
         //写入数据
@@ -68,14 +69,7 @@ public class bag_Resources_vo : Base_VO
                         {
                             Game_Omphalos.i.Delete(item + " 单次获取 " + list[i].Item2 + " 验证值 " + index + " " + verify_list[i].Item2 + " 单次最大值" + maxnumber);
                         }
-                    }
-                    else
-                    {
-                        if (dec[item] > SumSave.base_setting[3])
-                        {
-                            Game_Omphalos.i.Delete(item + " 单次获取 " + list[i].Item2 + " 验证值 " + index + " " + verify_list[i].Item2);
-                        }
-                    }
+                    } 
                     list[i] = (item, dec[item] + list[i].Item2);
                     verify_list[i] = (item, verify_list[i].Item2 + dec[item]);
                 }

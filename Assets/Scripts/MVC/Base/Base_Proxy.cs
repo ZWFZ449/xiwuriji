@@ -40,11 +40,12 @@ namespace MVC
         /// </summary>
         public void OpenMySqlDB()
         {
+            if (isClose) return;
             MysqlDb = new MysqlDbAccess();
             User_Login();
         }
 
-        private bool isClose = false;
+        protected bool isClose = false;
         /// <summary>
         /// 验证数据
         /// </summary>
@@ -169,7 +170,7 @@ namespace MVC
             }
         }
 
-        private string[] versions = new string[] {"0.2026.06", "0.2026.07", "0.2026.08" }; 
+        private string[] versions = new string[] {"0.2026.09", "0.2026.07", "0.2026.08" }; 
         /// <summary>
         /// 检测次数
         /// </summary>

@@ -261,7 +261,7 @@ public class map_show_offect : Base_Mono
     /// <param name="item"></param>
     private void OnClick(dream_BagItem item)
     {
-        if (SumSave.crtHero.lv <= crt_map.GetMap().map_lv && !Tool_Battle.IsBuff(common_Buff.月卡))
+        if (SumSave.crtHero.lv < crt_map.GetMap().map_lv && !Tool_Battle.IsBuff(common_Buff.月卡))
         { 
             Alert_Dec.Show("等级不足,无法查看");
             return;
@@ -312,16 +312,21 @@ public class map_show_offect : Base_Mono
         }
         else
         {
-            for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+            if (SumSave.crt_setting.Boss_list.ContainsKey(map.map_boss[crt_map.GetMap_Intensity - 1]))
             {
-                (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-                List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-                if (list.Count == 2)
-                {
-                    if (list[0] == map.map_boss[crt_map.GetMap_Intensity - 1])
-                        map_info += Show_Color.Green("\n存量 " + list[1]) + "";
-                }
+                map_info += Show_Color.Green("\n存量 " + SumSave.crt_setting.Boss_list[map.map_boss[crt_map.GetMap_Intensity - 1]].Item1) + "";
+
             }
+            //for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+            //{
+            //    (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+            //    List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+            //    if (list.Count == 2)
+            //    {
+            //        if (list[0] == map.map_boss[crt_map.GetMap_Intensity - 1])
+            //            map_info += Show_Color.Green("\n存量 " + list[1]) + "";
+            //    }
+            //}
             int spanSeconds = Tool_Battle.Meet_maposs_criteria(map.map_boss[crt_map.GetMap_Intensity - 1]);
             crt_info = "Boss倒计时:" + Show_Color.Green(ConvertSecondsToHHMMSS(spanSeconds));
             if (spanSeconds > 0)

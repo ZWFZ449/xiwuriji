@@ -127,12 +127,12 @@ public class medicineitem : Base_Mono
         {
             time -= 0.1f;
             crt_cdtime+= 0.1f;
-            cdBar.ChangeHealth(crt_cdtime);
+            cdBar.ChangeHealth(-0.1f);
             yield return new WaitForSeconds(0.1f);
         }
         isUse = true;
         crt_cdtime = 0;
-        cdBar.ChangeHealth(crt_cdtime);
+        cdBar.Init(Crt_medicine.medicine_cd);
     }
     /// <summary>
     /// 使用药品效果

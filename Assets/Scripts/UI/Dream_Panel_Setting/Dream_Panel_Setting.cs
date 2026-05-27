@@ -112,24 +112,43 @@ public class Dream_Panel_Setting : Panel_Base
                 }
                 break;
             case setting_type.Boss设置:
-                for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
-                {
-                    List<string> analysis = ArrayHelper.Get_Split<string>(SumSave.crt_setting.battle_Boss_list[i].Item1, '+');
 
+                foreach (var item in SumSave.crt_setting.Boss_list)
+                {
                     for (int j = 0; j < SumSave.db_maps.Count; j++)
                     {
                         if (SumSave.db_maps[j].map_type == 0)
                         {
-                            if (SumSave.db_maps[j].map_boss.Contains(analysis[0]))
+                            for (int i = 0; i < SumSave.db_maps[j].map_boss.Count; i++)
                             {
-                                dream_setting_item dream_setting_item = Instantiate(dream_setting_item_prefab, m_setting_btn_borm);
-                                dream_setting_item.Init(analysis[0], SumSave.crt_setting.battle_Boss_list[i].Item2);
-                                break;
+                                if (SumSave.db_maps[j].map_boss[i] == item.Key)
+                                { 
+                                    dream_setting_item dream_setting_item = Instantiate(dream_setting_item_prefab, m_setting_btn_borm);
+                                    dream_setting_item.Init(item.Key, item.Value.Item1, item.Value.Item2);
+                                    break;
+                                }
                             }
                         }
                     }
-
                 }
+                //for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+                //{
+                //    List<string> analysis = ArrayHelper.Get_Split<string>(SumSave.crt_setting.battle_Boss_list[i].Item1, '+');
+
+                //    for (int j = 0; j < SumSave.db_maps.Count; j++)
+                //    {
+                //        if (SumSave.db_maps[j].map_type == 0)
+                //        {
+                //            if (SumSave.db_maps[j].map_boss.Contains(analysis[0]))
+                //            {
+                //                dream_setting_item dream_setting_item = Instantiate(dream_setting_item_prefab, m_setting_btn_borm);
+                //                dream_setting_item.Init(analysis[0], SumSave.crt_setting.battle_Boss_list[i].Item2);
+                //                break;
+                //            }
+                //        }
+                //    }
+
+                //}
                 break;
             case setting_type.系统设置:
                 List<int> settings = SumSave.crt_setting.user_data_settings;
@@ -150,10 +169,21 @@ public class Dream_Panel_Setting : Panel_Base
         for (int i = 0; i < setting_list.Count; i++)
         {
             (int, int, string, int) temp = setting_list[i];
-            if ( temp.Item1 == info.Item1 && temp.Item2 == info.Item2)
+            if (temp.Item1 != 3)
             {
-                setting_list[i] = info;
-                return;
+                if (temp.Item1 == info.Item1 && temp.Item2 == info.Item2)
+                {
+                    setting_list[i] = info;
+                    return;
+                }
+            }
+            else
+            {
+                if (temp.Item3 == info.Item3)
+                {
+                    setting_list[i] = info;
+                    return;
+                }
             }
         }
         setting_list.Add(info);

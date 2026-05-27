@@ -263,7 +263,7 @@ public class PanelBattleOld : PanelBase
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(SumSave.crtMaxBattle.crt_name, battle_player_prefab,
             new Vector3(pos.position.x, pos.position.y, pos.position.z), Quaternion.identity, pos);
         item.GetComponent<BaseBattleAttack>().Data = SumSave.crtMaxBattle;
-        item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(m_medicine_borm));
+        //item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(m_medicine_borm));
         player_list.Add(item);
     }
 

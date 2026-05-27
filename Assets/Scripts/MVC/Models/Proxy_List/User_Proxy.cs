@@ -58,6 +58,9 @@ namespace MVC
                 SumSave.crt_user.par = SumSave.par;
                 Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.Dream_user_base, SumSave.crt_user.Set_Instace_String());
             }
+            CloseMySqlDB();
+            //验证作弊
+            OpenMySqlDB();
             Read_Instace();
             CloseMySqlDB();
             if (isLogin) Game_Omphalos.i.archive();
@@ -100,12 +103,16 @@ namespace MVC
         public void Account(string v)
         {
             OpenMySqlDB();
+            //封号 收网
             MysqlDb.InsertInto(Mysql_Table_Name.global_account, new string[] { GetStr(0), GetStr(SumSave.uid), GetStr(v) });
+            MysqlDb.UpdateInto(Mysql_Table_Name.user_login, new string[] { "login" }, new string[] { GetStr(-1) }, "uid", GetStr(SumSave.uid)); 
+            Application.Quit();
             CloseMySqlDB();
         }
 
         private void Read_Instace()
         {
+            if (isClose) return;
             Read_User_Unit();
             Read_User_Hero();
             Read_user_bag();

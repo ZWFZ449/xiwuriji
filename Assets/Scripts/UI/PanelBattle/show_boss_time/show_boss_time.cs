@@ -73,20 +73,23 @@ public class show_boss_time : Base_Mono
         foreach (KeyValuePair<string, info_time_item> item in dic_info_time_item)
         {
             string value = item.Key;
-
-            for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
-            {
-                (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-                List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-                if (list.Count == 2)
-                {
-                    if (list[0] == item.Key)
-                    {
-                        value += " 存量 " + list[1];
-                        break;
-                    }
-                }
+            if (SumSave.crt_setting.Boss_list.ContainsKey(item.Key))
+            { 
+                value += " 存量 " + SumSave.crt_setting.Boss_list[item.Key].Item1;
             }
+            //for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+            //{
+            //    (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+            //    List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+            //    if (list.Count == 2)
+            //    {
+            //        if (list[0] == item.Key)
+            //        {
+            //            value += " 存量 " + list[1];
+            //            break;
+            //        }
+            //    }
+            //}
             value+= " 倒计时:" + ConvertSecondsToHHMMSS(Tool_Battle.Meet_maposs_criteria(item.Key));
             item.Value.SetInfo(value);
         }

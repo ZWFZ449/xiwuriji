@@ -40,7 +40,12 @@ public class CircularHealthBar : MonoBehaviour
     // 公共方法，用于改变血量
     public void ChangeHealth(float amount)
     {
-        currentHealth = Mathf.Clamp(amount, 0f, maxHealth);
+        if (!gameObject.activeInHierarchy)
+            return;
+        if (healthBarImage == null)
+            return;
+        currentHealth -= amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
         // 如果不需要平滑效果，可以直接设置：
          healthBarImage.fillAmount = currentHealth / maxHealth;
     }

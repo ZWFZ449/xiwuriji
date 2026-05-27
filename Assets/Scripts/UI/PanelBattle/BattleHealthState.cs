@@ -78,13 +78,12 @@ public class BattleHealthState : Base_Mono
     public void Init(long _maxHP, int _maxMP,string _base_name)
     {
         is_Dead = true;
-        attack_number = 0;
-        maxHP = _maxHP;
+        maxHP = _maxHP + 1;
         maxMP = _maxMP + 1;
         CurrentHP = maxHP;
         CurrentMP = maxMP;
         base_name = _base_name;
-        circularHealthBar.Init(maxHP);
+        circularHealthBar.Init(_maxHP + 1);
     }
     private void Awake()
     {
@@ -104,10 +103,9 @@ public class BattleHealthState : Base_Mono
     public void TakeDamage(int damage,DamageEnum type = DamageEnum.普通伤害)
     {
         if (CurrentHP <= 0) return;
-        attack_number++;
         CurrentHP -= damage;
         Hurt(damage, type);
-        circularHealthBar.ChangeHealth(CurrentHP);
+        circularHealthBar.ChangeHealth(damage);
         if (CurrentHP <= 0)
         {
             is_Dead = false;

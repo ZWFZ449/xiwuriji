@@ -16,7 +16,7 @@ namespace MVC
         /// </summary>
         protected BattleHealthState oneselfHealthState;
 
-        protected List<skill_offect_item> battle_skills;
+        protected List<db_skill_vo> battle_skills;
 
         /// <summary>
         /// 目标
@@ -189,7 +189,7 @@ namespace MVC
 
         }
 
-        public virtual void Refresh_Skill(List<skill_offect_item> skills)
+        public virtual void Refresh_Skill(List<db_skill_vo> skills)
         {
             battle_skills = skills;
         }

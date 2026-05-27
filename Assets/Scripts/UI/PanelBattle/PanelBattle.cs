@@ -188,7 +188,6 @@ public class PanelBattle : PanelBase
             slider_list.Add(item, slider_item);
         }
     }
-
     protected void Show_Slider(BattleHealthState data)
     {
         foreach (var item in slider_list)
@@ -422,16 +421,22 @@ public class PanelBattle : PanelBase
     private void InitBoss_time()
     {
         string map_info = crt_map.map_boss[crt_map.GetMapIntensityDrop - 1]+" ";
-        for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+
+        string value = crt_map.map_boss[crt_map.GetMapIntensityDrop - 1];
+        if (SumSave.crt_setting.Boss_list.ContainsKey(value))
         {
-            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-            List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-            if (list.Count == 2)
-            {
-                if (list[0] == crt_map.map_boss[crt_map.GetMapIntensityDrop - 1])
-                    map_info += Show_Color.Green(" 存量 " + list[1]) + "";
-            }
+            map_info += Show_Color.Green(" 存量 " + SumSave.crt_setting.Boss_list[value].Item1) + "";
         }
+        //for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+        //{
+        //    (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
+        //    List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
+        //    if (list.Count == 2)
+        //    {
+        //        if (list[0] == crt_map.map_boss[crt_map.GetMapIntensityDrop - 1])
+        //            map_info += Show_Color.Green(" 存量 " + list[1]) + "";
+        //    }
+        //}
         int time = Tool_Battle.Meet_maposs_criteria(crt_map.map_boss[crt_map.GetMapIntensityDrop - 1]);
         map_info += " 倒计时:"+ ConvertSecondsToHHMMSS(time);
         boss_time_text.text = map_info;
@@ -492,70 +497,46 @@ public class PanelBattle : PanelBase
         if (!IsBoss) return;
         if (SumSave.crt_setting.user_data_settings.Count >= 2 && SumSave.crt_setting.user_data_settings[1] == 0) return;
         if (crt_map.map_type != 0) return;
-        //for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
-        //{
-        //    (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-        //    if (boss.Item2 > 0)
-        //    {
-        //        List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-        //        if (list.Count == 2)
-        //        {
-        //            //时间召唤
-        //            if (Meet_maposs_criteria(list[0])) 
-        //            {
-        //                //判断是否满足召唤条件 开启召唤
-        //                Generate_Boss_Monster(list[0]);
-        //                return;
-        //            }
-        //        }
-
-        //    }
-
-        //}
-        if (boss_index >= SumSave.crt_setting.battle_Boss_list.Count) boss_index = 0;
-        for (int i = boss_index; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+      
+        //调整召唤模式
+        if (boss_index >= SumSave.crt_setting.Boss_list.Count) boss_index = 0;
+        List<string> keys = new List<string>( SumSave.crt_setting.Boss_list.Keys);
+        for (int i = boss_index; i < keys.Count; i++)
         {
-            (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-            if (boss.Item2 > 0)
+            (int,int) boss = SumSave.crt_setting.Boss_list[keys[i]];
+            if(boss.Item2 > 0)//设置了召唤
             {
-                List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-                if (list.Count == 2)
+                if (Meet_maposs_criteria(keys[i]))//刷新cd到了召唤
                 {
-                    if (Meet_maposs_criteria(list[0]))//刷新cd到了召唤
+                    Clear_Condition();
+                    Need_Condition(common_items_list.Boss召唤卷轴, 1);
+                    if (Return_Condition())
                     {
-                        Clear_Condition();
-                        Need_Condition(common_items_list.Boss召唤卷轴, 1);
-                        if (Return_Condition())
-                        {
-                            Alert_Dec.Show("召唤 " + list[0] + " 成功");
-                            //判断是否满足召唤条件 开启召唤
-                            Generate_Boss_Monster(list[0]);
-                            SumSave.crt_setting.battle_Boss_list[i] = (boss.Item1,
-                                boss.Item2 - 1);
-                            SumSave.crt_setting.MysqlData();
-                            return;
-                        }
-                       
-                    }
-                    if (int.Parse(list[1]) > 0)
-                    {
-                        Clear_Condition();
-                        Need_Condition(common_items_list.Boss召唤卷轴, 1);
-                        if (Return_Condition())
-                        {
-                            Alert_Dec.Show("召唤 " + list[0] + " 成功");
-                            Generate_Boss_Monster(list[0]);
-                            SumSave.crt_setting.battle_Boss_list[i] = (
-                                list[0] + "+" + (int.Parse(list[1]) - 1),
-                                boss.Item2 - 1);
-                            SumSave.crt_setting.MysqlData();
-                        }
+                        Alert_Dec.Show("召唤 " + keys[i] + " 成功");
+                        //判断是否满足召唤条件 开启召唤
+                        Generate_Boss_Monster(keys[i]);
+                        SumSave.crt_setting.Boss_list[keys[i]] = (boss.Item1, boss.Item2 - 1); 
+                        SumSave.crt_setting.MysqlData();
                         return;
                     }
                 }
-
+                if (boss.Item1 > 0)
+                {
+                    Clear_Condition();
+                    Need_Condition(common_items_list.Boss召唤卷轴, 1);
+                    if (Return_Condition())
+                    {
+                        Alert_Dec.Show("召唤 " + keys[i] + " 成功");
+                        //判断是否满足召唤条件 开启召唤
+                        Generate_Boss_Monster(keys[i]);
+                        SumSave.crt_setting.Boss_list[keys[i]] = (boss.Item1 - 1, boss.Item2 - 1);
+                        SumSave.crt_setting.MysqlData();
+                    }
+                    return;
+                } 
             }
         }
+
         boss_index = 0;//都没有符合条件 重新开始循环
     }
     /// <summary>
@@ -592,28 +573,16 @@ public class PanelBattle : PanelBase
         {
             if (value == crt_map.map_boss[crt_map.GetMapIntensityDrop - 1])
             {
-                for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
+                if (SumSave.crt_setting.Boss_list.ContainsKey(value))
                 {
-                    (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-                    List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-                    if (list.Count == 2)
+                    (int,int) boss = SumSave.crt_setting.Boss_list[value];
+                    if (boss.Item1 > 0)
                     {
-                        if (list[0] == value)//刷新召唤
-                        {
-                            if (int.Parse(list[1]) > 0)
-                            {
-                                SumSave.crt_setting.battle_Boss_list[i] = (
-                                           list[0] + "+" + (int.Parse(list[1]) - 1),
-                                           boss.Item2);
-                                SumSave.crt_setting.MysqlData();
-                                is_true = true;
-                                break;
-                            }
-
-                        }
+                        SumSave.crt_setting.Boss_list[value]= (boss.Item1 - 1, boss.Item2);
+                        SumSave.crt_setting.MysqlData();
+                        is_true = true;
                     }
                 }
-
             }
         }
 
@@ -701,7 +670,7 @@ public class PanelBattle : PanelBase
             SumSave.crt_illustrated.Add_illustrated_list(baseBattleAttack.Data.crt_name);
             if (baseBattleAttack.Data.type == Battle_Game_Type.Boss)
             {
-                if (!Tool_Battle.Is_first_Boss_Kill(baseBattleAttack.Data.crt_name))
+                if (Tool_Battle.Is_first_Boss_Kill(baseBattleAttack.Data.crt_name))
                 {
                     if (Random.Range(0, 100) < 2)
                     {
@@ -709,12 +678,6 @@ public class PanelBattle : PanelBase
 
                         ObscuredLong moeny = 10;
                         Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, moeny, Obtain_Int.Add_unit(moeny));
-
-                        //ObscuredInt  number = 1;
-                        //ObscuredInt  random = Random.Range(1, 1000);
-                        //ObscuredInt  maxnumber = number + Random.Range(1, 1000);
-                        //Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.鉴定符, new ObscuredInt [] { number + random, random }), maxnumber);
-
                         monster_list.Remove(health.gameObject);
                         return;
                     }
@@ -760,9 +723,9 @@ public class PanelBattle : PanelBase
     /// <param name="value"></param>
     private void AddBossStringData(string value)
     {
-        if (Tool_Battle.Is_first_Boss_Kill(value))
+        if (!Tool_Battle.Is_first_Boss_Kill(value))
         {
-            SumSave.crt_setting.battle_Boss_list.Add((value + "+" + 0, 0));
+            SumSave.crt_setting.Boss_list.Add(value, (0, 0));
             SumSave.crt_setting.MysqlData();
         }
     }
@@ -941,9 +904,78 @@ public class PanelBattle : PanelBase
         }
         return list_skill;
     }
+
+    private List<db_skill_vo> Show_Battle_Skill()
+    {
+        List<db_skill_vo> list_skill = new List<db_skill_vo>();
+        List<int> list = SumSave.crt_skill.Set_Select_Skill_Type();
+        Dictionary<int, db_skill_vo> dic = SumSave.crt_skill.Set_Current_skill();
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (dic.ContainsKey(list[i]))
+            {
+                list_skill.Add(dic[list[i]]);
+            }
+            else
+            {
+                db_Hero_VO hero = SumSave.db_heros.Find((db_Hero_VO hero) => hero.id == SumSave.crtHero.job);
+                db_skill_vo skill = SumSave.db_skills.Find((db_skill_vo skill) => skill.show_name == hero.initskill);
+                list_skill.Add(skill);
+            }
+        }
+        return list_skill;
+    }
+
+    private List<db_skill_vo> Show_Battle_Skill(string value)
+    {
+        int index = 0; int number = 1;
+
+        switch (value)
+        {
+            case "骷髅":
+                index = 2;//剑气
+                break;
+            case "狗书":
+                number = 3;
+                index = 8;//火球
+                break;
+            default:
+                break;
+        }
+        Dictionary<int, db_skill_vo> dic = SumSave.crt_skill.Set_Current_skill();
+        foreach (var id in dic)
+        {
+            if (id.Value.show_name == value)//召唤
+            {
+                foreach (var item1 in id.Value.GetBuff)
+                {
+                    switch (item1.Key)
+                    {
+                        case enum_talent_offect_list.弹道:
+                            number += item1.Value;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        List<db_skill_vo> list_skill = new List<db_skill_vo>();
+        db_skill_vo skill = SumSave.db_skills.Find((db_skill_vo skill) => skill.id == index);
+        if (skill != null)
+        {
+            skill.activate_skill();//激活0级
+            skill.ClearBuff();
+            skill.AddBuff(enum_talent_offect_list.弹道, number);
+            list_skill.Add(skill);
+        }
+        return list_skill;
+    }
+
     /// <summary>
     /// 是否生成护盾
     /// </summary>
+    /// 
     private bool Open_Crate_Effect_5 = true;
     /// <summary>
     /// 生成玩家
@@ -953,7 +985,8 @@ public class PanelBattle : PanelBase
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(SumSave.crtMaxBattle.crt_name, battle_player_prefab,
             GetRandomUVPosition(10), Quaternion.identity, battle_borm.transform);
         item.GetComponent<BaseBattleAttack>().Data = SumSave.crtMaxBattle;
-        item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(m_skill_borm));
+        //item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(m_skill_borm));
+        item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill());
         Dictionary<int, db_skill_vo> dic = SumSave.crt_skill.Set_Current_skill();
         foreach (var id in dic) 
         {
@@ -971,22 +1004,13 @@ public class PanelBattle : PanelBase
             if (id.Value.EffectType == 6)//召唤
             {
                 int number = 1;
-                foreach (var item1 in id.Value.GetBuff)
-                {
-                    switch (item1.Key)
-                    {
-                        case enum_talent_offect_list.弹道:
-                            number += item1.Value;
-                            break;
-                        default:
-                            break;
-                    }
-                }
                 for (int i = 0; i < number; i++)
                 {
                     GameObject call = ObjectPoolManager.instance.GetObjectFormPool("召" + id.Value.show_name, battle_player_prefab,
                GetRandomUVPosition(800), Quaternion.identity, battle_borm.transform);
                     call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(id.Value);
+                    call.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(id.Value.show_name));
+
                     player_list.Add(call);
                 }
                 
@@ -1004,7 +1028,8 @@ public class PanelBattle : PanelBase
             {
                 GameObject call = ObjectPoolManager.instance.GetObjectFormPool("召" + id.Value.show_name, battle_player_prefab,
                GetRandomUVPosition(800), Quaternion.identity, battle_borm.transform);
-                call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(id.Value);
+               call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(id.Value);
+               call.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(id.Value.show_name));
                 player_list.Add(call);
             }
         }
