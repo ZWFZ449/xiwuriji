@@ -1,4 +1,6 @@
 using System.Drawing;
+using UnityEngine;
+
 namespace MVC
 {
     public enum Color_list
@@ -29,7 +31,7 @@ namespace MVC
 	/// </summary>
 	public static class Show_Color
     {
-        private static Color c = Color.White;
+        private static System.Drawing.Color c = System.Drawing.Color.White;
 
         /// <summary>
         /// 设置颜色
@@ -41,28 +43,28 @@ namespace MVC
             switch (crt_c)
             { 
                case Color_list.灰色:
-                    c = Color.Gray;
+                    c = System.Drawing.Color.Gray;
                     break;
                case Color_list.白色:
-                    c = Color.White;
+                    c = System.Drawing.Color.White;
                     break;
                case Color_list.绿色:
-                    c = Color.Green;
+                    c = System.Drawing.Color.Green;
                     break;
                case Color_list.蓝色:
-                    c = Color.Blue;
+                    c = System.Drawing.Color.Blue;
                     break;
                case Color_list.紫色:
-                    c = Color.Purple;
+                    c = System.Drawing.Color.Purple;
                     break;
                case Color_list.黄色:
-                    c = Color.Yellow;
+                    c = System.Drawing.Color.Yellow;
                     break;
                case Color_list.橙色:
-                    c = Color.Orange;
+                    c = System.Drawing.Color.Orange;
                     break;
                case Color_list.红色:
-                    c = Color.Red;
+                    c = System.Drawing.Color.Red;
                     break;
             }
             return new UnityEngine.Color(
@@ -73,34 +75,12 @@ namespace MVC
     );
         }
 
-        public static string Set_String(object s, Color_list crt_c)
+        public static string Set_String(object s, UnityEngine.Color c)
         {
-            switch (crt_c)
-            {
-                case Color_list.白色:
-                    c = Color.White;
-                    break;
-                case Color_list.绿色:
-                    c = Color.Green;
-                    break;
-                case Color_list.蓝色:
-                    c = Color.Blue;
-                    break;
-                case Color_list.紫色:
-                    c = Color.Purple;
-                    break;
-                case Color_list.黄色:
-                    c = Color.Yellow;
-                    break;
-                case Color_list.橙色:
-                    c = Color.Orange;
-                    break;
-                case Color_list.红色:
-                    c = Color.Red;
-                    break;
-            }
-            return $"<color=#{c.R}{c.G}{c.B}{c.A}>{s}</color>";
+            return $"<color=#{ColorUtility.ToHtmlStringRGB(c)}>{s}</color>";
         }
+
+
 
         public static string Set_String(object value, Show_Color_list crt_c)
         {
@@ -115,7 +95,7 @@ namespace MVC
 		public static string Red<T>(T red)
         {
             value = red.ToString();
-            c= Color.Red;
+            c= System.Drawing.Color.Red;
             return "<color=red>" + red + "</color>";
         }
         /// <summary>

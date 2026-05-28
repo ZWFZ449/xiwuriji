@@ -1142,7 +1142,6 @@ public static class Tool_Battle
                 {
                     if (!dic.ContainsKey(SumSave.db_maps[i].map_boss[j]))
                     {
-                        //dic.Add(SumSave.db_maps[i].map_boss[j], new Dictionary<ObscuredInt, string>());
                         dic[SumSave.db_maps[i].map_boss[j]] = (SumSave.db_maps[i].map_type, SumSave.db_maps[i].map_boss_cdtime[j], value);
                     }
                 }
@@ -1162,12 +1161,12 @@ public static class Tool_Battle
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static ObscuredInt Meet_maposs_criteria(string value)
+    public static int Meet_maposs_criteria(string value)
     {
-        (ObscuredInt,ObscuredInt, string) Boss_Time = GetBossTime(value);
+        (int, int, string) Boss_Time = GetBossTime(value);
         if (Boss_Time.Item3 == "no") return 99999999;
-        ObscuredInt spanSeconds = Battle_Tool.SettlementTransport(Boss_Time.Item3, 2);
-        db_vip crt_vip = Tool_Battle.Obtain_Vip();
+        int spanSeconds = Battle_Tool.SettlementTransport(Boss_Time.Item3, 2);
+        db_vip crt_vip = Obtain_Vip();
         if (crt_vip != null)
         {
             ObscuredInt base_time = Boss_Time.Item2 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
@@ -1684,14 +1683,14 @@ public static class Tool_Battle
         List<WeightedItem> eighteditems = new List<WeightedItem>();
         for (int i = 0; i < list.Count; i++)
         {
-            WeightedItem item = new WeightedItem(list[i], i + 1);
+            WeightedItem item = new WeightedItem(i + 1, list[i]);
             eighteditems.Add(item);
         }
 
         WeightedRandomPicker picker = new WeightedRandomPicker(eighteditems);
         // 获取一个概率
         WeightedItem selectedItem = picker.GetRandomItem();
-        return selectedItem.Weight;
+        return int.Parse(selectedItem.prizedraw.ToString());
 
     }
     /// <summary>

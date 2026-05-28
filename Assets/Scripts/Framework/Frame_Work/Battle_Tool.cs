@@ -222,14 +222,14 @@ public static class Battle_Tool
     /// <param name="time">记录时间</param>
     /// <param name="type">获取 1分钟 2秒钟3小时 4天</param>
     /// <returns></returns>
-    public static ObscuredInt SettlementTransport(string time, int type = 1)
+    public static int SettlementTransport(string time, int type = 1)
     {
         if (time == null || time == "") return -1;
 
         TimeSpan span;
-        ObscuredInt spanNumber = 0;
-        ObscuredInt value = 0;
-        span = SumSave.nowtime - Convert.ToDateTime(time);
+        int spanNumber = 0;
+        int value = 0;
+        span = (DateTime.Now > SumSave.nowtime ? DateTime.Now : SumSave.nowtime) - Convert.ToDateTime(time);
         if (type == 1)//计算分钟
             spanNumber = span.Minutes + span.Hours * 60 + span.Days * 60 * 24 + value;
         else if (type == 2)//计算秒

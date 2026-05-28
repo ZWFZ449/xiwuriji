@@ -105,7 +105,7 @@ public class BattleHealthState : Base_Mono
         if (CurrentHP <= 0) return;
         CurrentHP -= damage;
         Hurt(damage, type);
-        circularHealthBar.ChangeHealth(damage);
+        circularHealthBar.ChangeHealth(CurrentHP);
         if (CurrentHP <= 0)
         {
             is_Dead = false;

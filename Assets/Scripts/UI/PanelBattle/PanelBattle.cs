@@ -427,16 +427,6 @@ public class PanelBattle : PanelBase
         {
             map_info += Show_Color.Green(" 存量 " + SumSave.crt_setting.Boss_list[value].Item1) + "";
         }
-        //for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
-        //{
-        //    (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-        //    List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-        //    if (list.Count == 2)
-        //    {
-        //        if (list[0] == crt_map.map_boss[crt_map.GetMapIntensityDrop - 1])
-        //            map_info += Show_Color.Green(" 存量 " + list[1]) + "";
-        //    }
-        //}
         int time = Tool_Battle.Meet_maposs_criteria(crt_map.map_boss[crt_map.GetMapIntensityDrop - 1]);
         map_info += " 倒计时:"+ ConvertSecondsToHHMMSS(time);
         boss_time_text.text = map_info;

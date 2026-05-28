@@ -46,6 +46,7 @@ namespace MVC
             Read_Db_Chronicle();
             Read_db_vip();
             Read_Db_Setting_Aoption();
+            Read_Db_Reincarnation();
             //Read_Db_Magic();
             //
             //Read_Db_Hero();
@@ -77,6 +78,22 @@ namespace MVC
             //ReadDb_Endless();
             CloseMySqlDB();
         }
+        /// <summary>
+        /// 读取转生
+        /// </summary>
+        private void Read_Db_Reincarnation()
+        {
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_reincarnation);
+            SumSave.db_reincarnation_list = new List<db_reincarnation_vo>();
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    SumSave.db_reincarnation_list.Add(ReadDb.Read_Reincarnation(mysqlReader));
+                }
+            }
+        }
+
         /// <summary>
         /// 读取vip列表
         /// </summary>

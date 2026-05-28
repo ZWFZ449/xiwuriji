@@ -322,8 +322,16 @@ public static class ReadDb
         #endregion
         item.Init();
         return item;
-    } 
+    }
 
+    public static db_reincarnation_vo Read_Reincarnation(MySqlDataReader reader)
+    {
+        return new db_reincarnation_vo(
+            reader.GetInt32(reader.GetOrdinal("reincarnation_lv")),
+            reader.GetString(reader.GetOrdinal("reincarnation_name")),
+            reader.GetString(reader.GetOrdinal("reincarnation_need")),
+            reader.GetString(reader.GetOrdinal("reincarnation_effect")));
+    }
    
     public static db_vip Read_Vip(MySqlDataReader reader)
     {

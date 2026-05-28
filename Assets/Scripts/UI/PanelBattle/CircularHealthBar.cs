@@ -44,7 +44,7 @@ public class CircularHealthBar : MonoBehaviour
             return;
         if (healthBarImage == null)
             return;
-        currentHealth -= amount;
+        currentHealth = amount;
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
         // 如果不需要平滑效果，可以直接设置：
          healthBarImage.fillAmount = currentHealth / maxHealth;

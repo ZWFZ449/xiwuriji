@@ -113,4 +113,5 @@ public enum Mysql_Table_Name
     history_global_gift,//历史全局礼物
     global_uid,//全局uid
     global_account,//全局账号
+    db_reincarnation,//转生信息
 }

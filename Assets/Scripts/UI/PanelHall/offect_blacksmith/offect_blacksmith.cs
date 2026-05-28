@@ -82,6 +82,7 @@ public class offect_blacksmith : Base_Mono
                         appraisal();
                         Update_Info(true);
                         SelectBagItem(crt_bag);
+                        Game_Omphalos.i.archive();
                     }
                     else Alert_Dec.Show("资源不足");
                 }
@@ -127,6 +128,7 @@ public class offect_blacksmith : Base_Mono
                     refined_equip();
                     Update_Info(true);
                     SelectBagItem(crt_bag);
+                    Game_Omphalos.i.archive();
                 }
                 break;
         }
@@ -189,7 +191,7 @@ public class offect_blacksmith : Base_Mono
     /// </summary>
     private void appraisal() 
     {
-        List<int> list = new List<int>() { 1000, 500, 50 };
+        List<int> list = new List<int>() { 1000, 500, 100 };
         int number = Tool_Battle.Obtain_WeightedItem(list);
         if (appraisal_list == null)
         { 
@@ -214,7 +216,7 @@ public class offect_blacksmith : Base_Mono
             int random = appraisal_list[Random.Range(0, appraisal_list.Count)];
             value += (value == "" ? "" : "X") + random + "|0";
         }
-        value += ";";
+        //value += "";
         if (crt_bag.user_value != null)
         {
             string[] info = crt_bag.user_value.Split(' ');

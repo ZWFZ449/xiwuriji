@@ -847,13 +847,18 @@ namespace MVC
         /// <param name="lucky"></param>
         private int Lucky(int min, int max, int lucky)
         {
-            int value = 0;
-            value = Random.Range(min + (max - min) * lucky / 10, max);
-            if (lucky > 10)
-            {
-                value = value * (100 + (lucky * 10)) / 100;
+            int value = lucky * 5;
+            if (lucky == 9)
+            { 
+                value = 100;
             }
-            return value;
+            return Random.Range(min + ((max - min) * value / 100), max);
+            //value = Random.Range(min + (max - min) * lucky / 10, max);
+            //if (lucky > 10)
+            //{
+            //    value = value * (100 + (lucky * 10)) / 100;
+            //}
+            //return value;
         }
     }
 }
