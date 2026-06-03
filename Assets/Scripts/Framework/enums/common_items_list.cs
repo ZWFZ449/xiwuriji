@@ -6,12 +6,17 @@ public enum common_items_list
 {
     Boss召唤卷轴,
     鉴定符,
-    祝福油
+    祝福油,
+    黑铁矿石,
+    金条,
+    人参,
 }
 
 public enum common_Buff
 { 
     狂欢,
     月卡,
-    双倍经验卷轴
+    双倍经验卷轴,
+    增量卷轴,
+    减量卷轴,
 }

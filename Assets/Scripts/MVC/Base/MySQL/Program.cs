@@ -184,7 +184,7 @@ public static class Program
                 break;
             case Mysql_Table_Name.db_formula:
                 break;
-            case Mysql_Table_Name.db_suit:
+            case Mysql_Table_Name.db_suits:
                 break;
             case Mysql_Table_Name.db_dec:
                 break;

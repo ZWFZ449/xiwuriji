@@ -330,7 +330,14 @@ public static class ReadDb
             reader.GetInt32(reader.GetOrdinal("reincarnation_lv")),
             reader.GetString(reader.GetOrdinal("reincarnation_name")),
             reader.GetString(reader.GetOrdinal("reincarnation_need")),
-            reader.GetString(reader.GetOrdinal("reincarnation_effect")));
+            reader.GetString(reader.GetOrdinal("reincarnation_effect")),
+            reader.GetInt32(reader.GetOrdinal("need_lv")),
+            reader.GetInt32(reader.GetOrdinal("need_maxLv")),
+            reader.GetInt32(reader.GetOrdinal("result_maxRefinement")),
+            reader.GetInt32(reader.GetOrdinal("result_maxmedicine")),
+             reader.GetInt32(reader.GetOrdinal("result_minRefinement")),
+            reader.GetInt32(reader.GetOrdinal("result_minmedicine"))
+            );
     }
    
     public static db_vip Read_Vip(MySqlDataReader reader)

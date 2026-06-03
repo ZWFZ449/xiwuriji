@@ -461,9 +461,9 @@ namespace MVC
         /// </summary>
         private void Read_Db_Suit()
         {
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_suit);
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_suits);
 
-            SumSave.db_suits = new List<db_suit_vo>();
+            SumSave.db_suits = new List<db_suit_vo>(); 
 
             if (mysqlReader.HasRows)
             {

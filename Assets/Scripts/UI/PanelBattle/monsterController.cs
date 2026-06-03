@@ -5,6 +5,119 @@ using UnityEngine;
 
 public class monsterController : BaseBattleAttack 
 {
+    private int skill_index = 0;
+    GameObject ArrowPrefabs;
+    /// <summary>
+    /// 存储技能预制体
+    /// </summary>
+    private Dictionary<db_skill_vo, GameObject> dic = new Dictionary<db_skill_vo, GameObject>();
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
+    public override void OnAuto()
+    {
+        base.OnAuto();
+        if (Terget == null || !Terget.gameObject.activeSelf || Terget.isDead) Find_Terget();
+        if (Terget == null) return;
+        if (battle_skills != null && battle_skills.Count > 0)
+        {
+            if (skill_index >= battle_skills.Count) skill_index = 0;
+            for (int i = skill_index; i < battle_skills.Count; i++)
+            {
+                if (Select_Skill(battle_skills[i], i)) return;//往后看技能释放
+            }
+            for (int i = 0; i < skill_index; i++)
+            {
+                if (Select_Skill(battle_skills[i], i)) return;//往前看技能释放
+            }
+        }
+        //平a
+        BaseAttack();
+    }
+    /// <summary>
+    /// 选择技能
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    private bool Select_Skill(db_skill_vo skill, int index)
+    {
+ 
+        StartCoroutine(On_Attack(skill, 0));
+        skill_index++;
+        return true;
+    }
+    /// <summary>
+    /// 判断技能效果
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="skill"></param>
+    private IEnumerator On_Attack(db_skill_vo skill, int mp)
+    {
+        int number = 1;
+#if UNITY_EDITOR
+        //number = 10;
+#elif UNITY_ANDROID
+#elif UNITY_IPHONE
+#endif
+        foreach (var item in skill.GetBuff.Keys)
+        {
+            switch (item)
+            {
+                case enum_talent_offect_list.弹道:
+                    number = skill.GetBuff[item];
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (number == 1)
+            On_Skill(skill, mp);
+        else
+        {
+            while (number > 0)
+            {
+                number--;
+                On_Skill(skill, mp);
+                yield return new WaitForSeconds(0.1F);
+            }
+        }
+
+    }
+    /// <summary>
+    /// 多次释放
+    /// </summary>
+    /// <param name="base_name"></param>
+    /// <returns></returns>
+
+    private void On_Skill(db_skill_vo skill, int mp)
+    {
+        if (Terget == null) return;
+        if (!Terget.gameObject.activeInHierarchy || Terget.isDead) return;
+        if (!dic.ContainsKey(skill))
+        {
+            GameObject skill_prefabs = Resources.Load<GameObject>("UI/skill_prefabs/skill_" + skill.id);// skill.id); 
+            //技能放大效果 未完成
+            //float rand = 5;
+            //skill_prefabs.transform.localScale = new Vector3(rand, rand, rand);
+            dic.Add(skill, skill_prefabs);
+        }
+        ArrowPrefabs = dic[skill];
+        GameObject go = ObjectPoolManager.instance.GetObjectFormPool(skill.show_name, ArrowPrefabs, new Vector3(transform.position.x, transform.position.y), Quaternion.identity, transform);
+        if (go.GetComponent<Skill_Hit>() == null)
+        {
+            go.AddComponent<Skill_Hit>();
+        }
+        go.GetComponent<Skill_Hit>().SetTargetPosition(this, skill, Terget);
+
+        if (skill.MoveType == 0)//剑气类技能
+        {
+            skill_damage(skill);
+        }
+    }
+    /*
     public override void OnAuto()
     {
         base.OnAuto();
@@ -12,4 +125,5 @@ public class monsterController : BaseBattleAttack
         if (Terget == null) return;
         BaseAttack();
     }
+    */
 }

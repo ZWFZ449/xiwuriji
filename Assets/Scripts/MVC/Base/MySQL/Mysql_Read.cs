@@ -32,6 +32,28 @@ public static class Mysql_Read
             SumSave.nowtime = Convert.ToDateTime(mysqlReader[i].ToString());
             //Debug.Log("基准值读取成功" + SumSave.nowtime);
         }
+    } 
+    public static user_zs_vo Read(MySqlDataReader reader, user_zs_vo item)
+    { 
+        item.zs_medicine_max= reader.GetInt32(reader.GetOrdinal("zs_medicine_max"));
+        item.zs_Refinement_max = reader.GetInt32(reader.GetOrdinal("zs_Refinement_max"));
+        string[] zs_medicine_value = reader.GetString(reader.GetOrdinal("crt_medicine")).Split(',');
+        //List<int> zs_medicine = ArrayHelper.Get_Split<int>(zs_medicine_value, ',');
+        item.crt_medicine = new List<ObscuredInt>();
+        for (int i = 0; i < zs_medicine_value.Length; i++)
+        { 
+            if (zs_medicine_value[i] != "")
+            item.crt_medicine.Add(int.Parse(zs_medicine_value[i]));
+        }
+        string[] zs_Refinement_value = reader.GetString(reader.GetOrdinal("crt_Refinement")).Split(',');// ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("crt_Refinement")), ',');
+        item.crt_Refinement = new List<ObscuredInt>();
+        for (int i = 0; i < zs_Refinement_value.Length; i++)
+        {
+            if (zs_Refinement_value[i] != "")
+            item.crt_Refinement.Add(int.Parse(zs_Refinement_value[i]));
+        }
+        item.medicine_exp = reader.GetInt32(reader.GetOrdinal("medicine_exp"));
+        return item;
     }
     public static user_vo Read(MySqlDataReader reader, user_vo item)
     {
@@ -95,7 +117,8 @@ public static class Mysql_Read
             reader.GetInt32(reader.GetOrdinal("pet_talent_type")),
             reader.GetInt32(reader.GetOrdinal("pet_talent_offect")),
             reader.GetInt32(reader.GetOrdinal("pet_talent_offecttype")),
-            reader.GetFloat(reader.GetOrdinal("pet_talent_offectvalue"))
+            reader.GetFloat(reader.GetOrdinal("pet_talent_offectvalue")),
+            ArrayHelper.Get_Split<float>(reader.GetString(reader.GetOrdinal("talent_up_value")), ' ')
             );
     }
 
@@ -144,13 +167,16 @@ public static class Mysql_Read
     {
 
         crtMaxBattleVO item = new crtMaxBattleVO(0, 0, 0, 0, 0);
-        List<(enum_battle_pet_talent_list, ObscuredInt, ObscuredInt)> list = new List<(enum_battle_pet_talent_list, ObscuredInt, ObscuredInt)>();
+        List<(enum_battle_pet_talent_list, float, float)> list = new List<(enum_battle_pet_talent_list, float, float)>();
         item.id = reader.GetInt32(reader.GetOrdinal("id"));
         item.crt_name = reader.GetString(reader.GetOrdinal("monster_name"));// SumSave.crtHero.hero_name;
         item.lv = reader.GetInt32(reader.GetOrdinal("lv"));
         item.exp = reader.GetInt32(reader.GetOrdinal("exp"));
         item.hero_type = Hero_Type.平民;
         item.type = (Battle_Game_Type)(reader.GetInt32(reader.GetOrdinal("monster_type")));
+        item.skill_id = reader.GetInt32(reader.GetOrdinal("skill_id"));
+        item.skill_number = reader.GetInt32(reader.GetOrdinal("skill_number"));
+        item.skill_level = reader.GetInt32(reader.GetOrdinal("skill_level"));
         item.data = new FinalBattleValueVO(
              reader.GetInt64(reader.GetOrdinal("hp")),
              reader.GetInt32(reader.GetOrdinal("mp")),

@@ -82,6 +82,7 @@ public class panel_hero_equip : PanelBase
                 dream_BagItem bagItem = new dream_BagItem();
                 bagItem.Data = equips[i];
                 Instantiate(hero_equip_item_prefab, m_pos_brom).Init(bagItem, Panel_BagType.展示);
+                return;
             }
         }
     }

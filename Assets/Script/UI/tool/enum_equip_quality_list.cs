@@ -10,5 +10,5 @@ public enum enum_equip_quality_list
     尊器,
     圣器,
     帝器,
-    
+    皇器,
 }

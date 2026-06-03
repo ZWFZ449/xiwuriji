@@ -122,7 +122,7 @@ public class Dream_Panel_Login : PanelBase
         ClearObject(TheServerList);
         int device = 1;
 #if UNITY_EDITOR
-        device = 2;
+        device = 1;
 #elif UNITY_ANDROID
             device = 3;
 #elif UNITY_IPHONE

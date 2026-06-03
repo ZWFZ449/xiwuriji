@@ -65,6 +65,7 @@ public class Dream_User_Hero_VO : Base_VO
             "Lv",
             "Exp",
             "SelectPos",
+            "zs_lv",
             "Talent",
         };
     }
@@ -77,6 +78,7 @@ public class Dream_User_Hero_VO : Base_VO
                 GetStr(lv),
                 GetStr(exp),
                 GetStr(SelectPos),
+                GetStr(zs_lv),
                 GetStr(Gettalent()),
             };
     }

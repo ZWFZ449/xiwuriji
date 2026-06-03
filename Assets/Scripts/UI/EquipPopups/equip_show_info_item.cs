@@ -1,4 +1,5 @@
 using MVC;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,8 @@ public enum enum_equip_basetype_list
     基础属性 = -1,
     附加属性,
     元素属性,
-    铭文属性
+    铭文属性,
+    皇权属性
 }
 /// <summary>
 /// 装备属性条目
@@ -70,7 +72,35 @@ public enum enum_equip_entry_list
     金币掉落=6,
 
 }
+public enum medicine_type
+{
+    命中,
+    闪避,
+    生命属性 ,
+    魔法属性 ,
+    防御属性 ,
+    魔防属性 ,
+    物攻属性 ,
+    魔攻属性 ,
+    道攻属性 ,
+    暴击属性 ,
+    暴击伤害 ,
+    怪物爆率 ,
+    怪物刷新个数 ,
+}
 
+public enum Refinement_type
+{
+    生命值,
+    魔法值,
+    物理防御,
+    魔法防御,
+    攻击,
+    每秒回血,
+    每秒回蓝,
+    真实伤害,
+    吸收伤害,
+}
 public class equip_show_info_item : Base_Mono
 {
     private Image icon;
@@ -116,6 +146,13 @@ public class equip_show_info_item : Base_Mono
         icon.sprite = UI.UI_Manager.I.GetEquipSprite("skill/base_icon/",value);
         info.text = "   弹道 " + value + " + " + lv;
         info.color = UnityColorPresets.HexToColor("#ffff00");
+    }
+
+    public void Init_7(string value, int lv)
+    {
+        icon.sprite = UI.UI_Manager.I.GetEquipSprite("UI/pet/pet_talent/", value);
+        info.text = "   皇权 " + value + " + " + lv;
+        info.color = UnityColorPresets.HexToColor("#fa5151");
     }
 
     public void Init(string path, string value, Color color)

@@ -204,7 +204,7 @@ public class show_drop_list : Base_Mono
             case Drop_Type.逐个掉落:
                 for (int i = 0; i < values.Length; i++)
                 {
-                    Obtain_Drop(values[i],type);
+                    Obtain_Drop(values[i],type,crt_map.map_lv);
                 }
                 break;
             case Drop_Type.固定掉落:
@@ -216,14 +216,14 @@ public class show_drop_list : Base_Mono
                 }
                 while (sum >= drop_list[index].Item2.Count)
                 { 
-                    Obtain_Drop(values[Random.Range(0, values.Length)], type);
+                    Obtain_Drop(values[Random.Range(0, values.Length)], type, crt_map.map_lv);
                 }
                 break;
             case Drop_Type.随机掉落:
                 int number = Tool_Battle.Quality() / 2 + 1;
                 for (int i = 0; i < number; i++)
                 {
-                    Obtain_Drop(values[Random.Range(0, values.Length)], type);
+                    Obtain_Drop(values[Random.Range(0, values.Length)], type, crt_map.map_lv);
                 }
                 break;
             default:
@@ -235,7 +235,7 @@ public class show_drop_list : Base_Mono
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    private void Obtain_Drop(string value, Drop_Type type)
+    private void Obtain_Drop(string value, Drop_Type type,int lv)
     {
         Bag_Base_VO data;
         string[] drop_value_info = value.Split(' ');
@@ -254,7 +254,7 @@ public class show_drop_list : Base_Mono
                     {
                         string user_value = Tool_Battle.Obtain_Equip(data, 1, Quality(data));
                         Bag_Base_VO value_data = tool_Categoryt.Read_BaseBag(user_value);
-                        SetData(value_data);
+                        SetData(value_data,lv);
                         if (type != Drop_Type.随机掉落) drop_list[index].Item2.Add(value_data);
                     }
                 }
@@ -293,7 +293,7 @@ public class show_drop_list : Base_Mono
     /// 写入数据库
     /// </summary>
     /// <param name="data"></param>
-    private void SetData(Bag_Base_VO data)
+    private void SetData(Bag_Base_VO data,int lv)
     {
         Stditem_StdMode_List equip_Type = Tool_State.ToEnum(data.StdMode, Stditem_StdMode_List.nothing);
         if (equip_Type == Stditem_StdMode_List.nothing) return;
@@ -331,7 +331,7 @@ public class show_drop_list : Base_Mono
                 switch (unit)
                 {
                     case currency_unit.金币:
-                        moeny = 100 * (100 + SumSave.crtMaxBattle.gold_bonus) / 100;
+                        moeny = 100 * (moeny_needs[lv / 5] * 50 + SumSave.crtMaxBattle.gold_bonus) / 100;
                         break;
                     case currency_unit.元宝:
                         break;
@@ -351,6 +351,7 @@ public class show_drop_list : Base_Mono
                 break;
         }
     }
+    private List<int> moeny_needs = new List<int>() { 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 3000, 3500, 4000, 5000, 5000, 5000, 5000 };
     /// <summary>
     /// 回收判断
     /// </summary>

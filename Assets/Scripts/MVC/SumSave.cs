@@ -407,5 +407,7 @@ namespace Common
         /// 获取礼包码
         /// </summary>
         public static global_gift_vo global_gift;
+
+        public static user_zs_vo crt_zs;
     }
 }

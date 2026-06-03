@@ -115,7 +115,7 @@ public class playerController : BaseBattleAttack
     {
         int number = 1;
 #if UNITY_EDITOR
-        //number = 10;
+        number = 10;
 #elif UNITY_ANDROID
 #elif UNITY_IPHONE
 #endif
@@ -138,27 +138,6 @@ public class playerController : BaseBattleAttack
             {
                 number--;
                 On_Skill(skill,mp);
-                //int mp = skill.spells[skill.SetLv()];
-                //if (oneselfHealthState.Get_MP >= mp)
-                //{
-                //    foreach (var item in data.data.buffList)
-                //    {
-                //        switch (item.Item1)
-                //        {
-                //            case enum_battle_pet_talent_list.任意门:
-                //                break;
-                //            case enum_battle_pet_talent_list.嗜血追击:
-                //                break;
-                //            case enum_battle_pet_talent_list.慧根:
-                //                mp = (int)(mp * (100 - item.Item3) / 100);
-                //                break;
-                //            default:
-                //                break;
-                //        }
-                //    }
-                //    oneselfHealthState.Set_Mp = mp;
-                //}
-                //else number = 0;//蓝量不足
                 yield return new WaitForSeconds(0.1F);
             }
         }

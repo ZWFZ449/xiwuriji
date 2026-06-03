@@ -18,7 +18,10 @@ public class offect_promotion : Base_Mono
     private Button btn;
     private Text info;
     private input_offect input_offect_prefab, crt_input_offect;
-
+    /// <summary>
+    /// 领取礼包
+    /// </summary>
+    private string crt_key;
     private void Awake()
     { 
         oneself = Find<InputField>("oneself/show_id");
@@ -63,8 +66,12 @@ public class offect_promotion : Base_Mono
         if (crt_input_offect.GetInput != "")
         {
             string key = crt_input_offect.GetInput.Split('_')[0];
-            SendNotification(NotiList.Read_Global_Gift, key);
-            rename_confirm(key);
+            if (crt_key != key)
+            {
+                SendNotification(NotiList.Read_Global_Gift, key);
+                rename_confirm(key);
+            }else Alert_Dec.Show("请输入正确的礼包码");
+          
         }
         else Alert_Dec.Show("请输入不含特殊符号的内容");
     }
@@ -89,6 +96,7 @@ public class offect_promotion : Base_Mono
             return;
         }
         if (!is_state) { Alert_Dec.Show("当前操作过于频繁,请稍后操作"); return; }
+        crt_key = key;
         if (SumSave.global_gift.gift_type == 1)//全局
         {
             if (SumSave.global_gift.gift_par == SumSave.par || SumSave.global_gift.gift_par == -1)//通用礼包
@@ -210,6 +218,7 @@ public class offect_promotion : Base_Mono
     private void OnEnable()
     {
         SendNotification(NotiList.Read_global_promotion);
+        crt_key = "";
         Init();
     }
     private void OnBtnClick()

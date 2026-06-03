@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -63,7 +64,12 @@ public class db_pet_talent_vo
     /// </summary>
     public readonly float pet_talent_offectvalue; // 效果值
 
-    public db_pet_talent_vo(int pet_talent_id, string pet_talent_name, int pet_talent_level, int pet_talent_job, int pet_talent_type, int pet_talent_offect, int pet_talent_offecttype, float pet_talent_offectvalue)
+    public readonly List<float> pet_up_offect; // 升级效果
+    /// <summary>
+    /// 升级等级
+    /// </summary>
+    public ObscuredInt pet_up_lv = -1;
+    public db_pet_talent_vo(int pet_talent_id, string pet_talent_name, int pet_talent_level, int pet_talent_job, int pet_talent_type, int pet_talent_offect, int pet_talent_offecttype, float pet_talent_offectvalue, List<float> pet_up_offect)
     { 
         this.pet_talent_id = pet_talent_id;
         this.pet_talent_name = pet_talent_name;
@@ -73,6 +79,8 @@ public class db_pet_talent_vo
         this.pet_talent_offect = pet_talent_offect;
         this.pet_talent_offecttype = pet_talent_offecttype;
         this.pet_talent_offectvalue = pet_talent_offectvalue;
+        this.pet_up_offect = pet_up_offect;
+        //pet_up_lv=Random.Range(0, pet_up_offect.Count);
         //测试图片添加新内容时测试一下
         //UI.UI_Manager.I.GetEquipSprite("UI/pet/pet_talent/", pet_talent_name);
 

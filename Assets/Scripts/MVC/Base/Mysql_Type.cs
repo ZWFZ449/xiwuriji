@@ -74,7 +74,7 @@ public enum Mysql_Table_Name
     user_world_boss,//世界boss伤害
     history_world_boss,//世界boss历史伤害
     db_formula,//造化炉合成信息
-    db_suit,//套装信息
+    db_suits,//套装信息
     db_dec,//具体功能消息
     versions_task,//版本信息
     db_weather,//天气信息
@@ -114,4 +114,5 @@ public enum Mysql_Table_Name
     global_uid,//全局uid
     global_account,//全局账号
     db_reincarnation,//转生信息
+    dream_user_zs,//用户转生信息
 }

@@ -87,7 +87,7 @@ public class map_show_offect : Base_Mono
     /// </summary>
     public void Init(base_map_item map)
     {
-        crt_map = map;
+        crt_map = map; 
         if (SumSave.crtHero.lv < crt_map.GetMap().map_lv && !Tool_Battle.IsBuff(common_Buff.月卡))
         {
             Alert_Dec.Show("等级不足,无法查看");
@@ -126,7 +126,15 @@ public class map_show_offect : Base_Mono
         crt_select_map_lv_item.Selected = true;
         crt_map.Select_Map_Intensity(item.GetMapIntensity);
         Show_Base_Info();
-        //tool_equip();  
+
+#if UNITY_EDITOR
+        //tool_equip();
+#elif UNITY_ANDROID
+        
+           
+#elif UNITY_IPHONE
+        
+#endif
     }
     /// <summary>
     /// 测试物品
@@ -134,14 +142,14 @@ public class map_show_offect : Base_Mono
     private void tool_equip()
 
     {
-        return;
+        //return;
         //测试模式
         foreach (var item in drop_dic)
         {
             Bag_Base_VO data = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == item.Key);
             if (data != null)
             {
-                string user_value = Tool_Battle.Obtain_Equip(data, 1, 6);
+                string user_value = Tool_Battle.Obtain_Equip(data, 1, 7);
                 Bag_Base_VO base_data = tool_Categoryt.Read_BaseBag(user_value);
                 SetData(base_data);
             }

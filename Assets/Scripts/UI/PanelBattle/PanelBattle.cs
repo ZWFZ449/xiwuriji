@@ -116,6 +116,10 @@ public class PanelBattle : PanelBase
     private Button btn_bag;
 
     private TMP_Text boss_time_text;
+    /// <summary>
+    /// 最新状态
+    /// </summary>
+    private TMP_Text state_monster_info;
     protected override void Awake()
     {
         closeButton = Find<Button>("info/info/close_button");
@@ -160,6 +164,7 @@ public class PanelBattle : PanelBase
         boss_time_text = Find<TMP_Text>("info/btn_show_time/info");
         btn_bag= Find<Button>("info/info/btn_bag");
         btn_bag.onClick.AddListener(() => { UI_Manager.I.GetPanel<Dream_Panel_Bag>().Show(); });
+        state_monster_info = Find<TMP_Text>("info/state_monster/info");
         InitMedicine();
         InitSlider();
         InitBoss();
@@ -222,6 +227,15 @@ public class PanelBattle : PanelBase
                     break;
             }
         }
+    }
+    /// <summary>
+    /// 刷新装备
+    /// </summary>
+    private void Show_State_Monster()
+    {
+        string dec= "[当前怪物数量 " + monster_list.Count + "][最大怪物数量 " + crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] + "]"
+            + "[Boss进度 " + map_crate_boss_condition + "/" + crt_map.map_crate_boss_condition[crt_map.GetMapIntensityDrop - 1] + "]";
+        state_monster_info.text = Show_Color.Set_String(dec, UnityColorPresets.HexToColor("a5faff"));
     }
     /// <summary>
     /// 刷新状态
@@ -465,7 +479,16 @@ public class PanelBattle : PanelBase
             max = (int)MathF.Min(crt_map.map_add_number_monster[crt_map.GetMapIntensityDrop - 1],
                     crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] - monster_list.Count);
         }
-        
+        if (Tool_Battle.IsBuff(common_Buff.增量卷轴))
+        {
+            if (max <= 0) max = 0;
+            Alert_Dec.Show("增量刷新个数 + " + max);
+            max *= 2;
+        }
+        if (Tool_Battle.IsBuff(common_Buff.减量卷轴))
+        {
+            max /= 2;
+        }
         if (max > 0)
         { 
             for (int i = 0; i < max; i++) Generate_Monster();
@@ -623,6 +646,8 @@ public class PanelBattle : PanelBase
         player_list.Clear();
         Close_BossSlider();
         monster_battle_list.Add(Obtain_Monster_MaxBattle(crt_map.map_monster[crt_map.GetMapIntensityDrop - 1]));
+        Show_State_Monster();
+
     }
 
     /// <summary>
@@ -669,6 +694,7 @@ public class PanelBattle : PanelBase
                         ObscuredLong moeny = 10;
                         Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, moeny, Obtain_Int.Add_unit(moeny));
                         monster_list.Remove(health.gameObject);
+                        Show_State_Monster();
                         return;
                     }
                 }
@@ -676,25 +702,18 @@ public class PanelBattle : PanelBase
             switch (baseBattleAttack.Data.type)
             {
                 case Battle_Game_Type.player:
-                case Battle_Game_Type.call:
-
                     player_list.Remove(health.gameObject);
-                    if (player_list.Count == 0)
-                    {
-                        //战斗失败
-                        gameover();
-                    }
-                    else
-                    if (baseBattleAttack.Data.type == Battle_Game_Type.call)
-                    {
-                        //复活召唤兽
-                        Resurrection_Call(baseBattleAttack.Data.crt_name);
-                    }
+                    gameover();
+                    break;
+                case Battle_Game_Type.call:
+                    player_list.Remove(health.gameObject);
+                    Resurrection_Call(baseBattleAttack.Data.crt_name);
                     break;
                 case Battle_Game_Type.monster:
                 case Battle_Game_Type.Boss:
                 case Battle_Game_Type.Activity_Monster:
                     monster_list.Remove(health.gameObject);
+                    Show_State_Monster();
                     map_crate_boss_condition++;
                     kill_monster++;
                     Drop(baseBattleAttack);
@@ -968,6 +987,10 @@ public class PanelBattle : PanelBase
     /// 
     private bool Open_Crate_Effect_5 = true;
     /// <summary>
+    /// 核心位置
+    /// </summary>
+    private Transform crt_pos;
+    /// <summary>
     /// 生成玩家
     /// </summary>
     private void crate_player()
@@ -978,6 +1001,7 @@ public class PanelBattle : PanelBase
         //item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(m_skill_borm));
         item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill());
         Dictionary<int, db_skill_vo> dic = SumSave.crt_skill.Set_Current_skill();
+        crt_pos = item.transform;
         foreach (var id in dic) 
         {
             if (id.Value.EffectType == 5)//护盾
@@ -997,10 +1021,10 @@ public class PanelBattle : PanelBase
                 for (int i = 0; i < number; i++)
                 {
                     GameObject call = ObjectPoolManager.instance.GetObjectFormPool("召" + id.Value.show_name, battle_player_prefab,
-               GetRandomUVPosition(800), Quaternion.identity, battle_borm.transform);
+               Call_Pos(), Quaternion.identity, battle_borm.transform);
                     call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(id.Value);
                     call.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(id.Value.show_name));
-
+                    call.GetComponent<BaseBattleAttack>().Radius(crt_pos);
                     player_list.Add(call);
                 }
                 
@@ -1016,15 +1040,24 @@ public class PanelBattle : PanelBase
         {
             if ("召"+id.Value.show_name == name)
             {
+               // GameObject call = ObjectPoolManager.instance.GetObjectFormPool("召" + id.Value.show_name, battle_player_prefab,
+               //GetRandomUVPosition(800), Quaternion.identity, battle_borm.transform);
                 GameObject call = ObjectPoolManager.instance.GetObjectFormPool("召" + id.Value.show_name, battle_player_prefab,
-               GetRandomUVPosition(800), Quaternion.identity, battle_borm.transform);
-               call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(id.Value);
+                Call_Pos(), Quaternion.identity, battle_borm.transform);
+                call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(id.Value);
                call.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(id.Value.show_name));
+                call.GetComponent<BaseBattleAttack>().Radius(crt_pos);
                 player_list.Add(call);
             }
         }
     }
-
+    bool pos = true;
+    private Vector3 Call_Pos()
+    {
+        pos = !pos;
+        return new Vector3(transform.position.x + (pos ? 300 : -300), transform.position.y - 0, transform.position.z);
+         
+    }
     bool open_crate_monster = false;
     private IEnumerator Game_WaitTime(float time)
     {
@@ -1071,11 +1104,13 @@ public class PanelBattle : PanelBase
         crtMaxBattleVO monster = ArrayHelper.Find(monster_Bossbattle_list, e => e.crt_name == specify);
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(monster.crt_name, battle_Boss_monster_prefab,
             GetRandomUVPosition(2000), Quaternion.identity, battle_borm.transform);
-        item.GetComponent<BaseBattleAttack>().Data = monster;
+        item.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Monster(monster);
+        item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Monster(monster));
         item.transform.SetAsFirstSibling();
         item.GetComponent<Button>().onClick.RemoveAllListeners();
         item.GetComponent<Button>().onClick.AddListener(() => { lock_target(item); });
         monster_list.Add(item);
+        Show_State_Monster();
         if (SumSave.crt_setting.user_data_settings.Count >= 3 && SumSave.crt_setting.user_data_settings[2] == 1)
         {
             Alert_Dec.Show("集火模式开启");
@@ -1089,6 +1124,28 @@ public class PanelBattle : PanelBase
         InitBossSlider(monster);
 
     }
+    /// <summary>
+    /// 怪物技能
+    /// </summary>
+    /// <param name="monster"></param>
+    /// <returns></returns>
+    private List<db_skill_vo> Show_Battle_Monster(crtMaxBattleVO monster)
+    {
+        List<db_skill_vo> skill_list = new List<db_skill_vo>();
+        if (SumSave.crtHero.zs_lv > 1)
+        { 
+            db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, e => e.id == monster.skill_id);
+            if (skill != null)
+            {
+                skill.monster_lv(monster.skill_level);
+                skill.AddBuff(enum_talent_offect_list.弹道, monster.skill_number);
+                skill_list.Add(skill);
+            }
+        }
+        return skill_list;
+
+    }
+
     /// <summary>
     /// 初始化boss血条
     /// </summary>
@@ -1125,11 +1182,13 @@ public class PanelBattle : PanelBase
         crtMaxBattleVO monster = monster_battle_list[Random.Range(0, monster_battle_list.Count)];
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(monster.crt_name, battle_monster_prefab,
             GetRandomUVPosition(2000), Quaternion.identity, battle_borm.transform);
-        item.GetComponent<BaseBattleAttack>().Data = monster;
+        item.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Monster(monster);
+        item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Monster(monster));
         item.transform.SetAsFirstSibling();
         item.GetComponent<Button>().onClick.RemoveAllListeners();
         item.GetComponent<Button>().onClick.AddListener(() => { lock_target(item); });
         monster_list.Add(item);
+        Show_State_Monster();
         //测试掉落
         //show_drop_list.Init(crt_map, monster.type);
 

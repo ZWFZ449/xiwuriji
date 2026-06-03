@@ -210,6 +210,12 @@ public class db_skill_vo : Base_VO
     {
         lv = 0;
     }
+
+    public void monster_lv(int lv)
+    {
+        this.lv = lv;
+    }
+    
     /// <summary>
     /// 叠加buff效果
     /// </summary>

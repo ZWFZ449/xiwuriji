@@ -38,6 +38,23 @@ namespace MVC
         /// 查看目标
         /// </summary>
         public BattleHealthState InfoTerget { get { return Terget; } }
+        /// <summary>
+        /// 围绕旋转
+        /// </summary>
+        private bool is_centerPoint = false;
+        /// <summary>
+        /// 中心点
+        /// </summary>
+        private Transform crt_centerPoint;
+        private Vector2 initialOffset;
+        private float angle = 0f, speed = 30f, radius = 500f;
+        public void Radius(Transform centerPoint)
+        {
+            is_centerPoint = true;
+            crt_centerPoint= centerPoint;
+            initialOffset = (Vector2)transform.position - (Vector2)crt_centerPoint.position;
+            angle = 0f; // 重置角度
+        }
 
         private float attack_speed = 0;
         private void Update()
@@ -49,6 +66,19 @@ namespace MVC
                     if (Terget.isDead ||!Terget.gameObject.activeInHierarchy) Find_Terget();
                 }
                 else Find_Terget();
+            }
+            if(is_centerPoint)//判断是否围绕旋转
+            {
+                // 安全检查
+                if (crt_centerPoint == null) return;
+
+                Vector2 rotatedOffset = Quaternion.Euler(0, 0, angle) * initialOffset;
+
+                // 2. 应用新位置（中心点 + 旋转后的偏移）
+                transform.position = (Vector2)crt_centerPoint.position + rotatedOffset;
+
+                // 3. 更新角度（累加）
+                angle += speed * Time.deltaTime;
             }
         }
         public void Set_Target(BattleHealthState target)
@@ -236,7 +266,6 @@ namespace MVC
                     }
                 }
             }
-
             //真实伤害
             if ((Skill_Effect_Type)skill.EffectType == Skill_Effect_Type.单体 || (Skill_Effect_Type)skill.EffectType == Skill_Effect_Type.群体)
             {
@@ -615,7 +644,7 @@ namespace MVC
                     case enum_battle_pet_talent_list.招架:
                         if (Random.Range(0, 100) < item.Item2)
                         {
-                            damage = damage * (100 - item.Item3) / 100;
+                            damage = (int)(damage * (100 - item.Item3) / 100);
                         }
                         break;
                     case enum_battle_pet_talent_list.慧根:
@@ -708,14 +737,20 @@ namespace MVC
                     break;
                 case Hero_Type.战士:
                     damage = Lucky(Data.data.dc, Data.data.dc2, data.data.lucky);
+                    if (SumSave.crtHero.zs_lv > 1 && (data.type == Battle_Game_Type.player || data.type == Battle_Game_Type.call)) damage += (int)data.data.battle_maxhp / 100;
                     def = Random.Range(monster.Data.data.ac, monster.Data.data.ac2);
                     break;
                 case Hero_Type.法师:
                     damage = Lucky(Data.data.mc, Data.data.mc2, data.data.lucky);
+                    if (SumSave.crtHero.zs_lv > 1 && (data.type == Battle_Game_Type.player || data.type == Battle_Game_Type.call)) damage += (int)data.data.battle_maxmp / 100;
                     def = Random.Range(monster.Data.data.mac, monster.Data.data.mac2);
                     break;
                 case Hero_Type.道士:
                     damage = Lucky(Data.data.sc, Data.data.sc2, data.data.lucky);
+                    if (SumSave.crtHero.zs_lv > 1 && (data.type == Battle_Game_Type.player || data.type == Battle_Game_Type.call))
+                    {
+                        damage += ((int)data.data.battle_maxhp + (int)data.data.battle_maxmp) / 100;
+                    }
                     def = Random.Range(monster.Data.data.mac, monster.Data.data.mac2);
                     break;
             }
@@ -736,7 +771,7 @@ namespace MVC
                     case enum_battle_pet_talent_list.华山斩:
                         if (Random.Range(0, 100) < item.Item2)
                         {
-                            damage = damage * item.Item3;
+                            damage = (int)(damage * item.Item3);
                         }
                         break;
                     case enum_battle_pet_talent_list.斩杀:
@@ -757,7 +792,7 @@ namespace MVC
                         if (SumSave.crtHero.job + 9 == (int)(item.Item1))
                         {
                             if (Random.Range(0, 100) < item.Item2)
-                                def -= item.Item3;
+                                def -= (int)item.Item3;
                         }
                         break;
                     case enum_battle_pet_talent_list.反震:
@@ -822,7 +857,7 @@ namespace MVC
                         break;
                     
                     case enum_battle_pet_talent_list.防爆:
-                        value = item.Item3;
+                        value = (int)item.Item3;
                         break;
                    
                     case enum_battle_pet_talent_list.慧根:

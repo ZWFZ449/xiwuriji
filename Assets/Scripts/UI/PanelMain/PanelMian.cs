@@ -239,7 +239,7 @@ public class PanelMian : PanelBase
 
     private void Show_hero()
     {
-        hero_name.text = SumSave.crtMaxBattle.crt_name +" "+ Battle_Tool.Obtain_Talent_Name()+ " Lv." + SumSave.crtMaxBattle.lv;
+        hero_name.text = (SumSave.crtHero.zs_lv > 1 ? "[" + (SumSave.crtHero.zs_lv - 1) + "转]" : "") + SumSave.crtMaxBattle.crt_name + " " + Battle_Tool.Obtain_Talent_Name() + " Lv." + SumSave.crtMaxBattle.lv;
         hero_img.sprite = UI.UI_Manager.I.GetEquipSprite("UI/player/", SumSave.crtMaxBattle.hero_type+"头像");
         hero_icon.sprite = UI.UI_Manager.I.GetEquipSprite("UI/player/", SumSave.crtMaxBattle.hero_type);
     }

@@ -6,34 +6,55 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityColorPresets;
 using Random = UnityEngine.Random;
+
+
 /// <summary>
 /// 转生
 /// </summary>
 public class offect_reincarnation : Base_Mono
 {
+    private enum zs_unit
+    { 
+      转生,
+      炼药,
+      炼体,
+      炼气,
+      炼神,
+    }
     private Button reset_talent;
 
+    private Transform m_btn_brom;
+
+    private btn_item btn_item_prefab;
+
     private TMP_Text info;
+    /// <summary>
+    /// 当前选中
+    /// </summary>
+    private zs_unit crt_zs_unit;
     private void Awake()
     {
         reset_talent = Find<Button>("reset_talent");
         reset_talent.onClick.AddListener(ResetTalent);
-        info=Find<TMP_Text>("Scroll View/Viewport/Content/info/Text (TMP)");
+        info=Find<TMP_Text>("Scroll View/Viewport/Content/info");
+        btn_item_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
+        m_btn_brom = Find<Transform>("btn_list/Viewport/Content");
     }
 
     private void OnEnable()
     {
+        InitBtn();
         if (SumSave.crtHero.lv < 30 && SumSave.crtHero.zs_lv == 0)
         {
             Hide();
-            Alert_Dec.Show("当前等级不足60级无法转生");
+            Alert_Dec.Show("当前等级不足30级无法查看转生");
             return;
         }
-        init();
     }
     private void init()
     {
@@ -41,10 +62,10 @@ public class offect_reincarnation : Base_Mono
         for (int i = 0; i < SumSave.db_reincarnation_list.Count; i++)
         {
             if (SumSave.db_reincarnation_list[i].reincarnation_lv == SumSave.crtHero.zs_lv)
-            { 
+            {
                 db_reincarnation_vo vo = SumSave.db_reincarnation_list[i];
                 dec += vo.reincarnation_name + "\n";
-                dec += "需求\n";
+                dec += "最低转生等级 " + vo.need_lv + " - 最高转生等级 " + vo.need_maxLv;
                 for (int j = 0; j < vo.reincarnation_need.Count; j++)
                 {
                     List<string> need = ArrayHelper.Get_Split<string>(vo.reincarnation_need[j], ' ');
@@ -66,6 +87,10 @@ public class offect_reincarnation : Base_Mono
                         }
                     } 
                 }
+                dec += Show_Color.Red("\n怪物增强,谨慎转生"); 
+                dec += "\n转生收益\n";
+                dec += Show_Color.Set_String("炼体 + " + vo.result_minRefinement + " - " + vo.result_maxRefinement, GameColors.RageBar);
+                dec += "\n" + Show_Color.Set_String("炼药 + " + vo.result_minmedicine + " - " + vo.result_maxmedicine, GameColors.RageBar);
                 dec += "\n转生加成\n";
                 for (int j = 0; j < vo.reincarnation_cost.Count; j++)
                 {
@@ -163,15 +188,336 @@ public class offect_reincarnation : Base_Mono
                 }
             }
         }
+        if (dec == "")
+        {
+            dec += "当前无可用转生";
+        }
         info.text= dec;
     }
+    private void RefinementInit()
+    {
+        string dec = "";
+        dec += "炼体加成";
+        int max = 0;
+        for (int i = 0; i < SumSave.crt_zs.crt_Refinement.Count; i++) max += SumSave.crt_zs.crt_Refinement[i];
+        dec += "\n当前可获取最大永久属性 " + max + " / " + SumSave.crt_zs.zs_Refinement_max;
+        dec += "\n炼体加成\n";
+        for (int i = 0; i < Enum.GetNames(typeof(Refinement_type)).Length; i++)
+        {
+            int value = i < SumSave.crt_zs.crt_Refinement.Count ? SumSave.crt_zs.crt_Refinement[i] : 0;
+            switch ((Refinement_type)(i))
+            {
+                case Refinement_type.生命值:
+                    value = value * 10;
+                    break;
+                case Refinement_type.魔法值:
+                    value = value * 10;
+                    break;
+                case Refinement_type.物理防御:
+                    break;
+                case Refinement_type.魔法防御:
+                    break;
+                case Refinement_type.攻击:
+                    break;
+                case Refinement_type.每秒回血:
+                    break;
+                case Refinement_type.每秒回蓝:
+                    break;
+                case Refinement_type.真实伤害:
+                    break;
+                case Refinement_type.吸收伤害:
+                    break;
+            }
+            dec += Show_Color.Set_String((Refinement_type)(i) + " + " + value + "", GameColors.ManaBar);
+            dec += "\n";
+        }
+        info.text = dec;
+    }
+    /// <summary>
+    /// 炼药
+    /// </summary>
+    private void medicineinit()
+    {
+        string dec = "";
+        dec += "炼药成功率100%\n获得永久属性概率1%";
+        int max = 0;
+        for (int i = 0; i < SumSave.crt_zs.crt_medicine.Count; i++) max+= SumSave.crt_zs.crt_medicine[i];
+        dec += "\n当前可获取最大永久属性 " + max + " / " + SumSave.crt_zs.zs_medicine_max;
+        dec += "\n炼药加成\n";
+        for (int i = 0; i < Enum.GetNames(typeof(medicine_type)).Length; i++)
+        {
+            string value = (i < SumSave.crt_zs.crt_medicine.Count ? SumSave.crt_zs.crt_medicine[i] : 0) + "";
+            switch ((medicine_type)(i))
+            {
+                case medicine_type.命中:
+                    break;
+                case medicine_type.闪避:
+                    break;
+                case medicine_type.生命属性:
+                case medicine_type.魔法属性:
+                case medicine_type.防御属性:
+                case medicine_type.魔防属性:
+                case medicine_type.物攻属性:
+                case medicine_type.魔攻属性:
+                case medicine_type.道攻属性:
+                case medicine_type.暴击属性:
+                case medicine_type.暴击伤害:
+                case medicine_type.怪物爆率:
+                    if ((medicine_type)(i) == medicine_type.暴击伤害)
+                    { 
+                        value=(int.Parse(value) * 10+"");
+                    }
+                    value += "%";
+                    break;
+                case medicine_type.怪物刷新个数:
+                    value += "个";
+                    break;
+            }
+            dec += Show_Color.Set_String((medicine_type)(i) + " + " + value + "", GameColors.ManaBar);
+            dec+= "\n";
+        }
+        info.text = dec;
+    }
+
+    private void InitBtn()
+    {
+        ClearObject(m_btn_brom);
+        int max = Mathf.Min(Enum.GetNames(typeof(zs_unit)).Length, SumSave.crtHero.zs_lv == 2 ? 3 : SumSave.crtHero.zs_lv);
+        for (int i = 0; i < max; i++)
+        {
+            btn_item item = Instantiate(btn_item_prefab, m_btn_brom);
+            item.Show(i, (zs_unit)(i));
+            item.GetComponent<Button>().onClick.AddListener(() => { SelectJob(item); });
+            if(i== 0) SelectJob(item);
+        }
+    }
+
+    private void SelectJob(btn_item item)
+    {
+        crt_zs_unit = (zs_unit)item.index;
+        switch ((zs_unit)item.index)
+        {
+            case zs_unit.转生:
+                init();
+                break;
+            case zs_unit.炼药:
+                medicineinit();
+                break;
+            case zs_unit.炼体:
+                RefinementInit();
+                break;
+            case zs_unit.炼气:
+                break;
+            case zs_unit.炼神:
+                break;
+        }
+    }
+
+
 
     /// <summary>
     /// 转生
     /// </summary>
     private void ResetTalent()
     {
+        switch (crt_zs_unit)
+        { 
+           case zs_unit.转生:
+                confirm_zs();
+                break;
+           case zs_unit.炼药:
+                confirm_medicine();
+                break;
+           case zs_unit.炼体:
+                confirm_refinement();
+                break;
+        }
+    }
+    /// <summary>
+    /// 转生
+    /// </summary>
+    private void confirm_zs()
+    {
+        for (int i = 0; i < SumSave.db_reincarnation_list.Count; i++)
+        {
+            if (SumSave.db_reincarnation_list[i].reincarnation_lv == SumSave.crtHero.zs_lv)
+            {
+                db_reincarnation_vo vo = SumSave.db_reincarnation_list[i];
+                if (SumSave.crtHero.lv >= vo.need_lv)
+                {
+                    int base_lv = Mathf.Min(vo.need_maxLv, SumSave.crtHero.lv);
+                    int value = base_lv - vo.need_lv;
+                    int refinement = (vo.result_maxRefinement - vo.result_minRefinement) * value / (vo.need_maxLv - vo.need_lv) + vo.result_minRefinement;
+                    if (refinement > vo.result_maxRefinement) refinement = vo.result_maxRefinement;
+                    int medicine = (vo.result_maxmedicine - vo.result_minmedicine) * value / (vo.need_maxLv - vo.need_lv) + vo.result_minmedicine;
+                    if (medicine > vo.result_maxmedicine) medicine = vo.result_maxmedicine;
+                    Alert.Show("转生收益", "当前等级转生可获得\n炼体上限 " + refinement + "\n炼药上限" + medicine, Confirm_zs);
+                }else Alert_Dec.Show("等级不足");
+            }
+        }
 
+    }
+
+    private void Confirm_zs(object arg0)
+    {
+        for (int i = 0; i < SumSave.db_reincarnation_list.Count; i++)
+        {
+            if (SumSave.db_reincarnation_list[i].reincarnation_lv == SumSave.crtHero.zs_lv)
+            {
+                db_reincarnation_vo vo = SumSave.db_reincarnation_list[i];
+                if (SumSave.crtHero.lv >= vo.need_lv)
+                {
+                    Clear_Condition();
+                    for (int j = 0; j < vo.reincarnation_need.Count; j++)
+                    {
+                        List<string> need = ArrayHelper.Get_Split<string>(vo.reincarnation_need[j], ' ');
+                        if (need.Count == 3)
+                        {
+                            switch (int.Parse(need[0]))
+                            {
+                                case 1://需要等级
+                                    break;
+                                case 2://需要需求
+                                    Need_Condition(need[1], int.Parse(need[2]));
+                                    break;
+                                case 3://需要技能
+                                    Need_Condition((currency_unit)int.Parse(need[1]), int.Parse(need[2]));
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                    //转生
+                    if (Return_Condition())
+                    {
+                        int base_lv = Mathf.Min(vo.need_maxLv, SumSave.crtHero.lv);
+                        int value = base_lv - vo.need_lv;
+                        int refinement = (vo.result_maxRefinement - vo.result_minRefinement) * value / (vo.need_maxLv - vo.need_lv) + vo.result_minRefinement;
+                        if (refinement > vo.result_maxRefinement) refinement = vo.result_maxRefinement;
+                        int medicine = (vo.result_maxmedicine - vo.result_minmedicine) * value / (vo.need_maxLv - vo.need_lv) + vo.result_minmedicine;
+                        if (medicine > vo.result_maxmedicine) medicine = vo.result_maxmedicine;
+                        SumSave.crt_zs.zs_medicine_max += medicine;
+                        SumSave.crt_zs.zs_Refinement_max += refinement;
+                        SumSave.crt_zs.MysqlData();
+                        SumSave.crtHero.zs_lv++;
+                        SumSave.crtHero.lv = 30;
+                        SendNotification(NotiList.Refresh_Max_Hero_Attribute);
+                        SumSave.crtHero.MysqlData();
+                        UI_Manager.I.GetPanel<PanelMian>().Show();
+                        Alert_Dec.Show("转生成功");
+                        Alert_Dec.Show("开启炼药成功");
+                        Alert_Dec.Show("开启炼体成功");
+                    }
+                    else Alert_Dec.Show("转生失败");
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 强化炼体
+    /// </summary>
+    private void confirm_refinement()
+    {
+        int max = 0;
+        for (int i = 0; i < SumSave.crt_zs.crt_Refinement.Count; i++) max += SumSave.crt_zs.crt_Refinement[i];
+        string dec = "";
+        int number = (max / 20 + 1) * 10;
+        dec += "强化锻体需要\n" + number + "黑铁矿石" + "\n" + (number * 2) + "金条";
+        if (max < SumSave.crt_zs.zs_medicine_max)
+        {
+            Alert.Show(crt_zs_unit.ToString(), dec, Confirm_refinement, number); 
+
+        }
+        else { Alert_Dec.Show("当前属性已满"); };
+    }
+    /// <summary>
+    /// 确认强化锻体
+    /// </summary>
+    /// <param name="arg0"></param>
+    private void Confirm_refinement(object arg0)
+    {
+        int number= (int)arg0;
+        Clear_Condition();
+        Need_Condition(common_items_list.金条, number * 2);
+        Need_Condition(common_items_list.黑铁矿石, number);
+        if (Return_Condition())
+        {
+            Refinement_type item = EnumExtensions.GetRandomEnum<Refinement_type>();
+            while ((int)item >= SumSave.crt_zs.crt_Refinement.Count)
+            {
+                SumSave.crt_zs.crt_Refinement.Add(0);
+            }
+            SumSave.crt_zs.crt_Refinement[(int)item]++;
+            SumSave.crt_zs.crt_Refinement[(int)item] = (int)MathF.Min(SumSave.crt_zs.zs_Refinement_max / 4, SumSave.crt_zs.crt_Refinement[(int)item]);
+            Alert_Dec.Show("恭喜获得永久属性 " + item);
+            SumSave.crt_zs.MysqlData();
+            RefinementInit();
+        }
+        else
+        {
+            Alert_Dec.Show("条件不足");
+        }
+    }
+
+    /// <summary>
+    /// 强化炼药
+    /// </summary>
+    private void confirm_medicine()
+    {
+        int max = 0;
+        for (int i = 0; i < SumSave.crt_zs.crt_medicine.Count; i++) max += SumSave.crt_zs.crt_medicine[i];
+        string dec = "";
+        dec += "炼药需要" + common_items_list.人参 + " * 10" + "\n" + common_items_list.金条 + " * 1";
+        Alert.Show(crt_zs_unit.ToString(), dec, Confirm_medicine, max);
+       
+    }
+
+    private void Confirm_medicine(object arg0)
+    {
+        int max = (int)arg0;
+        SumSave.crt_zs.medicine_exp++;
+        bool eixst=true;
+        Clear_Condition();
+        Need_Condition(common_items_list.人参, 10);
+        Need_Condition(common_items_list.金条, 1);
+        if (!Return_Condition())
+        {
+            Alert_Dec.Show("条件不足");
+            return;
+        }
+        if (max < SumSave.crt_zs.zs_medicine_max)
+        {
+            if (Random.Range(0, 100) < 1)
+            {
+                eixst = false;
+                //成功
+                medicine_type item = EnumExtensions.GetRandomEnum<medicine_type>();
+                while ((int)item >= SumSave.crt_zs.crt_medicine.Count)
+                {
+                    SumSave.crt_zs.crt_medicine.Add(0);
+                }
+                if (item == medicine_type.怪物刷新个数)
+                {
+                    item = medicine_type.命中;
+                }
+                SumSave.crt_zs.crt_medicine[(int)item]++;
+                Alert_Dec.Show("恭喜获得永久属性 " + item);
+                medicineinit();
+            }
+        }
+        if (eixst)
+        {
+            List<Bag_Base_VO> list = ArrayHelper.FindAll(SumSave.db_stditems, e => e.StdMode == Stditem_StdMode_List.消耗品.ToString());
+            Bag_Base_VO item = list[Random.Range(0, list.Count)];
+            ObscuredInt number = 100;
+            ObscuredInt random = Random.Range(1, 1000);
+            ObscuredInt maxnumber = number + Random.Range(1, 1000);
+            Alert_Dec.Show("恭喜获得 " + item.Name + " * " + number);
+            Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, item.Name, new ObscuredInt[] { number + random, random }), maxnumber);
+        }
+        SumSave.crt_zs.MysqlData();
     }
 
     private void Hide()

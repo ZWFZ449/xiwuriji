@@ -14,12 +14,23 @@ using Random = UnityEngine.Random;
 public class offect_buff : Base_Mono
 {
 
+    private Transform m_btn;
+
+    private btn_item btn_item_prefab;
 
     private Button rechargeGift, buff_exp;
 
     private TMP_Text info;
 
     private input_offect input_offect_prefab, crt_input_offect;
+    /// <summary>
+    /// 当前buff
+    /// </summary>
+    private common_Buff crt_buff;
+    /// <summary>
+    /// buff列表
+    /// </summary>
+    List<common_Buff> buffs = new List<common_Buff>();
 
     private void Awake()
     {
@@ -29,6 +40,37 @@ public class offect_buff : Base_Mono
         buff_exp.onClick.AddListener(OnBuffExp);
         info = Find<TMP_Text>("other_buff/info");
         input_offect_prefab = Tool_UI.Find_Prefabs<input_offect>("input_offect");
+        btn_item_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
+        m_btn = Find<Transform>("Scroll View/Viewport/Content");
+        Init_btn();
+    }
+    private void Init_btn()
+    {
+        buffs.Add(common_Buff.双倍经验卷轴);
+        buffs.Add(common_Buff.增量卷轴);
+        buffs.Add(common_Buff.减量卷轴);
+        ClearObject(m_btn);
+        for (int i = 0; i < buffs.Count; i++)
+        { 
+            btn_item item = Instantiate(btn_item_prefab, m_btn);
+            item.Show(i, buffs[i]);
+            item.GetComponent<Button>().onClick.AddListener(() => { OnClickBuff(item); });
+        }
+    }
+    /// <summary>
+    /// 点击buff
+    /// </summary>
+    /// <param name="buff"></param>
+    private void OnClickBuff(btn_item item)
+    {
+        crt_buff = buffs[item.index];
+        if (crt_input_offect == null)
+        {
+            crt_input_offect = Instantiate(input_offect_prefab, transform);
+            crt_input_offect.GetConfirm.onClick.AddListener(() => { confirm(); });
+        }
+        crt_input_offect.gameObject.SetActive(true);
+        crt_input_offect.Init("激活"+ crt_buff, "请输入数量"); //common_items_list.双倍经验卷轴
     }
 
     private void OnBuffExp()
@@ -56,11 +98,11 @@ public class offect_buff : Base_Mono
                     return;
                 }
                 Clear_Condition();
-                Need_Condition(common_Buff.双倍经验卷轴, number); 
+                Need_Condition(crt_buff, number); 
                 if (Return_Condition())
                 {
                     // 激活buff
-                    SumSave.crt_user_unit.AddBuff(common_Buff.双倍经验卷轴.ToString(), Tool_UI.ToStandardFormat(SumSave.nowtime), number);
+                    SumSave.crt_user_unit.AddBuff(crt_buff.ToString(), Tool_UI.ToStandardFormat(SumSave.nowtime), number);
                     SendNotification(NotiList.Refresh_Max_Hero_Attribute);
                     Alert_Dec.Show("激活成功");
                     Init();

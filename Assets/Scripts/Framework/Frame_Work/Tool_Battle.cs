@@ -2,9 +2,7 @@ using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using MVC;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -25,6 +23,8 @@ public static class Tool_Battle
     private static List<enum_equip_entry_list> entry_inscription_list;
 
     private static List<WeightedItem> equip_eighteditems = new List<WeightedItem>();
+
+    private static List<WeightedItem> talent_eighteditems = new List<WeightedItem>();
     /// <summary>
     /// 获取属性
     /// </summary>
@@ -39,7 +39,7 @@ public static class Tool_Battle
         ObscuredInt hpRegen = 0, mpRegen = 0;
         ObscuredInt lucky = 0, damage_reduction=0,magic_damage_reduction=0;
         Dictionary<enum_equip_entry_list, int> buffList = new Dictionary<enum_equip_entry_list, int>();
-        List<(enum_battle_pet_talent_list, ObscuredInt, ObscuredInt)> talentList = new List<(enum_battle_pet_talent_list, ObscuredInt, ObscuredInt)>();
+        List<(enum_battle_pet_talent_list, float, float)> talentList = new List<(enum_battle_pet_talent_list, float, float)>();
         Dictionary<int, int> suits = new Dictionary<int, int>();//套装
         int speed_bonus = 1;
         if (SumSave.crtHero.job != 1) speed_bonus = 2;
@@ -183,6 +183,9 @@ public static class Tool_Battle
 
         }//角色天赋
         List<Bag_Base_VO> crt_euqip = SumSave.crt_equips.Get(Dream_User_Equip_Type.装备);
+        int zl = SumSave.crtHero.zs_lv - 1;//转生等级
+        for (int i = 0; i < SumSave.db_pet_talents.Count; i++) SumSave.db_pet_talents[i].pet_up_lv = -1;
+        Dictionary<int, int> pet_talents = new Dictionary<int, int>();//皇权加成
         for (int i = 0; i < crt_euqip.Count; i++)  
         {
             switch ((Hero_Type)SumSave.crtHero.job)
@@ -192,30 +195,30 @@ public static class Tool_Battle
                     mp += crt_euqip[i].mp;
                     break;
                 case Hero_Type.战士:
-                    hp += (ObscuredInt)(crt_euqip[i].hp * 1.8);
-                    mp += (ObscuredInt)(crt_euqip[i].mp * 0.5);
+                    hp += (ObscuredInt)(crt_euqip[i].hp * (1.8 + (zl * 0.3)));
+                    mp += (ObscuredInt)(crt_euqip[i].mp * 0.5 + (zl * 0.1));
                     break;
                 case Hero_Type.法师:
-                    hp += (ObscuredInt)(crt_euqip[i].hp * 0.5);
-                    mp += (ObscuredInt)(crt_euqip[i].mp * 1.8);
+                    hp += (ObscuredInt)(crt_euqip[i].hp * 0.5 + (zl * 0.1));
+                    mp += (ObscuredInt)(crt_euqip[i].mp * 1.8 + (zl * 0.3));
                     break;
                 case Hero_Type.道士:
-                    hp += (ObscuredInt)(crt_euqip[i].hp * 1.2);
-                    mp += (ObscuredInt)(crt_euqip[i].mp * 1.2);
+                    hp += (ObscuredInt)(crt_euqip[i].hp * 1.2 + (zl * 0.2));
+                    mp += (ObscuredInt)(crt_euqip[i].mp * 1.2 + (zl * 0.2));
                     break;
                 default:
                     break;
             }
             dc += crt_euqip[i].dc;
-            dc2 += crt_euqip[i].dc2;
+            dc2 += crt_euqip[i].dc2 + (crt_euqip[i].dc2 > 0 ? crt_euqip[i].need_lv / 15 * zl +1: 0);
             mac += crt_euqip[i].mac;
-            mac2 += crt_euqip[i].mac2;
+            mac2 += crt_euqip[i].mac2 + (crt_euqip[i].mac2 > 0 ? crt_euqip[i].need_lv / 15 * zl+1 : 0);
             ac += crt_euqip[i].ac;
-            ac2 += crt_euqip[i].ac2;
+            ac2 += crt_euqip[i].ac2 + (crt_euqip[i].ac2 > 0 ? crt_euqip[i].need_lv / 10 * zl+1 : 0);
             sc += crt_euqip[i].sc;
-            sc2 += crt_euqip[i].sc2;
+            sc2 += crt_euqip[i].sc2 + (crt_euqip[i].sc2 > 0 ? crt_euqip[i].need_lv / 10 * zl+1 : 0);
             mc += crt_euqip[i].mc;
-            mc2 += crt_euqip[i].mc2;
+            mc2 += crt_euqip[i].mc2 + (crt_euqip[i].mc2 > 0 ? crt_euqip[i].need_lv / 10 * zl+1 : 0);
             if (crt_euqip[i].suit > 0)
             { 
                 if (!suits.ContainsKey(crt_euqip[i].suit)) suits.Add(crt_euqip[i].suit, 0);
@@ -223,9 +226,12 @@ public static class Tool_Battle
             }
             string[] info = crt_euqip[i].user_value.Split(' ');
             int strengthenlv = int.Parse(info[1]);
-            if (strengthenlv > 1 && (crt_euqip[i].StdMode == equip_type_list.武器.ToString() || crt_euqip[i].StdMode == equip_type_list.项链.ToString()))
+            int equiplucky = strengthenlv % 10;
+            int equip_level = strengthenlv / 10;//强化等级
+            //强化逻辑
+            if (equiplucky > 1 && (crt_euqip[i].StdMode == equip_type_list.武器.ToString() || crt_euqip[i].StdMode == equip_type_list.项链.ToString()))
             {
-                lucky += strengthenlv - 1; 
+                lucky += equiplucky - 1; 
             }
             if (info.Length >= 5)
             {
@@ -306,6 +312,14 @@ public static class Tool_Battle
                                     default:
                                         if ((int)e >= 1000)//附加技能
                                         {
+                                            if ((int)e >= 2000)
+                                            {
+                                                if (!pet_talents.ContainsKey((int)e - 2000))
+                                                { 
+                                                    pet_talents.Add((int)e - 2000, 0);
+                                                }
+                                                pet_talents[(int)e - 2000] += value;
+                                            }else
                                             AddEquipSkillBuff((int)e - 1000, skill_list, value);
                                         }
                                         break;
@@ -576,24 +590,11 @@ public static class Tool_Battle
                 }
             }
         }
-        
         foreach (var item in skill_list)
         {
             ObscuredInt skill_lv = item.Value.SetLv(); 
             if (skill_lv >= 0 && item.Value.Job != -1)
             {
-                //if (item.Value.Job == -1)
-                //{
-                //    foreach (var item1 in item.Value.GetBuff.Keys)
-                //    {
-                //        switch (item1)
-                //        {
-                //            case enum_talent_offect_list.弹道:
-                //                skill_lv += item.Value.GetBuff[item1];
-                //                break;
-                //        }
-                //    }
-                //}
                 if (item.Value.skill_offect_value_list.Count > 0)
                 {
                     foreach (enum_equip_entry_list skill_effect_type in item.Value.skill_offect_value_list.Keys)
@@ -746,7 +747,136 @@ public static class Tool_Battle
                 }
             }
         }
+        //转生加成
+        for (int i = 0; i < SumSave.db_reincarnation_list.Count; i++)
+        {
+            if (SumSave.db_reincarnation_list[i].reincarnation_lv == SumSave.crtHero.zs_lv-1)
+            {
+                db_reincarnation_vo vo = SumSave.db_reincarnation_list[i];
+                for (int j = 0; j < vo.reincarnation_cost.Count; j++)
+                {
+                    enum_equip_entry_list e = vo.reincarnation_cost[j].Item1;
+                    int value = vo.reincarnation_cost[j].Item2; 
+                    switch (e)
+                    {
+                        case enum_equip_entry_list.生命值: hp += value; break;
+                        case enum_equip_entry_list.魔法值: mp += value; break;
+                        case enum_equip_entry_list.物理防御: ac2 += value; break;
+                        case enum_equip_entry_list.魔法防御: mac2 += value; break;
+                        case enum_equip_entry_list.物理攻击: dc2 += value; break;
+                        case enum_equip_entry_list.魔法攻击: mc2 += value; break;
+                        case enum_equip_entry_list.道术攻击: sc2 += value; break;
 
+                        case enum_equip_entry_list.每秒回血: hpRegen += value; break;
+                        case enum_equip_entry_list.每秒回蓝: mpRegen += value; break;
+                        case enum_equip_entry_list.真实伤害: battle_Damage += value; break;
+                        case enum_equip_entry_list.吸收伤害: battle_def += value; break;
+                        case enum_equip_entry_list.物理下防: ac += value; break;
+                        case enum_equip_entry_list.魔法下防: mac += value; break;
+                        case enum_equip_entry_list.物理下攻: dc += value; break;
+                        case enum_equip_entry_list.魔法下攻: mc += value; break;
+                        case enum_equip_entry_list.道术下攻: sc += value; break;
+
+                        case enum_equip_entry_list.生命属性: battle_hp += value; break;
+                        case enum_equip_entry_list.魔法属性: battle_mp += value; break;
+                        case enum_equip_entry_list.防御属性: battle_ac += value; break;
+                        case enum_equip_entry_list.魔防属性: battle_mac += value; break;
+                        case enum_equip_entry_list.物攻属性: battle_dc += value; break;
+                        case enum_equip_entry_list.魔攻属性: battle_mc += value; break;
+                        case enum_equip_entry_list.道攻属性: battle_sc += value; break;
+                        case enum_equip_entry_list.攻击速度: battle_speed -= (value * speed_bonus); break;
+                        case enum_equip_entry_list.攻击范围: battle_range += value; break;
+                        case enum_equip_entry_list.暴击属性: crit += value; break;
+                        case enum_equip_entry_list.暴击伤害: critDmg += value; break; 
+                        case enum_equip_entry_list.幸运: lucky += value; break;
+                        case enum_equip_entry_list.闪避: dodge += value; break;
+                        case enum_equip_entry_list.命中: hit += value; break;
+                        case enum_equip_entry_list.物伤减免: damage_reduction += value; break;
+                        case enum_equip_entry_list.魔伤减免: magic_damage_reduction += value; break;
+                        case enum_equip_entry_list.怪物爆率: drop_bonus += value; break;
+                        case enum_equip_entry_list.极品爆率: quality_bonus += value; break;
+                        case enum_equip_entry_list.经验加成: exp_bonus += value; break;
+                        case enum_equip_entry_list.金币掉落: gold_bonus += value; break;
+                        default:
+                            break;
+                    }
+
+                }
+            }
+        }
+        //炼体炼药
+        if (zl > 0)
+        {
+            for (int i = 0; i < Enum.GetNames(typeof(Refinement_type)).Length; i++)
+            {
+                int value = i < SumSave.crt_zs.crt_Refinement.Count ? SumSave.crt_zs.crt_Refinement[i] : 0;
+                switch ((Refinement_type)(i))
+                {
+                    case Refinement_type.生命值:
+                        hp+= value * 10;
+                        break;
+                    case Refinement_type.魔法值:
+                        mp += value * 10;
+                        break;
+                    case Refinement_type.物理防御:
+                        ac += value;ac2+= value;
+                        break;
+                    case Refinement_type.魔法防御:
+                        mac += value; mac2 += value;
+                        break;
+                    case Refinement_type.攻击:
+                        sc2+= value;mc2+= value;dc2 += value;
+                        break;
+                    case Refinement_type.每秒回血:
+                        hpRegen += value;
+                        break;
+                    case Refinement_type.每秒回蓝:
+                        mpRegen += value;
+                        break;
+                    case Refinement_type.真实伤害:
+                        battle_Damage += value;
+                        break;
+                    case Refinement_type.吸收伤害:
+                        battle_def += value;
+                        break;
+                }
+            }
+            for (int i = 0; i < Enum.GetNames(typeof(medicine_type)).Length; i++)
+            {
+                int value = (i < SumSave.crt_zs.crt_medicine.Count ? SumSave.crt_zs.crt_medicine[i] : 0);
+                switch ((medicine_type)(i))
+                {
+                    case medicine_type.命中:
+                        hit += value;
+                        break;
+                    case medicine_type.闪避:
+                        dodge += value;
+                        break;
+                    case medicine_type.生命属性:
+                        battle_hp += value; break;
+                    case medicine_type.魔法属性:
+                        battle_mp += value; break;
+                    case medicine_type.防御属性:
+                        battle_ac += value; break;
+                    case medicine_type.魔防属性:
+                        battle_mac += value; break;
+                    case medicine_type.物攻属性:
+                        battle_dc += value; break;
+                    case medicine_type.魔攻属性:
+                        battle_mc += value; break;
+                    case medicine_type.道攻属性:
+                        battle_sc += value; break;
+                    case medicine_type.暴击属性:
+                        crit += value; break;
+                    case medicine_type.暴击伤害:
+                        critDmg += value * 10; break;
+                    case medicine_type.怪物爆率:
+                        drop_bonus += value; break;
+                    case medicine_type.怪物刷新个数:
+                        break;
+                }
+            }
+        }
         //宠物加成
         db_pet_vo pet = SumSave.crt_pet.GetPet;
         if (pet != null)
@@ -756,9 +886,20 @@ public static class Tool_Battle
             dc += 1;
             mc += 1;
             sc += 1;
-            (ObscuredInt,ObscuredInt,ObscuredInt,ObscuredInt,ObscuredInt) pet_attr = pet.GetCrtAttr;
-            (ObscuredInt, ObscuredInt, ObscuredInt, ObscuredInt, ObscuredInt) pet_add_attr = pet.GetAddAttr;
+            (int, int, int, int, int) pet_attr = pet.GetCrtAttr;
+            (int, int, int, int, int) pet_add_attr = pet.GetAddAttr;
             List<db_pet_talent_vo> talent_list = pet.GetCrtTalent;
+            foreach (var item in pet_talents)
+            {
+                for (int i = 0; i < talent_list.Count; i++)
+                {
+                    if (item.Key == talent_list[i].pet_talent_id)
+                    {
+                        talent_list[i].pet_up_lv = item.Value;//皇权赋值
+                    }
+                }
+            }
+
             Bag_Base_VO bag = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == pet.pet_name);
             ac2 += bag.ac2 + pet_attr.Item1 + pet_add_attr.Item1;
             mac2 += bag.mac2 + pet_attr.Item2 + pet_add_attr.Item2;
@@ -767,31 +908,35 @@ public static class Tool_Battle
             sc2 += bag.sc2 + pet_attr.Item5 + pet_add_attr.Item5;
             foreach (var talent in talent_list)
             {
-                (enum_battle_pet_talent_list, ObscuredInt, ObscuredInt) D = (enum_battle_pet_talent_list.任意门, 0, 0);
-                ObscuredInt lv = (ObscuredInt)MathF.Min(60, SumSave.crtHero.lv);
+                (enum_battle_pet_talent_list, float, float) D = (enum_battle_pet_talent_list.任意门, 0, 0);
+                int lv = (int)MathF.Min(60, SumSave.crtHero.lv);
+                float pet_up_offect_value = 0;
+                int talent_lv = Mathf.Min(talent.pet_up_lv, talent.pet_up_offect.Count - 1);
+                if (talent.pet_up_lv >= 0)
+                    pet_up_offect_value = talent.pet_up_offect[talent_lv];
                 switch (talent.pet_talent_type)
                 {
                     
                     case 3:
                         switch ((talent.pet_talent_offect))
                         {
-                            case 1: battle_hp+=(ObscuredInt)(talent.pet_talent_offectvalue) ; break;
+                            case 1: battle_hp += (int)(talent.pet_talent_offectvalue + pet_up_offect_value); break;
                             case 2:
-                                dc2+= (ObscuredInt)(talent.pet_talent_offectvalue * lv);
-                                mc2 += (ObscuredInt)(talent.pet_talent_offectvalue * lv);
-                                sc2 += (ObscuredInt)(talent.pet_talent_offectvalue * lv); break;
-                           case 3: D = new (enum_battle_pet_talent_list.任意门, talent.pet_talent_offecttype,1);
+                                dc2 += (int)((talent.pet_talent_offectvalue + pet_up_offect_value) * lv);
+                                mc2 += (int)((talent.pet_talent_offectvalue + pet_up_offect_value) * lv);
+                                sc2 += (int)((talent.pet_talent_offectvalue + pet_up_offect_value) * lv); break;
+                           case 3: D = new(enum_battle_pet_talent_list.任意门, talent.pet_talent_offecttype, 1 + pet_up_offect_value);
                                 if(!talentList.Contains(D)) talentList.Add(D); break;
                             case 4:
-                                 D = (enum_battle_pet_talent_list.嗜血追击, talent.pet_talent_offecttype, 10);
+                                D = (enum_battle_pet_talent_list.嗜血追击, talent.pet_talent_offecttype, talent.pet_talent_offectvalue - pet_up_offect_value);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
-                            case 5: D = (enum_battle_pet_talent_list.破壁一击, talent.pet_talent_offecttype, 100);
+                            case 5: D = (enum_battle_pet_talent_list.破壁一击, talent.pet_talent_offecttype + pet_up_offect_value, talent.pet_talent_offectvalue);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
-                            case 6: D = (enum_battle_pet_talent_list.华山斩, talent.pet_talent_offecttype, 10);
+                            case 6: D = (enum_battle_pet_talent_list.华山斩, talent.pet_talent_offecttype, talent.pet_talent_offectvalue + pet_up_offect_value);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
                             case 7: D = (enum_battle_pet_talent_list.斩杀, talent.pet_talent_offecttype, 10);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
-                            case 8: D = (enum_battle_pet_talent_list.连击效果, talent.pet_talent_offecttype, 100);
+                            case 8: D = (enum_battle_pet_talent_list.连击效果, talent.pet_talent_offecttype, talent.pet_talent_offectvalue + pet_up_offect_value);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
                         }
                         break;
@@ -800,23 +945,23 @@ public static class Tool_Battle
                         {
 
                             case 1:
-                                battle_dc+= (ObscuredInt)(talent.pet_talent_offectvalue); break;
+                                battle_dc+= (ObscuredInt)(talent.pet_talent_offectvalue+pet_up_offect_value); break;
                             case 2: 
-                                battle_mc+= (ObscuredInt)(talent.pet_talent_offectvalue); break;
+                                battle_mc+= (ObscuredInt)(talent.pet_talent_offectvalue + pet_up_offect_value); break;
                             //case 3: dec += "召唤兽伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
                             case 4:
-                                ac2+= (ObscuredInt)(talent.pet_talent_offectvalue * lv);break;
+                                ac2+= (ObscuredInt)((talent.pet_talent_offectvalue + pet_up_offect_value) * lv);break;
                             case 5: 
-                                mac2+= (ObscuredInt)(talent.pet_talent_offectvalue * lv); break;
+                                mac2+= (ObscuredInt)((talent.pet_talent_offectvalue + pet_up_offect_value )* lv); break;
                             case 6:
-                                hpRegen += (ObscuredInt)(talent.pet_talent_offectvalue * lv); break;
+                                hpRegen += (ObscuredInt)((talent.pet_talent_offectvalue + pet_up_offect_value) * lv); break;
                             case 7: 
-                                mpRegen += (ObscuredInt)(talent.pet_talent_offectvalue * lv); break;
+                                mpRegen += (ObscuredInt)((talent.pet_talent_offectvalue + pet_up_offect_value) * lv); break;
                             case 8:
-                                damage_reduction+= (ObscuredInt)(talent.pet_talent_offectvalue); break;
+                                damage_reduction+= (ObscuredInt)(talent.pet_talent_offectvalue + pet_up_offect_value); break;
                             case 9:
-                                magic_damage_reduction += (ObscuredInt)(talent.pet_talent_offectvalue); break;
-                            case 11: dodge +=(ObscuredInt)(talent.pet_talent_offectvalue) ; break;
+                                magic_damage_reduction += (ObscuredInt)(talent.pet_talent_offectvalue + pet_up_offect_value); break;
+                            case 11: dodge +=(ObscuredInt)(talent.pet_talent_offectvalue + pet_up_offect_value) ; break;
                             default:
                                 break;
                         }
@@ -825,21 +970,21 @@ public static class Tool_Battle
                         switch ((talent.pet_talent_offect))
                         {
                             case 1:
-                                D = ((enum_battle_pet_talent_list)(talent.pet_talent_job + 6), talent.pet_talent_offecttype, (ObscuredInt)talent.pet_talent_offectvalue);
+                                D = ((enum_battle_pet_talent_list)(talent.pet_talent_job + 6), talent.pet_talent_offecttype, (ObscuredInt)talent.pet_talent_offectvalue + pet_up_offect_value);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
                             case 2:
                             case 3:
                             case 4:
-                                D = ((enum_battle_pet_talent_list)(talent.pet_talent_offect + 8), talent.pet_talent_offecttype, (ObscuredInt)talent.pet_talent_offectvalue * lv);
+                                D = ((enum_battle_pet_talent_list)(talent.pet_talent_offect + 8), talent.pet_talent_offecttype, ((ObscuredInt)talent.pet_talent_offectvalue + pet_up_offect_value) * lv);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
                             case 5:
                             case 6: 
                             case 7: 
                             case 8: 
-                                D = ((enum_battle_pet_talent_list)(talent.pet_talent_offect + 8), talent.pet_talent_offecttype, (ObscuredInt)talent.pet_talent_offectvalue);
+                                D = ((enum_battle_pet_talent_list)(talent.pet_talent_offect + 8), talent.pet_talent_offecttype, (ObscuredInt)talent.pet_talent_offectvalue + pet_up_offect_value);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
                             case 10:
-                                D = (enum_battle_pet_talent_list.慧根, talent.pet_talent_offecttype, (ObscuredInt)talent.pet_talent_offectvalue);
+                                D = (enum_battle_pet_talent_list.慧根, talent.pet_talent_offecttype, (ObscuredInt)talent.pet_talent_offectvalue + pet_up_offect_value);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
                         }
                         break;
@@ -849,7 +994,7 @@ public static class Tool_Battle
         if (talentList.Count > 0)
         {
             bool exist = false;
-            foreach (var item in talentList)
+            foreach (var item in talentList)//双星
             {
                 if (item.Item1 == enum_battle_pet_talent_list.连击效果)
                 {
@@ -857,9 +1002,9 @@ public static class Tool_Battle
                     break;
                 } 
             }
-            if (exist)
+            if (exist)//双星效果
             {
-                for (ObscuredInt i = 0; i < talentList.Count; i++)
+                for (int i = 0; i < talentList.Count; i++)
                 {
                     if (talentList[i].Item1 == enum_battle_pet_talent_list.连击 || talentList[i].Item1 == enum_battle_pet_talent_list.法连 || talentList[i].Item1 == enum_battle_pet_talent_list.道连)
                     {
@@ -874,10 +1019,12 @@ public static class Tool_Battle
             exp_bonus += crt_vip.lingzhuIncome;
             gold_bonus += crt_vip.experienceBonus;
             drop_bonus += crt_vip.equipmentExplosionRate;
-            boss_cd += crt_vip.monsterHuntingInterval;
+            boss_cd += crt_vip.monsterHuntingInterval; 
+            int sum = (SumSave.crt_global_gift.GetGiftPoints);
+            quality_bonus += sum / 5000;
         }
         List<(string, string, int)> buffs = SumSave.crt_user_unit.GetBuff;
-        for (ObscuredInt i = 0; i < buffs.Count; i++)
+        for (int i = 0; i < buffs.Count; i++)
         {
             ObscuredInt spanSeconds = Battle_Tool.SettlementTransport(buffs[i].Item2, 3);
             ObscuredInt time = buffs[i].Item3 - spanSeconds;//剩余时间
@@ -951,8 +1098,70 @@ public static class Tool_Battle
             }else
             battle_speed = Mathf.Max(50, battle_speed);
         }
+        //lucky = 8;
         crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky,damage_reduction,magic_damage_reduction,0);
+        return crt;
+    }
+
+    public static crtMaxBattleVO Crate_Monster(crtMaxBattleVO monster)
+    {
+        ObscuredInt exp_bonus = 0, gold_bonus = 0, drop_bonus = 0, quality_bonus = 0;
+        ObscuredInt maxhp = 0, maxmp = 0;
+        ObscuredInt battle_hp = 0, battle_mp = 0, battle_ac = 0, battle_mac = 0, battle_dc = 0, battle_sc = 0, battle_mc = 0, battle_speed = 0, battle_range = 0, battle_Damage = 0, battle_def = 0;
+        ObscuredInt hp = 0, mp = 0, dc = 0, dc2 = 0, mac = 0, mac2 = 0, ac = 0, ac2 = 0, sc = 0, sc2 = 0, mc = 0, mc2 = 0;
+        ObscuredInt hit = 0, dodge = 0, crit = 0, critDmg = 100;
+        ObscuredInt hpRegen = 0, mpRegen = 0;
+        ObscuredInt lucky = 0, damage_reduction = 0, magic_damage_reduction = 0;
+        List<(enum_battle_pet_talent_list, float, float)> talentList = new List<(enum_battle_pet_talent_list, float, float)>();
+        //str += "召唤 " + Show_Color.Set_String(crt_skill.show_name, color_list) + "\n继承" + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + " %属性" + " ", color_list);
+        //if (crt_skill.skill_damages.Count > 0) str += "[召唤兽伤害] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
+        ObscuredInt lv = Mathf.Max(0, SumSave.crtHero.zs_lv - 1);
+        ObscuredInt power = (lv * 500 + 100);
+        maxhp = (ObscuredInt)monster.data.battle_maxhp * (power) / 100;
+        maxmp = 1000;
+        hp = (ObscuredInt)monster.data.battle_maxhp * (power) / 100;
+        mp = 1000;
+        if (lv > 0) power = (lv * 200);
+        ac = (ObscuredInt)monster.data.ac * (power) / 100;
+        ac2 = (ObscuredInt)monster.data.ac2 * (power) / 100;
+        mac = (ObscuredInt)monster.data.mac * (power) / 100;
+        mac2 = (ObscuredInt)monster.data.mac2 * (power) / 100;
+        dc = (ObscuredInt)monster.data.dc * (power) / 100;
+        dc2 = (ObscuredInt)monster.data.dc2 * (power) / 100;
+        sc = (ObscuredInt)monster.data.sc * (power) / 100;
+        sc2 = (ObscuredInt)monster.data.sc2 * (power) / 100;
+        mc = (ObscuredInt)monster.data.mc * (power) / 100;
+        mc2 = (ObscuredInt)monster.data.mc2 * (power) / 100;
+        hit = (ObscuredInt)monster.data.hit * (power) / 100;
+        dodge = (ObscuredInt)monster.data.dodge;
+        crit = (ObscuredInt)monster.data.crit ;
+        critDmg = (ObscuredInt)monster.data.critDmg ;
+        hpRegen = (ObscuredInt)monster.data.hpRegen ;
+        mpRegen = 1000;
+        battle_hp = (ObscuredInt)monster.data.battle_hp * (power) / 100;
+        battle_mp = (ObscuredInt)monster.data.battle_mp * (power) / 100;
+        battle_ac = (ObscuredInt)monster.data.battle_ac * (power) / 100;
+        battle_mac = (ObscuredInt)monster.data.battle_mac * (power) / 100;
+        battle_dc = (ObscuredInt)monster.data.battle_sc * (power) / 100;
+        battle_sc = (ObscuredInt)monster.data.battle_sc * (power) / 100;
+        battle_mc = (ObscuredInt)monster.data.battle_sc * (power) / 100;
+        battle_speed = (ObscuredInt)monster.data.battle_speed;
+        battle_range = (ObscuredInt)monster.data.battle_range;
+        if (lv > 0) battle_range = Random.Range(monster.data.battle_range - 30, monster.data.battle_range + 30);
+         battle_Damage = (ObscuredInt)monster.data.battle_Damage;//真实伤害
+        battle_def = (ObscuredInt)monster.data.battle_def ;
+        damage_reduction = (ObscuredInt)monster.data.damage_reduction * (power) / 100;
+        magic_damage_reduction = (ObscuredInt)monster.data.magic_damage_reduction * (power) / 100;
+        crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus, 0);
+        crt.crt_name = monster.crt_name;
+        crt.lv = monster.lv;
+        crt.exp = monster.exp;
+        crt.hero_type = monster.hero_type;
+        crt.type =  monster.type;
+        //maxhp = 1; hp = 1; maxmp = 1; mp = 1; //测试
+        crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
+            mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky, damage_reduction, magic_damage_reduction, monster.data.move_speed);
         return crt;
     }
 
@@ -994,40 +1203,66 @@ public static class Tool_Battle
         /// 8 连击效果提升
 
         ObscuredInt lv = (ObscuredInt)MathF.Min(SumSave.crtHero.lv, 60);
+        talent.pet_up_lv = Mathf.Min(talent.pet_up_lv, talent.pet_up_offect.Count - 1);
+        int pet_up_lv = talent.pet_up_lv + 1;
         switch (talent.pet_talent_type)
         {
             case 3:
                 switch ((talent.pet_talent_offect))
                 {
-                    case 1: dec += "生命上限 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
+                    case 1: dec += "生命上限 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                            break;
                     case 2:
                         dec += "基础属性\n" + enum_equip_entry_list.物理攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * lv)
                         + "\n" + enum_equip_entry_list.魔法攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * lv)
                         + "\n" + enum_equip_entry_list.道术攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * lv)
-                        + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")");
+                        + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")")
+                        +(talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : "")
+                       ; break;
+                    case 3: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + "随机传送一个敌人"
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 随机传送 " + talent.pet_up_offect[talent.pet_up_lv] + " 敌人", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                        break;
+                    case 4: dec += "击杀后追击另一个目标\n每次触发消耗最大Hp的" + Show_Color.Red(talent.pet_talent_offectvalue+"%")
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: Hp消耗 " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                        break;
+                    case 5: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red("无视防御") + " 效果"
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 概率 + " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                        break;
+                    case 6: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red(" 伤害 * " + talent.pet_talent_offectvalue) + " 效果"
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 伤害 + " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                        break;
+                    case 7: dec += "攻击目标时 当目标血量低于" + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 时 触发 " + Show_Color.Red("斩杀") + " 效果"
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 血量低于 " + (talent.pet_talent_offecttype +talent.pet_up_offect[talent.pet_up_lv] )+ " % 触发", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                        break;
+                    case 8: dec += "连击效果提升 " + Show_Color.Red(talent.pet_talent_offecttype + "%")
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : "");
                         ; break;
-                    case 3: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + "随机传送一个敌人"; break;
-                    case 4: dec += "击杀后追击另一个目标\n每次触发消耗最大Hp的" + Show_Color.Red("10%"); break;
-                    case 5: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red("无视防御") + " 效果"; ; break;
-                    case 6: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red(" 伤害 * " + talent.pet_talent_offectvalue) + " 效果"; break;
-                    case 7: dec += "攻击目标时 当目标血量低于" + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 时 触发 " + Show_Color.Red("斩杀") + " 效果"; break;
-                    case 8: dec += "连击效果提升 " + Show_Color.Red(talent.pet_talent_offecttype + "%"); break;
                 }
                 break;
             case 1:
                 switch ((talent.pet_talent_offect))
                 {
-                    case 1: dec += "物理伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
-                    case 2: dec += "魔法伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
-                    case 3: dec += "召唤兽伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
-                    case 4: dec += "物理防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")"); break;
-                    case 5: dec += "魔法防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")"); ; break;
-                    case 6: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + " Hp" + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")"); ; break;
-                    case 7: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + " Mp" + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")"); ; break;
-                    case 8: dec += "受到物理伤害减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
-                    case 9: dec += "受到魔法伤害减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
-                    case 11: dec += "躲避 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " "; break;
-
+                    case 1: dec += "物理伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                    case 2: dec += "魔法伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                    case 3: dec += "召唤兽伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                    case 4: dec += "物理防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")")
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                    case 5: dec += "魔法防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")")
+                        +(talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                    case 6: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + " Hp" + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")")
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                    case 7: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + " Mp" + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")")
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                    case 8: dec += "受到物理伤害减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
+                             + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 物理伤害减少 " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                    case 9: dec += "受到魔法伤害减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
+                             + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 魔法伤害减少 " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                    case 11: dec += "躲避 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " "
+                             + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 躲避 +" + talent.pet_up_offect[talent.pet_up_lv] + " ", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     default:
                         break;
                 }
@@ -1038,19 +1273,26 @@ public static class Tool_Battle
                     case 1:
                         dec += "攻击目标时 " + Show_Color.Red((Hero_Type)(talent.pet_talent_job)) + " 职业 "
                             //+ (talent.pet_talent_job == 3 ? "(召唤兽)" : "")
-                            + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"; break;
+                            + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                        break;
                     case 2:
                     case 3:
                     case 4:
                         dec += "攻击目标时 " + Show_Color.Red((Hero_Type)(talent.pet_talent_offect - 1)) + " 职业 "
-                            //+ (talent.pet_talent_offect == 4 ? "(召唤兽)" : "")
-                            + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 忽视 " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + " 防御"; break;
+                            + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 忽视 " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + " 防御"
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 5:
-                        dec += "受到伤害时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 反震 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"; break;
-                    case 6: dec += "受到攻击时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 降低 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 暴击概率"; break;
-                    case 7: dec += "受到伤害时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 降低 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"; break;
-                    case 8: dec += "受到攻击时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 反弹 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"; break;
-                    case 10: dec += "技能释放消耗减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"; break;
+                        dec += "受到伤害时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 反震 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 反震 + " + talent.pet_up_offect[talent.pet_up_lv] + " % 伤害", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                    case 6: dec += "受到攻击时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 降低 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 暴击概率"
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 降低 + " + talent.pet_up_offect[talent.pet_up_lv] + " % 暴击概率", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                    case 7: dec += "受到伤害时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 降低 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 降低 + " + talent.pet_up_offect[talent.pet_up_lv] + " % 伤害", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                    case 8: dec += "受到攻击时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 反弹 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 反弹 + " + talent.pet_up_offect[talent.pet_up_lv] + " % 伤害", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                    case 10: dec += "技能释放消耗减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 技能释放消耗减少 + " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                 }
                 break;
             default:
@@ -1105,6 +1347,7 @@ public static class Tool_Battle
         return false;
 
     }
+
     /// <summary>
     /// 初始化vip
     /// </summary>
@@ -1209,7 +1452,7 @@ public static class Tool_Battle
         ObscuredInt hit = 0, dodge = 0, crit = 0, critDmg = 100;
         ObscuredInt hpRegen = 0, mpRegen = 0;
         ObscuredInt lucky = 0, damage_reduction = 0, magic_damage_reduction = 0;
-        List<(enum_battle_pet_talent_list, ObscuredInt, ObscuredInt)> talentList = new List<(enum_battle_pet_talent_list, ObscuredInt, ObscuredInt)>();
+        List<(enum_battle_pet_talent_list, float, float)> talentList = new List<(enum_battle_pet_talent_list, float, float)>();
         //str += "召唤 " + Show_Color.Set_String(crt_skill.show_name, color_list) + "\n继承" + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + " %属性" + " ", color_list);
         //if (crt_skill.skill_damages.Count > 0) str += "[召唤兽伤害] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
         ObscuredInt lv = Mathf.Min(skill.DefPowers.Count - 1, skill.SetLv());
@@ -1315,6 +1558,7 @@ public static class Tool_Battle
         sc2 = sc2 * (100 + battle_sc) / 100;
         mc = mc * (100 + battle_mc) / 100;
         mc2 = mc2 * (100 + battle_mc) / 100;
+        talentList = SumSave.crtMaxBattle.data.buffList;
         crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus, 0);
         crt.crt_name = "召" + skill.show_name;
         crt.lv = skill.SetLv();
@@ -1534,28 +1778,28 @@ public static class Tool_Battle
     深寒文,
     瑶光文,
                * 
-               */
-        entry_inscription_list= new List<enum_equip_entry_list>();
-        entry_inscription_list.Add(enum_equip_entry_list.烈阳文);
-        entry_inscription_list.Add(enum_equip_entry_list.盾护文);
-        entry_inscription_list.Add(enum_equip_entry_list.守月文);
-        entry_inscription_list.Add(enum_equip_entry_list.幽狼文);
-        entry_inscription_list.Add(enum_equip_entry_list.神行文);
-        entry_inscription_list.Add(enum_equip_entry_list.怒目文);
-        entry_inscription_list.Add(enum_equip_entry_list.震火文);
-        entry_inscription_list.Add(enum_equip_entry_list.金刚文);
-        entry_inscription_list.Add(enum_equip_entry_list.大愈文);
-        entry_inscription_list.Add(enum_equip_entry_list.回春文);
-        entry_inscription_list.Add(enum_equip_entry_list.回心文);
-        entry_inscription_list.Add(enum_equip_entry_list.峰芒文);
-        entry_inscription_list.Add(enum_equip_entry_list.破枪文);
-        entry_inscription_list.Add(enum_equip_entry_list.深寒文);
-        entry_inscription_list.Add(enum_equip_entry_list.瑶光文);
-        for (ObscuredInt i = 0; i < SumSave.db_skills.Count; i++)
+        //       */
+        //entry_inscription_list= new List<enum_equip_entry_list>();
+        //entry_inscription_list.Add(enum_equip_entry_list.烈阳文);
+        //entry_inscription_list.Add(enum_equip_entry_list.盾护文);
+        //entry_inscription_list.Add(enum_equip_entry_list.守月文);
+        //entry_inscription_list.Add(enum_equip_entry_list.幽狼文);
+        //entry_inscription_list.Add(enum_equip_entry_list.神行文);
+        //entry_inscription_list.Add(enum_equip_entry_list.怒目文);
+        //entry_inscription_list.Add(enum_equip_entry_list.震火文);
+        //entry_inscription_list.Add(enum_equip_entry_list.金刚文);
+        //entry_inscription_list.Add(enum_equip_entry_list.大愈文);
+        //entry_inscription_list.Add(enum_equip_entry_list.回春文);
+        //entry_inscription_list.Add(enum_equip_entry_list.回心文);
+        //entry_inscription_list.Add(enum_equip_entry_list.峰芒文);
+        //entry_inscription_list.Add(enum_equip_entry_list.破枪文);
+        //entry_inscription_list.Add(enum_equip_entry_list.深寒文);
+        //entry_inscription_list.Add(enum_equip_entry_list.瑶光文);
+        for (int i = 0; i < SumSave.db_skills.Count; i++)
         {
             if (SumSave.db_skills[i].EffectType != 5)//&& SumSave.db_skills[i].EffectType != 6召唤
             {
-                Obtain_Weight(SumSave.db_skills[i].id+1000, SumSave.db_skills[i].Weighted);
+                Obtain_Weight(SumSave.db_skills[i].id + 1000, SumSave.db_skills[i].Weighted, equip_eighteditems);
             }
         }
     } 
@@ -1572,10 +1816,33 @@ public static class Tool_Battle
 
         return int.Parse(selectedItem.prizedraw.ToString());
     }
-    private static void Obtain_Weight(object seed_name, ObscuredInt weight)
+    public static ObscuredInt Equip_talent_eight()
+    {
+        if (talent_eighteditems.Count == 0) Obtain_Init_Entry_talent_eighteditems_list();
+        WeightedRandomPicker picker = new WeightedRandomPicker(talent_eighteditems);
+        // 获取一个概率
+        WeightedItem selectedItem = picker.GetRandomItem();
+
+        return int.Parse(selectedItem.prizedraw.ToString());
+    }
+
+    private static List<int> pet_talents_eighteditems = new List<int> { 5000, 5000, 1000, 100 };
+    /// <summary>
+    /// 获取天赋属性
+    /// </summary>
+    private static void Obtain_Init_Entry_talent_eighteditems_list()
+    {
+        //初始化
+        for (int i = 0; i < SumSave.db_pet_talents.Count; i++)
+        {
+            Obtain_Weight(SumSave.db_pet_talents[i].pet_talent_id + 2000, pet_talents_eighteditems[SumSave.db_pet_talents[i].pet_talent_level], talent_eighteditems);
+        }
+    }
+
+    private static void Obtain_Weight(object seed_name, ObscuredInt weight,List<WeightedItem> eighteditems )
     {
         WeightedItem weightedItem = new WeightedItem(seed_name,weight);
-        equip_eighteditems.Add(weightedItem);
+        eighteditems.Add(weightedItem);
     }
 
     /// <summary>
@@ -1655,7 +1922,7 @@ public static class Tool_Battle
     /// <summary>
     /// 获取权重比例
     /// </summary>
-    private static ObscuredInt[] QualityWeighted = new ObscuredInt[] { 5000, 3000, 2000, 1500, 500, 100, 50, 10, 10, 10 };
+    private static ObscuredInt[] QualityWeighted = new ObscuredInt[] { 500000, 300000, 200000, 150000, 50000, 10000, 1000, 10, 10, 1 };
     /// <summary>
     /// 权重列表
     /// </summary>
@@ -1712,7 +1979,15 @@ public static class Tool_Battle
 #elif UNITY_IPHONE
         
 #endif
-        return int.Parse( selectedItem.prizedraw.ToString());
+        int quality = int.Parse(selectedItem.prizedraw.ToString());
+        if (quality > (int)enum_equip_quality_list.帝器)
+        {
+            if (SumSave.crtHero.zs_lv <= 1)
+            {
+                quality = (int)enum_equip_quality_list.帝器;
+            }
+        }
+        return quality;
     }
     /// <summary>
     /// 获取装备数值
@@ -1763,22 +2038,23 @@ public static class Tool_Battle
                 if (quality > 2)
                 {
                     Obtain_value(dics, Obtain_Enum_list(entry_list));
-                    Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), Random.Range(1, 100) < 30 ? 2 : 1,false, entry_coefficient_list);
+                    Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), false, entry_coefficient_list);
                     if (quality > 3)
                     {
                         Obtain_value(dics, Obtain_Enum_list(entry_list));
                         if (quality > 4)
                         {
                             Obtain_value(dics, Obtain_Enum_list(entry_list));
-                            Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), Random.Range(1, 100) < 30 ? 2 : 1, false, entry_coefficient_list);
+                            Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), false, entry_coefficient_list);
 
                             if (quality > 5)
                             {
                                 Obtain_value(dics, Obtain_Enum_list(entry_list));
-                                if (Random.Range(0, 100) < 10)
+                                if (Random.Range(0, 100) < 10 && quality == 6)
                                 {
                                     dics_3.Add(Equip_Skill_eight());
                                 }
+
                                 if (quality >= 6)
                                 {
                                     if (bag.Name == "新手剑")
@@ -1791,10 +2067,19 @@ public static class Tool_Battle
                                     else
                                     {
                                         Obtain_value(dics, Obtain_Enum_list(entry_list));
-                                        Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), Random.Range(1, 100) < 30 ? 2 : 1, false, entry_coefficient_list);
+                                        Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), false, entry_coefficient_list);
                                         dics_3.Add(Equip_Skill_eight());
                                     }
-                                   
+                                    if (quality >= 7)
+                                    {
+                                        Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), false, entry_coefficient_list);
+
+                                        for (int i = 0; i < 5; i++) Obtain_value(dics, Obtain_Enum_list(entry_list));
+
+                                        int max = MaxValue(3);
+                                        for (int i = 0; i < max; i++) dics_3.Add(Equip_talent_eight());
+                                    }
+
                                 }
                             }
                         }
@@ -1846,10 +2131,22 @@ public static class Tool_Battle
             }
             user_value+= " " + value;
         }
-
         return user_value;
     }
-
+    /// <summary>
+    /// 生成最大值
+    /// </summary>
+    /// <param name="max"></param>
+    /// <returns></returns>
+    private static int MaxValue( int max)
+    {
+        List<int> list = new List<int>() { 1000, 500, 100, 10, 1 };
+        if (max < list.Count)
+        { 
+         list.RemoveRange(max, list.Count - max);
+        }
+        return Obtain_WeightedItem(list);
+    }
     /// <summary>
     /// 创建装备
     /// </summary>

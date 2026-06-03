@@ -17,7 +17,7 @@ public class crtMaxBattleVO
     /// <summary>
     /// 经验值
     /// </summary>
-    public long exp;
+    public ObscuredLong exp;
     /// <summary>
     /// 等级
     /// </summary>
@@ -40,7 +40,18 @@ public class crtMaxBattleVO
     public readonly ObscuredInt  quality_bonus;
 
     public readonly ObscuredInt  boss_cd;
-
+    /// <summary>
+    /// 携带技能
+    /// </summary>
+    public int skill_id;
+    /// <summary>
+    /// 弹道数量
+    /// </summary>
+    public int skill_number;
+    /// <summary>
+    /// 技能等级
+    /// </summary>
+    public int skill_level;
     /// <summary>
     /// 属性
     /// </summary>

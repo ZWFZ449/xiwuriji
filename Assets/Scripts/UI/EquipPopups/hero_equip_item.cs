@@ -353,23 +353,26 @@ public class hero_equip_item : Base_Mono
         Color c = HexToColor("#ffffff");
         Get().Init(("[" + enum_equip_basetype_list.基础属性 + "]"), c);
         float hp_coefficient = 1f, mp_coefficient = 1f;
+        int zl = SumSave.crtHero.zs_lv - 1;//转生等级
+
         switch ((Hero_Type)SumSave.crtHero.job)
         {
+
             case Hero_Type.平民:
                 hp_coefficient = 1f;
                 mp_coefficient = 1f;
                 break;
             case Hero_Type.战士:
-                hp_coefficient = 1.8f;
-                mp_coefficient = 0.5f;
+                hp_coefficient = 1.8f + (zl * 0.3f);
+                mp_coefficient = 0.5f + (zl * 0.1f);
                 break;
             case Hero_Type.法师:
-                hp_coefficient = 0.5f;
-                mp_coefficient = 1.8f;
+                hp_coefficient = 0.5f + (zl * 0.1f);
+                mp_coefficient = 1.8f + (zl * 0.3f);
                 break;
             case Hero_Type.道士:
-                hp_coefficient = 1.2f;
-                mp_coefficient = 1.2f;
+                hp_coefficient = 1.2f + (zl * 0.2f);
+                mp_coefficient = 1.2f + (zl * 0.2f);
                 break;
             default:
                 break;
@@ -390,27 +393,52 @@ public class hero_equip_item : Base_Mono
         if (data.Data.ac > 0 || data.Data.ac2 > 0)
         {
             equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.物理防御, data.Data.ac + " - " + data.Data.ac2, c);
+            string dec= data.Data.ac + " - " + data.Data.ac2;
+            if (zl > 0&& data.Data.ac2>0)
+            {
+                dec += "[ + " + (data.Data.need_lv / 15 + 1) * zl + "]";
+            }
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.物理防御, dec, c);
         }
         if (data.Data.mac > 0 || data.Data.mac2 > 0)
         {
             equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.魔法防御, data.Data.mac + " - " + data.Data.mac2, c);
+            string dec = data.Data.mac + " - " + data.Data.mac2;
+            if (zl > 0 && data.Data.mac2 > 0)
+            {
+                dec += "[ + " + (data.Data.need_lv / 15 + 1) * zl + "]";
+            }
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.魔法防御, dec, c);
         }
         if (data.Data.dc > 0 || data.Data.dc2 > 0)
         {
             equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.物理攻击, data.Data.dc + " - " + data.Data.dc2, c);
+            string dec = data.Data.dc + " - " + data.Data.dc2;
+            if (zl > 0 && data.Data.dc2 > 0)
+            {
+                dec += "[ + " + (data.Data.need_lv / 10 + 1) * zl + "]";
+            }
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.物理攻击, dec, c);
         }
         if (data.Data.mc > 0 || data.Data.mc2 > 0)
         {
             equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.魔法攻击, data.Data.mc + " - " + data.Data.mc2, c);
+            string dec = data.Data.mc + " - " + data.Data.mc2;
+            if (zl > 0 && data.Data.mc2 > 0)
+            {
+                dec += "[ + " + (data.Data.need_lv / 10 + 1) * zl + "]";
+            }
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.魔法攻击, dec, c);
         }
         if (data.Data.sc > 0 || data.Data.sc2 > 0)
         {
             equip_show_info_item itemValue = Instantiate(equip_show_info_item_prefab, m_info_brom);
-            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.道术攻击, data.Data.sc + " - " + data.Data.sc2, c);
+            string dec = data.Data.sc + " - " + data.Data.sc2;
+            if (zl > 0 && data.Data.sc2 > 0)
+            {
+                dec += "[ + " + (data.Data.need_lv / 10 + 1) * zl + "]";
+            }
+            itemValue.Init(enum_equip_basetype_list.基础属性, enum_equip_entry_list.道术攻击, dec, c);
         }
         if (data.Data.user_value != null)
         {
@@ -427,6 +455,7 @@ public class hero_equip_item : Base_Mono
             {
                 //类型
                 string[] arr2 = info[4].Split('X');
+                List<equip_show_info_item> talents = new List<equip_show_info_item>();
                 for (int i = 0; i < arr2.Length; i++)
                 {
                     if (arr2[i].Length > 0)
@@ -452,7 +481,6 @@ public class hero_equip_item : Base_Mono
                                 break;
                         }
                         string[] entry = arr2[i].Split('|');
-
                         for (int j = 0; j < entry.Length; j++)
                         {
                             string[] entry_arr = entry[j].Split(',');
@@ -542,15 +570,27 @@ public class hero_equip_item : Base_Mono
                                     default:
                                         if ((int)e >= 1000)//附加技能
                                         {
-                                            string skill_name = "";
-                                            skill_name=ArrayHelper.Find(SumSave.db_skills, x => x.id == (((int)e)-1000)).show_name;
-                                            itemValue.Init(skill_name, value);
+                                            if ((int)e >= 2000)//天赋
+                                            {
+                                                string talent = "";
+                                                talent = ArrayHelper.Find(SumSave.db_pet_talents, x => x.pet_talent_id == (((int)e) - 2000)).pet_talent_name;
+                                                itemValue.Init_7(talent, value);
+                                                talents.Add(itemValue);
+                                            }
+                                            else
+                                            {
+                                                string skill_name = "";
+                                                skill_name = ArrayHelper.Find(SumSave.db_skills, x => x.id == (((int)e) - 1000)).show_name;
+                                                itemValue.Init(skill_name, value);
+                                            }
+                                           
                                         }
                                         break;
                                 }
 
                             }
                         }
+
                     }
                 }
                 if (info.Length >= 6)
@@ -587,7 +627,16 @@ public class hero_equip_item : Base_Mono
                             }
                         }
                     }
-                } 
+                }
+                if (talents.Count > 0)
+                {
+                    c = HexToColor("#fa5151");
+                    Get().Init(("[" + enum_equip_basetype_list.皇权属性 + "]"), c);
+                    for (int i = 0; i < talents.Count; i++)
+                    {
+                        talents[i].transform.SetAsLastSibling();
+                    }
+                }
             }
         }
         if (data.Data.suit > 0)
