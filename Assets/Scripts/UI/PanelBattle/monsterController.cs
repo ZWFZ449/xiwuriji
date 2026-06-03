@@ -8,7 +8,7 @@ public class monsterController : BaseBattleAttack
     private int skill_index = 0;
     GameObject ArrowPrefabs;
     /// <summary>
-    /// ´æ´¢¼¼ÄÜÔ¤ÖÆÌå
+    /// å­˜å‚¨æŠ€èƒ½é¢„åˆ¶ä½“
     /// </summary>
     private Dictionary<db_skill_vo, GameObject> dic = new Dictionary<db_skill_vo, GameObject>();
     protected override void Awake()
@@ -26,18 +26,18 @@ public class monsterController : BaseBattleAttack
             if (skill_index >= battle_skills.Count) skill_index = 0;
             for (int i = skill_index; i < battle_skills.Count; i++)
             {
-                if (Select_Skill(battle_skills[i], i)) return;//Íùºó¿´¼¼ÄÜÊÍ·Å
+                if (Select_Skill(battle_skills[i], i)) return;//å¾€åçœ‹æŠ€èƒ½é‡Šæ”¾
             }
             for (int i = 0; i < skill_index; i++)
             {
-                if (Select_Skill(battle_skills[i], i)) return;//ÍùÇ°¿´¼¼ÄÜÊÍ·Å
+                if (Select_Skill(battle_skills[i], i)) return;//å¾€å‰çœ‹æŠ€èƒ½é‡Šæ”¾
             }
         }
-        //Æ½a
+        //å¹³a
         BaseAttack();
     }
     /// <summary>
-    /// Ñ¡Ôñ¼¼ÄÜ
+    /// é€‰æ‹©æŠ€èƒ½
     /// </summary>
     /// <param name="item"></param>
     /// <param name="index"></param>
@@ -50,7 +50,7 @@ public class monsterController : BaseBattleAttack
         return true;
     }
     /// <summary>
-    /// ÅĞ¶Ï¼¼ÄÜĞ§¹û
+    /// åˆ¤æ–­æŠ€èƒ½æ•ˆæœ
     /// </summary>
     /// <param name="target"></param>
     /// <param name="skill"></param>
@@ -66,7 +66,7 @@ public class monsterController : BaseBattleAttack
         {
             switch (item)
             {
-                case enum_talent_offect_list.µ¯µÀ:
+                case enum_talent_offect_list.å¼¹é“:
                     number = skill.GetBuff[item];
                     break;
                 default:
@@ -87,7 +87,7 @@ public class monsterController : BaseBattleAttack
 
     }
     /// <summary>
-    /// ¶à´ÎÊÍ·Å
+    /// å¤šæ¬¡é‡Šæ”¾
     /// </summary>
     /// <param name="base_name"></param>
     /// <returns></returns>
@@ -99,7 +99,7 @@ public class monsterController : BaseBattleAttack
         if (!dic.ContainsKey(skill))
         {
             GameObject skill_prefabs = Resources.Load<GameObject>("UI/skill_prefabs/skill_" + skill.id);// skill.id); 
-            //¼¼ÄÜ·Å´óĞ§¹û Î´Íê³É
+            //æŠ€èƒ½æ”¾å¤§æ•ˆæœ æœªå®Œæˆ
             //float rand = 5;
             //skill_prefabs.transform.localScale = new Vector3(rand, rand, rand);
             dic.Add(skill, skill_prefabs);
@@ -112,7 +112,7 @@ public class monsterController : BaseBattleAttack
         }
         go.GetComponent<Skill_Hit>().SetTargetPosition(this, skill, Terget);
 
-        if (skill.MoveType == 0)//½£ÆøÀà¼¼ÄÜ
+        if (skill.MoveType == 0)//å‰‘æ°”ç±»æŠ€èƒ½
         {
             skill_damage(skill);
         }

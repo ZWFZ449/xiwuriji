@@ -26,21 +26,21 @@ public class battle_buff : MonoBehaviour
         for (int i = 0; i < buffs.Count; i++)
         {
             int spanSeconds = Battle_Tool.SettlementTransport(buffs[i].Item2, 3);
-            int time = buffs[i].Item3 - spanSeconds;// £”‡ ±º‰
-            if (buffs[i].Item1 == common_Buff.‘¬ø®.ToString())
+            int time = buffs[i].Item3 - spanSeconds;//Ââ©‰ΩôÊó∂Èó¥
+            if (buffs[i].Item1 == common_Buff.ÊúàÂç°.ToString())
             {
                 if (buffs[i].Item3 >= 99999)
                 {
                     if (!buff_item_dic.ContainsKey(buffs[i].Item1))
                     {
                         buff_item item = Instantiate(btn_item_prefab, m_btn);
-                        item.Init(buffs[i].Item1, "”¿æ√");
+                        item.Init(buffs[i].Item1, "Ê∞∏‰πÖ");
                         buff_item_dic.Add(buffs[i].Item1, item);
                     }
                     else
                     {
                         buff_item_dic[buffs[i].Item1].gameObject.SetActive(true);
-                        buff_item_dic[buffs[i].Item1].Init(buffs[i].Item1, "”¿æ√");
+                        buff_item_dic[buffs[i].Item1].Init(buffs[i].Item1, "Ê∞∏‰πÖ");
                     }
                 }
                 else
