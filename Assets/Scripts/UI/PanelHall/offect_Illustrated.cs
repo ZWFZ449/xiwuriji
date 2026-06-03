@@ -110,7 +110,7 @@ public class offect_Illustrated : Base_Mono
 
     private void OnEnable()
     {
-        if (SumSave.crtHero.lv <= 15)  
+        if (SumSave.crtHero.lv < 15)  
         { 
             Alert_Dec.Show("图鉴功能在15级开放");
             Hide();
