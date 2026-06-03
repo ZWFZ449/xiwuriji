@@ -101,13 +101,19 @@ public class Dream_Panel_Setting : Panel_Base
                 for (int i = 0; i < Enum.GetNames(typeof(enum_equip_quality_list)).Length; i++)
                 {
                     dream_setting_item dream_setting_item = Instantiate(dream_setting_item_prefab, m_setting_btn_borm);
+                    bool exist = true;
                     for (int j = 0; j < SumSave.crt_setting.battle_base_list.Count; j++)
                     {
                         if (SumSave.crt_setting.battle_base_list[j].Item1 == (i + 1))
                         {
+                            exist=false;
                             dream_setting_item.Init((enum_equip_quality_list)(i + 1), SumSave.crt_setting.battle_base_list[j].Item2);
 
                         }
+                    }
+                    if (exist)
+                    { 
+                        dream_setting_item.Init((enum_equip_quality_list)(i + 1), 0);
                     }
                 }
                 break;

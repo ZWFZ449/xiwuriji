@@ -351,7 +351,7 @@ public class offect_reincarnation : Base_Mono
                     if (refinement > vo.result_maxRefinement) refinement = vo.result_maxRefinement;
                     int medicine = (vo.result_maxmedicine - vo.result_minmedicine) * value / (vo.need_maxLv - vo.need_lv) + vo.result_minmedicine;
                     if (medicine > vo.result_maxmedicine) medicine = vo.result_maxmedicine;
-                    Alert.Show("转生收益", "当前等级转生可获得\n炼体上限 " + refinement + "\n炼药上限" + medicine, Confirm_zs);
+                    Alert.Show("转生收益", "当前等级转生可获得\n炼体上限 " + refinement + "\n炼药上限" + medicine + "\n转生后需要重启游戏", Confirm_zs);
                 }else Alert_Dec.Show("等级不足");
             }
         }
@@ -402,12 +402,17 @@ public class offect_reincarnation : Base_Mono
                         SumSave.crt_zs.MysqlData();
                         SumSave.crtHero.zs_lv++;
                         SumSave.crtHero.lv = 30;
+                        SumSave.crtHero.exp = 0;
                         SendNotification(NotiList.Refresh_Max_Hero_Attribute);
                         SumSave.crtHero.MysqlData();
                         UI_Manager.I.GetPanel<PanelMian>().Show();
                         Alert_Dec.Show("转生成功");
                         Alert_Dec.Show("开启炼药成功");
                         Alert_Dec.Show("开启炼体成功");
+                        Alert.Show("转生成功","请重启游戏");
+                        Game_Omphalos.i.archive();
+                        UI_Manager.I.GetPanel<PanelBattle>().Close();
+
                     }
                     else Alert_Dec.Show("转生失败");
                 }

@@ -173,12 +173,18 @@ public class data_setting_vo : Base_VO
             switch (data[i].Item1)
             { 
                 case 1:
+                    bool exist = true;
                     for (int j = 0; j < battle_base_list.Count; j++)
                     {
                         if (battle_base_list[j].Item1 == data[i].Item2)
-                        { 
+                        {
+                            exist= false;
                             battle_base_list[j] = (data[i].Item2, data[i].Item4);
                         }
+                    }
+                    if (exist)
+                    { 
+                        battle_base_list.Add((data[i].Item2, data[i].Item4));
                     }
                     break;
                 case 2:

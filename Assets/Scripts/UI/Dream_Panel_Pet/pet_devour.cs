@@ -80,18 +80,19 @@ public class pet_devour : Base_Mono
     private string State_Value(enum_equip_entry_list item,int value)
     {
         string str = value + "";
+        int max = (SumSave.crtHero.zs_lv - 1) * 10;
         switch (item)
         {
             case enum_equip_entry_list.物理防御:
-                if (value >= crt_pet.pet_ac) str += "Max"; break;
+                if (value >= crt_pet.pet_ac+ max) str += "Max"; break;
             case enum_equip_entry_list.魔法防御:
-                if (value >= crt_pet.pet_mac) str += "Max"; break;
+                if (value >= crt_pet.pet_mac + max) str += "Max"; break;
             case enum_equip_entry_list.物理攻击:
-                if (value >= crt_pet.pet_dc) str += "Max"; break;
+                if (value >= crt_pet.pet_dc + max) str += "Max"; break;
             case enum_equip_entry_list.魔法攻击:
-                if (value >= crt_pet.pet_mc) str += "Max"; break;
+                if (value >= crt_pet.pet_mc + max) str += "Max"; break;
             case enum_equip_entry_list.道术攻击:
-                if (value >= crt_pet.pet_sc) str += "Max"; break;
+                if (value >= crt_pet.pet_sc + max) str += "Max"; break;
         }
         return str;
     }
@@ -134,6 +135,7 @@ public class pet_devour : Base_Mono
         db_pet_vo pet = (arg0 as dream_BagItem).Pet_Data;
         if (pet == null) return;
         SendNotification(NotiList.Read_Mysql_Base_Time);
+        int max = (SumSave.crtHero.zs_lv - 1) * 10;
         if (SumSave.openMysql)
         { 
             Alert_Dec.Show("网络连接失败");
@@ -157,11 +159,11 @@ public class pet_devour : Base_Mono
                 int random= Random.Range(0, 5);
                 switch (random)
                 { 
-                    case 0: AddAttr.Item1++; AddAttr.Item1 = (int)MathF.Min(crt_pet.pet_ac, AddAttr.Item1);Alert_Dec.Show("物理防御+1"); break;
-                    case 1: AddAttr.Item2++; AddAttr.Item2 = (int)MathF.Min(crt_pet.pet_mac, AddAttr.Item2); Alert_Dec.Show("魔法防御+1"); break;
-                    case 2: AddAttr.Item3++; AddAttr.Item3 = (int)MathF.Min(crt_pet.pet_dc, AddAttr.Item3); Alert_Dec.Show("物理攻击+1"); break;
-                    case 3: AddAttr.Item4++; AddAttr.Item4 = (int)MathF.Min(crt_pet.pet_mc, AddAttr.Item4); Alert_Dec.Show("魔法攻击+1"); break;
-                    case 4: AddAttr.Item5++; AddAttr.Item5 = (int)MathF.Min(crt_pet.pet_sc, AddAttr.Item5);  Alert_Dec.Show("道术攻击+1"); break;
+                    case 0: AddAttr.Item1++; AddAttr.Item1 = (int)MathF.Min(crt_pet.pet_ac + max, AddAttr.Item1);Alert_Dec.Show("物理防御+1"); break;
+                    case 1: AddAttr.Item2++; AddAttr.Item2 = (int)MathF.Min(crt_pet.pet_mac + max, AddAttr.Item2); Alert_Dec.Show("魔法防御+1"); break;
+                    case 2: AddAttr.Item3++; AddAttr.Item3 = (int)MathF.Min(crt_pet.pet_dc + max, AddAttr.Item3); Alert_Dec.Show("物理攻击+1"); break;
+                    case 3: AddAttr.Item4++; AddAttr.Item4 = (int)MathF.Min(crt_pet.pet_mc + max, AddAttr.Item4); Alert_Dec.Show("魔法攻击+1"); break;
+                    case 4: AddAttr.Item5++; AddAttr.Item5 = (int)MathF.Min(crt_pet.pet_sc + max, AddAttr.Item5);  Alert_Dec.Show("道术攻击+1"); break;
                 }
             }
             crt_pet.SetAddAttr(AddAttr.Item1, AddAttr.Item2, AddAttr.Item3, AddAttr.Item4, AddAttr.Item5);

@@ -133,6 +133,10 @@ public class PanelBattle : PanelBase
     {
         this.transform.SetAsFirstSibling();
     }
+    public void Close()
+    { 
+        gameObject.SetActive(false);
+    }
     public override void Initialize()
     {
         base.Initialize();
