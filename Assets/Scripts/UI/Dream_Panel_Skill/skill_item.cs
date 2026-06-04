@@ -39,7 +39,9 @@ public class skill_item : Base_Mono
                     }
                 }
             }
-            info.text += "Lv." + (skill_Lv_Type)(lv + talent_lv) + "(" + data.SetExp() + "/" + data.skill_up_lv[lv] + ")" + "\n";
+            if (lv < data.skill_up_lv.Count)
+                info.text += "Lv." + (skill_Lv_Type)(lv + talent_lv) + "(" + data.SetExp() + "/" + data.skill_up_lv[lv] + ")" + "\n";
+            else info.text += "Lv." + (skill_Lv_Type)(lv + talent_lv) + "\n";
         }
     }
 

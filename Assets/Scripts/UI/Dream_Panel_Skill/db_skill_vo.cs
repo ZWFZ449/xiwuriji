@@ -107,58 +107,26 @@ public class db_skill_vo : Base_VO
     /// 攻击范围
     /// </summary>
     public readonly int scope;
+
+    public readonly List<int> needLvitem;
     /// <summary>
     /// 技能消耗魔法
     /// </summary>
     public int Get_Mp { get { return spells[SetLv() >= 0 ? SetLv() : 0]; ; } }
 
-    public db_skill_vo(int id, string show_name, int EffectType, int Effect, string spells, int Power, 
-        string DefPowers, string skill_damages, string skill_offect_value, int Job, int Delay,List<int> skill_up_lv,int need_lv,int Weighted,int MoveType,
-        List<int> offset,int scope)
+    public db_skill_vo(int id, string show_name, int EffectType, int Effect, List<int> spells, int Power,
+        List<int> DefPowers, List<int> skill_damages, Dictionary<enum_equip_entry_list, List<int>> skill_offect_value, int Job, int Delay,List<int> skill_up_lv,int need_lv,int Weighted,int MoveType,
+        List<int> offset,int scope,List<int> needLvitem)
     { 
         this.id = id;
         this.show_name = show_name;
         this.EffectType = EffectType; 
         this.Effect = Effect;
-        this.spells = new List<int>();
-        string[] spell = spells.Split(' ');
-        for (int i = 0; i < spell.Length; i++)
-        {
-            if (!string.IsNullOrEmpty(spell[i])) this.spells.Add(int.Parse(spell[i]));
-        }
+        this.spells = spells;
         this.Power = Power;
-        this.DefPowers = new List<int>();
-        string[] defpower = DefPowers.Split(' ');
-        for (int i = 0; i < defpower.Length; i++)
-        { 
-            if (!string.IsNullOrEmpty(defpower[i])) this.DefPowers.Add(int.Parse(defpower[i]));
-        }
-        this.skill_damages = new List<int>();
-        string[] skill_damage = skill_damages.Split(' ');
-        for (int i = 0; i < skill_damage.Length; i++)
-        { 
-            if (!string.IsNullOrEmpty(skill_damage[i])) this.skill_damages.Add(int.Parse(skill_damage[i]));
-        }
-        this.skill_offect_value_list = new Dictionary<enum_equip_entry_list, List<int>>();
-        string[] skill_offect = skill_offect_value.Split('&');
-        for (int i = 0; i < skill_offect.Length; i++)
-        {
-            if (!string.IsNullOrEmpty(skill_offect[i]))
-            {
-                string[] skill_offectvalue = skill_offect[i].Split('a');
-                if (!string.IsNullOrEmpty(skill_offectvalue[i]))
-                {
-                    enum_equip_entry_list skill_offectvalue_type = (enum_equip_entry_list)int.Parse(skill_offectvalue[0]);
-                    if (!this.skill_offect_value_list.ContainsKey(skill_offectvalue_type))
-                    this.skill_offect_value_list.Add(skill_offectvalue_type, new List<int>());
-                    string[] skill_offectvalue_value = skill_offectvalue[1].Split(' ');
-                    for (int j = 0; j < skill_offectvalue_value.Length; j++)
-                    { 
-                        if (!string.IsNullOrEmpty(skill_offectvalue_value[j])) this.skill_offect_value_list[skill_offectvalue_type].Add(int.Parse(skill_offectvalue_value[j]));
-                    }
-                }
-            }
-        }
+        this.DefPowers = DefPowers;
+        this.skill_damages = skill_damages;
+        this.skill_offect_value_list = skill_offect_value;
         this.Job = Job;
         this.Delay = Delay;
         this.skill_up_lv = skill_up_lv;
@@ -167,11 +135,11 @@ public class db_skill_vo : Base_VO
         this.MoveType = MoveType;
         this.offset = offset;
         this.scope = scope;
+        this.needLvitem = needLvitem;
         lv = -1;
         exp = 0;
         select_pos = -1;
     }
-
     public void Init(int lv, int exp)
     { 
         this.lv = lv;

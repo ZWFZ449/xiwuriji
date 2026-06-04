@@ -331,7 +331,7 @@ public class show_drop_list : Base_Mono
                 switch (unit)
                 {
                     case currency_unit.金币:
-                        moeny = 100 * (moeny_needs[lv / 5] * 50 + SumSave.crtMaxBattle.gold_bonus) / 100;
+                        moeny = moeny_needs[lv / 5] * (100 + SumSave.crtMaxBattle.gold_bonus) / 100;
                         break;
                     case currency_unit.元宝:
                         break;

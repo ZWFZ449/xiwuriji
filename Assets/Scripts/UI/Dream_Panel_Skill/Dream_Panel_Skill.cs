@@ -56,7 +56,8 @@ public class Dream_Panel_Skill : Panel_Base
     { 
       上阵,
       升级,
-      激活
+      激活,
+      进阶
     };
     private enum Skill_Type
     { 
@@ -131,8 +132,30 @@ public class Dream_Panel_Skill : Panel_Base
             case Skill_Btn_Type.激活:
                 Alert.Show("激活技能", "需要" + Show_Color.Red(crt_skill.show_name), activate_skill);
                 break;
+            case Skill_Btn_Type.进阶:
+                if (crt_skill.SetLv() < crt_skill.skill_damages.Count - 1)
+                {
+                    Alert.Show("进阶技能", "需要" + Show_Color.Red("\n天赋书页 * " + crt_skill.needLvitem[crt_skill.SetLv()]+ "\n转生石 * " + crt_skill.needLvitem[crt_skill.SetLv()]), advancedskill);
+                }else Alert_Dec.Show("技能已满级");
+                break;
         }
     }
+
+    private void advancedskill(object arg0)
+    {
+        Clear_Condition();
+        Need_Condition("转生石", crt_skill.needLvitem[crt_skill.SetLv()]);
+        Need_Condition("天赋书页", crt_skill.needLvitem[crt_skill.SetLv()]);
+        if (Return_Condition())
+        {
+            crt_skill.monster_lv(crt_skill.SetLv() + 1);
+            SumSave.crt_skill.UpLv_skill();
+            Alert_Dec.Show(crt_skill.show_name + "升级成功");
+            SendNotification(NotiList.Refresh_Max_Hero_Attribute);
+        }
+        else Alert_Dec.Show("背包中天赋书页不足");
+    }
+
     /// <summary>
     /// 升级技能
     /// </summary>
@@ -199,10 +222,13 @@ public class Dream_Panel_Skill : Panel_Base
                     exist = lv >= 0 && crt_skill.Job >= 0 && crt_skill.EffectType < 5;
                     break;
                 case Skill_Btn_Type.升级:
-                    exist = lv >= 0 && (crt_skill.SetLv() <= crt_skill.skill_up_lv.Count);
+                    exist = lv >= 0 && (crt_skill.SetLv() < crt_skill.skill_up_lv.Count - 1);
                     break;
                 case Skill_Btn_Type.激活:
                     exist = lv < 0;
+                    break;
+                case Skill_Btn_Type.进阶:
+                    exist = lv >= 0 && (crt_skill.SetLv() >= crt_skill.skill_up_lv.Count - 1);
                     break;
             }
             if (exist)
@@ -460,7 +486,6 @@ public class Dream_Panel_Skill : Panel_Base
     /// <returns></returns>
     private string passive_skill_str()
     {
-
         Color color_list = UnityColorPresets.HexToColor("ffffff");
         string str = "";
         int lv = crt_skill.SetLv();
@@ -742,6 +767,88 @@ public class Dream_Panel_Skill : Panel_Base
                 str += "生成 " + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + (crt_skill.Effect == 1 ? " 双防御" : "% 双免伤") + " ", color_list);
                 if (crt_skill.skill_damages.Count > 0) str += "\n[免伤] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
                 break;
+        }
+        if (SumSave.crtHero.zs_lv > 1)
+        {
+            str += "\n[转生加成] ";
+            if (crt_skill.skill_offect_value_list.Count > 0)
+            {
+                foreach (enum_equip_entry_list entry in crt_skill.skill_offect_value_list.Keys)
+                {
+                    for (int j = 0; j < crt_skill.skill_offect_value_list[entry].Count; j++)
+                    {
+                        if (j == i)
+                        {
+                            Color color_lists = UnityColorPresets.HexToColor("ffe400");
+                            str += "\n" + (skill_Lv_Type)j + " ";
+                            switch (entry)
+                            {
+                                case enum_equip_entry_list.生命值:
+                                case enum_equip_entry_list.魔法值:
+                                case enum_equip_entry_list.每秒回血:
+                                case enum_equip_entry_list.每秒回蓝:
+                                case enum_equip_entry_list.真实伤害:
+                                case enum_equip_entry_list.吸收伤害:
+                                case enum_equip_entry_list.命中:
+                                case enum_equip_entry_list.闪避:
+                                    str += entry + " " + UnityColorPresets.Colorize(crt_skill.skill_offect_value_list[entry][i], color_lists) + ";";
+                                    break;
+                                case enum_equip_entry_list.物理防御:
+                                case enum_equip_entry_list.魔法防御:
+                                case enum_equip_entry_list.物理攻击:
+                                case enum_equip_entry_list.魔法攻击:
+                                case enum_equip_entry_list.道术攻击:
+                                    str += entry + " " + UnityColorPresets.Colorize(crt_skill.skill_offect_value_list[entry][i] + " - " + crt_skill.skill_offect_value_list[entry][i], color_lists) + ";";
+                                    break;
+
+                                case enum_equip_entry_list.幸运:
+                                    break;
+                                case enum_equip_entry_list.生命属性:
+                                case enum_equip_entry_list.魔法属性:
+                                case enum_equip_entry_list.防御属性:
+                                case enum_equip_entry_list.魔防属性:
+                                case enum_equip_entry_list.物攻属性:
+                                case enum_equip_entry_list.魔攻属性:
+                                case enum_equip_entry_list.道攻属性:
+                                case enum_equip_entry_list.攻击速度:
+                                case enum_equip_entry_list.攻击范围:
+                                case enum_equip_entry_list.暴击属性:
+                                case enum_equip_entry_list.暴击伤害:
+                                    str += entry + " " + UnityColorPresets.Colorize(crt_skill.skill_offect_value_list[entry][i] + "%", color_lists) + ";";
+                                    break;
+                                case enum_equip_entry_list.物理下防:
+                                    break;
+                                case enum_equip_entry_list.魔法下防:
+                                    break;
+                                case enum_equip_entry_list.物理下攻:
+                                    break;
+                                case enum_equip_entry_list.魔法下攻:
+                                    break;
+                                case enum_equip_entry_list.道术下攻:
+                                    break;
+                                case enum_equip_entry_list.物伤减免:
+                                case enum_equip_entry_list.魔伤减免:
+                                case enum_equip_entry_list.怪物爆率:
+                                case enum_equip_entry_list.极品爆率:
+                                case enum_equip_entry_list.经验加成:
+                                case enum_equip_entry_list.金币掉落:
+                                    str += entry + " " + UnityColorPresets.Colorize(crt_skill.skill_offect_value_list[entry][i] + "%", color_lists) + ";";
+                                    break;
+                                default:
+                                    if ((int)entry > 1000)
+                                    {
+                                        db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, (x) => x.id == ((int)entry - 1000));
+                                        if (skill != null)
+                                        {
+                                            str += "\n" + skill.show_name + " 技能效果 + " + UnityColorPresets.Colorize(crt_skill.skill_offect_value_list[entry][i] + "%", color_lists) + ";";
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
         }
         foreach (var item1 in crt_skill.GetBuff.Keys)
         {

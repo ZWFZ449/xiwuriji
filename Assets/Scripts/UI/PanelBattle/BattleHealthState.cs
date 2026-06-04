@@ -93,6 +93,7 @@ public class BattleHealthState : Base_Mono
     /// 文字偏移量
     /// </summary>
     float offset = 1;
+
     private void Hurt(float dec, DamageEnum type)
     {
         string _dec = dec.ToString("F0");

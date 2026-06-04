@@ -745,6 +745,7 @@ public static class Tool_Battle
                         }
                     }
                 }
+
             }
         }
         //转生加成
@@ -1972,7 +1973,7 @@ public static class Tool_Battle
         // 获取一个概率
         WeightedItem selectedItem = picker.GetRandomItem();
 #if UNITY_EDITOR
-        //return 6;
+        return 7;
 #elif UNITY_ANDROID
         
            

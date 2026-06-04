@@ -104,7 +104,8 @@ public class dream_user_equip_VO : Base_VO
         {
             "equip_value",
             "house_value",
-            "treasure_value" 
+            "treasure_value" ,
+            "page"
         };
     }
 
@@ -114,7 +115,8 @@ public class dream_user_equip_VO : Base_VO
         {
             GetStr(OnWirte(Equip_List)),
             GetStr(OnWirte(House_List)),
-            GetStr(OnWirte(Treasure_List))
+            GetStr(OnWirte(Treasure_List)),
+            GetStr(Page)
         };
     }
 }

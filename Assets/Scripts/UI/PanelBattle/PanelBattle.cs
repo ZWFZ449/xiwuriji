@@ -609,28 +609,7 @@ public class PanelBattle : PanelBase
     /// 查找boss刷新时间
     /// </summary>
     /// <param name="boss_name"></param>
-    /// <returns></returns>
-    private bool Search_Generate_Boss_Time(string boss_name)
-    {
-        if (!Generate_Boss_Time.ContainsKey(boss_name))
-        {
-            foreach (var item in SumSave.db_maps)
-            {
-                for (int i = 0; i < item.map_boss.Count; i++)
-                {
-                    if (item.map_boss[i] == boss_name)
-                    {
-                        Generate_Boss_Time.Add(boss_name, item.map_boss_cdtime[i]);
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        else return true;
-        
-    }
-
+    /// <returns></returns> 
     /// <summary>
     /// 清空场景
     /// </summary>
@@ -807,13 +786,7 @@ public class PanelBattle : PanelBase
     private void Drop(BaseBattleAttack monster)
     {
         int exp = (int)monster.Data.exp * (100 + SumSave.crtMaxBattle.exp_bonus) / 100;
-        //if (SumSave.crtHero.lv >= 50)
-        //{
-        //    if (monster.Data.lv <= SumSave.crtHero.lv - 10) 
-        //    {
-        //        exp = exp / 10;
-        //    }
-        //}
+       
         Show_Info("击杀 " + monster.Data.crt_name + " 获得经验 " + exp);
         //掉落收益
         Add_Exp(exp); 
@@ -1125,7 +1098,7 @@ public class PanelBattle : PanelBase
             }
         }
         boss_index++;
-        InitBossSlider(monster);
+        InitBossSlider(item.GetComponent<BaseBattleAttack>().Data);
 
     }
     /// <summary>
@@ -1141,15 +1114,15 @@ public class PanelBattle : PanelBase
             db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, e => e.id == monster.skill_id);
             if (skill != null)
             {
-                skill.monster_lv(monster.skill_level);
-                skill.AddBuff(enum_talent_offect_list.弹道, monster.skill_number);
-                skill_list.Add(skill);
+                db_skill_vo newskill = new db_skill_vo(skill.id, skill.show_name, skill.EffectType, skill.Effect, skill.spells, skill.Power, skill.DefPowers, skill.skill_damages,
+                    skill.skill_offect_value_list, skill.Job, skill.Delay, skill.skill_up_lv, skill.need_lv, skill.Weighted, skill.MoveType, skill.offset, skill.scope,skill.needLvitem);
+                newskill.monster_lv(monster.skill_level + 1);
+                newskill.AddBuff(enum_talent_offect_list.弹道, monster.skill_number);
+                skill_list.Add(newskill);
             }
         }
         return skill_list;
-
     }
-
     /// <summary>
     /// 初始化boss血条
     /// </summary>

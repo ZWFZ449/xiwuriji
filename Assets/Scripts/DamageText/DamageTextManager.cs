@@ -77,6 +77,10 @@ public class DamageTextManager : MonoBehaviour// MonoSingleton <DamageTextManage
     /// <param name="parent"></param>
     public void ShowDamageText(DamageEnum damageEnum, string damage, Transform parent,float offset)
     {
+        if (SumSave.crt_setting.user_data_settings.Count >= 8 && SumSave.crt_setting.user_data_settings[7] == 1)
+        {
+            return;
+        }
         Color color = normalColor;
         string path= "UI/base_bg/text/";
         switch (damageEnum)

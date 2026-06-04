@@ -1,3 +1,4 @@
+using Common;
 using MVC;
 using System.Collections;
 using System.Collections.Generic;
@@ -96,6 +97,11 @@ public class monsterController : BaseBattleAttack
     {
         if (Terget == null) return;
         if (!Terget.gameObject.activeInHierarchy || Terget.isDead) return;
+        if (SumSave.crt_setting.user_data_settings.Count >= 9 && SumSave.crt_setting.user_data_settings[8] == 1)
+        {
+            skill_damage(skill);
+            return;
+        }
         if (!dic.ContainsKey(skill))
         {
             GameObject skill_prefabs = Resources.Load<GameObject>("UI/skill_prefabs/skill_" + skill.id);// skill.id); 

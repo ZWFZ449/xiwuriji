@@ -253,10 +253,48 @@ public static class Mysql_Read
         int EffectType = reader.GetInt32(reader.GetOrdinal("EffectType"));
         int Effect = reader.GetInt32(reader.GetOrdinal("Effect"));
         string spells = reader.GetString(reader.GetOrdinal("spells"));
+        List<int> spellvalues = new List<int>();
+        string[] spell = spells.Split(' ');
+        for (int i = 0; i < spell.Length; i++)
+        {
+            if (!string.IsNullOrEmpty(spell[i])) spellvalues.Add(int.Parse(spell[i]));
+        }
         int Power = reader.GetInt32(reader.GetOrdinal("Power"));
         string DefPowers = reader.GetString(reader.GetOrdinal("DefPowers"));
+        string[] def = DefPowers.Split(' ');
+        List<int> defpowers = new List<int>();
+        for (int i = 0; i < def.Length; i++)
+        { 
+            if (!string.IsNullOrEmpty(def[i])) defpowers.Add(int.Parse(def[i]));
+        }
         string skill_damages = reader.GetString(reader.GetOrdinal("skill_damages"));
+        string[] skill = skill_damages.Split(' ');
+        List<int> skill_damages_list = new List<int>();
+        for (int i = 0; i < skill.Length; i++)
+        { 
+            if (!string.IsNullOrEmpty(skill[i])) skill_damages_list.Add(int.Parse(skill[i]));
+        }
         string skill_offect_value = reader.GetString(reader.GetOrdinal("skill_offect_value"));
+        Dictionary<enum_equip_entry_list, List<int>> skill_offect_value_list = new Dictionary<enum_equip_entry_list, List<int>>();
+        string[] skill_offect = skill_offect_value.Split('&');
+        for (int i = 0; i < skill_offect.Length; i++)
+        {
+            if (!string.IsNullOrEmpty(skill_offect[i]))
+            {
+                string[] skill_offectvalue = skill_offect[i].Split('a');
+                if (!string.IsNullOrEmpty(skill_offectvalue[i]))
+                {
+                    enum_equip_entry_list skill_offectvalue_type = (enum_equip_entry_list)int.Parse(skill_offectvalue[0]);
+                    if (!skill_offect_value_list.ContainsKey(skill_offectvalue_type))
+                        skill_offect_value_list.Add(skill_offectvalue_type, new List<int>());
+                    string[] skill_offectvalue_value = skill_offectvalue[1].Split(' ');
+                    for (int j = 0; j < skill_offectvalue_value.Length; j++)
+                    {
+                        if (!string.IsNullOrEmpty(skill_offectvalue_value[j])) skill_offect_value_list[skill_offectvalue_type].Add(int.Parse(skill_offectvalue_value[j]));
+                    }
+                }
+            }
+        }
         int Job = reader.GetInt32(reader.GetOrdinal("Job"));
         int Delay = reader.GetInt32(reader.GetOrdinal("Delay"));
         List<int> skill_up_lv = ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("skill_up_lv")), ' ');
@@ -265,7 +303,9 @@ public static class Mysql_Read
         int MoveType= reader.GetInt32(reader.GetOrdinal("MoveType"));
         List<int> list = ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("offset")), ' ');
         int scope = reader.GetInt32(reader.GetOrdinal("scope"));
-        return new db_skill_vo(id, show_name, EffectType, Effect, spells, Power, DefPowers, skill_damages, skill_offect_value, Job, Delay, skill_up_lv, needlv, Weighted, MoveType, list,scope);
+        string needlvitem = reader.GetString(reader.GetOrdinal("up_need"));
+        List<int> needlvitemlist = ArrayHelper.Get_Split<int>(needlvitem, ' ');
+        return new db_skill_vo(id, show_name, EffectType, Effect, spellvalues, Power, defpowers, skill_damages_list, skill_offect_value_list, Job, Delay, skill_up_lv, needlv, Weighted, MoveType, list,scope, needlvitemlist);
     }
 
     public static dream_user_skill_vo ReadUserSkill(MySqlDataReader reader, dream_user_skill_vo item)
