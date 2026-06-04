@@ -14,6 +14,7 @@ public enum Map_Btn_list
    个人Boss,
    每日副本,
    中州秘境,
+   手动存档,
    返回战斗
 }
 public class PanelMap : PanelBase
@@ -165,6 +166,9 @@ public class PanelMap : PanelBase
                 if (open_return_battle)
                     panelBattle.Show();
                 else Alert_Dec.Show("请先开始战斗");
+                break;
+            case Map_Btn_list.手动存档:
+                Game_Omphalos.i.archive();
                 break;
             default:
                 break;

@@ -1,3 +1,4 @@
+using CodeStage.AntiCheat.ObscuredTypes;
 using Common;
 using Components;
 using MVC;
@@ -9,6 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityColorPresets;
+using Random = UnityEngine.Random;
 
 public enum equip_job
 { 
@@ -25,7 +27,8 @@ public enum equip_btn_list
 回收,
 存入,
 取出,
-脱下
+脱下,
+分解
 }
 
 public class hero_equip_item : Base_Mono
@@ -48,7 +51,7 @@ public class hero_equip_item : Base_Mono
     { 
     穿戴,
     取下,
-    出售
+    出售,
     }
 
     //private 
@@ -61,7 +64,7 @@ public class hero_equip_item : Base_Mono
         equip_show_info_item_prefab = Tool_UI.Find_Prefabs<equip_show_info_item>("equip_show_info_item");
         m_dream_bag_brom= Find<Transform>("show_icon");
         dream_BagItem_prefab = Tool_UI.Find_Prefabs<dream_BagItem>("dream_bagitem");
-        m_btn_brom= Find<Transform>("btn_brom");
+        m_btn_brom = Find<Transform>("btn_brom/Scroll View/Viewport/Content");
         btn_item_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
     }
 
@@ -77,6 +80,7 @@ public class hero_equip_item : Base_Mono
                 btn_list.Add(equip_btn_list.穿戴);
                 btn_list.Add(equip_btn_list.出售);
                 btn_list.Add(equip_btn_list.锁定);
+                btn_list.Add(equip_btn_list.分解);
                 break;
             case Panel_BagType.存入仓库:
                 btn_list.Add(equip_btn_list.存入);
@@ -136,10 +140,40 @@ public class hero_equip_item : Base_Mono
             case equip_btn_list.脱下:
                 takeoff();
                 break;
+            case equip_btn_list.分解:
+                decompose();
+                break;
             default:
                 break;
         }
     }
+    /// <summary>
+    /// 分解
+    /// </summary>
+    private void decompose()
+    {
+        string[] info_str = data.Data.user_value.Split(' ');
+        int lv= int.Parse(info_str[2]);
+        if (lv >= 7)
+        {
+            ObscuredInt number = 1;
+            ObscuredInt random = Random.Range(1, 1000);
+            ObscuredInt maxnumber = number + Random.Range(1, 1000);
+            Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.皇级碎片, new ObscuredInt[] { number + random, random }), maxnumber);
+            Alert_Dec.Show("分解成功");
+            SumSave.crt_bags.Remove_Bag_List(data.Data);
+            Hide(true);
+        }
+        else
+        {
+            Alert_Dec.Show("装备等级不足，无法分解");
+            return;
+        }
+         
+        SumSave.crt_bags.MysqlData();
+        Hide(true);
+    }
+
     /// <summary>
     /// 取出
     /// </summary>

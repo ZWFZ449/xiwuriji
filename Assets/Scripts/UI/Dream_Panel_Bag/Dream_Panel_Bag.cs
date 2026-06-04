@@ -21,6 +21,7 @@ public enum Panel_BagType
     存入仓库,
     取出仓库,
     一键出售,
+    一键分解,
     已装备,//不显示内容
     展示,//不显示内容
 }
@@ -97,11 +98,47 @@ public class Dream_Panel_Bag : Panel_Base
                 m_curPanel_BagType = Panel_BagType.装备;
                 Show_Sell();
                 break;
-
+            case Panel_BagType.一键分解:
+                m_curPanel_BagType = Panel_BagType.装备;
+                Show_decompose();
+                break;
             case Panel_BagType.已装备:
                 break;
             case Panel_BagType.展示:
                 break;
+        }
+    }
+
+    private void Show_decompose()
+    {
+        Alert.Show("一键分解", "将自动分解背包中所有未锁定的皇级装备\n请检查是否分解", OneClickDecompose);
+    }
+
+    private void OneClickDecompose(object arg0)
+    {
+        List<Bag_Base_VO> baglist = SumSave.crt_bags.Get_Bag_List();
+        int number = 0;
+        for (int i = 0; i < baglist.Count; i++)
+        {
+            string[] info_str = baglist[i].user_value.Split(' ');
+            int lv = int.Parse(info_str[2]);
+            int islock = int.Parse(info_str[3]);
+            if (islock == 0&& lv>=7)
+            {
+                number++;
+                baglist.RemoveAt(i);
+                i--;
+            }
+        }
+        if (number > 0)
+        {
+            ObscuredInt random = Random.Range(1, 1000);
+            ObscuredInt maxnumber = number + Random.Range(1, 1000);
+            Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.皇级碎片, new ObscuredInt[] { number + random, random }), maxnumber);
+            Alert_Dec.Show("分解成功");
+            SumSave.crt_bags.Set_Bag_List(baglist);
+            Alert.Show("一键分解", "分解成功,\n获得 " + common_items_list.皇级碎片 + " * " + number);
+            baseShow();
         }
     }
 
