@@ -465,7 +465,7 @@ public class offect_reincarnation : Base_Mono
             Alert_Dec.Show("条件不足");
         }
     }
-
+    int number = 0;
     /// <summary>
     /// 强化炼药
     /// </summary>
@@ -475,12 +475,41 @@ public class offect_reincarnation : Base_Mono
         for (int i = 0; i < SumSave.crt_zs.crt_medicine.Count; i++) max += SumSave.crt_zs.crt_medicine[i];
         string dec = "";
         dec += "炼药需要" + common_items_list.人参 + " * 10" + "\n" + common_items_list.金条 + " * 1";
+        if (number >= 5) { 
+            dec += "\n自动开启连续炼药,连续10次\n点击取消 继续单次炼药";
+            Alert.Show(crt_zs_unit.ToString(), dec, Anto_Confirm_medicine, max, Confirm_medicine,false);
+
+        }
+        else
         Alert.Show(crt_zs_unit.ToString(), dec, Confirm_medicine, max);
        
     }
+    /// <summary>
+    /// 自动确认炼药
+    /// </summary>
+    /// <param name="arg0"></param>
+    private void Anto_Confirm_medicine(object arg0)
+    {
+        StartCoroutine(Game_BossTime((int)arg0));
+
+    }
+    private IEnumerator Game_BossTime(int number)
+    {
+        int max = 10;
+        while (max > 0)
+        {
+            max--;
+            Alert_Dec.Show("自动炼药中");
+            Confirm_medicine(number);
+            yield return new WaitForSeconds(1f);
+        }
+        Alert_Dec.Show("炼药结束");
+    }
+
 
     private void Confirm_medicine(object arg0)
     {
+        number++;
         int max = (int)arg0;
         SumSave.crt_zs.medicine_exp++;
         bool eixst=true;

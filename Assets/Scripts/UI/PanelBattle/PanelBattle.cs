@@ -670,6 +670,15 @@ public class PanelBattle : PanelBase
         {
             BaseBattleAttack baseBattleAttack = health.GetComponent<BaseBattleAttack>();
             SumSave.crt_illustrated.Add_illustrated_list(baseBattleAttack.Data.crt_name);
+            if (SumSave.crtHero.zs_lv > 1)
+            {
+                if (Random.Range(0, 100) < 1)
+                {
+                    Battle_Tool.Dream_Obtain_Unit(currency_unit.Boss积分, 1, Obtain_Int.Add_unit(1));
+                    Alert_Dec.Show("获得Boss积分 * 1");
+                }
+
+            }
             if (baseBattleAttack.Data.type == Battle_Game_Type.Boss)
             {
                 if (Tool_Battle.Is_first_Boss_Kill(baseBattleAttack.Data.crt_name))
@@ -985,6 +994,7 @@ public class PanelBattle : PanelBase
         item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill());
         Dictionary<int, db_skill_vo> dic = SumSave.crt_skill.Set_Current_skill();
         crt_pos = item.transform;
+        List<db_skill_vo> list_skill = new List<db_skill_vo>();
         foreach (var id in dic) 
         {
             if (id.Value.EffectType == 5)//护盾
@@ -1000,17 +1010,26 @@ public class PanelBattle : PanelBase
             else
             if (id.Value.EffectType == 6)//召唤
             {
-                int number = 1;
+                list_skill.Add(id.Value);
+            }
+        }
+        if (list_skill.Count > 0)
+        {
+            db_skill_vo skill = ArrayHelper.GetMax(list_skill, E => E.need_lv);
+            if (skill != null)
+            {
+                int number = 2;//召唤多个
+                if (skill.SetLv() >= 4) number++;
+                if (skill.SetLv() >= 9) number++;
                 for (int i = 0; i < number; i++)
                 {
-                    GameObject call = ObjectPoolManager.instance.GetObjectFormPool("召" + id.Value.show_name, battle_player_prefab,
+                    GameObject call = ObjectPoolManager.instance.GetObjectFormPool("召" + skill.show_name, battle_player_prefab,
                Call_Pos(), Quaternion.identity, battle_borm.transform);
-                    call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(id.Value);
-                    call.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(id.Value.show_name));
+                    call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(skill);
+                    call.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(skill.show_name));
                     call.GetComponent<BaseBattleAttack>().Radius(crt_pos);
                     player_list.Add(call);
                 }
-                
             }
         }
         player_list.Add(item);
@@ -1034,11 +1053,25 @@ public class PanelBattle : PanelBase
             }
         }
     }
-    bool pos = true;
+
+    int call_index = 0;
     private Vector3 Call_Pos()
     {
-        pos = !pos;
-        return new Vector3(transform.position.x + (pos ? 300 : -300), transform.position.y - 0, transform.position.z);
+        call_index++;
+        if (call_index > 3) call_index = 0;
+        switch (call_index)
+        {
+            case 0:
+                return new Vector3(transform.position.x + 300, transform.position.y + 300, transform.position.z);
+            case 1:
+                return new Vector3(transform.position.x - 300, transform.position.y + 300, transform.position.z);
+            case 2:
+                return new Vector3(transform.position.x + 300, transform.position.y - 300, transform.position.z);
+            case 3:
+                return new Vector3(transform.position.x - 300, transform.position.y - 300, transform.position.z);
+            default:
+                return new Vector3(transform.position.x + 300, transform.position.y + 300, transform.position.z);
+        }
          
     }
     bool open_crate_monster = false;
