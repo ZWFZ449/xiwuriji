@@ -800,6 +800,8 @@ public class PanelBattle : PanelBase
         {
             case Battle_Game_Type.Boss://boss掉落
                 Battle_Tool.Dream_Obtain_Unit(currency_unit.Boss积分, 1, Obtain_Int.Add_unit(1));
+                if (SumSave.crtHero.zs_lv > 1) Battle_Tool.Dream_Obtain_Unit(currency_unit.转生积分, 1, Obtain_Int.Add_unit(1));
+
                 AddSkill();
                 Close_BossSlider();
                 break;
