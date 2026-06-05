@@ -175,10 +175,11 @@ public static class Battle_Tool
         //升级
         if (SumSave.db_lvs.ContainsKey(SumSave.crtMaxBattle.lv))
         {
-            if (SumSave.crtMaxBattle.exp >= SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp)
+            long values = (long)(SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp * MathF.Pow(10, SumSave.crtHero.zs_lv - 1));
+            if (SumSave.crtMaxBattle.exp >= values)
             { 
-               SumSave.crtMaxBattle.exp -= SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp;
-               SumSave.crtHero.exp -= SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp;
+               SumSave.crtMaxBattle.exp -= values;
+               SumSave.crtHero.exp -= values;
                SumSave.crtMaxBattle.lv += 1;
                SumSave.crtHero.lv += 1;
                Game_Omphalos.Refresh(Mysql_Table_Name.Dream_Users);

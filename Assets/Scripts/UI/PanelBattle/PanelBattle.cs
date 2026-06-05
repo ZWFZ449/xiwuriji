@@ -210,7 +210,9 @@ public class PanelBattle : PanelBase
                     item.Value.Refresh(data.Get_MP * 100 / (SumSave.crtMaxBattle.data.battle_maxmp + 1) , item.Key + " " + data.Get_MP + "/" + SumSave.crtMaxBattle.data.battle_maxmp);
                     break;
                 case slider_type.exp:
-                    item.Value.Refresh(SumSave.crtMaxBattle.exp * 100 / (SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp + 1), item.Key + "Lv." + SumSave.crtMaxBattle.lv + " " + SumSave.crtMaxBattle.exp + "/" + SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp);
+                    long value = (long)(SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp * MathF.Pow(10, SumSave.crtHero.zs_lv - 1));
+                    if(value== 0) value = 1;
+                    item.Value.Refresh(SumSave.crtMaxBattle.exp * 100 / value, item.Key + "Lv." + SumSave.crtMaxBattle.lv + " " + SumSave.crtMaxBattle.exp + "/" + value);
                     break;
             }
         }
@@ -226,8 +228,10 @@ public class PanelBattle : PanelBase
             switch (item.Key)
             {
                 case slider_type.exp:
-                    float value= SumSave.crtMaxBattle.exp * 100 / (SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp + 1);
-                    item.Value.Refresh(value, item.Key + "Lv." + SumSave.crtMaxBattle.lv + " " + SumSave.crtMaxBattle.exp + "/" + SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp);
+                    long values = (long)(SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp * MathF.Pow(10, SumSave.crtHero.zs_lv - 1));
+                    if (values == 0) values = 1;
+                    float value= SumSave.crtMaxBattle.exp * 100 / values;
+                    item.Value.Refresh(value, item.Key + "Lv." + SumSave.crtMaxBattle.lv + " " + SumSave.crtMaxBattle.exp + "/" + values);
                     break;
             }
         }
@@ -786,7 +790,7 @@ public class PanelBattle : PanelBase
     private void Drop(BaseBattleAttack monster)
     {
         int exp = (int)monster.Data.exp * (100 + SumSave.crtMaxBattle.exp_bonus) / 100;
-       
+        exp = (int)(exp * MathF.Pow(10, SumSave.crtHero.zs_lv - 1));
         Show_Info("击杀 " + monster.Data.crt_name + " 获得经验 " + exp);
         //掉落收益
         Add_Exp(exp); 

@@ -337,7 +337,7 @@ public class show_drop_list : Base_Mono
                         break;
                     case currency_unit.Boss积分:
                         break;
-                    case currency_unit.离线积分:
+                    case currency_unit.转生积分:
                         break;
                     case currency_unit.试炼积分:
                         break;

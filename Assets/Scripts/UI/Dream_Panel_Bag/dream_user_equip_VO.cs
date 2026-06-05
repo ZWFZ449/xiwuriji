@@ -104,7 +104,7 @@ public class dream_user_equip_VO : Base_VO
         {
             "equip_value",
             "house_value",
-            "treasure_value" ,
+            "treasure_value",
             "page"
         };
     }

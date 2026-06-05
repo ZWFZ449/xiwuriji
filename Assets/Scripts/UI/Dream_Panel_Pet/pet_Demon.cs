@@ -121,7 +121,7 @@ public class pet_Demon : Base_Mono
         int number = select_pet.GetCrtTalent.Count + crt_pet.GetCrtTalent.Count;
         int crt_number = Random.Range(number / 2, (number) / 2 + 2);
 #if UNITY_EDITOR
-        crt_number = 9;
+        crt_number = 10;
 #elif UNITY_ANDROID
 #elif UNITY_IPHONE
 #endif

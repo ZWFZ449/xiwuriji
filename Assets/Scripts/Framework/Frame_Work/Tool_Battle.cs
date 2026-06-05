@@ -196,15 +196,15 @@ public static class Tool_Battle
                     break;
                 case Hero_Type.战士:
                     hp += (ObscuredInt)(crt_euqip[i].hp * (1.8 + (zl * 0.3)));
-                    mp += (ObscuredInt)(crt_euqip[i].mp * 0.5 + (zl * 0.1));
+                    mp += (ObscuredInt)(crt_euqip[i].mp * (0.5 + (zl * 0.1)));
                     break;
                 case Hero_Type.法师:
-                    hp += (ObscuredInt)(crt_euqip[i].hp * 0.5 + (zl * 0.1));
-                    mp += (ObscuredInt)(crt_euqip[i].mp * 1.8 + (zl * 0.3));
+                    hp += (ObscuredInt)(crt_euqip[i].hp * (0.5 + (zl * 0.1)));
+                    mp += (ObscuredInt)(crt_euqip[i].mp * (1.8 + (zl * 0.3)));
                     break;
                 case Hero_Type.道士:
-                    hp += (ObscuredInt)(crt_euqip[i].hp * 1.2 + (zl * 0.2));
-                    mp += (ObscuredInt)(crt_euqip[i].mp * 1.2 + (zl * 0.2));
+                    hp += (ObscuredInt)(crt_euqip[i].hp * (1.2 + (zl * 0.2)));
+                    mp += (ObscuredInt)(crt_euqip[i].mp * (1.2 + (zl * 0.2)));
                     break;
                 default:
                     break;
@@ -595,6 +595,26 @@ public static class Tool_Battle
             ObscuredInt skill_lv = item.Value.SetLv(); 
             if (skill_lv >= 0 && item.Value.Job != -1)
             {
+                switch ((Skill_Effect_Type)item.Value.EffectType)
+                {
+                    case Skill_Effect_Type.护盾:
+                        if (item.Value.Effect == 1)
+                        {
+                            ac += item.Value.Power + item.Value.DefPowers[skill_lv];
+                            ac2 += item.Value.Power + item.Value.DefPowers[skill_lv];
+                            mac += item.Value.Power + item.Value.DefPowers[skill_lv];
+                            mac2 += item.Value.Power + item.Value.DefPowers[skill_lv];
+                        }
+                        else 
+                        {
+                            damage_reduction += item.Value.Power + item.Value.DefPowers[skill_lv];
+                            //魔法免伤
+                            magic_damage_reduction += item.Value.Power + item.Value.DefPowers[skill_lv];
+                        }
+                        if(item.Value.skill_damages.Count>0) battle_def+= item.Value.skill_damages[skill_lv];
+                        break;
+                }
+
                 if (item.Value.skill_offect_value_list.Count > 0)
                 {
                     foreach (enum_equip_entry_list skill_effect_type in item.Value.skill_offect_value_list.Keys)
@@ -911,6 +931,7 @@ public static class Tool_Battle
             {
                 (enum_battle_pet_talent_list, float, float) D = (enum_battle_pet_talent_list.任意门, 0, 0);
                 int lv = (int)MathF.Min(60, SumSave.crtHero.lv);
+                if (zl >= 1) lv = 80;
                 float pet_up_offect_value = 0;
                 int talent_lv = Mathf.Min(talent.pet_up_lv, talent.pet_up_offect.Count - 1);
                 if (talent.pet_up_lv >= 0)
@@ -1117,13 +1138,13 @@ public static class Tool_Battle
         List<(enum_battle_pet_talent_list, float, float)> talentList = new List<(enum_battle_pet_talent_list, float, float)>();
         //str += "召唤 " + Show_Color.Set_String(crt_skill.show_name, color_list) + "\n继承" + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + " %属性" + " ", color_list);
         //if (crt_skill.skill_damages.Count > 0) str += "[召唤兽伤害] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
-        ObscuredInt lv = Mathf.Max(0, SumSave.crtHero.zs_lv - 1);
-        ObscuredInt power = (lv * 500 + 100);
+        int lv = Mathf.Max(1, SumSave.crtHero.zs_lv);
+        int power = lv > 1 ? (lv * 500) : 100;
         maxhp = (ObscuredInt)monster.data.battle_maxhp * (power) / 100;
         maxmp = 1000;
         hp = (ObscuredInt)monster.data.battle_maxhp * (power) / 100;
         mp = 1000;
-        if (lv > 0) power = (lv * 200);
+        if (lv > 0) power = (lv * 100);
         ac = (ObscuredInt)monster.data.ac * (power) / 100;
         ac2 = (ObscuredInt)monster.data.ac2 * (power) / 100;
         mac = (ObscuredInt)monster.data.mac * (power) / 100;
@@ -1204,6 +1225,7 @@ public static class Tool_Battle
         /// 8 连击效果提升
 
         ObscuredInt lv = (ObscuredInt)MathF.Min(SumSave.crtHero.lv, 60);
+        if (SumSave.crtHero.zs_lv >= 2) lv = (SumSave.crtHero.zs_lv - 1) * 20 + 60;
         talent.pet_up_lv = Mathf.Min(talent.pet_up_lv, talent.pet_up_offect.Count - 1);
         int pet_up_lv = talent.pet_up_lv + 1;
         switch (talent.pet_talent_type)

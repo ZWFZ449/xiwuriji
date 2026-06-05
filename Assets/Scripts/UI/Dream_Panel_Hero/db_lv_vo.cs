@@ -1,4 +1,6 @@
 
+using Common;
+
 public class db_lv_vo
 {
     /// <summary>

@@ -196,8 +196,6 @@ public class map_show_offect : Base_Mono
                         break;
                     case currency_unit.Boss积分:
                         break;
-                    case currency_unit.离线积分:
-                        break;
                     case currency_unit.试炼积分:
                         break;
                     case currency_unit.灵气:
