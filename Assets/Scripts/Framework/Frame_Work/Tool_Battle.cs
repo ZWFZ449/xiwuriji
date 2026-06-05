@@ -1128,53 +1128,53 @@ public static class Tool_Battle
 
     public static crtMaxBattleVO Crate_Monster(crtMaxBattleVO monster)
     {
-        ObscuredInt exp_bonus = 0, gold_bonus = 0, drop_bonus = 0, quality_bonus = 0;
-        ObscuredInt maxhp = 0, maxmp = 0;
-        ObscuredInt battle_hp = 0, battle_mp = 0, battle_ac = 0, battle_mac = 0, battle_dc = 0, battle_sc = 0, battle_mc = 0, battle_speed = 0, battle_range = 0, battle_Damage = 0, battle_def = 0;
-        ObscuredInt hp = 0, mp = 0, dc = 0, dc2 = 0, mac = 0, mac2 = 0, ac = 0, ac2 = 0, sc = 0, sc2 = 0, mc = 0, mc2 = 0;
-        ObscuredInt hit = 0, dodge = 0, crit = 0, critDmg = 100;
-        ObscuredInt hpRegen = 0, mpRegen = 0;
-        ObscuredInt lucky = 0, damage_reduction = 0, magic_damage_reduction = 0;
+        int exp_bonus = 0, gold_bonus = 0, drop_bonus = 0, quality_bonus = 0;
+        long maxhp = 0, maxmp = 0;
+        int battle_hp = 0, battle_mp = 0, battle_ac = 0, battle_mac = 0, battle_dc = 0, battle_sc = 0, battle_mc = 0, battle_speed = 0, battle_range = 0, battle_Damage = 0, battle_def = 0;
+        long hp = 0, mp = 0;
+        int dc = 0, dc2 = 0, mac = 0, mac2 = 0, ac = 0, ac2 = 0, sc = 0, sc2 = 0, mc = 0, mc2 = 0;
+        int hit = 0, dodge = 0, crit = 0, critDmg = 100;
+        int hpRegen = 0, mpRegen = 0;
+        int lucky = 0, damage_reduction = 0, magic_damage_reduction = 0;
         List<(enum_battle_pet_talent_list, float, float)> talentList = new List<(enum_battle_pet_talent_list, float, float)>();
-        //str += "召唤 " + Show_Color.Set_String(crt_skill.show_name, color_list) + "\n继承" + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + " %属性" + " ", color_list);
-        //if (crt_skill.skill_damages.Count > 0) str += "[召唤兽伤害] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
         int lv = Mathf.Max(1, SumSave.crtHero.zs_lv);
         int power = lv > 1 ? (lv * 500) : 100;
-        maxhp = (ObscuredInt)monster.data.battle_maxhp * (power) / 100;
+        maxhp = (long)(monster.data.battle_maxhp * (power) / 100);
         maxmp = 1000;
-        hp = (ObscuredInt)monster.data.battle_maxhp * (power) / 100;
+        hp = monster.data.battle_maxhp * (power) / 100;
         mp = 1000;
-        if (lv > 0) power = (lv * 100);
-        ac = (ObscuredInt)monster.data.ac * (power) / 100;
-        ac2 = (ObscuredInt)monster.data.ac2 * (power) / 100;
-        mac = (ObscuredInt)monster.data.mac * (power) / 100;
-        mac2 = (ObscuredInt)monster.data.mac2 * (power) / 100;
-        dc = (ObscuredInt)monster.data.dc * (power) / 100;
-        dc2 = (ObscuredInt)monster.data.dc2 * (power) / 100;
-        sc = (ObscuredInt)monster.data.sc * (power) / 100;
-        sc2 = (ObscuredInt)monster.data.sc2 * (power) / 100;
-        mc = (ObscuredInt)monster.data.mc * (power) / 100;
-        mc2 = (ObscuredInt)monster.data.mc2 * (power) / 100;
-        hit = (ObscuredInt)monster.data.hit * (power) / 100;
-        dodge = (ObscuredInt)monster.data.dodge;
-        crit = (ObscuredInt)monster.data.crit ;
-        critDmg = (ObscuredInt)monster.data.critDmg ;
-        hpRegen = (ObscuredInt)monster.data.hpRegen ;
+        if (lv > 1) power = (lv * 100);
+        ac = monster.data.ac * (power) / 100;
+        ac2 = monster.data.ac2 * (power) / 100;
+        mac = monster.data.mac * (power) / 100;
+        mac2 = monster.data.mac2 * (power) / 100;
+        if (lv > 1) power = (lv / 2 * 150);
+        dc = monster.data.dc * (power) / 100;
+        dc2 = monster.data.dc2 * (power) / 100;
+        sc = monster.data.sc * (power) / 100;
+        sc2 = monster.data.sc2 * (power) / 100;
+        mc = monster.data.mc * (power) / 100;
+        mc2 = monster.data.mc2 * (power) / 100;
+        hit = monster.data.hit * (power) / 100;
+        dodge = monster.data.dodge;
+        crit = monster.data.crit ;
+        critDmg = monster.data.critDmg ;
+        hpRegen = monster.data.hpRegen ;
         mpRegen = 1000;
-        battle_hp = (ObscuredInt)monster.data.battle_hp * (power) / 100;
-        battle_mp = (ObscuredInt)monster.data.battle_mp * (power) / 100;
-        battle_ac = (ObscuredInt)monster.data.battle_ac * (power) / 100;
-        battle_mac = (ObscuredInt)monster.data.battle_mac * (power) / 100;
-        battle_dc = (ObscuredInt)monster.data.battle_sc * (power) / 100;
-        battle_sc = (ObscuredInt)monster.data.battle_sc * (power) / 100;
-        battle_mc = (ObscuredInt)monster.data.battle_sc * (power) / 100;
-        battle_speed = (ObscuredInt)monster.data.battle_speed;
-        battle_range = (ObscuredInt)monster.data.battle_range;
-        if (lv > 0) battle_range = Random.Range(monster.data.battle_range - 30, monster.data.battle_range + 30);
-         battle_Damage = (ObscuredInt)monster.data.battle_Damage;//真实伤害
-        battle_def = (ObscuredInt)monster.data.battle_def ;
-        damage_reduction = (ObscuredInt)monster.data.damage_reduction * (power) / 100;
-        magic_damage_reduction = (ObscuredInt)monster.data.magic_damage_reduction * (power) / 100;
+        battle_hp = monster.data.battle_hp * (power) / 100;
+        battle_mp = monster.data.battle_mp * (power) / 100;
+        battle_ac = monster.data.battle_ac * (power) / 100;
+        battle_mac = monster.data.battle_mac * (power) / 100;
+        battle_dc = monster.data.battle_sc * (power) / 100;
+        battle_sc = monster.data.battle_sc * (power) / 100;
+        battle_mc = monster.data.battle_sc * (power) / 100;
+        battle_speed = monster.data.battle_speed;
+        battle_range = monster.data.battle_range;
+        if (lv > 1) battle_range = Random.Range(monster.data.battle_range - 30, monster.data.battle_range + 30);
+         battle_Damage = monster.data.battle_Damage;//真实伤害
+        battle_def = monster.data.battle_def ;
+        damage_reduction = monster.data.damage_reduction * (power) / 100;
+        magic_damage_reduction = monster.data.magic_damage_reduction * (power) / 100;
         crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus, 0);
         crt.crt_name = monster.crt_name;
         crt.lv = monster.lv;
@@ -1182,7 +1182,7 @@ public static class Tool_Battle
         crt.hero_type = monster.hero_type;
         crt.type =  monster.type;
         //maxhp = 1; hp = 1; maxmp = 1; mp = 1; //测试
-        crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
+        crt.data = new FinalBattleValueVO(maxhp, (int)maxmp, hp, (int)mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky, damage_reduction, magic_damage_reduction, monster.data.move_speed);
         return crt;
     }

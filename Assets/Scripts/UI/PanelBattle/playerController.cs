@@ -153,8 +153,9 @@ public class playerController : BaseBattleAttack
     {
         if (oneselfHealthState.Get_MP < mp) return;//蓝量不足
         oneselfHealthState.Set_Mp = mp;
-        if (Terget == null) return;
-        if (!Terget.gameObject.activeInHierarchy || Terget.isDead) return; 
+        if (Terget == null) { Find_Terget(); return; }
+        
+        if (!Terget.gameObject.activeInHierarchy || Terget.isDead) { Find_Terget(); return; }
         if (!dic.ContainsKey(skill))
         {
             GameObject skill_prefabs = Resources.Load<GameObject>("UI/skill_prefabs/skill_" + skill.id);// skill.id); 
