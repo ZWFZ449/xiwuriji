@@ -63,7 +63,15 @@ public static class Mysql_Read
         item.Init(nowtime,value, buff_value);
         return item;
     }
+    public static user_refined_vo Read(MySqlDataReader reader, user_refined_vo item)
+    {
 
+        item.Init(
+            reader.GetString(reader.GetOrdinal("refined_numbers")),
+            reader.GetString(reader.GetOrdinal("refined_maxnumbers"))
+        );
+        return item;
+    }
     public static db_synthesis_vo Read_Synthesis(MySqlDataReader reader)//
     {
         return new db_synthesis_vo

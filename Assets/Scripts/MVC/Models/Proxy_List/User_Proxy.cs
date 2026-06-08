@@ -125,6 +125,7 @@ namespace MVC
             Read_global_gift();
             read_global_promotion();
             Read_User_zs();
+            Read_User_refined();
             refresh_Max_Hero_Attribute();
             Read_global_battle_info();
         }
@@ -435,6 +436,23 @@ namespace MVC
                 SumSave.crt_zs.crt_Refinement = new List<CodeStage.AntiCheat.ObscuredTypes.ObscuredInt>();
                 SumSave.crt_zs.crt_medicine = new List<CodeStage.AntiCheat.ObscuredTypes.ObscuredInt>();
                 Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.dream_user_zs, SumSave.crt_zs.Set_Instace_String());
+            }
+        }
+
+        private void Read_User_refined()
+        {
+            mysqlReader = MysqlDb.Select(Mysql_Table_Name.dream_user_refined, "uid", GetStr(SumSave.crt_user.uid));//读取角色信息
+            SumSave.crt_refined = new user_refined_vo();
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    SumSave.crt_refined = Mysql_Read.Read(mysqlReader, new user_refined_vo());
+                }
+            }
+            else
+            {
+                Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.dream_user_refined, SumSave.crt_refined.Set_Instace_String());
             }
         }
 

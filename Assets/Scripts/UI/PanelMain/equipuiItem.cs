@@ -1,4 +1,6 @@
 
+using Common;
+using System;
 using System.Collections.Generic;
 using UI;
 using UnityEngine;
@@ -42,15 +44,16 @@ namespace MVC
             equip_type_index= _equip_type_index;
             show_info.sprite = UI_Manager.I.GetEquipSprite("UI/panel/panelmain/equip", _equip_type_index + "");
         }
+        public void Insance_Crate(equip_refined_list _equip_type_index)
+        {
+            equip_type_index = (equip_type_list)_equip_type_index;
+            show_info.sprite = UI_Manager.I.GetEquipSprite("UI/panel/panelmain/equip", _equip_type_index + "");
+        }
         public void Initialize()
         {
             data = null;
             crt_bag= null;
             ClearObject(this.transform);
-            //for (int i = transform.childCount - 1; i >= 0; i--)
-            //{
-            //    Destroy(transform.GetChild(i).gameObject);
-            //}
         }
 
         /// <summary>
@@ -83,13 +86,50 @@ namespace MVC
                 item.Data = data;
                 item.GetComponent<Button>().onClick.AddListener(() => { AudioManager.Instance.playAudio(ClipEnum.购买物品); ShowEquip(); });//
                 crt_bag = item;
+                Set_Lv(item);
             }
             get
             {
                 return data;
             }
         }
-
+        /// <summary>
+        /// 洗炼属性
+        /// </summary>
+        /// <param name="item"></param>
+        private void Set_Lv(dream_BagItem item)
+        {
+            int num = 0, surplus = -1;
+            for (int i = 0; i < SumSave.crt_refined.refined_numbers.Count; i++)
+            {
+                num = SumSave.crt_refined.refined_numbers[i] / Enum.GetNames(typeof(redined_lucky_type)).Length;
+                surplus = SumSave.crt_refined.refined_numbers[i] > 0 ? SumSave.crt_refined.refined_numbers[i] % Enum.GetNames(typeof(redined_lucky_type)).Length : -1;
+                if (i == 0 && num > 0)
+                {
+                    for (int j = 0; j < Enum.GetNames(typeof(redined_lucky_type)).Length; j++)
+                    {
+                        if (equip_type_index.ToString() == ((equip_refined_list)j).ToString())
+                        {
+                            int number = Tool_Battle.Refined_MaxNumbers(num + (surplus == j ? 1 : 0));
+                            item.refined_Lv(number);
+                            return;
+                        }
+                    }
+                }
+                if (i == 1 && num > 0)
+                {
+                    for (int j = 0; j < Enum.GetNames(typeof(equip_refined_list)).Length; j++)
+                    {
+                        if (equip_type_index.ToString() == ((equip_refined_list)(j+5)).ToString())
+                        {
+                            int number = Tool_Battle.Refined_MaxNumbers(num + (surplus == j ? 1 : 0));
+                            item.refined_Lv(number);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
 
         private void ShowPetEquip()
         {

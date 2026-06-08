@@ -363,6 +363,10 @@ namespace Common
         /// </summary>
         public static crtMaxBattleVO crtMaxBattle;
         /// <summary>
+        /// 精炼属性
+        /// </summary>
+        public static user_refined_vo crt_refined;
+        /// <summary>
         /// 玩家信息
         /// </summary>
         public static Dream_User_Hero_VO crtHero;

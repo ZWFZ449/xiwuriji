@@ -2,6 +2,7 @@ using Common;
 using Components;
 using MVC;
 using System.Collections.Generic;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -192,6 +193,7 @@ public class offect_synthesis : Base_Mono
                         Bag_Base_VO synthesis = tool_Categoryt.Read_BaseBag(user_value);
                         SumSave.crt_bags.Set_Bag_List(synthesis);
                     }
+                    UI_Manager.Instance.GetPanel<PanelMian>().Show();
                 }
                 else Alert_Dec.Show("合成失败,材料不足");
             }

@@ -4,6 +4,7 @@ using MVC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -451,6 +452,8 @@ public class show_drop_list : Base_Mono
         string[] info_str = data.user_value.Split(' ');
         int lv = 1;
         if (info_str.Length > 2) lv = int.Parse(info_str[2]);
+        //if (SumSave.crtHero.zs_lv > 1 || SumSave.crtHero.lv >= 60)
+        moeny = moeny * lv / Enum.GetValues(typeof(enum_equip_quality_list)).Cast<int>().Max();
         dic.Add( (exist?"职业回收" :"回收 ") + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.金币 + " * " + moeny);
         Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
         if (lv >= 5)
@@ -461,7 +464,6 @@ public class show_drop_list : Base_Mono
             Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, sycee, Obtain_Int.Add_unit(sycee));
         }
     }
-
     private void OnClick(dream_BagItem item)
     {
         Stditem_StdMode_List equip_Type = Tool_State.ToEnum(item.Data.StdMode, Stditem_StdMode_List.nothing);

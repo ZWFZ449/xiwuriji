@@ -312,9 +312,6 @@ public class offect_reincarnation : Base_Mono
                 break;
         }
     }
-
-
-
     /// <summary>
     /// 转生
     /// </summary>

@@ -31,13 +31,23 @@ public static class Tool_Battle
     /// <returns></returns>
     public static crtMaxBattleVO InitPlayerMaxBattle()
     {
-        ObscuredInt exp_bonus = 0, gold_bonus = 0, drop_bonus = 0, quality_bonus = 0,boss_cd=0;
-        ObscuredInt maxhp = 0, maxmp = 0;
-        ObscuredInt battle_hp = 0, battle_mp = 0, battle_ac = 0, battle_mac = 0, battle_dc = 0, battle_sc = 0, battle_mc = 0, battle_speed = 0, battle_range = 0, battle_Damage = 0, battle_def = 0;
-        ObscuredInt hp = 0, mp = 0, dc = 0, dc2 = 0, mac = 0, mac2 = 0, ac = 0, ac2 = 0, sc = 0, sc2 = 0, mc = 0, mc2 = 0;
-        ObscuredInt hit = 0, dodge = 0, crit = 0, critDmg = 100;
-        ObscuredInt hpRegen = 0, mpRegen = 0;
-        ObscuredInt lucky = 0, damage_reduction=0,magic_damage_reduction=0;
+        int exp_bonus = 0, gold_bonus = 0, drop_bonus = 0, quality_bonus = 0,boss_cd=0;
+        int maxhp = 0, maxmp = 0;
+        int battle_hp = 0, battle_mp = 0, battle_ac = 0, battle_mac = 0, battle_dc = 0, battle_sc = 0, battle_mc = 0, battle_speed = 0, battle_range = 0, battle_Damage = 0, battle_def = 0;
+        int hp = 0, mp = 0, dc = 0, dc2 = 0, mac = 0, mac2 = 0, ac = 0, ac2 = 0, sc = 0, sc2 = 0, mc = 0, mc2 = 0;
+        int hit = 0, dodge = 0, crit = 0, critDmg = 100;
+        int hpRegen = 0, mpRegen = 0;
+        int lucky = 0, damage_reduction=0,magic_damage_reduction=0;
+        if (crt_vip == null) Obtain_Vip();
+        if (crt_vip != null)
+        {
+            exp_bonus += crt_vip.lingzhuIncome;
+            gold_bonus += crt_vip.experienceBonus;
+            drop_bonus += crt_vip.equipmentExplosionRate;
+            boss_cd += crt_vip.monsterHuntingInterval;
+            int sum = (SumSave.crt_global_gift.GetGiftPoints);
+            quality_bonus += sum / 5000;
+        }
         Dictionary<enum_equip_entry_list, int> buffList = new Dictionary<enum_equip_entry_list, int>();
         List<(enum_battle_pet_talent_list, float, float)> talentList = new List<(enum_battle_pet_talent_list, float, float)>();
         Dictionary<int, int> suits = new Dictionary<int, int>();//套装
@@ -231,7 +241,27 @@ public static class Tool_Battle
             //强化逻辑
             if (equiplucky > 1 && (crt_euqip[i].StdMode == equip_type_list.武器.ToString() || crt_euqip[i].StdMode == equip_type_list.项链.ToString()))
             {
-                lucky += equiplucky - 1; 
+                if (crt_euqip[i].StdMode == equip_type_list.武器.ToString())
+                {
+                    if (equiplucky <= 8) lucky += equiplucky - 1;
+                    else Game_Omphalos.i.Delete("武器幸运超标");
+                }else
+                if (crt_euqip[i].StdMode == equip_type_list.项链.ToString())
+                {
+                    if (equiplucky <= 3)
+                    {
+                        if (equiplucky == 3)
+                        {
+                            int sum = (SumSave.crt_global_gift.GetGiftPoints);
+                            if (sum < 5000)
+                            { 
+                                Game_Omphalos.i.Delete("项链幸运3级需要定制皇权");
+                            }
+                        }
+                        lucky += equiplucky - 1;
+                    } 
+                    else Game_Omphalos.i.Delete("项链幸运超标");
+                }
             }
             if (info.Length >= 5)
             {
@@ -427,6 +457,101 @@ public static class Tool_Battle
                     }
 
 
+                }
+            }
+        }
+        //精炼
+        for (int i = 0; i < SumSave.crt_refined.refined_numbers.Count; i++)
+        {
+            int num = 0, surplus = -1;
+            num = SumSave.crt_refined.refined_numbers[i] / Enum.GetNames(typeof(redined_lucky_type)).Length;
+            surplus = SumSave.crt_refined.refined_numbers[i] > 0 ? SumSave.crt_refined.refined_numbers[i] % Enum.GetNames(typeof(redined_lucky_type)).Length : -1;
+            if (i == 0)
+            {
+                for (int j = 0; j < Enum.GetNames(typeof(redined_lucky_type)).Length; j++)
+                {
+                    int number = Tool_Battle.Refined_MaxNumbers(num + (surplus == j ? 1 : 0));
+                    switch ((redined_lucky_type)j)
+                    {
+                        case redined_lucky_type.生命值:
+                            switch ((Hero_Type)SumSave.crtHero.job)
+                            {
+                                case Hero_Type.平民:
+                                    hp += number * 10;
+                                    break;
+                                case Hero_Type.战士:
+                                    hp += (int)(number * 18f);
+                                    break;
+                                case Hero_Type.法师:
+                                    hp += (int)(number * 5f);
+                                    break;
+                                case Hero_Type.道士:
+                                    hp += (int)(number * 12f);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case redined_lucky_type.魔法值:
+                            switch ((Hero_Type)SumSave.crtHero.job)
+                            {
+                                case Hero_Type.平民:
+                                    mp += number * 10;
+                                    break;
+                                case Hero_Type.战士:
+                                    mp += (int)(number * 5f);
+                                    break;
+                                case Hero_Type.法师:
+                                    mp += (int)(number * 18f);
+                                    break;
+                                case Hero_Type.道士:
+                                    mp += (int)(number * 12f);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case redined_lucky_type.物理防御:
+                            ac += number;
+                            ac2 += number;
+                            break;
+                        case redined_lucky_type.魔法防御:
+                            mac += number;
+                            mac2 += number;
+                            break;
+                        case redined_lucky_type.攻击:
+                            sc2 += number;
+                            mc2 += number;
+                            dc2 += number;
+                            break;
+                    }
+                }
+            }
+            if (i == 1)
+            {
+                for (int j = 0; j < Enum.GetNames(typeof(redined_type)).Length; j++)
+                {
+                    int number = Refined_MaxNumbers(num + (surplus == j ? 1 : 0));
+                    switch ((redined_type)j)
+                    {
+                        case redined_type.生命属性:
+                            battle_hp += number;
+                            break;
+                        case redined_type.魔法属性:
+                            battle_mp += number;
+                            break;
+                        case redined_type.防御属性:
+                            battle_ac += number;
+                            break;
+                        case redined_type.魔防属性:
+                            battle_mac += number;
+                            break;
+                        case redined_type.攻击属性:
+                            battle_sc += number;
+                            battle_mc += number;
+                            battle_dc += number;
+                            break;
+                    }
                 }
             }
         }
@@ -1035,16 +1160,6 @@ public static class Tool_Battle
                 }
             }
         }
-        if (crt_vip == null) Obtain_Vip();
-        if (crt_vip != null)
-        { 
-            exp_bonus += crt_vip.lingzhuIncome;
-            gold_bonus += crt_vip.experienceBonus;
-            drop_bonus += crt_vip.equipmentExplosionRate;
-            boss_cd += crt_vip.monsterHuntingInterval; 
-            int sum = (SumSave.crt_global_gift.GetGiftPoints);
-            quality_bonus += sum / 5000;
-        }
         List<(string, string, int)> buffs = SumSave.crt_user_unit.GetBuff;
         for (int i = 0; i < buffs.Count; i++)
         {
@@ -1124,6 +1239,25 @@ public static class Tool_Battle
         crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky,damage_reduction,magic_damage_reduction,0);
         return crt;
+    }
+
+    /// <summary>
+    /// 精炼计算等级
+    /// </summary>
+    /// <param name="total"></param>
+    /// <returns></returns>
+    public static int Refined_MaxNumbers(int total)
+    {
+        if (total == 0) return 0;
+        int times = 0;
+        for (int i = 1; i <= total; i++)
+        {
+            if (total < i) break;
+
+            total -= i;
+            times++;
+        }
+        return times;
     }
 
     public static crtMaxBattleVO Crate_Monster(crtMaxBattleVO monster)

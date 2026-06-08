@@ -195,6 +195,7 @@ public class PanelBattle : PanelBase
                     break;
             }
             slider_list.Add(item, slider_item);
+            
         }
     }
     protected void Show_Slider(BattleHealthState data)
@@ -1047,9 +1048,17 @@ public class PanelBattle : PanelBase
                 GameObject call = ObjectPoolManager.instance.GetObjectFormPool("召" + id.Value.show_name, battle_player_prefab,
                 Call_Pos(), Quaternion.identity, battle_borm.transform);
                 call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(id.Value);
-               call.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(id.Value.show_name));
+                call.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(id.Value.show_name));
                 call.GetComponent<BaseBattleAttack>().Radius(crt_pos);
                 player_list.Add(call);
+                for (int i = 0; i < monster_list.Count; i++)
+                {
+                    if (monster_list[i].GetComponent<BaseBattleAttack>().Data.type == Battle_Game_Type.Boss)
+                    {
+                        call.GetComponent<BaseBattleAttack>().Set_Target(monster_list[i].GetComponent<BattleHealthState>());
+                        break;
+                    }
+                }
             }
         }
     }

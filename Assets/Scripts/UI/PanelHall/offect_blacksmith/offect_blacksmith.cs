@@ -383,6 +383,7 @@ public class offect_blacksmith : Base_Mono
         info.text = (blacksmith_type)btn_item.index + "";
         crt_type = (blacksmith_type)btn_item.index;
         Base_Show((blacksmith_type)btn_item.index);
+        crt_bag = null;
     }
 
     private void Base_Show(blacksmith_type index)

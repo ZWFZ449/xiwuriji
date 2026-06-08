@@ -14,7 +14,7 @@ namespace MVC
     {
         private Image item_icon, item_frame, lock_On;
 
-        private Text info;
+        private Text info, refined_info;
 
         private Transform receive, m_gem_brom;
 
@@ -32,6 +32,7 @@ namespace MVC
             m_gem_brom= Find<Transform>("gem_brom");
             Image_text = Resources.Load<GameObject>("Prefabs/panel_text/Image_text");
             gridLayoutGroup = Find<GridLayoutGroup>("gem_brom");
+            refined_info = Find<Text>("refined_info");
         }
 
 
@@ -137,7 +138,14 @@ namespace MVC
                 return data;
             }
         }
-
+        /// <summary>
+        /// 精炼等级
+        /// </summary>
+        /// <param name="lv"></param>
+        public void refined_Lv(int lv)
+        {
+            refined_info.text="+" + lv;
+        }
         private void Show_Pet()
         {
             item_frame.sprite = UI.UI_Manager.I.GetEquipSprite("UI/frame/", "5");

@@ -115,4 +115,5 @@ public enum Mysql_Table_Name
     global_account,//全局账号
     db_reincarnation,//转生信息
     dream_user_zs,//用户转生信息
+    dream_user_refined,//用户精炼信息
 }

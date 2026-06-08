@@ -34,6 +34,45 @@ public enum equip_type_list
 
     坐骑,
 }
+public enum redined_type
+{
+    生命属性,
+    魔法属性,
+    防御属性,
+    魔防属性,
+    攻击属性,
+}
+
+public enum redined_lucky_type
+{
+    生命值,
+    魔法值,
+    物理防御,
+    魔法防御,
+    攻击,
+}
+public enum equip_refined_list
+{
+    武器,
+
+    衣服,
+
+    头盔,
+
+    项链,
+
+    左手,
+
+    右手,
+
+    左戒,
+
+    右戒,
+
+    靴子,
+
+    腰带,
+}
 
 public enum Stditem_StdMode_List
 {
