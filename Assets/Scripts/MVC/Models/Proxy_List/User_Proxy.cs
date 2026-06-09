@@ -441,7 +441,7 @@ namespace MVC
 
         private void Read_User_refined()
         {
-            mysqlReader = MysqlDb.Select(Mysql_Table_Name.dream_user_refined, "uid", GetStr(SumSave.crt_user.uid));//读取角色信息
+            mysqlReader = MysqlDb.Select(Mysql_Table_Name.dream_user_refineds, "uid", GetStr(SumSave.crt_user.uid));//读取角色信息
             SumSave.crt_refined = new user_refined_vo();
             if (mysqlReader.HasRows)
             {
@@ -452,7 +452,7 @@ namespace MVC
             }
             else
             {
-                Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.dream_user_refined, SumSave.crt_refined.Set_Instace_String());
+                Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.dream_user_refineds, SumSave.crt_refined.Set_Instace_String());
             }
         }
 

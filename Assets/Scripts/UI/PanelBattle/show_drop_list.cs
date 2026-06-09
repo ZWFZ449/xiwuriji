@@ -128,10 +128,10 @@ public class show_drop_list : Base_Mono
     /// <param name="data"></param>
     private void judgment((int, db_map_vo) data)
     {
-        //int moeny = data.Item2.base_moenys[data.Item2.GetMapIntensityDrop - 1];
-        //moeny *= (100 + SumSave.crtMaxBattle.gold_bonus) / 100;
-        //dic.Add("获得 " + currency_unit.金币 + " * " + moeny);
-        //Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
+        int moeny = data.Item2.base_moenys[data.Item2.GetMapIntensityDrop - 1];
+        moeny *= (100 + SumSave.crtMaxBattle.gold_bonus) / 100;
+        dic.Add("获得 " + currency_unit.金币 + " * " + moeny);
+        Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
         switch (data.Item1)
         {
             case 0:
@@ -456,7 +456,7 @@ public class show_drop_list : Base_Mono
         int lv = 1;
         if (info_str.Length > 2) lv = int.Parse(info_str[2]);
         //if (SumSave.crtHero.zs_lv > 1 || SumSave.crtHero.lv >= 60)
-        moeny = moeny * lv / Enum.GetValues(typeof(enum_equip_quality_list)).Cast<int>().Max();
+        //moeny = moeny * lv / Enum.GetValues(typeof(enum_equip_quality_list)).Cast<int>().Max();
         dic.Add( (exist?"职业回收" :"回收 ") + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.金币 + " * " + moeny);
         Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
         if (lv >= 5)

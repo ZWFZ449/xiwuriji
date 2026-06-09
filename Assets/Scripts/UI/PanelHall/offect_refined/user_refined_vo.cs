@@ -73,7 +73,7 @@ public class user_refined_vo : Base_VO
     public override void MysqlData()
     {
         base.MysqlData();
-        Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.dream_user_refined, Set_Uptade_String(), Get_Update_Character());
+        Game_Omphalos.i.GetQueue(Mysql_Type.UpdateInto, Mysql_Table_Name.dream_user_refineds, Set_Uptade_String(), Get_Update_Character());
 
     }
 }

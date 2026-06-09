@@ -128,7 +128,7 @@ public class offect_refined : Base_Mono
           
            
         }
-        number = 10; exp = 10;
+        //number = 10; exp = 10;
         if (number > 0)
         {
             Clear_Condition();
