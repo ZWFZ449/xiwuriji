@@ -80,7 +80,7 @@ public class pet_devour : Base_Mono
     private string State_Value(enum_equip_entry_list item,int value)
     {
         string str = value + "";
-        int max = (SumSave.crtHero.zs_lv - 1) * 10;
+        int max = (SumSave.crtHero.zs_lvs - 1) * 10;
         switch (item)
         {
             case enum_equip_entry_list.物理防御:
@@ -135,7 +135,7 @@ public class pet_devour : Base_Mono
         db_pet_vo pet = (arg0 as dream_BagItem).Pet_Data;
         if (pet == null) return;
         SendNotification(NotiList.Read_Mysql_Base_Time);
-        int max = (SumSave.crtHero.zs_lv - 1) * 10;
+        int max = (SumSave.crtHero.zs_lvs - 1) * 10;
         if (SumSave.openMysql)
         { 
             Alert_Dec.Show("网络连接失败");

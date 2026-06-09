@@ -387,7 +387,7 @@ public class hero_equip_item : Base_Mono
         Color c = HexToColor("#ffffff");
         Get().Init(("[" + enum_equip_basetype_list.基础属性 + "]"), c);
         float hp_coefficient = 1f, mp_coefficient = 1f;
-        int zl = SumSave.crtHero.zs_lv - 1;//转生等级
+        int zl = SumSave.crtHero.zs_lvs - 1;//转生等级
 
         switch ((Hero_Type)SumSave.crtHero.job)
         {

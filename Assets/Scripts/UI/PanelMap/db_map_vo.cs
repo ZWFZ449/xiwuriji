@@ -48,8 +48,10 @@ public class db_map_vo
     /// </summary>
     public readonly Dictionary<ObscuredInt,string> map_intensity_drop;
 
+    public readonly List<int> base_moenys = new List<int>();
+
     public db_map_vo(ObscuredInt map_id,string map_name,ObscuredInt map_type, ObscuredInt map_lv,List<string> map_monster, List<string> map_boss, List<ObscuredInt> map_boss_cdtime, List<float> map_cd,string map_base_drop,string map_drop,string drop_value,
-        List<ObscuredInt> map_crate_number_monster, List<ObscuredInt> map_max_number_monster, List<ObscuredInt> map_add_number_monster, string map_intensity_drop,List<ObscuredInt> map_crate_boss_condition)
+        List<ObscuredInt> map_crate_number_monster, List<ObscuredInt> map_max_number_monster, List<ObscuredInt> map_add_number_monster, string map_intensity_drop,List<ObscuredInt> map_crate_boss_condition,List<int> base_moenys)
     { 
         this.map_id = map_id;
         this.map_name = map_name;
@@ -80,6 +82,7 @@ public class db_map_vo
         }
         this.map_intensity_drop = dic;
         this.map_crate_boss_condition = map_crate_boss_condition;
+        this.base_moenys = base_moenys;
     }
 
     private ObscuredInt map_intensity = 1;

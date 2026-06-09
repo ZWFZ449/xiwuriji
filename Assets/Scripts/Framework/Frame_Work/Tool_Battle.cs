@@ -193,7 +193,7 @@ public static class Tool_Battle
 
         }//角色天赋
         List<Bag_Base_VO> crt_euqip = SumSave.crt_equips.Get(Dream_User_Equip_Type.装备);
-        int zl = SumSave.crtHero.zs_lv - 1;//转生等级
+        int zl = SumSave.crtHero.zs_lvs - 1;//转生等级
         for (int i = 0; i < SumSave.db_pet_talents.Count; i++) SumSave.db_pet_talents[i].pet_up_lv = -1;
         Dictionary<int, int> pet_talents = new Dictionary<int, int>();//皇权加成
         for (int i = 0; i < crt_euqip.Count; i++)  
@@ -896,7 +896,7 @@ public static class Tool_Battle
         //转生加成
         for (int i = 0; i < SumSave.db_reincarnation_list.Count; i++)
         {
-            if (SumSave.db_reincarnation_list[i].reincarnation_lv == SumSave.crtHero.zs_lv-1)
+            if (SumSave.db_reincarnation_list[i].reincarnation_lv == SumSave.crtHero.zs_lvs-1)
             {
                 db_reincarnation_vo vo = SumSave.db_reincarnation_list[i];
                 for (int j = 0; j < vo.reincarnation_cost.Count; j++)
@@ -1271,7 +1271,8 @@ public static class Tool_Battle
         int hpRegen = 0, mpRegen = 0;
         int lucky = 0, damage_reduction = 0, magic_damage_reduction = 0;
         List<(enum_battle_pet_talent_list, float, float)> talentList = new List<(enum_battle_pet_talent_list, float, float)>();
-        int lv = Mathf.Max(1, SumSave.crtHero.zs_lv);
+        int lv = Mathf.Max(1, SumSave.crtHero.zs_lvs);//第一大陆属性加成
+        lv = 1;
         int power = lv > 1 ? (lv * 500) : 100;
         maxhp = (long)(monster.data.battle_maxhp * (power) / 100);
         maxmp = 1000;
@@ -1359,7 +1360,7 @@ public static class Tool_Battle
         /// 8 连击效果提升
 
         ObscuredInt lv = (ObscuredInt)MathF.Min(SumSave.crtHero.lv, 60);
-        if (SumSave.crtHero.zs_lv >= 2) lv = (SumSave.crtHero.zs_lv - 1) * 20 + 60;
+        if (SumSave.crtHero.zs_lvs >= 2) lv = (SumSave.crtHero.zs_lvs - 1) * 20 + 60;
         talent.pet_up_lv = Mathf.Min(talent.pet_up_lv, talent.pet_up_offect.Count - 1);
         int pet_up_lv = talent.pet_up_lv + 1;
         switch (talent.pet_talent_type)
@@ -1918,40 +1919,6 @@ public static class Tool_Battle
 
     private static void Obtain_Init_Entry_Inscription_list()
     {
-        /*
-         烈阳文,
-    盾护文,
-    守月文,
-    幽狼文,
-    神行文,
-    怒目文,
-    震火文,
-    金刚文,
-    大愈文,
-    回春文,
-    回心文,
-    峰芒文,
-    破枪文,
-    深寒文,
-    瑶光文,
-               * 
-        //       */
-        //entry_inscription_list= new List<enum_equip_entry_list>();
-        //entry_inscription_list.Add(enum_equip_entry_list.烈阳文);
-        //entry_inscription_list.Add(enum_equip_entry_list.盾护文);
-        //entry_inscription_list.Add(enum_equip_entry_list.守月文);
-        //entry_inscription_list.Add(enum_equip_entry_list.幽狼文);
-        //entry_inscription_list.Add(enum_equip_entry_list.神行文);
-        //entry_inscription_list.Add(enum_equip_entry_list.怒目文);
-        //entry_inscription_list.Add(enum_equip_entry_list.震火文);
-        //entry_inscription_list.Add(enum_equip_entry_list.金刚文);
-        //entry_inscription_list.Add(enum_equip_entry_list.大愈文);
-        //entry_inscription_list.Add(enum_equip_entry_list.回春文);
-        //entry_inscription_list.Add(enum_equip_entry_list.回心文);
-        //entry_inscription_list.Add(enum_equip_entry_list.峰芒文);
-        //entry_inscription_list.Add(enum_equip_entry_list.破枪文);
-        //entry_inscription_list.Add(enum_equip_entry_list.深寒文);
-        //entry_inscription_list.Add(enum_equip_entry_list.瑶光文);
         for (int i = 0; i < SumSave.db_skills.Count; i++)
         {
             if (SumSave.db_skills[i].EffectType != 5)//&& SumSave.db_skills[i].EffectType != 6召唤
@@ -1964,13 +1931,12 @@ public static class Tool_Battle
     /// 获取装备属性
     /// </summary>
     /// <returns></returns>
-    public static ObscuredInt Equip_Skill_eight()
+    public static int Equip_Skill_eight()
     {
         if (equip_eighteditems.Count == 0) Obtain_Init_Entry_Inscription_list();
         WeightedRandomPicker picker = new WeightedRandomPicker(equip_eighteditems);
         // 获取一个概率
         WeightedItem selectedItem = picker.GetRandomItem();
-
         return int.Parse(selectedItem.prizedraw.ToString());
     }
     public static ObscuredInt Equip_talent_eight()
@@ -2139,10 +2105,11 @@ public static class Tool_Battle
         int quality = int.Parse(selectedItem.prizedraw.ToString());
         if (quality > (int)enum_equip_quality_list.帝器)
         {
-            if (SumSave.crtHero.zs_lv <= 1)
-            {
-                quality = (int)enum_equip_quality_list.帝器;
-            }
+            quality = (int)enum_equip_quality_list.帝器;
+            //if (SumSave.crtHero.zs_lvs <= 1)皇器加成
+            //{
+            //    quality = (int)enum_equip_quality_list.帝器;
+            //}
         }
         return quality;
     }

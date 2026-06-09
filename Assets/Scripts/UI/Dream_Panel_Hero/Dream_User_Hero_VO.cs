@@ -19,7 +19,7 @@ public class Dream_User_Hero_VO : Base_VO
     public long exp;
     public List<(db_player_talent_vo,int)> talent;
     public int SelectPos;
-    public int zs_lv;
+    public int zs_lvs;
     public string user_value;
 
     public override void Iint()
@@ -37,7 +37,7 @@ public class Dream_User_Hero_VO : Base_VO
         exp = 0;
         talent = new List<(db_player_talent_vo, int)>();
         SelectPos = -1;
-        zs_lv = 1;
+        zs_lvs = 1;
         user_value = "";
         return new string[]
         {
@@ -51,7 +51,7 @@ public class Dream_User_Hero_VO : Base_VO
             GetStr(exp),
             GetStr(Gettalent()),
             GetStr(SelectPos),
-            GetStr(zs_lv),
+            GetStr(zs_lvs),
             GetStr(user_value)
         };
     }
@@ -78,7 +78,7 @@ public class Dream_User_Hero_VO : Base_VO
                 GetStr(lv),
                 GetStr(exp),
                 GetStr(SelectPos),
-                GetStr(zs_lv),
+                GetStr(zs_lvs),
                 GetStr(Gettalent()),
             };
     }

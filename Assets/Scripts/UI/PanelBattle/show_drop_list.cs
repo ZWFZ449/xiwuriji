@@ -118,7 +118,6 @@ public class show_drop_list : Base_Mono
                 }
             }
         }
-
         if (dic_map_drop.ContainsKey(monster.Data.crt_name))
             judgment(dic_map_drop[monster.Data.crt_name]);
         return dic;
@@ -129,6 +128,10 @@ public class show_drop_list : Base_Mono
     /// <param name="data"></param>
     private void judgment((int, db_map_vo) data)
     {
+        //int moeny = data.Item2.base_moenys[data.Item2.GetMapIntensityDrop - 1];
+        //moeny *= (100 + SumSave.crtMaxBattle.gold_bonus) / 100;
+        //dic.Add("获得 " + currency_unit.金币 + " * " + moeny);
+        //Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
         switch (data.Item1)
         {
             case 0:

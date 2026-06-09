@@ -49,7 +49,7 @@ public class offect_reincarnation : Base_Mono
     private void OnEnable()
     {
         InitBtn();
-        if (SumSave.crtHero.lv < 30 && SumSave.crtHero.zs_lv == 0)
+        if (SumSave.crtHero.lv < 30 && SumSave.crtHero.zs_lvs == 0)
         {
             Hide();
             Alert_Dec.Show("当前等级不足30级无法查看转生");
@@ -61,7 +61,7 @@ public class offect_reincarnation : Base_Mono
         string dec = "";
         for (int i = 0; i < SumSave.db_reincarnation_list.Count; i++)
         {
-            if (SumSave.db_reincarnation_list[i].reincarnation_lv == SumSave.crtHero.zs_lv)
+            if (SumSave.db_reincarnation_list[i].reincarnation_lv == SumSave.crtHero.zs_lvs)
             {
                 db_reincarnation_vo vo = SumSave.db_reincarnation_list[i];
                 dec += vo.reincarnation_name + "\n";
@@ -282,7 +282,7 @@ public class offect_reincarnation : Base_Mono
     private void InitBtn()
     {
         ClearObject(m_btn_brom);
-        int max = Mathf.Min(Enum.GetNames(typeof(zs_unit)).Length, SumSave.crtHero.zs_lv == 2 ? 3 : SumSave.crtHero.zs_lv);
+        int max = Mathf.Min(Enum.GetNames(typeof(zs_unit)).Length, SumSave.crtHero.zs_lvs == 2 ? 3 : SumSave.crtHero.zs_lvs);
         for (int i = 0; i < max; i++)
         {
             btn_item item = Instantiate(btn_item_prefab, m_btn_brom);
@@ -337,7 +337,7 @@ public class offect_reincarnation : Base_Mono
     {
         for (int i = 0; i < SumSave.db_reincarnation_list.Count; i++)
         {
-            if (SumSave.db_reincarnation_list[i].reincarnation_lv == SumSave.crtHero.zs_lv)
+            if (SumSave.db_reincarnation_list[i].reincarnation_lv == SumSave.crtHero.zs_lvs)
             {
                 db_reincarnation_vo vo = SumSave.db_reincarnation_list[i];
                 if (SumSave.crtHero.lv >= vo.need_lv)
@@ -359,7 +359,7 @@ public class offect_reincarnation : Base_Mono
     {
         for (int i = 0; i < SumSave.db_reincarnation_list.Count; i++)
         {
-            if (SumSave.db_reincarnation_list[i].reincarnation_lv == SumSave.crtHero.zs_lv)
+            if (SumSave.db_reincarnation_list[i].reincarnation_lv == SumSave.crtHero.zs_lvs)
             {
                 db_reincarnation_vo vo = SumSave.db_reincarnation_list[i];
                 if (SumSave.crtHero.lv >= vo.need_lv)
@@ -397,7 +397,7 @@ public class offect_reincarnation : Base_Mono
                         SumSave.crt_zs.zs_medicine_max += medicine;
                         SumSave.crt_zs.zs_Refinement_max += refinement;
                         SumSave.crt_zs.MysqlData();
-                        SumSave.crtHero.zs_lv++;
+                        SumSave.crtHero.zs_lvs++;
                         SumSave.crtHero.lv = 30;
                         SumSave.crtHero.exp = 0;
                         SendNotification(NotiList.Refresh_Max_Hero_Attribute);

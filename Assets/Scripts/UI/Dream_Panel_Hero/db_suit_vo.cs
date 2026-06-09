@@ -28,7 +28,7 @@ public class db_suit_vo : Base_VO
     /// <summary>
     /// (需要数量，属性类型，属性加成)
     /// </summary>
-    public List<(int, int, int)> suit_list { get { return Dic_suit_list[SumSave.crtHero.zs_lv]; } }
+    public List<(int, int, int)> suit_list { get { return Dic_suit_list[SumSave.crtHero.zs_lvs]; } }
 
     public Dictionary<int, List<(int, int, int)>> Dic_suit_list;
 

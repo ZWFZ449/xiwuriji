@@ -664,7 +664,7 @@ public class Dream_Panel_Skill : Panel_Base
                 if (crt_skill.skill_damages.Count > 0) str += "\n[免伤] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
                 break;
         }
-        if (SumSave.crtHero.zs_lv > 1)
+        if (SumSave.crtHero.zs_lvs > 1)
         {
             str += "\n[转生加成] ";
             if (crt_skill.skill_offect_value_list.Count > 0)

@@ -211,7 +211,7 @@ public class PanelBattle : PanelBase
                     item.Value.Refresh(data.Get_MP * 100 / (SumSave.crtMaxBattle.data.battle_maxmp + 1) , item.Key + " " + data.Get_MP + "/" + SumSave.crtMaxBattle.data.battle_maxmp);
                     break;
                 case slider_type.exp:
-                    long value = (long)(SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp * MathF.Pow(10, SumSave.crtHero.zs_lv - 1));
+                    long value = (long)(SumSave.db_lvs[SumSave.crtMaxBattle.lv + ((SumSave.crtHero.zs_lvs - 1) * 5)].exp);
                     if(value== 0) value = 1;
                     item.Value.Refresh(SumSave.crtMaxBattle.exp * 100 / value, item.Key + "Lv." + SumSave.crtMaxBattle.lv + " " + SumSave.crtMaxBattle.exp + "/" + value);
                     break;
@@ -229,7 +229,7 @@ public class PanelBattle : PanelBase
             switch (item.Key)
             {
                 case slider_type.exp:
-                    long values = (long)(SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp * MathF.Pow(10, SumSave.crtHero.zs_lv - 1));
+                    long values = (long)(SumSave.db_lvs[SumSave.crtMaxBattle.lv + ((SumSave.crtHero.zs_lvs - 1) * 5)].exp);
                     if (values == 0) values = 1;
                     float value= SumSave.crtMaxBattle.exp * 100 / values;
                     item.Value.Refresh(value, item.Key + "Lv." + SumSave.crtMaxBattle.lv + " " + SumSave.crtMaxBattle.exp + "/" + values);
@@ -491,9 +491,17 @@ public class PanelBattle : PanelBase
         if (Tool_Battle.IsBuff(common_Buff.增量卷轴))
         {
             if (max <= 0) max = 0;
-            Alert_Dec.Show("增量刷新个数 + " + max);
-            max *= 2;
+            Alert_Dec.Show("增量刷新个数 + " + crt_map.map_add_number_monster[crt_map.GetMapIntensityDrop - 1] / 2);
+            max += crt_map.map_add_number_monster[crt_map.GetMapIntensityDrop - 1] / 2;
         }
+        int sum = SumSave.crt_global_gift.GetGiftPoints;
+        if (sum > 5000)
+        {
+            max += 1;
+            if(sum > 10000) max += 2;
+            if (sum > 20000) max += 3;
+        }
+        max = (int)MathF.Min(max,crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] - monster_list.Count);
         if (Tool_Battle.IsBuff(common_Buff.减量卷轴))
         {
             max /= 2;
@@ -671,7 +679,7 @@ public class PanelBattle : PanelBase
         {
             BaseBattleAttack baseBattleAttack = health.GetComponent<BaseBattleAttack>();
             SumSave.crt_illustrated.Add_illustrated_list(baseBattleAttack.Data.crt_name);
-            if (SumSave.crtHero.zs_lv > 1)
+            if (SumSave.crtHero.zs_lvs > 1)
             {
                 if (Random.Range(0, 100) < 1)
                 {
@@ -800,7 +808,7 @@ public class PanelBattle : PanelBase
     private void Drop(BaseBattleAttack monster)
     {
         int exp = (int)monster.Data.exp * (100 + SumSave.crtMaxBattle.exp_bonus) / 100;
-        exp = (int)(exp * MathF.Pow(10, SumSave.crtHero.zs_lv - 1));
+        //exp = (int)(exp * MathF.Pow(10, SumSave.crtHero.zs_lvs - 1));
         Show_Info("击杀 " + monster.Data.crt_name + " 获得经验 " + exp);
         //掉落收益
         Add_Exp(exp); 
@@ -810,8 +818,7 @@ public class PanelBattle : PanelBase
         {
             case Battle_Game_Type.Boss://boss掉落
                 Battle_Tool.Dream_Obtain_Unit(currency_unit.Boss积分, 1, Obtain_Int.Add_unit(1));
-                if (SumSave.crtHero.zs_lv > 1) Battle_Tool.Dream_Obtain_Unit(currency_unit.转生积分, 1, Obtain_Int.Add_unit(1));
-
+                //if (SumSave.crtHero.zs_lvs > 1) Battle_Tool.Dream_Obtain_Unit(currency_unit.转生积分, 1, Obtain_Int.Add_unit(1));
                 AddSkill();
                 Close_BossSlider();
                 break;
@@ -1156,19 +1163,19 @@ public class PanelBattle : PanelBase
     /// <returns></returns>
     private List<db_skill_vo> Show_Battle_Monster(crtMaxBattleVO monster)
     {
-        List<db_skill_vo> skill_list = new List<db_skill_vo>();
-        if (SumSave.crtHero.zs_lv > 1)
-        { 
-            db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, e => e.id == monster.skill_id);
-            if (skill != null)
-            {
-                db_skill_vo newskill = new db_skill_vo(skill.id, skill.show_name, skill.EffectType, skill.Effect, skill.spells, skill.Power, skill.DefPowers, skill.skill_damages,
-                    skill.skill_offect_value_list, skill.Job, skill.Delay, skill.skill_up_lv, skill.need_lv, skill.Weighted, skill.MoveType, skill.offset, skill.scope,skill.needLvitem);
-                newskill.monster_lv(monster.skill_level + 1);
-                newskill.AddBuff(enum_talent_offect_list.弹道, monster.skill_number);
-                skill_list.Add(newskill);
-            }
-        }
+        List<db_skill_vo> skill_list = new List<db_skill_vo>();//第一地图难度
+        //if (SumSave.crtHero.zs_lvs > 1)
+        //{ 
+        //    db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, e => e.id == monster.skill_id);
+        //    if (skill != null)
+        //    {
+        //        db_skill_vo newskill = new db_skill_vo(skill.id, skill.show_name, skill.EffectType, skill.Effect, skill.spells, skill.Power, skill.DefPowers, skill.skill_damages,
+        //            skill.skill_offect_value_list, skill.Job, skill.Delay, skill.skill_up_lv, skill.need_lv, skill.Weighted, skill.MoveType, skill.offset, skill.scope,skill.needLvitem);
+        //        newskill.monster_lv(monster.skill_level + 1);
+        //        newskill.AddBuff(enum_talent_offect_list.弹道, monster.skill_number);
+        //        skill_list.Add(newskill);
+        //    }
+        //}
         return skill_list;
     }
     /// <summary>

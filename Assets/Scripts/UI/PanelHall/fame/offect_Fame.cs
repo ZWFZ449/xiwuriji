@@ -29,6 +29,23 @@ public class offect_Fame : Base_Mono
     /// 选中vip
     /// </summary>
     private db_vip vip;
+    /// <summary>
+    /// vip列表
+    /// </summary>
+    private List<ObscuredInt> vip_list = new List<ObscuredInt>() {
+        30,
+        60,
+        100,
+        300,
+        600,
+        1000,
+        1500,
+        2000,
+        3000,
+        5000,
+        10000,
+        20000
+    };
     private void Awake()
     {
         m_btn_brom = Find<Transform>("btn_list/Viewport/Content");
@@ -47,50 +64,58 @@ public class offect_Fame : Base_Mono
     {
         if (vip != null)
         {
-            if ((SumSave.crt_global_gift.GetGiftPoints) >= vip.vip_exp)
+            if (vip.vip_exp == vip_list[vip.vip_lv - 1])
             {
-                SumSave.crt_global_gift.SetGiftS(vip.vip_name);
-                List<string> list = ArrayHelper.Get_Split<string>(vip.gift_value, ',');
-                for (int i = 0; i < list.Count; i++)
+                ObscuredInt gift_points = SumSave.crt_global_gift.GetGiftPoints;
+                if (gift_points >= vip.vip_exp)
                 {
-                    List<string> gift_values = ArrayHelper.Get_Split<string>(list[i], ' ');
-                    if (gift_values.Count == 3)
+                    SumSave.crt_global_gift.SetGiftS(vip.vip_name);
+                    List<string> list = ArrayHelper.Get_Split<string>(vip.gift_value, ',');
+                    for (int i = 0; i < list.Count; i++)
                     {
-                        switch (int.Parse(gift_values[0]))
+                        List<string> gift_values = ArrayHelper.Get_Split<string>(list[i], ' ');
+                        if (gift_values.Count == 3)
                         {
-                            case 0://金币
-                                Battle_Tool.Dream_Obtain_Unit((currency_unit)int.Parse(gift_values[1]), int.Parse(gift_values[2]), Obtain_Int.Add_unit(int.Parse(gift_values[2])));
-                                Alert_Dec.Show("获得 " + (currency_unit)int.Parse(gift_values[1]) + "：" + gift_values[2]);
-                                break;
-                            case 1:
-                                pet_list pet = Tool_State.ToEnum(gift_values[1], pet_list.麋鹿);
-                                SumSave.crt_pet.AddPet(pet);
-                                Alert_Dec.Show("获得 灵宠 " + pet.ToString());
-                                break;
-                            case 2:
-                                Bag_Base_VO synthesis_value = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == gift_values[1]);
-                                if (synthesis_value != null)
-                                {
-                                    string user_value = Tool_Battle.Obtain_Equip(synthesis_value, 1, 1);
-                                    Bag_Base_VO bag_Base_ = tool_Categoryt.Read_BaseBag(user_value);
-                                    SumSave.crt_bags.Set_Bag_List(bag_Base_);
-                                    Alert_Dec.Show("获得 "+ synthesis_value.StdMode + " * " + synthesis_value.Name);
-                                }
-                                break;
-                            case 3:
-                                ObscuredInt number = int.Parse(gift_values[2]);
-                                ObscuredInt  random = Random.Range(1, 1000);
-                                ObscuredInt  maxnumber = number + Random.Range(1, 1000);
-                                Alert_Dec.Show("获得  " + gift_values[1] + " * " + number);
-                                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, gift_values[1], new ObscuredInt [] { number + random, random }), maxnumber);
-                                break;
-                            default:
-                                break;
+                            switch (int.Parse(gift_values[0]))
+                            {
+                                case 0://金币
+                                    Battle_Tool.Dream_Obtain_Unit((currency_unit)int.Parse(gift_values[1]), int.Parse(gift_values[2]), Obtain_Int.Add_unit(int.Parse(gift_values[2])));
+                                    Alert_Dec.Show("获得 " + (currency_unit)int.Parse(gift_values[1]) + "：" + gift_values[2]);
+                                    break;
+                                case 1:
+                                    pet_list pet = Tool_State.ToEnum(gift_values[1], pet_list.麋鹿);
+                                    SumSave.crt_pet.AddPet(pet);
+                                    Alert_Dec.Show("获得 灵宠 " + pet.ToString());
+                                    break;
+                                case 2:
+                                    Bag_Base_VO synthesis_value = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == gift_values[1]);
+                                    if (synthesis_value != null)
+                                    {
+                                        string user_value = Tool_Battle.Obtain_Equip(synthesis_value, 1, 1);
+                                        Bag_Base_VO bag_Base_ = tool_Categoryt.Read_BaseBag(user_value);
+                                        SumSave.crt_bags.Set_Bag_List(bag_Base_);
+                                        Alert_Dec.Show("获得 " + synthesis_value.StdMode + " * " + synthesis_value.Name);
+                                    }
+                                    break;
+                                case 3:
+                                    ObscuredInt number = int.Parse(gift_values[2]);
+                                    ObscuredInt random = Random.Range(1, 1000);
+                                    ObscuredInt maxnumber = number + Random.Range(1, 1000);
+                                    Alert_Dec.Show("获得  " + gift_values[1] + " * " + number);
+                                    Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, gift_values[1], new ObscuredInt[] { number + random, random }), maxnumber);
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
+                    Game_Omphalos.global_battle_info("领取 " + vip.vip_lv + " 奖励");
+                    Show_Info(vip, true);
                 }
-                Game_Omphalos.global_battle_info("领取 " + vip.vip_lv + " 奖励");
-                Show_Info(vip, true);
+            }
+            else
+            {
+                Game_Omphalos.i.Delete("需求积分被更改 Lv " + vip.vip_lv + " 积分" + vip.vip_exp);
             }
         }
     }
@@ -98,7 +123,7 @@ public class offect_Fame : Base_Mono
     private void init()
     {
         ObscuredInt sum = (SumSave.crt_global_gift.GetGiftPoints);
-        for (int i = 0; i < SumSave.db_vip_list.Count; i++)
+        for (int i = 0; i < 10; i++)
         { 
             btn_item btn = Instantiate(btn_item_prefab, m_btn_brom);
             btn.Show(SumSave.db_vip_list[i].vip_lv, SumSave.db_vip_list[i].vip_name);

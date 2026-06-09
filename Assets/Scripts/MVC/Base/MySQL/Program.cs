@@ -172,7 +172,7 @@ public static class Program
                 break;
             case Mysql_Table_Name.db_fate:
                 break;
-            case Mysql_Table_Name.db_vip:
+            case Mysql_Table_Name.db_vips:
                 break;
             case Mysql_Table_Name.db_world_boss:
                 break;

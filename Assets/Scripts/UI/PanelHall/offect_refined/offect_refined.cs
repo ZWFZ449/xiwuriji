@@ -77,12 +77,12 @@ public class offect_refined : Base_Mono
         switch ((refined_btn_list)btn_Item.index)
         {
             case refined_btn_list.幸运强化:
-                Alert.Show(refined_btn_list.幸运强化.ToString(), "将消耗背包内全部的帝级幸运项链,\n请确认\n每件消耗元宝 * 200", confirm_lucky,200);
+                Alert.Show(refined_btn_list.幸运强化.ToString(), "将消耗背包内全部的帝级幸运项链,\n请确认\n每件消耗元宝 * 100", confirm_lucky,100);
                 break;
             case refined_btn_list.转生强化:
-                if (SumSave.crtHero.zs_lv > 1)
+                if (SumSave.crtHero.zs_lvs > 1)
                 {
-                    Alert.Show(refined_btn_list.转生强化.ToString(), "将消耗背包内全部的帝级转生石,\n请确认\n每件消耗元宝 * 500", confirm_lucky, 500);
+                    Alert.Show(refined_btn_list.转生强化.ToString(), "将消耗背包内全部的皇级幸运项链,\n请确认\n每件消耗元宝 * 300", confirm_lucky, 300);
                 }
                 else
                 { 
@@ -98,7 +98,7 @@ public class offect_refined : Base_Mono
     private void confirm_lucky(object arg0)
     {
         int price = (int)arg0;
-        int baselv = price == 200 ? 6 : 7;
+        int baselv = price == 100 ? 6 : 7;
         List<Bag_Base_VO> baglist = SumSave.crt_bags.Get_Bag_List();
         int number = 0;//数量
         int exp = 0;//给经验

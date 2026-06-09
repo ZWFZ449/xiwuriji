@@ -99,7 +99,7 @@ namespace MVC
         /// </summary>
         private void Read_db_vip()
         {
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_vip);
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_vips);
             SumSave.db_vip_list = new List<db_vip>();
             if (mysqlReader.HasRows)
             {

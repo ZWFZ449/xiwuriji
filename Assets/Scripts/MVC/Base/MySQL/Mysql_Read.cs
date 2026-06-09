@@ -398,7 +398,7 @@ public static class Mysql_Read
             }
         }
         item.SelectPos = mysqlReader.GetInt32(mysqlReader.GetOrdinal("SelectPos"));
-        item.zs_lv= mysqlReader.GetInt32(mysqlReader.GetOrdinal("zs_lv"));
+        item.zs_lvs= mysqlReader.GetInt32(mysqlReader.GetOrdinal("zs_lv"));
         item.user_value= mysqlReader.GetString(mysqlReader.GetOrdinal("user_value"));
         return item;
     }

@@ -22,22 +22,6 @@ public class Read_Mysql
     }
     public static db_map_vo Read(MySqlDataReader reader)
     {
-        //reader.GetInt32(reader.GetOrdinal("id"));
-        //Debug.Log(reader.GetString(reader.GetOrdinal("map_name")));
-        //    reader.GetInt32(reader.GetOrdinal("map_type"));
-        //    reader.GetInt32(reader.GetOrdinal("map_lv"));
-        //ArrayHelper.Get_Split<string>(reader.GetString(reader.GetOrdinal("map_monster")), ',');
-        //ArrayHelper.Get_Split<string>(reader.GetString(reader.GetOrdinal("map_boss")), ',');
-        //    ArrayHelper.Get_Split<ObscuredInt>(reader.GetString(reader.GetOrdinal("map_boss_cdtime")), ',');
-        //ArrayHelper.Get_Split<float>(reader.GetString(reader.GetOrdinal("map_cd")), ',');
-        //reader.GetString(reader.GetOrdinal("map_base_drop"));
-        //reader.GetString(reader.GetOrdinal("map_drop"));
-        //reader.GetString(reader.GetOrdinal("drop_value"));
-        //ArrayHelper.Get_Split<ObscuredInt>(reader.GetString(reader.GetOrdinal("map_crate_number_monster")), ',');
-        //ArrayHelper.Get_Split<ObscuredInt>(reader.GetString(reader.GetOrdinal("map_max_number_monster")), ',');
-        //ArrayHelper.Get_Split<ObscuredInt>(reader.GetString(reader.GetOrdinal("map_add_number_monster")), ',');
-        //reader.GetString(reader.GetOrdinal("map_intensity_drop"));
-        //ArrayHelper.Get_Split<ObscuredInt>(reader.GetString(reader.GetOrdinal("map_crate_boss_condition")), ',');
         return new db_map_vo
             (reader.GetInt32(reader.GetOrdinal("id")),
             reader.GetString(reader.GetOrdinal("map_name")),
@@ -54,8 +38,8 @@ public class Read_Mysql
             ArrayHelper.Get_Split(reader.GetString(reader.GetOrdinal("map_max_number_monster")), ','),
             ArrayHelper.Get_Split(reader.GetString(reader.GetOrdinal("map_add_number_monster")), ','),
             reader.GetString(reader.GetOrdinal("map_intensity_drop")),
-            ArrayHelper.Get_Split(reader.GetString(reader.GetOrdinal("map_crate_boss_condition")), ',')
-
+            ArrayHelper.Get_Split(reader.GetString(reader.GetOrdinal("map_crate_boss_condition")), ','),
+            ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("moeny")), ',')
             );
     }
     public static db_dec Read_dec(MySqlDataReader reader)

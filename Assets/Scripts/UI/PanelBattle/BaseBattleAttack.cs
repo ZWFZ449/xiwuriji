@@ -737,17 +737,17 @@ namespace MVC
                     break;
                 case Hero_Type.战士:
                     damage = Lucky(Data.data.dc, Data.data.dc2, data.data.lucky);
-                    if (SumSave.crtHero.zs_lv > 1 && (data.type == Battle_Game_Type.player || data.type == Battle_Game_Type.call)) damage += (int)data.data.battle_maxhp / 100;
+                    if (SumSave.crtHero.zs_lvs > 1 && (data.type == Battle_Game_Type.player || data.type == Battle_Game_Type.call)) damage += (int)data.data.battle_maxhp / 100;
                     def = Random.Range(monster.Data.data.ac, monster.Data.data.ac2);
                     break;
                 case Hero_Type.法师:
                     damage = Lucky(Data.data.mc, Data.data.mc2, data.data.lucky);
-                    if (SumSave.crtHero.zs_lv > 1 && (data.type == Battle_Game_Type.player || data.type == Battle_Game_Type.call)) damage += (int)data.data.battle_maxmp / 100;
+                    if (SumSave.crtHero.zs_lvs > 1 && (data.type == Battle_Game_Type.player || data.type == Battle_Game_Type.call)) damage += (int)data.data.battle_maxmp / 100;
                     def = Random.Range(monster.Data.data.mac, monster.Data.data.mac2);
                     break;
                 case Hero_Type.道士:
                     damage = Lucky(Data.data.sc, Data.data.sc2, data.data.lucky);
-                    if (SumSave.crtHero.zs_lv > 1 && (data.type == Battle_Game_Type.player || data.type == Battle_Game_Type.call))
+                    if (SumSave.crtHero.zs_lvs > 1 && (data.type == Battle_Game_Type.player || data.type == Battle_Game_Type.call))
                     {
                         damage += ((int)data.data.battle_maxhp + (int)data.data.battle_maxmp) / 100;
                     }

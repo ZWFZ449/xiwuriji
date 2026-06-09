@@ -175,7 +175,7 @@ public static class Battle_Tool
         //升级
         if (SumSave.db_lvs.ContainsKey(SumSave.crtMaxBattle.lv))
         {
-            long values = (long)(SumSave.db_lvs[SumSave.crtMaxBattle.lv].exp * MathF.Pow(10, SumSave.crtHero.zs_lv - 1));
+            long values = (long)(SumSave.db_lvs[SumSave.crtMaxBattle.lv + ((SumSave.crtHero.zs_lvs - 1) * 5)].exp) ;
             if (SumSave.crtMaxBattle.exp >= values)
             { 
                SumSave.crtMaxBattle.exp -= values;
