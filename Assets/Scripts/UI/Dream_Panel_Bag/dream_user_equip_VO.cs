@@ -23,6 +23,7 @@ public class dream_user_equip_VO : Base_VO
         Equip_List = toList(equipvalue, Equip_List);
         House_List = toList(housevalue, House_List);
         Treasure_List = toList(treasurevalue, Treasure_List);
+        if (page < 100) page = page + 100;
         Page = page + 60;
     }
     private List<Bag_Base_VO> toList(string value, List<Bag_Base_VO> list)

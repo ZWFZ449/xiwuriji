@@ -49,7 +49,8 @@ public class offect_reincarnation : Base_Mono
     private void OnEnable()
     {
         InitBtn();
-        if (SumSave.crtHero.lv < 30 && SumSave.crtHero.zs_lvs == 0)
+        is_Anto = true;
+        if (SumSave.crtHero.lv < 30 && SumSave.crtHero.zs_lvs == 1)
         {
             Hide();
             Alert_Dec.Show("当前等级不足30级无法查看转生");
@@ -87,6 +88,7 @@ public class offect_reincarnation : Base_Mono
                         }
                     } 
                 }
+                if (SumSave.crtHero.zs_lvs > 1) dec += Show_Color.Red("\n炼体炼药满级可以继续转生");
                 dec += Show_Color.Red("\n怪物增强,谨慎转生"); 
                 dec += "\n转生收益\n";
                 dec += Show_Color.Set_String("炼体 + " + vo.result_minRefinement + " - " + vo.result_maxRefinement, GameColors.RageBar);
@@ -365,6 +367,23 @@ public class offect_reincarnation : Base_Mono
                 if (SumSave.crtHero.lv >= vo.need_lv)
                 {
                     Clear_Condition();
+                    if (SumSave.crtHero.zs_lvs > 1)
+                    {
+                        int max = 0;
+                        for (int j = 0; j < SumSave.crt_zs.crt_Refinement.Count; j++) max += SumSave.crt_zs.crt_Refinement[j];
+                        if (max >= SumSave.crt_zs.zs_Refinement_max)
+                        {
+                            Alert_Dec.Show("炼体不足");
+                            return;
+                        }
+                        max = 0;
+                        for (int j = 0; j < SumSave.crt_zs.crt_medicine.Count; j++) max += SumSave.crt_zs.crt_medicine[j];
+                        if (max >= SumSave.crt_zs.zs_medicine_max)
+                        { 
+                            Alert_Dec.Show("炼药不足");
+                            return;
+                        }
+                    }
                     for (int j = 0; j < vo.reincarnation_need.Count; j++)
                     {
                         List<string> need = ArrayHelper.Get_Split<string>(vo.reincarnation_need[j], ' ');
@@ -409,7 +428,6 @@ public class offect_reincarnation : Base_Mono
                         Alert.Show("转生成功","请重启游戏");
                         Game_Omphalos.i.archive();
                         UI_Manager.I.GetPanel<PanelBattle>().Close();
-
                     }
                     else Alert_Dec.Show("转生失败");
                 }
@@ -452,7 +470,7 @@ public class offect_reincarnation : Base_Mono
                 SumSave.crt_zs.crt_Refinement.Add(0);
             }
             SumSave.crt_zs.crt_Refinement[(int)item]++;
-            SumSave.crt_zs.crt_Refinement[(int)item] = (int)MathF.Min(SumSave.crt_zs.zs_Refinement_max / 4, SumSave.crt_zs.crt_Refinement[(int)item]);
+            SumSave.crt_zs.crt_Refinement[(int)item] = (int)MathF.Min(SumSave.crt_zs.zs_Refinement_max / 5, SumSave.crt_zs.crt_Refinement[(int)item]);
             Alert_Dec.Show("恭喜获得永久属性 " + item);
             SumSave.crt_zs.MysqlData();
             RefinementInit();
@@ -481,17 +499,21 @@ public class offect_reincarnation : Base_Mono
         Alert.Show(crt_zs_unit.ToString(), dec, Confirm_medicine, max);
        
     }
+
+    private bool is_Anto = true;
     /// <summary>
     /// 自动确认炼药
     /// </summary>
     /// <param name="arg0"></param>
     private void Anto_Confirm_medicine(object arg0)
     {
+        if (is_Anto) { Alert_Dec.Show("炼药中,请等待");return; }
         StartCoroutine(Game_BossTime((int)arg0));
 
     }
     private IEnumerator Game_BossTime(int number)
     {
+        is_Anto = false;
         int max = 10;
         while (max > 0)
         {
@@ -501,6 +523,7 @@ public class offect_reincarnation : Base_Mono
             yield return new WaitForSeconds(1f);
         }
         Alert_Dec.Show("炼药结束");
+        is_Anto = true;
     }
 
 
@@ -534,7 +557,13 @@ public class offect_reincarnation : Base_Mono
                     item = medicine_type.命中;
                 }
                 SumSave.crt_zs.crt_medicine[(int)item]++;
-                Alert_Dec.Show("恭喜获得永久属性 " + item);
+                if (SumSave.crt_zs.crt_medicine[(int)item] > SumSave.crt_zs.zs_medicine_max / 3)
+                {
+                    Alert_Dec.Show("恭喜获得永久属性 " + item + " 当前属性已满");
+                    SumSave.crt_zs.crt_medicine[(int)item] = SumSave.crt_zs.zs_medicine_max / 3;
+                }
+                else
+                    Alert_Dec.Show("恭喜获得永久属性 " + item);
                 medicineinit();
             }
         }

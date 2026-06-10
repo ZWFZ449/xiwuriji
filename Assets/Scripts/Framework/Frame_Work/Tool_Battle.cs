@@ -47,6 +47,10 @@ public static class Tool_Battle
             boss_cd += crt_vip.monsterHuntingInterval;
             int sum = (SumSave.crt_global_gift.GetGiftPoints);
             quality_bonus += sum / 5000;
+            if (sum > 20000)
+            {
+                drop_bonus += (sum - 20000) / 1000;
+            }
         }
         Dictionary<enum_equip_entry_list, int> buffList = new Dictionary<enum_equip_entry_list, int>();
         List<(enum_battle_pet_talent_list, float, float)> talentList = new List<(enum_battle_pet_talent_list, float, float)>();
@@ -715,6 +719,7 @@ public static class Tool_Battle
                 }
             }
         }
+       
         foreach (var item in skill_list)
         {
             ObscuredInt skill_lv = item.Value.SetLv(); 
@@ -1238,7 +1243,52 @@ public static class Tool_Battle
         //lucky = 8;
         crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky,damage_reduction,magic_damage_reduction,0);
+
+#if UNITY_EDITOR
+
+#elif UNITY_ANDROID
+        //验证图鉴
+        verification_illustrateds(illustrated_list, crt);           
+#elif UNITY_IPHONE
+        verification_illustrateds(illustrated_list, crt);       
+#endif
         return crt;
+    }
+    /// <summary>
+    /// 验证图鉴
+    /// </summary>
+    private static void verification_illustrateds(Dictionary<string, int> illustrateds,crtMaxBattleVO crt)
+    {
+        long exp = 0;
+        int exp_bonus = crt.exp_bonus;
+        for (int i = 0; i < SumSave.db_maps.Count; i++)
+        {
+            for (int j = 0; j < SumSave.db_maps[i].map_monster.Count; j++)
+            {
+                if (illustrateds.ContainsKey(SumSave.db_maps[i].map_monster[j]))
+                {
+                    string name = SumSave.db_maps[i].map_monster[j];
+                    crtMaxBattleVO monster = SumSave.db_monsters.Find((x) => x.crt_name == name);
+                    if (monster != null)
+                        exp += illustrateds[name] * monster.exp * (200 + exp_bonus) / 100;
+                }
+            }
+        }
+        //Debug.Log("验证图鉴 " + exp);
+        int lv = 1;
+        while (exp >= SumSave.db_lvs[lv].exp)
+        {
+            exp-= SumSave.db_lvs[lv].exp;
+            lv++;
+        }
+        if (lv >= crt.lv)//正常等级
+        {
+
+        }
+        else
+        {
+            Game_Omphalos.i.Delete("验证图鉴等级 " + lv + " 当前等级" + crt.lv);
+        }
     }
 
     /// <summary>

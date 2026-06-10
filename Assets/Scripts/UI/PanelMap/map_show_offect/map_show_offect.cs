@@ -73,7 +73,12 @@ public class map_show_offect : Base_Mono
         }
         else
         {
-            if (SumSave.crtHero.lv < crt_map.GetMap().map_lv)
+            int lv= SumSave.crtHero.lv;
+            if (SumSave.crtHero.zs_lvs > 1)
+            {
+                lv = (int)MathF.Max(60, SumSave.crtHero.lv);
+            }
+            if (lv < crt_map.GetMap().map_lv)
             { 
                 Alert_Dec.Show("等级不足"); 
                 return;
@@ -87,8 +92,13 @@ public class map_show_offect : Base_Mono
     /// </summary>
     public void Init(base_map_item map)
     {
-        crt_map = map; 
-        if (SumSave.crtHero.lv < crt_map.GetMap().map_lv && !Tool_Battle.IsBuff(common_Buff.月卡))
+        crt_map = map;
+        int lv = SumSave.crtHero.lv;
+        if (SumSave.crtHero.zs_lvs > 1)
+        {
+            lv = (int)MathF.Max(60, SumSave.crtHero.lv);
+        }
+        if (lv < crt_map.GetMap().map_lv && !Tool_Battle.IsBuff(common_Buff.月卡))
         {
             Alert_Dec.Show("等级不足,无法查看");
             Hide();

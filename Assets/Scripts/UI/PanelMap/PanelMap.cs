@@ -181,7 +181,12 @@ public class PanelMap : PanelBase
         bool exist = false;
         if (item.GetMap().map_type == index)
         {
-            if (item.GetMap().map_lv <= SumSave.crtHero.lv || Tool_Battle.IsBuff(common_Buff.月卡))
+            int lv = SumSave.crtHero.lv;
+            if (SumSave.crtHero.zs_lvs > 1)
+            {
+                lv = (int)MathF.Max(60, SumSave.crtHero.lv);
+            }
+            if (item.GetMap().map_lv <= lv || Tool_Battle.IsBuff(common_Buff.月卡))
             { 
                 exist = true;
                 return exist;

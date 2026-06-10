@@ -497,9 +497,13 @@ public class PanelBattle : PanelBase
         int sum = SumSave.crt_global_gift.GetGiftPoints;
         if (sum > 5000)
         {
-            max += 1;
-            if(sum > 10000) max += 2;
-            if (sum > 20000) max += 3;
+            max += 2;
+            if(sum > 10000) max += 4;
+            if (sum > 20000) max += 6;
+        }
+        if (SumSave.crt_zs.crt_medicine.Count >= (int)medicine_type.怪物刷新个数)
+        { 
+            max += SumSave.crt_zs.crt_medicine[(int)medicine_type.怪物刷新个数];
         }
         max = (int)MathF.Min(max,crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] - monster_list.Count);
         if (Tool_Battle.IsBuff(common_Buff.减量卷轴))
