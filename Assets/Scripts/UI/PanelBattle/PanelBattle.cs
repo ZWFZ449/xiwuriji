@@ -501,7 +501,7 @@ public class PanelBattle : PanelBase
             if(sum > 10000) max += 4;
             if (sum > 20000) max += 6;
         }
-        if (SumSave.crt_zs.crt_medicine.Count >= (int)medicine_type.怪物刷新个数)
+        if (SumSave.crt_zs.crt_medicine.Count > (int)medicine_type.怪物刷新个数)
         { 
             max += SumSave.crt_zs.crt_medicine[(int)medicine_type.怪物刷新个数];
         }
