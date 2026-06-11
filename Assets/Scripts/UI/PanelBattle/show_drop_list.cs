@@ -41,7 +41,8 @@ public class show_drop_list : Base_Mono
     { 
         逐个掉落,
         固定掉落,
-        随机掉落
+        随机掉落,
+        难度掉落,
     }
     private void Awake()
     {
@@ -136,6 +137,7 @@ public class show_drop_list : Base_Mono
         {
             case 0:
                 Show_Bag(data.Item2.map_drop, Drop_Type.随机掉落, data.Item2);
+                if (SumSave.map_Lv > 1) Show_Bag(data.Item2.map_lv_drop, Drop_Type.随机掉落, data.Item2);
                 break;
             case 1:
             case 2:
@@ -157,6 +159,12 @@ public class show_drop_list : Base_Mono
                 }
                 Show_Bag(data.Item2.drop_value, Drop_Type.逐个掉落, data.Item2);
                 Show_Bag(data.Item2.map_drop, Drop_Type.固定掉落, data.Item2);
+                if (SumSave.map_Lv > 1)
+                {
+                    Show_Bag(data.Item2.map_lv_drop, Drop_Type.随机掉落, data.Item2);
+                    Show_Bag(data.Item2.map_boss_lv_drop, Drop_Type.逐个掉落, data.Item2);
+
+                }
                 if (!gameObject.activeSelf)
                 {
                     gameObject.SetActive(true);
@@ -431,16 +439,6 @@ public class show_drop_list : Base_Mono
                     else
                     {
                         recycle(data);
-                        //int moeny = data.price;
-                        //dic.Add("回收 " + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.金币 + " * " + moeny);
-                        //Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
-                        //if (lv >= 5)
-                        //{
-                        //    int sycee = 0;
-                        //    sycee += data.need_lv / 7 * (lv - 5) + 1;
-                        //    dic.Add("回收 " + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.元宝 + " * "+ sycee);
-                        //    Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, sycee, Obtain_Int.Add_unit(sycee));
-                        //}
                         return exist;
                     }
                 }
@@ -455,8 +453,7 @@ public class show_drop_list : Base_Mono
         string[] info_str = data.user_value.Split(' ');
         int lv = 1;
         if (info_str.Length > 2) lv = int.Parse(info_str[2]);
-        //if (SumSave.crtHero.zs_lv > 1 || SumSave.crtHero.lv >= 60)
-        //moeny = moeny * lv / Enum.GetValues(typeof(enum_equip_quality_list)).Cast<int>().Max();
+        moeny = moeny * lv / Enum.GetValues(typeof(enum_equip_quality_list)).Cast<int>().Max();
         dic.Add( (exist?"职业回收" :"回收 ") + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.金币 + " * " + moeny);
         Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
         if (lv >= 5)

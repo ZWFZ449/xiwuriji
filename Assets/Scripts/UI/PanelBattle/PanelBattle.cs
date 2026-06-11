@@ -761,6 +761,11 @@ public class PanelBattle : PanelBase
     /// </summary>
     private void gameover()
     {
+        if (crt_map.map_type != 0)
+        { 
+            Alert.Show("战斗失败", "请重新选择战斗地图");
+        }
+        else
         StartCoroutine(Game_InitMap(5));
     }
     /// <summary>
@@ -813,6 +818,7 @@ public class PanelBattle : PanelBase
     {
         int exp = (int)monster.Data.exp * (100 + SumSave.crtMaxBattle.exp_bonus) / 100;
         //exp = (int)(exp * MathF.Pow(10, SumSave.crtHero.zs_lvs - 1));
+        if (SumSave.map_Lv > 1) exp *= SumSave.map_Lv;
         Show_Info("击杀 " + monster.Data.crt_name + " 获得经验 " + exp);
         //掉落收益
         Add_Exp(exp); 
@@ -822,7 +828,7 @@ public class PanelBattle : PanelBase
         {
             case Battle_Game_Type.Boss://boss掉落
                 Battle_Tool.Dream_Obtain_Unit(currency_unit.Boss积分, 1, Obtain_Int.Add_unit(1));
-                //if (SumSave.crtHero.zs_lvs > 1) Battle_Tool.Dream_Obtain_Unit(currency_unit.转生积分, 1, Obtain_Int.Add_unit(1));
+                if (SumSave.map_Lv > 1) Battle_Tool.Dream_Obtain_Unit(currency_unit.转生积分, 1, Obtain_Int.Add_unit(1));
                 AddSkill();
                 Close_BossSlider();
                 break;
@@ -1168,18 +1174,18 @@ public class PanelBattle : PanelBase
     private List<db_skill_vo> Show_Battle_Monster(crtMaxBattleVO monster)
     {
         List<db_skill_vo> skill_list = new List<db_skill_vo>();//第一地图难度
-        //if (SumSave.crtHero.zs_lvs > 1)
-        //{ 
-        //    db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, e => e.id == monster.skill_id);
-        //    if (skill != null)
-        //    {
-        //        db_skill_vo newskill = new db_skill_vo(skill.id, skill.show_name, skill.EffectType, skill.Effect, skill.spells, skill.Power, skill.DefPowers, skill.skill_damages,
-        //            skill.skill_offect_value_list, skill.Job, skill.Delay, skill.skill_up_lv, skill.need_lv, skill.Weighted, skill.MoveType, skill.offset, skill.scope,skill.needLvitem);
-        //        newskill.monster_lv(monster.skill_level + 1);
-        //        newskill.AddBuff(enum_talent_offect_list.弹道, monster.skill_number);
-        //        skill_list.Add(newskill);
-        //    }
-        //}
+        if (SumSave.map_Lv > 1)
+        {
+            db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, e => e.id == monster.skill_id);
+            if (skill != null)
+            {
+                db_skill_vo newskill = new db_skill_vo(skill.id, skill.show_name, skill.EffectType, skill.Effect, skill.spells, skill.Power, skill.DefPowers, skill.skill_damages,
+                    skill.skill_offect_value_list, skill.Job, skill.Delay, skill.skill_up_lv, skill.need_lv, skill.Weighted, skill.MoveType, skill.offset, skill.scope, skill.needLvitem);
+                newskill.monster_lv(monster.skill_level + 1);
+                newskill.AddBuff(enum_talent_offect_list.弹道, monster.skill_number);
+                skill_list.Add(newskill);
+            }
+        }
         return skill_list;
     }
     /// <summary>

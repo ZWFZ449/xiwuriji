@@ -39,7 +39,10 @@ public class Read_Mysql
             ArrayHelper.Get_Split(reader.GetString(reader.GetOrdinal("map_add_number_monster")), ','),
             reader.GetString(reader.GetOrdinal("map_intensity_drop")),
             ArrayHelper.Get_Split(reader.GetString(reader.GetOrdinal("map_crate_boss_condition")), ','),
-            ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("moeny")), ',')
+            ArrayHelper.Get_Split<int>(reader.GetString(reader.GetOrdinal("moeny")), ','),
+            reader.GetString(reader.GetOrdinal("map_lv_drop")),
+            reader.GetString(reader.GetOrdinal("map_boss_lv_drop")),
+            reader.GetString(reader.GetOrdinal("map_lv_intensity_drop")) 
             );
     }
     public static db_dec Read_dec(MySqlDataReader reader)

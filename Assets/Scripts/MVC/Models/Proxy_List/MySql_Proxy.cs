@@ -152,7 +152,6 @@ namespace MVC
         private void Read_Db_Synthesis()
         {
             mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_synthesiss); //db_synthesis
-            //mysqlReader = MysqlDb.ReadGetLatest(Mysql_Table_Name.db_synthesis,0,30);
             SumSave.db_synthesis = new List<db_synthesis_vo>();
             if (mysqlReader.HasRows)
             {
@@ -622,7 +621,7 @@ namespace MVC
         /// </summary>
         private void Read_Db_Map()
         {
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_map);
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_maps);
             SumSave.db_maps = new List<db_map_vo>();
             if (mysqlReader.HasRows)
             {

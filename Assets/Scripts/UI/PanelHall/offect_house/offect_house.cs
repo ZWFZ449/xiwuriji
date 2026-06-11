@@ -71,7 +71,7 @@ public class offect_house : Base_Mono
                 else
                 {
                     ObscuredLong moeny = 0;
-                    moeny = ((house - 60) / 10 + 1) * 1000;
+                    moeny = ((house - 160) / 10 + 1) * 1000;
                     Alert.Show("仓库扩容", "是否花费" + Battle_Tool.FormatNumberToChineseUnit(moeny) + currency_unit.元宝 + "扩容仓库", confirm_house, moeny);
                 }
                 break;

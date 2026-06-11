@@ -50,8 +50,13 @@ public class db_map_vo
 
     public readonly List<int> base_moenys = new List<int>();
 
+    public readonly string map_lv_drop, map_boss_lv_drop;
+    public readonly Dictionary<ObscuredInt, string> map_lv_intensity_drop;
+
     public db_map_vo(ObscuredInt map_id,string map_name,ObscuredInt map_type, ObscuredInt map_lv,List<string> map_monster, List<string> map_boss, List<ObscuredInt> map_boss_cdtime, List<float> map_cd,string map_base_drop,string map_drop,string drop_value,
-        List<ObscuredInt> map_crate_number_monster, List<ObscuredInt> map_max_number_monster, List<ObscuredInt> map_add_number_monster, string map_intensity_drop,List<ObscuredInt> map_crate_boss_condition,List<int> base_moenys)
+        List<ObscuredInt> map_crate_number_monster, List<ObscuredInt> map_max_number_monster, List<ObscuredInt> map_add_number_monster, string map_intensity_drop,List<ObscuredInt> map_crate_boss_condition,List<int> base_moenys,
+        string map_lv_drop, string map_boss_lv_drop, string map_lv_intensity_drop
+        )
     { 
         this.map_id = map_id;
         this.map_name = map_name;
@@ -83,6 +88,22 @@ public class db_map_vo
         this.map_intensity_drop = dic;
         this.map_crate_boss_condition = map_crate_boss_condition;
         this.base_moenys = base_moenys;
+        this.map_lv_drop = map_lv_drop;
+        this.map_boss_lv_drop = map_boss_lv_drop;
+        Dictionary<ObscuredInt, string> dic1 = new Dictionary<ObscuredInt, string>();
+        string[] map_lv_intensity_drop_arr = map_lv_intensity_drop.Split('|');
+        for (ObscuredInt i = 0; i < map_lv_intensity_drop_arr.Length; i++)
+        {
+            if (map_lv_intensity_drop_arr[i].Length > 0)
+            { 
+                string[] map_lv_intensity_drop_arr1 = map_lv_intensity_drop_arr[i].Split(',');
+                if (map_lv_intensity_drop_arr1.Length == 2)
+                { 
+                    dic1.Add(int.Parse(map_lv_intensity_drop_arr1[0]), map_lv_intensity_drop_arr1[1]);
+                }
+            }
+        }
+        this.map_lv_intensity_drop = dic1;
     }
 
     private ObscuredInt map_intensity = 1;

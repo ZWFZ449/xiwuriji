@@ -809,6 +809,50 @@ namespace MVC
                         break;
                 }
             }
+            if (data.hero_talentList != null)
+            {
+                (int, int) Proportion = oneselfHealthState.Proportion();
+
+                foreach (var item in data.hero_talentList.Keys)
+                {
+                    switch (item)
+                    {
+                        case enum_talent_offect_list.临时伤害:
+                            int value = (100 - Proportion.Item1) / 10 * data.hero_talentList[item];
+                            if (value > 0 && value <= 100)
+                            {
+                                damage = (int)(damage * (value + 100) / 100);
+                            }
+                            break;
+                        case enum_talent_offect_list.临时防御:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            if (monster.data.hero_talentList != null)
+            {
+                (int, int) Proportion = monster.GetComponent<BattleHealthState>().Proportion();
+                foreach (var item in monster.data.hero_talentList.Keys)
+                {
+                    switch (item)
+                    {
+                        case enum_talent_offect_list.临时伤害:
+                            
+                            break;
+                        case enum_talent_offect_list.临时防御:
+                            int value = (100 - Proportion.Item1) / 10 * monster.data.hero_talentList[item];
+                            if (value > 0 && value <= 100)
+                            {
+                                def = (int)(def * (value + 100) / 100);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
             damage = damage * skilldamage / 100 - def;
             if (damage <= 0) damage = 1;
             return damage;

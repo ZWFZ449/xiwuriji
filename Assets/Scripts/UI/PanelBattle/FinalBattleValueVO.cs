@@ -39,7 +39,9 @@ public readonly struct FinalBattleValueVO
     /// <summary>
     /// 幸运
     /// </summary>
-    public readonly ObscuredInt lucky, damage_reduction, magic_damage_reduction; 
+    public readonly ObscuredInt lucky, damage_reduction, magic_damage_reduction;
+
+    //public Dictionary<enum_talent_offect_list, int> hero_talentList;
     /// <summary>
     /// 初始化
     /// </summary>

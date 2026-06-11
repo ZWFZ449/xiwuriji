@@ -413,5 +413,9 @@ namespace Common
         public static global_gift_vo global_gift;
 
         public static user_zs_vo crt_zs;
+        /// <summary>
+        /// 地图难度
+        /// </summary>
+        public static int map_Lv = 1;
     }
 }

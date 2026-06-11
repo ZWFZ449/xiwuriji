@@ -45,7 +45,6 @@ public class offect_reincarnation : Base_Mono
         btn_item_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
         m_btn_brom = Find<Transform>("btn_list/Viewport/Content");
     }
-
     private void OnEnable()
     {
         InitBtn();
@@ -444,7 +443,11 @@ public class offect_reincarnation : Base_Mono
         for (int i = 0; i < SumSave.crt_zs.crt_Refinement.Count; i++) max += SumSave.crt_zs.crt_Refinement[i];
         string dec = "";
         int number = (max / 20 + 1) * 10;
+        if(SumSave.crtHero.zs_lvs ==2)
         dec += "强化锻体需要\n" + number + "黑铁矿石" + "\n" + (number * 2) + "金条";
+        else
+        if (SumSave.crtHero.zs_lvs == 3)
+        dec += "强化锻体需要\n" + number + common_items_list.黑铁精矿 + "\n" + (number * 2) + common_items_list.金条;
         if (max < SumSave.crt_zs.zs_Refinement_max)
         {
             Alert.Show(crt_zs_unit.ToString(), dec, Confirm_refinement, number); 
@@ -460,8 +463,20 @@ public class offect_reincarnation : Base_Mono
     {
         int number= (int)arg0;
         Clear_Condition();
-        Need_Condition(common_items_list.金条, number * 2);
-        Need_Condition(common_items_list.黑铁矿石, number);
+        switch (SumSave.crtHero.zs_lvs)
+        {
+            case 2:
+                Need_Condition(common_items_list.金条, number * 2);
+                Need_Condition(common_items_list.黑铁矿石, number);
+                break;
+            case 3:
+                Need_Condition(common_items_list.金条, number * 2);
+                Need_Condition(common_items_list.黑铁精矿, number);
+                break;
+            default:
+                Need_Condition("未开放", 99999);
+                break;
+        }
         if (Return_Condition())
         {
             Refinement_type item = EnumExtensions.GetRandomEnum<Refinement_type>();
@@ -489,7 +504,18 @@ public class offect_reincarnation : Base_Mono
         int max = 0;
         for (int i = 0; i < SumSave.crt_zs.crt_medicine.Count; i++) max += SumSave.crt_zs.crt_medicine[i];
         string dec = "";
-        dec += "炼药需要" + common_items_list.人参 + " * 10" + "\n" + common_items_list.金条 + " * 1";
+        switch (SumSave.crtHero.zs_lvs)
+        {
+            case 2:
+                dec += "炼药需要" + common_items_list.人参 + " * 10" + "\n" + common_items_list.金条 + " * 1";
+
+                break;
+            case 3:
+                dec += "炼药需要" + common_items_list.人参精华 + " * 1" + "\n" + common_items_list.金条 + " * 10";
+                break;
+            default:
+                break;
+        }
         if (number >= 5) { 
             dec += "\n自动开启连续炼药,连续10次\n点击取消 继续单次炼药";
             Alert.Show(crt_zs_unit.ToString(), dec, Anto_Confirm_medicine, max, Confirm_medicine,false);
@@ -507,7 +533,7 @@ public class offect_reincarnation : Base_Mono
     /// <param name="arg0"></param>
     private void Anto_Confirm_medicine(object arg0)
     {
-        if (is_Anto) { Alert_Dec.Show("炼药中,请等待");return; }
+        if (!is_Anto) { Alert_Dec.Show("炼药中,请等待");return; }
         StartCoroutine(Game_BossTime((int)arg0));
 
     }
@@ -534,8 +560,20 @@ public class offect_reincarnation : Base_Mono
         SumSave.crt_zs.medicine_exp++;
         bool eixst=true;
         Clear_Condition();
-        Need_Condition(common_items_list.人参, 10);
-        Need_Condition(common_items_list.金条, 1);
+        switch (SumSave.crtHero.zs_lvs)
+        {
+            case 2:
+                Need_Condition(common_items_list.人参, 10);
+                Need_Condition(common_items_list.金条, 1);
+                break;
+            case 3:
+                Need_Condition(common_items_list.人参精华, 1);
+                Need_Condition(common_items_list.金条, 10);
+                break;
+            default:
+                Need_Condition("未开放", 99999);
+                break;
+        }
         if (!Return_Condition())
         {
             Alert_Dec.Show("条件不足");
@@ -584,56 +622,5 @@ public class offect_reincarnation : Base_Mono
     {
         gameObject.SetActive(false);
         transform.parent.gameObject.SetActive(false);
-    }
-
-    /// <summary>
-    /// 重置职业
-    /// </summary>
-    private void ResetJob()
-    {
-        if (SumSave.crtHero.job == 0)
-        {
-            Alert_Dec.Show("当前职业为默认职业无法重置");
-            return;
-        }
-        List<long> Units = SumSave.crt_user_unit.Set();
-        int buy = 5000;
-        if (Units[(int)currency_unit.元宝] >= buy)
-        {
-            Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, -buy, Obtain_Int.Add_unit(-buy));
-            Dictionary<string, int> dic = new Dictionary<string, int>();
-            for (int i = 0; i < SumSave.crtHero.talent.Count; i++)
-            {
-                int lv = SumSave.crtHero.talent[i].Item2;
-                for (int j = 0; j < lv; j++)
-                {
-                    if (!dic.ContainsKey(SumSave.crtHero.talent[i].Item1.ralent_need_uplv_value[j]))
-                    {
-                        dic.Add(SumSave.crtHero.talent[i].Item1.ralent_need_uplv_value[j], SumSave.crtHero.talent[i].Item1.ralent_need_uplv[j]);
-                    }
-                    else
-                    {
-                        dic[SumSave.crtHero.talent[i].Item1.ralent_need_uplv_value[j]] += SumSave.crtHero.talent[i].Item1.ralent_need_uplv[j];
-                    }
-                }
-            }
-            string dec = "重置返还";
-            foreach (var item in dic.Keys)
-            {
-                dec += "\n" + item + " " + dic[item];
-                ObscuredInt  random = Random.Range(1, 1000);
-                ObscuredInt  maxnumber = dic[item] + Random.Range(1, 1000);
-                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, item, new ObscuredInt [] { dic[item] + random, random }), maxnumber);
-            }
-            SumSave.crtHero.talent.Clear();
-            SumSave.crtHero.SelectPos = -1;
-            SumSave.crtHero.job = 0;
-            //刷新数据
-            SendNotification(NotiList.Refresh_Max_Hero_Attribute);
-            SumSave.crtHero.MysqlData();
-            Alert.Show("重置职业成功", dec);
-            Hide();
-        }
-        else Alert_Dec.Show("元宝不足");
     }
 }

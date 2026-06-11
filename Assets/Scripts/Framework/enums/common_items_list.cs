@@ -11,6 +11,8 @@ public enum common_items_list
     金条,
     人参,
     皇级碎片,
+    黑铁精矿,
+    人参精华,
 }
 
 public enum common_Buff

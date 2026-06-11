@@ -238,6 +238,26 @@ public class map_show_offect : Base_Mono
                 Show_Bag(drop_value[i]);
             }
         }
+        if (SumSave.map_Lv > 1)
+        {
+            Show_Bag(map.map_lv_drop);
+            Show_Bag(map.map_boss_lv_drop);
+            if (map.map_lv_intensity_drop.Count > 0)
+            {
+                List<string> drop_value = new List<string>();
+                foreach (var item in map.map_intensity_drop.Keys)
+                {
+                    if (crt_map.GetMap_Intensity >= item)
+                    {
+                        drop_value.Add(map.map_intensity_drop[item]);
+                    }
+                }
+                for (int i = drop_value.Count - 1; i >= 0; i--)
+                {
+                    Show_Bag(drop_value[i]);
+                }
+            }
+        } 
         Show_Bag(map.drop_value);
         Show_Bag(map.map_drop);
     }
