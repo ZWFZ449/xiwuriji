@@ -355,7 +355,7 @@ public static class ReadDb
         ObscuredInt goodFortune = reader.GetInt32(reader.GetOrdinal("goodFortune"));
         ObscuredInt strengthenCosts = reader.GetInt32(reader.GetOrdinal("strengthenCosts"));
         ObscuredInt offlineInterval = reader.GetInt32(reader.GetOrdinal("offlineInterval"));
-        ObscuredInt signInIncome = reader.GetInt32(reader.GetOrdinal("signInIncome"));
+        string signInIncome = reader.GetString(reader.GetOrdinal("signInIncomes"));
         ObscuredInt whippingCorpses = reader.GetInt32(reader.GetOrdinal("whippingCorpses"));
         string gift_value = reader.GetString(reader.GetOrdinal("gift_value"));
         return new db_vip(vip_lv, vip_name, vip_exp, experienceBonus, lingzhuIncome, equipmentExplosionRate, characterExperience

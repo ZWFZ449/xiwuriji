@@ -58,7 +58,7 @@ public class db_vip : Base_VO
     /// <summary>
     /// 签到收益 522
     /// </summary>
-    public readonly ObscuredInt  signInIncome;
+    public readonly string  signInIncome;
     /// <summary>
     /// 鞭尸(双倍奖励) 506 
     /// </summary>
@@ -68,7 +68,8 @@ public class db_vip : Base_VO
     /// </summary>
     public readonly string gift_value;
 
-    public db_vip(ObscuredInt  vip_lv, string vip_name, ObscuredInt  vip_exp, ObscuredInt  experienceBonus, ObscuredInt  lingzhuIncome, ObscuredInt  equipmentExplosionRate, ObscuredInt  characterExperience, ObscuredInt  monsterHuntingInterval, ObscuredInt  hpRecovery, ObscuredInt  manaRegeneration, ObscuredInt  goodFortune, ObscuredInt  strengthenCosts, ObscuredInt  offlineInterval, ObscuredInt  signInIncome, ObscuredInt  whippingCorpses, string gift_value)
+    public db_vip(ObscuredInt  vip_lv, string vip_name, ObscuredInt  vip_exp, ObscuredInt  experienceBonus, ObscuredInt  lingzhuIncome, ObscuredInt  equipmentExplosionRate, ObscuredInt  characterExperience, 
+        ObscuredInt  monsterHuntingInterval, ObscuredInt  hpRecovery, ObscuredInt  manaRegeneration, ObscuredInt  goodFortune, ObscuredInt  strengthenCosts, ObscuredInt  offlineInterval, string signInIncome, ObscuredInt  whippingCorpses, string gift_value)
     {
         this.vip_lv = vip_lv;
         this.vip_name = vip_name;

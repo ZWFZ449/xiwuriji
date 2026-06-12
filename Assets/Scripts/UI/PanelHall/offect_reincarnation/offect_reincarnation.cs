@@ -370,14 +370,16 @@ public class offect_reincarnation : Base_Mono
                     {
                         int max = 0;
                         for (int j = 0; j < SumSave.crt_zs.crt_Refinement.Count; j++) max += SumSave.crt_zs.crt_Refinement[j];
-                        if (max >= SumSave.crt_zs.zs_Refinement_max)
+                        int basemax = (int)MathF.Min(300 * ((SumSave.crtHero.zs_lvs - 1)), SumSave.crt_zs.zs_Refinement_max);
+                        if (max < basemax)
                         {
                             Alert_Dec.Show("炼体不足");
                             return;
                         }
                         max = 0;
                         for (int j = 0; j < SumSave.crt_zs.crt_medicine.Count; j++) max += SumSave.crt_zs.crt_medicine[j];
-                        if (max >= SumSave.crt_zs.zs_medicine_max)
+                        basemax = (int)MathF.Min(30 * ((SumSave.crtHero.zs_lvs - 1)), SumSave.crt_zs.zs_medicine_max);
+                        if (max < basemax)
                         { 
                             Alert_Dec.Show("炼药不足");
                             return;
@@ -393,10 +395,12 @@ public class offect_reincarnation : Base_Mono
                                 case 1://需要等级
                                     break;
                                 case 2://需要需求
+                                    VIP_Need_Condition(need[1], int.Parse(need[2]));
                                     Need_Condition(need[1], int.Parse(need[2]));
                                     break;
                                 case 3://需要技能
-                                    Need_Condition((currency_unit)int.Parse(need[1]), int.Parse(need[2]));
+                                    VIP_Need_Condition((currency_unit)int.Parse(need[1]), int.Parse(need[2]));
+                                    //Need_Condition((currency_unit)int.Parse(need[1]), int.Parse(need[2]));
                                     break;
                                 default:
                                     break;
@@ -434,6 +438,20 @@ public class offect_reincarnation : Base_Mono
         }
     }
 
+    private void VIP_Need_Condition(object arg0, int number)
+    {
+        db_vip crt_vip = Tool_Battle.Obtain_Vip();
+        if (crt_vip != null)
+        {
+            if (crt_vip.strengthenCosts > 0)
+            { 
+                number= (int)(number * (100-crt_vip.strengthenCosts)/100);
+                number = Mathf.Max(1, number);
+            }
+        }
+        Need_Condition(arg0, number);
+    }
+
     /// <summary>
     /// 强化炼体
     /// </summary>
@@ -447,7 +465,7 @@ public class offect_reincarnation : Base_Mono
         dec += "强化锻体需要\n" + number + "黑铁矿石" + "\n" + (number * 2) + "金条";
         else
         if (SumSave.crtHero.zs_lvs == 3)
-        dec += "强化锻体需要\n" + number + common_items_list.黑铁精矿 + "\n" + (number * 2) + common_items_list.金条;
+        dec += "强化锻体需要\n" + number + common_items_list.黑铁精矿 + "\n" + (number * 2) + common_items_list.转生石;
         if (max < SumSave.crt_zs.zs_Refinement_max)
         {
             Alert.Show(crt_zs_unit.ToString(), dec, Confirm_refinement, number); 
@@ -466,12 +484,16 @@ public class offect_reincarnation : Base_Mono
         switch (SumSave.crtHero.zs_lvs)
         {
             case 2:
-                Need_Condition(common_items_list.金条, number * 2);
-                Need_Condition(common_items_list.黑铁矿石, number);
+                VIP_Need_Condition(common_items_list.金条, number * 2);
+                VIP_Need_Condition(common_items_list.黑铁矿石, number);
+                //Need_Condition(common_items_list.金条, number * 2);
+                //Need_Condition(common_items_list.黑铁矿石, number);
                 break;
             case 3:
-                Need_Condition(common_items_list.金条, number * 2);
-                Need_Condition(common_items_list.黑铁精矿, number);
+                VIP_Need_Condition(common_items_list.转生石, number * 2);
+                VIP_Need_Condition(common_items_list.黑铁精矿, number);
+                //Need_Condition(common_items_list.金条, number * 2);
+                //Need_Condition(common_items_list.黑铁精矿, number);
                 break;
             default:
                 Need_Condition("未开放", 99999);
@@ -563,12 +585,16 @@ public class offect_reincarnation : Base_Mono
         switch (SumSave.crtHero.zs_lvs)
         {
             case 2:
-                Need_Condition(common_items_list.人参, 10);
-                Need_Condition(common_items_list.金条, 1);
+                VIP_Need_Condition(common_items_list.人参, 10);
+                VIP_Need_Condition(common_items_list.金条, 1);
+                //Need_Condition(common_items_list.人参, 10);
+                //Need_Condition(common_items_list.金条, 1);
                 break;
             case 3:
-                Need_Condition(common_items_list.人参精华, 1);
-                Need_Condition(common_items_list.金条, 10);
+                VIP_Need_Condition(common_items_list.人参精华, 1);
+                VIP_Need_Condition(common_items_list.金条, 10);
+                //Need_Condition(common_items_list.人参精华, 1);
+                //Need_Condition(common_items_list.金条, 10);
                 break;
             default:
                 Need_Condition("未开放", 99999);

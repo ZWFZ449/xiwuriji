@@ -115,7 +115,7 @@ public class playerController : BaseBattleAttack
     {
         int number = 1;
 #if UNITY_EDITOR
-        number = 10;
+        number = 20;
 #elif UNITY_ANDROID
 #elif UNITY_IPHONE
 #endif

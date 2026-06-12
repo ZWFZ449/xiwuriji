@@ -730,6 +730,7 @@ public class PanelBattle : PanelBase
                     Drop(baseBattleAttack);
                     if (baseBattleAttack.Data.type == Battle_Game_Type.Boss)
                     {
+                        AdditionalIncome(baseBattleAttack);
                         AddBossStringData(baseBattleAttack.Data.crt_name);
                     }
                     break;
@@ -754,9 +755,16 @@ public class PanelBattle : PanelBase
     /// </summary>
     /// <param name="monster"></param>
     private void AdditionalIncome(BaseBattleAttack monster)
-    { 
+    {
         //图鉴收益
-
+        db_vip vip = Tool_Battle.Obtain_Vip();
+        if (vip != null)
+        {
+            if (vip.vip_lv >= 10)
+            {
+                SumSave.crt_illustrated.Add_illustrated_list(monster.Data.crt_name, vip.vip_lv - 9);
+            }
+        }
     }
     /// <summary>
     /// 复活cd中
@@ -824,7 +832,6 @@ public class PanelBattle : PanelBase
         Show_Info("击杀 " + monster.Data.crt_name + " 获得经验 " + exp);
         //掉落收益
         Add_Exp(exp); 
-        AdditionalIncome(monster);
         Show_Info( show_drop_list.Init(monster));
         switch (monster.Data.type)
         {

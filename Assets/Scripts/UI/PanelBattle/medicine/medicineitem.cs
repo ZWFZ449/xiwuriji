@@ -89,6 +89,13 @@ public class medicineitem : Base_Mono
         isUse = true;
         crt_cdtime = 0;
     }
+
+    private void OnEnable()
+    {
+        Debug.Log("OnEnable");
+        isUse = true;
+        StopAllCoroutines(); 
+    }
     /// <summary>
     /// 字典初始化 药品字典和库存数量
     /// </summary>

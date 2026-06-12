@@ -8,6 +8,7 @@ using static UnityColorPresets;
 using TMPro;
 using UnityEngine;
 using CodeStage.AntiCheat.ObscuredTypes;
+using System.Collections.Generic;
 
 public class offect_signin : Base_Mono
 {
@@ -62,6 +63,22 @@ public class offect_signin : Base_Mono
                 random = Random.Range(1, 1000);
                 maxnumber = crt_vip.characterExperience + Random.Range(1, 1000);
                 Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.Boss召唤卷轴, new ObscuredInt [] { crt_vip.characterExperience + random, random }), maxnumber);
+                if (crt_vip.signInIncome != "")
+                {
+                    List<string> list = ArrayHelper.Get_Split<string>(crt_vip.signInIncome, ',');
+                    foreach (string s in list)
+                    {
+                        string[] str = s.Split(' ');
+                        if (str.Length == 2)
+                        { 
+                            int strnumber = int.Parse(str[1]);
+                            random = Random.Range(1, 1000);
+                            maxnumber = strnumber + Random.Range(1, 1000);
+                            dec += Colorize(str[0] + " * " + strnumber + "\n", GameColors.Uncommon);
+                            Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, str[0], new ObscuredInt[] { strnumber + random, random }), maxnumber);
+                        }
+                    }
+                }
                 pet_list pet = (pet_list)(crt_vip.vip_lv - 1);
                 SumSave.crt_pet.AddPet(pet);
                 dec += Colorize("\n获得 灵宠 " + pet.ToString() + "\n", GameColors.Uncommon);

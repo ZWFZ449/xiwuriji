@@ -1793,17 +1793,6 @@ public static class Tool_Battle
             return true;
         }
         return false;
-        //bool exist= false;
-        //for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
-        //{
-        //    (string, ObscuredInt) boss = SumSave.crt_setting.battle_Boss_list[i];
-        //    List<string> boss_name = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-        //    if (boss_name.Count == 2)
-        //    {
-        //        if (boss_name[0] == value) return exist;//已经存在
-        //    }
-        //}
-        //return !exist;
     }
     /// <summary>
     /// 添加技能buff
