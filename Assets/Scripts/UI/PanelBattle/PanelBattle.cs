@@ -491,8 +491,10 @@ public class PanelBattle : PanelBase
         if (Tool_Battle.IsBuff(common_Buff.增量卷轴))
         {
             if (max <= 0) max = 0;
-            Alert_Dec.Show("增量刷新个数 + " + crt_map.map_add_number_monster[crt_map.GetMapIntensityDrop - 1] / 2);
-            max += crt_map.map_add_number_monster[crt_map.GetMapIntensityDrop - 1] / 2;
+            //Alert_Dec.Show("增量刷新个数 + " + crt_map.map_add_number_monster[crt_map.GetMapIntensityDrop - 1] / 2);
+            //max += crt_map.map_add_number_monster[crt_map.GetMapIntensityDrop - 1] / 2;
+            max += 6;
+            Alert_Dec.Show("增量刷新个数 + 6");
         }
         int sum = SumSave.crt_global_gift.GetGiftPoints;
         if (sum > 5000)
@@ -818,7 +820,7 @@ public class PanelBattle : PanelBase
     {
         int exp = (int)monster.Data.exp * (100 + SumSave.crtMaxBattle.exp_bonus) / 100;
         //exp = (int)(exp * MathF.Pow(10, SumSave.crtHero.zs_lvs - 1));
-        if (SumSave.map_Lv > 1) exp *= SumSave.map_Lv;
+        if (SumSave.map_Lv > 1) exp *= 5;
         Show_Info("击杀 " + monster.Data.crt_name + " 获得经验 " + exp);
         //掉落收益
         Add_Exp(exp); 

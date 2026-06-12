@@ -20,8 +20,8 @@ public enum Panel_BagType
     材料,
     存入仓库,
     取出仓库,
-    一键出售,
-    一键分解,
+    一键售解,
+    //一键分解,
     已装备,//不显示内容
     展示,//不显示内容
 }
@@ -94,13 +94,13 @@ public class Dream_Panel_Bag : Panel_Base
                 //打开仓库界面
                 baseShow();
                 break;
-            case Panel_BagType.一键出售:
+            case Panel_BagType.一键售解:
                 m_curPanel_BagType = Panel_BagType.装备;
                 Show_Sell();
                 break;
-            case Panel_BagType.一键分解:
-                m_curPanel_BagType = Panel_BagType.装备;
-                Show_decompose();
+            //case Panel_BagType.一键分解:
+            //    m_curPanel_BagType = Panel_BagType.装备;
+            //    Show_decompose();
                 break;
             case Panel_BagType.已装备:
                 break;
@@ -154,6 +154,7 @@ public class Dream_Panel_Bag : Panel_Base
         List<Bag_Base_VO> baglist = SumSave.crt_bags.Get_Bag_List();
         ObscuredLong moeny = 0;//回收金币
         ObscuredLong sycee = 0;//回收元宝
+        int Decomposenumber = 0;//分解数量
         for (int i = 0; i < baglist.Count; i++)
         {
             string[] info_str = baglist[i].user_value.Split(' ');
@@ -163,6 +164,7 @@ public class Dream_Panel_Bag : Panel_Base
             {
                 moeny += baglist[i].price * lv / Enum.GetValues(typeof(enum_equip_quality_list)).Cast<int>().Max();
                 if (lv >= 5) sycee += baglist[i].need_lv / 7 * (lv - 5) + 1;
+                if (lv >= 7) Decomposenumber++;
                 baglist.RemoveAt(i);
                 i--;
             }
@@ -173,7 +175,15 @@ public class Dream_Panel_Bag : Panel_Base
             if (sycee > 0)
                 Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, sycee, Obtain_Int.Add_unit(sycee));
             SumSave.crt_bags.Set_Bag_List(baglist);
-            Alert.Show("一键出售", "出售成功,\n获得 " + currency_unit.金币 + " * " + moeny + "\n" + currency_unit.元宝 + " * " + sycee);
+            if (Decomposenumber > 0)
+            {
+                int number = Decomposenumber;
+                ObscuredInt random = Random.Range(1, 1000);
+                ObscuredInt maxnumber = number + Random.Range(1, 1000);
+                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.皇级碎片, new ObscuredInt[] { number + random, random }), maxnumber);
+            }
+            Alert.Show("一键出售", "出售成功,\n获得 " + currency_unit.金币 + " * " + moeny + "\n" + currency_unit.元宝 + " * " + sycee
+                +"\n" + common_items_list.皇级碎片 + " * " + Decomposenumber);
 
             baseShow();
         }
@@ -245,8 +255,7 @@ public class Dream_Panel_Bag : Panel_Base
                     bagItem.GetComponent<Button>().onClick.AddListener(() => SelectBagItem(bagItem));
                 }
                 break;
-            case Panel_BagType.一键出售:
-                break;
+            
             case Panel_BagType.已装备:
                 break;
             case Panel_BagType.展示:

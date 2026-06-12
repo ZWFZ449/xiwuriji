@@ -131,8 +131,9 @@ public class show_drop_list : Base_Mono
     {
         int moeny = data.Item2.base_moenys[data.Item2.GetMapIntensityDrop - 1];
         moeny *= (100 + SumSave.crtMaxBattle.gold_bonus) / 100;
+        if (SumSave.map_Lv > 1) moeny *= 5;
         dic.Add("获得 " + currency_unit.金币 + " * " + moeny);
-        Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
+        Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny)); 
         switch (data.Item1)
         {
             case 0:
@@ -462,6 +463,16 @@ public class show_drop_list : Base_Mono
             sycee += data.need_lv / 7 * (lv - 5) + 1;
             dic.Add((exist ? "职业回收" : "回收 ") + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.元宝 + " * " + sycee); 
             Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, sycee, Obtain_Int.Add_unit(sycee));
+            if (lv == 7)
+            {
+                int number = 1;
+                ObscuredInt random = Random.Range(1, 1000);
+                ObscuredInt maxnumber = number + Random.Range(1, 1000);
+                Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.皇级碎片, new ObscuredInt[] { number + random, random }), maxnumber);
+                dic.Add((exist ? "职业回收" : "回收 ") + (enum_equip_quality_list)lv + data.Name + " 获得 " + common_items_list.皇级碎片 + " * " + 1);
+
+            }
+
         }
     }
     private void OnClick(dream_BagItem item)

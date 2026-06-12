@@ -129,7 +129,7 @@ public class hero_Resources_item : Base_Mono
                 break;
             case Panel_BagType.取出仓库:
                 break;
-            case Panel_BagType.一键出售:
+            case Panel_BagType.一键售解:
                 break;
             case Panel_BagType.已装备:
                 break;

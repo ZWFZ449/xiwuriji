@@ -41,7 +41,7 @@ public class offect_house : Base_Mono
             btn_item.GetComponent<Button>().onClick.AddListener(() => SelectBtn(btn_item));
         }
     }
-
+    int number = 0;
     private void SelectBtn(btn_item btn_item)
     {
         crt_btn= (Offect_House_State)btn_item.index;
@@ -77,16 +77,63 @@ public class offect_house : Base_Mono
                 break;
             case Offect_House_State.合成金条:
                 ObscuredLong needmoeny = 13000000;
+                if (number >= 5)
+                {
+                    needmoeny *= 10;
+                    Alert.Show("合成金条", "是否花费" + Battle_Tool.FormatNumberToChineseUnit(needmoeny) + currency_unit.金币 + "合成\n金条 * 100", Synthetic_golds, needmoeny);
+
+                }else
                 Alert.Show("合成金条", "是否花费" + Battle_Tool.FormatNumberToChineseUnit(needmoeny) + currency_unit.金币 + "合成\n金条 * 10", Synthetic_gold, needmoeny);
 
                 break;
             case Offect_House_State.兑换元宝:
                 ObscuredLong need_moeny = 13000000;
-                Alert.Show("兑换元宝", "是否花费" + Battle_Tool.FormatNumberToChineseUnit(need_moeny) + currency_unit.金币 + "兑换\n元宝 * 1000", Synthetic_sycee, need_moeny);
+                if (number >= 5)
+                {
+                    need_moeny *= 10;
+                    Alert.Show("兑换元宝", "是否花费" + Battle_Tool.FormatNumberToChineseUnit(need_moeny) + currency_unit.金币 + "兑换\n元宝 * 10000", Synthetic_sycees, need_moeny);
+
+                }
+                else
+                    Alert.Show("兑换元宝", "是否花费" + Battle_Tool.FormatNumberToChineseUnit(need_moeny) + currency_unit.金币 + "兑换\n元宝 * 1000", Synthetic_sycee, need_moeny);
                 break;
             default:
                 break;
         }
+    }
+
+    private void Synthetic_sycees(object arg0)
+    {
+        ObscuredLong moeny = (ObscuredLong)arg0;
+        if (moeny < 0) return;
+        Clear_Condition();
+        Need_Condition(currency_unit.金币, moeny);
+        if (Return_Condition())
+        {
+            ObscuredLong number = 10000;
+            Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, number, Obtain_Int.Add_unit(number));
+            Alert_Dec.Show("获得 " + currency_unit.元宝 + " * " + number);
+        }
+        else Alert_Dec.Show("兑换失败");
+    }
+
+    private void Synthetic_golds(object arg0)
+    {
+        ObscuredLong moeny = (ObscuredLong)arg0;
+        if (moeny < 0) return;
+        Clear_Condition();
+        Need_Condition(currency_unit.金币, moeny);
+        if (Return_Condition())
+        {
+            this.number++;
+            string path = "金条";
+            ObscuredInt number = 100;
+            ObscuredInt random = Random.Range(1, 1000);
+            ObscuredInt maxnumber = number + Random.Range(1, 1000);
+            Alert_Dec.Show("获得 " + path + " * " + number);
+            Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, path, new ObscuredInt[] { number + random, random }), maxnumber);
+        }
+        else Alert_Dec.Show("合成失败");
     }
 
     private void Synthetic_sycee(object arg0)
@@ -112,6 +159,7 @@ public class offect_house : Base_Mono
         Need_Condition(currency_unit.金币, moeny);
         if (Return_Condition())
         {
+            this.number++;
             string path = "金条";
             ObscuredInt number = 10;
             ObscuredInt random = Random.Range(1, 1000);
