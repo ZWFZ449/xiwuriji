@@ -396,7 +396,7 @@ public class offect_reincarnation : Base_Mono
                                     break;
                                 case 2://需要需求
                                     VIP_Need_Condition(need[1], int.Parse(need[2]));
-                                    Need_Condition(need[1], int.Parse(need[2]));
+                                    //Need_Condition(need[1], int.Parse(need[2]));
                                     break;
                                 case 3://需要技能
                                     VIP_Need_Condition((currency_unit)int.Parse(need[1]), int.Parse(need[2]));

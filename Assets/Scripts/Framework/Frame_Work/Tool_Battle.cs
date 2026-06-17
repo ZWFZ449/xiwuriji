@@ -749,8 +749,8 @@ public static class Tool_Battle
                             case enum_equip_entry_list.防御属性: battle_ac += value; break;
                             case enum_equip_entry_list.魔防属性: battle_mac += value; break;
                             case enum_equip_entry_list.物攻属性: battle_dc += value; break;
-                            case enum_equip_entry_list.魔攻属性: battle_sc += value; break;
-                            case enum_equip_entry_list.道攻属性: battle_mc += value; break;
+                            case enum_equip_entry_list.魔攻属性: battle_mc += value; break;
+                            case enum_equip_entry_list.道攻属性: battle_sc += value; break;
                             case enum_equip_entry_list.攻击速度: battle_speed -= (value * speed_bonus); break;
                             case enum_equip_entry_list.攻击范围: battle_range += value; break;
                             case enum_equip_entry_list.暴击属性: crit += value; break;
