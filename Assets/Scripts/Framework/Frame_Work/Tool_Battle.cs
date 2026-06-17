@@ -1063,7 +1063,7 @@ public static class Tool_Battle
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
                             case 6: D = (enum_battle_pet_talent_list.华山斩, talent.pet_talent_offecttype, talent.pet_talent_offectvalue + pet_up_offect_value);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
-                            case 7: D = (enum_battle_pet_talent_list.斩杀, talent.pet_talent_offecttype, 10);
+                            case 7: D = (enum_battle_pet_talent_list.斩杀, talent.pet_talent_offecttype + pet_up_offect_value, 10);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
                             case 8: D = (enum_battle_pet_talent_list.连击效果, talent.pet_talent_offecttype, talent.pet_talent_offectvalue + pet_up_offect_value);
                                 if (!talentList.Contains(D)) talentList.Add(D); break;
@@ -1218,7 +1218,24 @@ public static class Tool_Battle
             }else
             battle_speed = Mathf.Max(50, battle_speed);
         }
-        //lucky = 8;
+
+#if UNITY_EDITOR
+        lucky = 9;
+        dc2 = 1500;
+        ac2 = 5000;
+        ac = 5000;
+        mac= 5000;
+        mac2 = 1500;
+        battle_speed = 30;
+        battle_range = 300;
+        maxmp = 1000000;
+        battle_mp = 1000000;
+        mpRegen = 1000000;
+#elif UNITY_ANDROID
+        //验证图鉴
+#elif UNITY_IPHONE
+#endif
+        //
         crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky,damage_reduction,magic_damage_reduction,0);
 
@@ -1248,7 +1265,7 @@ public static class Tool_Battle
                     string name = SumSave.db_maps[i].map_monster[j];
                     crtMaxBattleVO monster = SumSave.db_monsters.Find((x) => x.crt_name == name);
                     if (monster != null)
-                        exp += illustrateds[name] * monster.exp * (200 + exp_bonus) / 100;
+                        exp += (illustrateds[name] * monster.exp * (200 + exp_bonus)) / 100;
                 }
             }
         }
@@ -1259,7 +1276,7 @@ public static class Tool_Battle
             exp-= SumSave.db_lvs[lv].exp;
             lv++;
         }
-        if (lv >= crt.lv)//正常等级
+        if (lv >= crt.lv-3)//正常等级
         {
 
         }
@@ -1389,39 +1406,39 @@ public static class Tool_Battle
         ObscuredInt lv = (ObscuredInt)MathF.Min(SumSave.crtHero.lv, 60);
         if (SumSave.crtHero.zs_lvs >= 2) lv = (SumSave.crtHero.zs_lvs - 1) * 20 + 60;
         talent.pet_up_lv = Mathf.Min(talent.pet_up_lv, talent.pet_up_offect.Count - 1);
-        int pet_up_lv = talent.pet_up_lv + 1;
+        int pet_up_lv = talent.pet_up_lv;
         switch (talent.pet_talent_type)
         {
             case 3:
                 switch ((talent.pet_talent_offect))
                 {
                     case 1: dec += "生命上限 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
-                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : "");
                             break;
                     case 2:
-                        dec += "基础属性\n" + enum_equip_entry_list.物理攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * lv)
-                        + "\n" + enum_equip_entry_list.魔法攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * lv)
-                        + "\n" + enum_equip_entry_list.道术攻击 + " +" + Show_Color.Red(talent.pet_talent_offectvalue * lv)
+                        dec += "基础属性\n" + enum_equip_entry_list.物理攻击 + " +" + Show_Color.Red(Show_Lv_offect(talent,lv,pet_up_lv))
+                        + "\n" + enum_equip_entry_list.魔法攻击 + " +" + Show_Color.Red(Show_Lv_offect(talent, lv, pet_up_lv))
+                        + "\n" + enum_equip_entry_list.道术攻击 + " +" + Show_Color.Red(Show_Lv_offect(talent, lv, pet_up_lv))
                         + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")")
-                        +(talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : "")
+                        +(talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv +1)+ " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : "")
                        ; break;
                     case 3: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + "随机传送一个敌人"
-                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 随机传送 " + talent.pet_up_offect[talent.pet_up_lv] + " 敌人", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 随机传送 " + talent.pet_up_offect[talent.pet_up_lv] + " 敌人", UnityColorPresets.HexToColor("#1E90FF")) : "");
                         break;
                     case 4: dec += "击杀后追击另一个目标\n每次触发消耗最大Hp的" + Show_Color.Red(talent.pet_talent_offectvalue+"%")
-                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: Hp消耗 " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: Hp消耗 " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : "");
                         break;
                     case 5: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red("无视防御") + " 效果"
-                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 概率 + " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 概率 + " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : "");
                         break;
-                    case 6: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red(" 伤害 * " + talent.pet_talent_offectvalue) + " 效果"
-                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 伤害 + " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                    case 6: dec += "攻击目标时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red(" 伤害 * " + talent.pet_talent_offectvalue+ "倍") + " 效果" 
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 伤害 + " + talent.pet_up_offect[talent.pet_up_lv] + " 倍", UnityColorPresets.HexToColor("#1E90FF")) : "");
                         break;
                     case 7: dec += "攻击目标时 当目标血量低于" + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 时 触发 " + Show_Color.Red("斩杀") + " 效果"
-                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 血量低于 " + (talent.pet_talent_offecttype +talent.pet_up_offect[talent.pet_up_lv] )+ " % 触发", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 血量低于 " + (talent.pet_talent_offecttype +talent.pet_up_offect[talent.pet_up_lv] )+ " % 触发", UnityColorPresets.HexToColor("#1E90FF")) : "");
                         break;
                     case 8: dec += "连击效果提升 " + Show_Color.Red(talent.pet_talent_offecttype + "%")
-                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : "");
                         ; break;
                 }
                 break;
@@ -1429,25 +1446,25 @@ public static class Tool_Battle
                 switch ((talent.pet_talent_offect))
                 {
                     case 1: dec += "物理伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
-                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 2: dec += "魔法伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
-                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 3: dec += "召唤兽伤害 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
-                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 4: dec += "物理防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")")
-                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 5: dec += "魔法防御 + " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")")
-                        +(talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                        +(talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 6: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + " Hp" + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")")
-                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 7: dec += "每s回复 + " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + " Mp" + Show_Color.Grey("\n(每级 + " + talent.pet_talent_offectvalue + ")")
-                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 8: dec += "受到物理伤害减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
-                             + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 物理伤害减少 " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                             + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 物理伤害减少 " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 9: dec += "受到魔法伤害减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
-                             + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 魔法伤害减少 " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                             + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 魔法伤害减少 " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 11: dec += "躲避 + " + Show_Color.Red(talent.pet_talent_offectvalue) + " "
-                             + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 躲避 +" + talent.pet_up_offect[talent.pet_up_lv] + " ", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                             + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 躲避 +" + talent.pet_up_offect[talent.pet_up_lv] + " ", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     default:
                         break;
                 }
@@ -1459,25 +1476,25 @@ public static class Tool_Battle
                         dec += "攻击目标时 " + Show_Color.Red((Hero_Type)(talent.pet_talent_job)) + " 职业 "
                             //+ (talent.pet_talent_job == 3 ? "(召唤兽)" : "")
                             + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 触发 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"
-                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : "");
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 伤害 + " + (talent.pet_up_offect[talent.pet_up_lv]) + " % ", UnityColorPresets.HexToColor("#1E90FF")) : "");
                         break;
                     case 2:
                     case 3:
                     case 4:
                         dec += "攻击目标时 " + Show_Color.Red((Hero_Type)(talent.pet_talent_offect - 1)) + " 职业 "
                             + Show_Color.Red(talent.pet_talent_offecttype + "%") + " 概率 忽视 " + Show_Color.Red(talent.pet_talent_offectvalue * lv) + " 防御"
-                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 每级 + " + talent.pet_up_offect[talent.pet_up_lv] + "", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 5:
                         dec += "受到伤害时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 反震 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"
-                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 反震 + " + talent.pet_up_offect[talent.pet_up_lv] + " % 伤害", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                        + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 反震 + " + talent.pet_up_offect[talent.pet_up_lv] + " % 伤害", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 6: dec += "受到攻击时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 降低 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 暴击概率"
-                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 降低 + " + talent.pet_up_offect[talent.pet_up_lv] + " % 暴击概率", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 降低 + " + talent.pet_up_offect[talent.pet_up_lv] + " % 暴击概率", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 7: dec += "受到伤害时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 降低 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"
-                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 降低 + " + talent.pet_up_offect[talent.pet_up_lv] + " % 伤害", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 降低 + " + talent.pet_up_offect[talent.pet_up_lv] + " % 伤害", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 8: dec += "受到攻击时 " + Show_Color.Red(talent.pet_talent_offecttype + "%") + "概率 反弹 " + Show_Color.Red(talent.pet_talent_offectvalue + "%") + " 伤害"
-                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 反弹 + " + talent.pet_up_offect[talent.pet_up_lv] + " % 伤害", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 反弹 + " + talent.pet_up_offect[talent.pet_up_lv] + " % 伤害", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                     case 10: dec += "技能释放消耗减少  " + Show_Color.Red(talent.pet_talent_offectvalue) + " %"
-                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ pet_up_lv + " 加成: 技能释放消耗减少 + " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
+                            + (talent.pet_up_lv > -1 ? "\n" + Show_Color.Set_String("皇权 Lv."+ (pet_up_lv + 1) + " 加成: 技能释放消耗减少 + " + talent.pet_up_offect[talent.pet_up_lv] + " %", UnityColorPresets.HexToColor("#1E90FF")) : ""); break;
                 }
                 break;
             default:
@@ -1487,6 +1504,12 @@ public static class Tool_Battle
         return dec;
     }
 
+    private static string Show_Lv_offect(db_pet_talent_vo talent, int lv,int pet_up_lv)
+    {
+        string dec = "";
+        dec += (talent.pet_talent_offectvalue+(pet_up_lv>-1? talent.pet_up_offect[talent.pet_up_lv]:0)) * lv;
+        return dec;
+    }
     /// <summary>
     /// 当前vip
     /// </summary>
@@ -2111,7 +2134,7 @@ public static class Tool_Battle
         // 获取一个概率
         WeightedItem selectedItem = picker.GetRandomItem();
 #if UNITY_EDITOR
-        return 7;
+        //return 7;
 #elif UNITY_ANDROID
         
            

@@ -521,12 +521,12 @@ public class Dream_Panel_Hero : Panel_Base
             case enum_talent_offect_list.无视防御:
                 if (data.correlation_skill == -1)
                 {
-                    dec += "[战斗效果]\n" + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "%";
+                    dec += "[战斗效果]\n" + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "";
                 }
                 else
                 {
                     skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
-                    dec += "[专属技能效果]\n" + Show_Color.Yellow(skill_name) + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "%";
+                    dec += "[专属技能效果]\n" + Show_Color.Yellow(skill_name) + (enum_talent_offect_list)data.talent_offect + "+" + data.talent_offect_value[index] + "";
 
                 }
                 break;
@@ -555,7 +555,7 @@ public class Dream_Panel_Hero : Panel_Base
                 break;
             case enum_talent_offect_list.技能攻击个数:
                 skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
-                dec += "[战斗效果]\n" + Show_Color.Yellow(skill_name) + " 的攻击次数变为 " + data.talent_offect_value[index] + "";
+                dec += "[战斗效果]\n" + Show_Color.Yellow(skill_name) + "  攻击 " + data.talent_offect_value[index] + "个目标";
                 break;
             case enum_talent_offect_list.技能概率不消耗蓝:
                 if (data.correlation_skill == -1)

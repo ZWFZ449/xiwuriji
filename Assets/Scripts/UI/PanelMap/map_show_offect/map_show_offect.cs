@@ -245,11 +245,11 @@ public class map_show_offect : Base_Mono
             if (map.map_lv_intensity_drop.Count > 0)
             {
                 List<string> drop_value = new List<string>();
-                foreach (var item in map.map_intensity_drop.Keys)
+                foreach (var item in map.map_lv_intensity_drop.Keys)
                 {
                     if (crt_map.GetMap_Intensity >= item)
                     {
-                        drop_value.Add(map.map_intensity_drop[item]);
+                        drop_value.Add(map.map_lv_intensity_drop[item]);
                     }
                 }
                 for (int i = drop_value.Count - 1; i >= 0; i--)

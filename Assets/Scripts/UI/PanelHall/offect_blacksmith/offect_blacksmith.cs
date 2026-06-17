@@ -40,6 +40,14 @@ public class offect_blacksmith : Base_Mono
     private panel_hero_equip m_panel_hero_equip;
 
     private blacksmith_gem crt_gem;
+    /// <summary>
+    /// 选择锁定状态
+    /// </summary>
+    private Toggle crt_toggle;
+    /// <summary>
+    /// 锁定
+    /// </summary>
+    private bool is_toggle = false;
     private void Awake()
     {
         m_btn_brom = Find<Transform>("btn_list/Viewport/Content");
@@ -53,6 +61,8 @@ public class offect_blacksmith : Base_Mono
         need_info = Find<TMP_Text>("need_info");
         m_panel_hero_equip = UI_Manager.I.GetPanel<panel_hero_equip>();
         crt_gem = Find<blacksmith_gem>("blacksmith_gem");
+        crt_toggle = Find<Toggle>("Toggle");
+        crt_toggle.onValueChanged.AddListener((bool isOn) => { is_toggle = isOn; SelectBagItem(crt_bag); });
         Init();
     }
 
@@ -127,6 +137,10 @@ public class offect_blacksmith : Base_Mono
                 if (int.Parse(infos[2]) >= 7)
                 {
                     Need_Condition(common_items_list.皇级碎片, 1);
+                    if (is_toggle)
+                    {
+                        Need_Condition(common_items_list.金条, 10);
+                    }
                 }
                 Need_Condition(currency_unit.Boss积分, 100);
                 if (Return_Condition())
@@ -220,7 +234,21 @@ public class offect_blacksmith : Base_Mono
                     {
 
                     }
-                    else result += (result == "" ? "" : "|") + entry[j];
+                    else
+                    {
+                        if (!is_toggle)
+                        {
+                            result += (result == "" ? "" : "|") + entry[j];
+                        } else
+                        {
+                            if (int.Parse(entry_arr[0]) >= 2000)
+                            {
+
+                            }
+                            else result += (result == "" ? "" : "|") + entry[j];
+                        }
+                        
+                    } 
                 }
             }
         }
@@ -232,50 +260,22 @@ public class offect_blacksmith : Base_Mono
                 string[] entry_arr = entry[j].Split(',');
                 if (entry_arr.Length > 1)
                 {
+
                     if (int.Parse(entry_arr[0]) >= 1000 && int.Parse(entry_arr[0]) < 2000)
                     {
                         result += (result == "" ? "" : "|") + entry[j];
                     }
+                    else
+                    {
+                        if (is_toggle && int.Parse(entry_arr[0]) >= 2000)
+                        { 
+                            result += (result == "" ? "" : "|") + entry[j];
+                        }
+                    }
                 }
             }
         }
-        //for (int i = 0; i < user_value_list.Length; i++)
-        //{
-        //    bool exist = true;
-        //    string[] entry = user_value_list[i].Split('|');
-        //    for (int j = 0; j < entry.Length; j++)
-        //    {
-        //        string[] entry_arr = entry[j].Split(',');
-        //        if (entry_arr.Length > 1)
-        //        {
-        //            if (int.Parse(entry_arr[0]) >= 1000 && int.Parse(entry_arr[0]) < 2000)
-        //            {
-        //                exist = false;
-        //                break;
-        //            }
-        //        }
-        //    }
-        //    if (exist) result += (result == "" ? "" : "X") + user_value_list[i];
-        //}
-        //for (int i = 0; i < info_list.Length; i++)
-        //{
-        //    bool exist = false;
-        //    string[] entry = info_list[i].Split('|');
-        //    for (int j = 0; j < entry.Length; j++)
-        //    {
-        //        string[] entry_arr = entry[j].Split(',');
-        //        if (entry_arr.Length > 1)
-        //        {
-        //            if (int.Parse(entry_arr[0]) >= 1000 && int.Parse(entry_arr[0]) < 2000)
-        //            {
-        //                exist = true;
-        //                break;
-        //            }
-
-        //        }
-        //    }
-        //    if (exist) result += "X" + info_list[i];
-        //}
+       
         info[4] = result;
         crt_bag.user_value = Battle_Tool.Equip_User_Value(info);
     }
@@ -390,6 +390,7 @@ public class offect_blacksmith : Base_Mono
     {
         ClearObject(m_bags_brom);
         ClearObject(m_show_brom);
+        crt_toggle.gameObject.SetActive(false);
         List<Bag_Base_VO> baglist = SumSave.crt_bags.Get_Bag_List();
         switch (index)
         {
@@ -416,7 +417,7 @@ public class offect_blacksmith : Base_Mono
             case blacksmith_type.升级装备:
                 for (int i = 0; i < baglist.Count; i++)
                 {
-                    if (baglist[i].need_lv >= 30)
+                    if (baglist[i].need_lv >= 30) 
                     {
                         if (baglist[i].user_value != null)
                         {
@@ -608,12 +609,24 @@ public class offect_blacksmith : Base_Mono
                     break;
                 case blacksmith_type.洗炼装备:
                     need_info.text = "需求";
-                    if (int.Parse(info[2]) >= 7) need_info.text += common_items_list.皇级碎片 + " * 1";
+                    if (int.Parse(info[2]) >= 7)
+                    {
+                        crt_toggle.gameObject.SetActive(true);
+                        if (is_toggle)
+                        {
+                            need_info.text += common_items_list.皇级碎片 + " * 1\n";
+                            need_info.text += common_items_list.金条 + " * 10\n";
+
+                        }
+                        else
+                            need_info.text += common_items_list.皇级碎片 + " * 1\n";
+
+                    }
                     need_info.text += currency_unit.Boss积分 + " *  100";
                     break;
                 case blacksmith_type.升级装备:
                     need_info.text = "需求";
-                    need_info.text += common_items_list.皇级碎片 + " * 100";
+                    need_info.text += common_items_list.皇级碎片 + " * 100\n";
                     need_info.text += currency_unit.元宝 + " *  10000";
                     break;
             }

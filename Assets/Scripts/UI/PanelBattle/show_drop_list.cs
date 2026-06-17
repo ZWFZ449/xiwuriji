@@ -130,7 +130,7 @@ public class show_drop_list : Base_Mono
     private void judgment((int, db_map_vo) data)
     {
         int moeny = data.Item2.base_moenys[data.Item2.GetMapIntensityDrop - 1];
-        moeny *= (100 + SumSave.crtMaxBattle.gold_bonus) / 100;
+        moeny = (moeny * (100 + SumSave.crtMaxBattle.gold_bonus)) / 100;
         if (SumSave.map_Lv > 1) moeny *= 5;
         dic.Add("获得 " + currency_unit.金币 + " * " + moeny);
         Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny)); 
@@ -164,6 +164,16 @@ public class show_drop_list : Base_Mono
                 {
                     Show_Bag(data.Item2.map_lv_drop, Drop_Type.随机掉落, data.Item2);
                     Show_Bag(data.Item2.map_boss_lv_drop, Drop_Type.逐个掉落, data.Item2);
+                    if (data.Item2.map_lv_intensity_drop.Count > 0)
+                    {
+                        foreach (var item in data.Item2.map_lv_intensity_drop.Keys)
+                        {
+                            if (data.Item1 >= item)
+                            {
+                                Show_Bag(data.Item2.map_lv_intensity_drop[item], Drop_Type.逐个掉落, data.Item2);
+                            }
+                        }
+                    }
 
                 }
                 if (!gameObject.activeSelf)

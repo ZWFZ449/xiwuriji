@@ -430,9 +430,12 @@ namespace MVC
                                 break;
                             case enum_talent_offect_list.单体改群体:
                                 exist = false;
-                                Buff_range(skill, monster, skilldamage * item1.Value / 100, battle_Damage * item1.Value / 100);
+                                Buff_rangeold(skill, monster, skilldamage * item1.Value / 100, battle_Damage * item1.Value / 100);
                                 break;
                             case enum_talent_offect_list.技能攻击个数:
+                                exist = false;
+                                Buff_range(skill, monster, skilldamage, battle_Damage, item1.Value);
+                                //Buff_range(skill, monster, skilldamage * item1.Value / 100, battle_Damage * item1.Value / 100);
                                 break;
                             case enum_talent_offect_list.技能概率不消耗蓝:
                                 break;
@@ -496,10 +499,25 @@ namespace MVC
         /// <param name="monster"></param>
         /// <param name="skilldamage"></param>
         /// <param name="battle_Damage"></param>
-        private void Buff_range(db_skill_vo skill,BaseBattleAttack monster, int skilldamage,int battle_Damage)
+        private void Buff_rangeold(db_skill_vo skill,BaseBattleAttack monster, int skilldamage,int battle_Damage)
         {
             List<BattleHealthState> monsterList = FindTheTarget(skill, monster);
             for (int i = 0; i < monsterList.Count; i++)
+            {
+                BaseBattleAttack base_monster = monsterList[i].gameObject.GetComponent<BaseBattleAttack>();
+                if (base_monster != null)
+                {
+                    int base_damage = Base_Damage(base_monster, skilldamage);
+                    if (base_damage < 0) base_damage = 1;
+                    TakeDamage(base_damage, base_monster, battle_Damage);
+                }
+            }
+        }
+        private void Buff_range(db_skill_vo skill, BaseBattleAttack monster, int skilldamage, int battle_Damage, int number)
+        {
+            List<BattleHealthState> monsterList = FindTheTarget(skill, monster, true);
+            int max = Mathf.Min(monsterList.Count, number - 1);
+            for (int i = 0; i < max; i++)
             {
                 BaseBattleAttack base_monster = monsterList[i].gameObject.GetComponent<BaseBattleAttack>();
                 if (base_monster != null)
@@ -521,7 +539,7 @@ namespace MVC
                 oneselfHealthState. Use_Medicine(data.data.hpRegen, data.data.mpRegen);
             }
         }
-        private List<BattleHealthState> FindTheTarget(db_skill_vo skill, BaseBattleAttack base_monster)
+        private List<BattleHealthState> FindTheTarget(db_skill_vo skill, BaseBattleAttack base_monster,bool exist=false)
         {
             string TergetTag = "Monster";
              
@@ -534,16 +552,21 @@ namespace MVC
                     BattleHealthState monster = monsters[i].GetComponent<BattleHealthState>();
                     //消失或者死亡
                     if (!monster.gameObject.activeInHierarchy || monster.isDead) continue;
-                    switch (skill.MoveType)
+                    if (exist) monsterList.Add(monster);
+                    else
                     {
-                        case 3:
-                            if (Vector3.Distance(monster.transform.position, base_monster.transform.position) < skill.scope) monsterList.Add(monster);
-                            break;
-                        case 4:
-                            if (Vector3.Distance(monster.transform.position, transform.position) < skill.scope) monsterList.Add(monster);
-                            break;
-                        default:
-                            break;
+                        switch (skill.MoveType)
+                        {
+                            case 3:
+                                if (Vector3.Distance(monster.transform.position, base_monster.transform.position) < skill.scope) monsterList.Add(monster);
+                                break;
+                            case 4:
+                                if (Vector3.Distance(monster.transform.position, transform.position) < skill.scope) monsterList.Add(monster);
+                                break;
+                            default:
+                                break;
+                        }
+
                     }
                 }
             }
@@ -777,7 +800,7 @@ namespace MVC
                     case enum_battle_pet_talent_list.斩杀:
                         if (monster.GetComponent<BattleHealthState>().Proportion().Item1 <= item.Item2)
                         {
-                            damage = (int)(monster.data.data.battle_maxhp / 5);
+                            damage = (int)(monster.data.data.battle_maxhp * item.Item2 / 100);
                         }
                         break;
                     case enum_battle_pet_talent_list.连击:

@@ -192,7 +192,7 @@ namespace MVC
         }
         private void Read_Db_Player_Talent()
         {
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_player_talent);
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_player_talents);
 
             SumSave.db_player_talents = new List<db_player_talent_vo>();
             if (mysqlReader.HasRows)

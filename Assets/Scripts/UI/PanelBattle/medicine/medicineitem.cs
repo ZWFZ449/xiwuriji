@@ -92,7 +92,6 @@ public class medicineitem : Base_Mono
 
     private void OnEnable()
     {
-        Debug.Log("OnEnable");
         isUse = true;
         StopAllCoroutines(); 
     }

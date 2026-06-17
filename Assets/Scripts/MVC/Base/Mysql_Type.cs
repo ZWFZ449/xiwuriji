@@ -90,7 +90,7 @@ public enum Mysql_Table_Name
 
 
     db_hero_type,//英雄类型
-    db_player_talent,//玩家天赋
+    db_player_talents,//玩家天赋
     db_player_talent_type,//玩家天赋类型
     db_pet_talent,//宠物天赋
     Dream_Users,//用户货币信息

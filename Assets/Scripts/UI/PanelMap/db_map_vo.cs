@@ -1,6 +1,7 @@
 using CodeStage.AntiCheat.ObscuredTypes;
 using MVC;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class db_map_vo 
 {
@@ -74,7 +75,7 @@ public class db_map_vo
         this.map_add_number_monster = map_add_number_monster;
         Dictionary<ObscuredInt, string> dic=new Dictionary<ObscuredInt, string>();
         string[] map_intensity_drop_arr = map_intensity_drop.Split('|');
-        for (ObscuredInt i = 0; i < map_intensity_drop_arr.Length; i++)
+        for (int i = 0; i < map_intensity_drop_arr.Length; i++)
         {
             if (map_intensity_drop_arr[i].Length > 0)
             {
@@ -92,7 +93,7 @@ public class db_map_vo
         this.map_boss_lv_drop = map_boss_lv_drop;
         Dictionary<ObscuredInt, string> dic1 = new Dictionary<ObscuredInt, string>();
         string[] map_lv_intensity_drop_arr = map_lv_intensity_drop.Split('|');
-        for (ObscuredInt i = 0; i < map_lv_intensity_drop_arr.Length; i++)
+        for (int i = 0; i < map_lv_intensity_drop_arr.Length; i++)
         {
             if (map_lv_intensity_drop_arr[i].Length > 0)
             { 

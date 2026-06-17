@@ -460,6 +460,7 @@ public class offect_reincarnation : Base_Mono
         int max = 0;
         for (int i = 0; i < SumSave.crt_zs.crt_Refinement.Count; i++) max += SumSave.crt_zs.crt_Refinement[i];
         string dec = "";
+        max = (int)MathF.Min(150 * ((SumSave.crtHero.zs_lvs - 1)), max);
         int number = (max / 20 + 1) * 10;
         if(SumSave.crtHero.zs_lvs ==2)
         dec += "强化锻体需要\n" + number + "黑铁矿石" + "\n" + (number * 2) + "金条";
