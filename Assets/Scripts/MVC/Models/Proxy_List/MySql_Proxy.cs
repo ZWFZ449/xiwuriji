@@ -151,7 +151,7 @@ namespace MVC
         }
         private void Read_Db_Synthesis()
         {
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_synthesiss); //db_synthesis
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_synthesis); //db_synthesis
             SumSave.db_synthesis = new List<db_synthesis_vo>();
             if (mysqlReader.HasRows)
             {

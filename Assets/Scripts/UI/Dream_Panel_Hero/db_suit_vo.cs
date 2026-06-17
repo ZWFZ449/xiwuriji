@@ -18,7 +18,9 @@ public enum Suit_Type
  道攻属性,
  双防属性,
  伤害吸收,
- 魔法
+ 魔法,
+ 经验加成,
+ 金币加成,
 }
 public class db_suit_vo : Base_VO
 {

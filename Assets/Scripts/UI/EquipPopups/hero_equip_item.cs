@@ -770,6 +770,12 @@ public class hero_equip_item : Base_Mono
             case Suit_Type.双防属性:
                 value += " : " + suit.Item3 + " %";
                 break;
+            case Suit_Type.魔法:
+                break;
+            case Suit_Type.经验加成:
+            case Suit_Type.金币加成:
+                value += " : " + suit.Item3 + " %";
+                break;
         }
         return value;
     }

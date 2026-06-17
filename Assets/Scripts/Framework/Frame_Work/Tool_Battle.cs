@@ -16,7 +16,7 @@ public static class Tool_Battle
     /// <summary>
     /// 元素属性
     /// </summary>
-    private static List<enum_equip_entry_list> entry_coefficient_list;
+    private static List<enum_equip_entry_list> entry_coefficient_list; 
     /// <summary>
     /// 附魔属性
     /// </summary>
@@ -432,6 +432,14 @@ public static class Tool_Battle
                                     break;
                                 case Suit_Type.伤害吸收:
                                     battle_def += suit.suit_list[i].Item3;
+                                    break;
+                                case Suit_Type.魔法:
+                                    break;
+                                case Suit_Type.经验加成:
+                                    exp_bonus += suit.suit_list[i].Item3;
+                                    break;
+                                case Suit_Type.金币加成:
+                                    gold_bonus += suit.suit_list[i].Item3;
                                     break;
                             }
                         }

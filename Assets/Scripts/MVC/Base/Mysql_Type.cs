@@ -102,7 +102,7 @@ public enum Mysql_Table_Name
     dream_user_pet,//用户宠物信息
     user_data_settings,//用户设置信息
     dream_user_signin,//用户签到信息
-    db_synthesiss,//合成信息
+    db_synthesis,//合成信息
     db_illustrated,//图鉴信息
     dream_user_illustrated,//用户图鉴信息
     global_battle_info,//全局战斗信息
