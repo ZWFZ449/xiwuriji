@@ -118,10 +118,13 @@ namespace MVC
         {
             opentime();
             performTime+=1;
-            show_Screensaver_time_state++;
-            if (show_Screensaver_time_state >= 300)
+            if (SumSave.crt_setting.user_data_settings.Count >= 10 && SumSave.crt_setting.user_data_settings[9] == 1)
             {
-                Alert_Screensaver.show_Screensaver();
+                show_Screensaver_time_state++;
+                if (show_Screensaver_time_state >= 300)
+                {
+                    Alert_Screensaver.show_Screensaver();
+                }
             }
             monitor_plant();
             ////显示屏幕保护
