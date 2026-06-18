@@ -110,6 +110,12 @@ public class offect_promotion : Base_Mono
                     }
                     else
                     {
+                        if (SumSave.global_gift.GetGiftPoints > 0)
+                        { 
+                            Alert_Dec.Show("获得荣耀积分  + " + SumSave.global_gift.GetGiftPoints);
+                            SumSave.crt_global_gift.SetGiftPoints(SumSave.global_gift.GetGiftPoints); 
+                        }
+
                         SumSave.crt_global_gift.SetGiftS(key);
                         Sift_value(SumSave.global_gift.GetGiftValue);
                     }

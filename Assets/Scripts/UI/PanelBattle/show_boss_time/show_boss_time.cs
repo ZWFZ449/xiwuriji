@@ -68,7 +68,8 @@ public class show_boss_time : Base_Mono
     {
         List<long> Units = SumSave.crt_user_unit.Set();
 
-        Boss_unit_info.text = currency_unit.Boss积分 + " " + Battle_Tool.FormatNumberToChineseUnit(Units[(int)currency_unit.Boss积分]);
+        Boss_unit_info.text = currency_unit.Boss积分 + " " + Battle_Tool.FormatNumberToChineseUnit(Units[(int)currency_unit.Boss积分])
+            +" "+ currency_unit.转生积分 + " " + Battle_Tool.FormatNumberToChineseUnit(Units[(int)currency_unit.转生积分]);
 
         foreach (KeyValuePair<string, info_time_item> item in dic_info_time_item)
         {
