@@ -7,4 +7,5 @@ public enum currency_unit
     转生积分,
     试炼积分,
     灵气,
+    荣耀积分
 }

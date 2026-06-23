@@ -264,6 +264,17 @@ namespace MVC
 
                         }
                     }
+                    if (monster.data.def_buff == 0)
+                    {
+                        if (item.Value.EffectType == 4)//状态类
+                        {
+                            int duff_value = item.Value.Power + item.Value.DefPowers[skill_lv];
+                            duff_value = (data.data.sc + data.data.sc2) / 2 * duff_value / 100;//计算减防
+                            if (item.Value.skill_damages.Count > skill_lv) duff_value += item.Value.skill_damages[skill_lv];
+                            monster.data.def_buff = duff_value;
+                            monster.data.def_buff = (int)MathF.Min(duff_value, MathF.Max(monster.data.data.ac2, monster.data.data.mac2) / 2);
+                        }
+                    }
                 }
             }
             //真实伤害
@@ -492,6 +503,7 @@ namespace MVC
                     break;
             }
         }
+
         /// <summary>
         /// 群攻
         /// </summary>
@@ -876,7 +888,7 @@ namespace MVC
                     }
                 }
             }
-            damage = damage * skilldamage / 100 - def;
+            damage = (damage + monster.data.def_buff) * skilldamage / 100 - def;
             if (damage <= 0) damage = 1;
             return damage;
         }

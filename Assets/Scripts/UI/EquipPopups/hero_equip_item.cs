@@ -276,7 +276,7 @@ public class hero_equip_item : Base_Mono
 
     private void OnWear()
     {
-        if (data.Data.need_lv > SumSave.crtHero.lv)
+        if (data.Data.need_lv > SumSave.crtHero.lv && SumSave.crtHero.zs_lvs == 1)
         {
             Alert_Dec.Show("等级不足，无法装备");
             return;

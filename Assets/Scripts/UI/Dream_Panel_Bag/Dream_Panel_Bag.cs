@@ -215,6 +215,7 @@ public class Dream_Panel_Bag : Panel_Base
             case Panel_BagType.装备:
             case Panel_BagType.存入仓库:
                 List<Bag_Base_VO> baglist = SumSave.crt_bags.Get_Bag_List();
+                ArrayHelper.OrderDescding(baglist, e => int.Parse(e.user_value.Split(' ')[2]));
                 if (m_curPanel_BagType == Panel_BagType.存入仓库)
                     base_info.text = m_curPanel_BagType + " " + baglist.Count + "/" + SumSave.crt_equips.GetPage;
                 else base_info.text = m_curPanel_BagType + " " + baglist.Count + "/" + SumSave.crt_bags.Get_Page;

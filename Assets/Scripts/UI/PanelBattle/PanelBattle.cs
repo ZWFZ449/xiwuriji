@@ -732,6 +732,11 @@ public class PanelBattle : PanelBase
                     {
                         AdditionalIncome(baseBattleAttack);
                         AddBossStringData(baseBattleAttack.Data.crt_name);
+                        if (crt_map.map_type == 1)
+                        {
+                            Alert_Dec.Show("副本挑战结束");
+                            StopAllCoroutines();
+                        }
                     }
                     break;
             }

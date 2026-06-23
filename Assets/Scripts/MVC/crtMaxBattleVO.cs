@@ -59,6 +59,10 @@ public class crtMaxBattleVO
     public FinalBattleValueVO data;
 
     public Dictionary<enum_talent_offect_list, int> hero_talentList;
+    /// <summary>
+    /// ºı…Ÿ∑¿”˘
+    /// </summary>
+    public int def_buff;
     public crtMaxBattleVO(ObscuredInt  exp_bonus, ObscuredInt  gold_bonus, ObscuredInt  drop_bonus ,ObscuredInt  quality_bonus ,ObscuredInt  boss_cd)
     { 
         this.exp_bonus= exp_bonus;

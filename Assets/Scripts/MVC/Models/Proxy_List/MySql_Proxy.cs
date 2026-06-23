@@ -621,7 +621,7 @@ namespace MVC
         /// </summary>
         private void Read_Db_Map()
         {
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_maps);
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_map); 
             SumSave.db_maps = new List<db_map_vo>();
             if (mysqlReader.HasRows)
             {

@@ -452,9 +452,10 @@ public static class Tool_Battle
         //精炼
         for (int i = 0; i < SumSave.crt_refined.refined_numbers.Count; i++)
         {
-            int num = 0, surplus = -1;
-            num = SumSave.crt_refined.refined_numbers[i] / Enum.GetNames(typeof(redined_lucky_type)).Length;
-            surplus = SumSave.crt_refined.refined_numbers[i] > 0 ? SumSave.crt_refined.refined_numbers[i] % Enum.GetNames(typeof(redined_lucky_type)).Length : -1;
+            int num = 0, surplus = -1, max = 0;
+            if (crt_vip != null) max = SumSave.crt_refined.refined_numbers[i] * (100 + crt_vip.whippingCorpses) / 100;
+             num = max / Enum.GetNames(typeof(redined_lucky_type)).Length;
+            surplus = max > 0 ? max % Enum.GetNames(typeof(redined_lucky_type)).Length : -1;
             if (i == 0)
             {
                 for (int j = 0; j < Enum.GetNames(typeof(redined_lucky_type)).Length; j++)
@@ -1683,8 +1684,8 @@ public static class Tool_Battle
         mac2 = (int)SumSave.crtMaxBattle.data.mac2 * (power) / 100;
         dc = (int)SumSave.crtMaxBattle.data.sc * (power) / 100;
         dc2 = (int)SumSave.crtMaxBattle.data.sc2 * (power) / 100;
-        sc = (int)SumSave.crtMaxBattle.data.sc * (power) / 100;
-        sc2 = (int)SumSave.crtMaxBattle.data.sc2 * (power) / 100;
+        sc = (int)SumSave.crtMaxBattle.data.sc * (100) / 100;
+        sc2 = (int)SumSave.crtMaxBattle.data.sc2 * (100) / 100;
         mc = (int)SumSave.crtMaxBattle.data.sc * (power) / 100;
         mc2 = (int)SumSave.crtMaxBattle.data.sc2 * (power) / 100;
         hit = (int)SumSave.crtMaxBattle.data.hit * (power) / 100;
@@ -1704,7 +1705,7 @@ public static class Tool_Battle
         battle_range = (int)SumSave.crtMaxBattle.data.battle_range * (power) / 100;
         battle_Damage = (int)SumSave.crtMaxBattle.data.battle_Damage * (power) / 100 + skill.skill_damages[lv];//真实伤害
         battle_def = (int)SumSave.crtMaxBattle.data.battle_def * (power) / 100;
-        //lucky = (ObscuredInt)SumSave.crtMaxBattle.data.lucky * (power) / 100;
+        lucky = SumSave.crtMaxBattle.data.lucky;
         dc2 += skill.skill_damages[lv];
         sc2 += skill.skill_damages[lv];
         mc2 += skill.skill_damages[lv];

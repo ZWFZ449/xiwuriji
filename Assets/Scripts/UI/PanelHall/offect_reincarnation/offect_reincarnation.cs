@@ -26,25 +26,184 @@ public class offect_reincarnation : Base_Mono
       炼气,
       炼神,
     }
-    private Button reset_talent;
+    private Button reset_talent, crate_talent;
 
     private Transform m_btn_brom;
 
     private btn_item btn_item_prefab;
 
     private TMP_Text info;
+
+    private Image offect;
+
+    private TMP_Dropdown m_drop_down;
+
+    private TMP_Text offect_info,offect_need;
+
+    private Button close_offect;
+
+    private Button confirm_crate_btn;
     /// <summary>
     /// 当前选中
     /// </summary>
     private zs_unit crt_zs_unit;
+    /// <summary>
+    /// 获取列表
+    /// </summary>
+    private List<string> offect_list;
     private void Awake()
     {
-        reset_talent = Find<Button>("reset_talent");
+        reset_talent = Find<Button>("reset_list/reset_talent");
+        crate_talent = Find<Button>("reset_list/crate_talent");
         reset_talent.onClick.AddListener(ResetTalent);
-        info=Find<TMP_Text>("Scroll View/Viewport/Content/info");
+        crate_talent.onClick.AddListener(CrateTalent);
+        info =Find<TMP_Text>("Scroll View/Viewport/Content/info");
         btn_item_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
         m_btn_brom = Find<Transform>("btn_list/Viewport/Content");
+        offect = Find<Image>("offect");
+        m_drop_down = Find<TMP_Dropdown>("offect/bg/result_Dropdown");
+        offect_info = Find<TMP_Text>("offect/bg/info");
+        close_offect = Find<Button>("offect/close_button");
+        close_offect.onClick.AddListener(() => { offect.gameObject.SetActive(false); });
+        confirm_crate_btn = Find<Button>("offect/bg/confirm_crate_btn");
+        confirm_crate_btn.onClick.AddListener(() => { confirm_crate(); });
+        offect_need = Find<TMP_Text>("offect/bg/need");
     }
+    /// <summary>
+    /// 初始化按钮
+    /// </summary>
+    private void confirm_crate()
+    {
+        string need_currency = "重置内容"+Show_Color.Red(offect_list[m_drop_down.value]);
+        switch (crt_zs_unit)
+        {
+            case zs_unit.转生:
+                break;
+            case zs_unit.炼药:
+                need_currency += "\n需消耗" + (10000 * SumSave.crtHero.zs_lvs) + "" + currency_unit.元宝 + "\n" + (5000 * SumSave.crtHero.zs_lvs) + "" + currency_unit.转生积分;
+                break;
+            case zs_unit.炼体:
+                need_currency = "\n需消耗" + (10000 * SumSave.crtHero.zs_lvs) + "" + currency_unit.元宝;
+                break;
+            case zs_unit.炼气:
+                break;
+            case zs_unit.炼神:
+                break;
+        }
+        Alert.Show("重置"+ offect_list[m_drop_down.value], need_currency+"\n是否重置", Confirm_crate);
+
+    }
+
+    private void Confirm_crate(object arg0)
+    {
+        Clear_Condition();
+        switch (crt_zs_unit)
+        {
+            case zs_unit.转生:
+                break;
+            case zs_unit.炼药:
+                Need_Condition(currency_unit.元宝, (10000 * SumSave.crtHero.zs_lvs));
+                Need_Condition(currency_unit.转生积分, (5000 * SumSave.crtHero.zs_lvs));
+                if (Return_Condition())
+                { 
+                    if(m_drop_down.value < SumSave.crt_zs.crt_medicine.Count)
+                        SumSave.crt_zs.crt_medicine[m_drop_down.value] = 0;
+                    SumSave.crt_zs.MysqlData();
+                    offect.gameObject.SetActive(false);
+                    medicineinit();
+                    Alert_Dec.Show("重置成功");
+                }else Alert_Dec.Show("重置失败");
+                break;
+            case zs_unit.炼体:
+                Need_Condition(currency_unit.元宝, (10000 * SumSave.crtHero.zs_lvs));
+                if (Return_Condition())
+                { 
+                    if (m_drop_down.value < SumSave.crt_zs.crt_Refinement.Count)
+                        SumSave.crt_zs.crt_Refinement[m_drop_down.value] = 0;
+                    SumSave.crt_zs.MysqlData();
+                    offect.gameObject.SetActive(false);
+                    RefinementInit();
+                    Alert_Dec.Show("重置成功");
+                }else Alert_Dec.Show("重置失败");
+                break;
+            case zs_unit.炼气:
+                break;
+            case zs_unit.炼神:
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 重置
+    /// </summary>
+    private void CrateTalent()
+    {
+        switch (crt_zs_unit)
+        {
+            case zs_unit.转生:
+                Alert.Show("重置转生", "是否重置转生,转生后清空全部炼药炼体加成", confirm_Crate_zs);
+                break;
+            case zs_unit.炼药:
+            case zs_unit.炼体:
+                offect_show();
+                break;
+        }
+    }
+
+    private void offect_show()
+    {
+        offect_list = new List<string>();
+        offect.gameObject.SetActive(true);
+        offect_info.text = crt_zs_unit + "重置";
+        switch (crt_zs_unit)
+        {
+            case zs_unit.转生:
+                break;
+            case zs_unit.炼药:
+                for (int i = 0; i < Enum.GetNames(typeof(medicine_type)).Length; i++)
+                {
+                    offect_list.Add(Enum.GetNames(typeof(medicine_type))[i]);
+                    if(i== Enum.GetNames(typeof(medicine_type)).Length-1)
+                        offect_list.Add(Enum.GetNames(typeof(medicine_type))[i]);
+                }
+
+                offect_need.text = "重置指定内容需消耗" + (10000 * SumSave.crtHero.zs_lvs) + "" + currency_unit.元宝 + "\n" + (5000 * SumSave.crtHero.zs_lvs) + "" + currency_unit.转生积分;
+                break;
+            case zs_unit.炼体:
+                for (int i = 0; i < Enum.GetNames(typeof(Refinement_type)).Length; i++)
+                {
+                    offect_list.Add(Enum.GetNames(typeof(Refinement_type))[i]);
+                    if (i == Enum.GetNames(typeof(Refinement_type)).Length - 1)
+                        offect_list.Add(Enum.GetNames(typeof(Refinement_type))[i]);
+                }
+                offect_need.text = "重置指定内容需消耗" + (10000 * SumSave.crtHero.zs_lvs) + "" + currency_unit.元宝;
+                break;
+            case zs_unit.炼气:
+                break;
+            case zs_unit.炼神:
+                break;
+        }
+        m_drop_down.ClearOptions();
+        m_drop_down.AddOptions(offect_list);
+
+    }
+
+    private void confirm_Crate_zs(object arg0)
+    {
+        SumSave.crtHero.zs_lvs = 1;
+        SumSave.crt_zs.zs_medicine_max = 0;
+        SumSave.crt_zs.zs_Refinement_max = 0;
+        SumSave.crt_zs.crt_medicine.Clear();
+        SumSave.crt_zs.crt_Refinement.Clear();
+        SumSave.crt_zs.MysqlData();
+        SendNotification(NotiList.Refresh_Max_Hero_Attribute);
+        SumSave.crtHero.MysqlData();
+        UI_Manager.I.GetPanel<PanelMian>().Show();
+        Alert.Show("重置转生成功", "请重启游戏");
+        Game_Omphalos.i.archive();
+        UI_Manager.I.GetPanel<PanelBattle>().Close();
+    }
+
     private void OnEnable()
     {
         InitBtn();

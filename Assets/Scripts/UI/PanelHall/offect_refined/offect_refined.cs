@@ -100,6 +100,7 @@ public class offect_refined : Base_Mono
         int price = (int)arg0;
         int baselv = price == 100 ? 6 : 7;
         List<Bag_Base_VO> baglist = SumSave.crt_bags.Get_Bag_List();
+        List<Bag_Base_VO> removelist = new List<Bag_Base_VO>();
         int number = 0;//数量
         int exp = 0;//给经验
         for (int i = 0; i < baglist.Count; i++)
@@ -118,8 +119,9 @@ public class offect_refined : Base_Mono
                         else if (baglist[i].need_lv < 60 && baglist[i].need_lv >= 50) exp += 3;
                         else if (baglist[i].need_lv < 70 && baglist[i].need_lv >= 60) exp += 4;
                         else if (baglist[i].need_lv >= 70) exp += 5;
-                        baglist.RemoveAt(i);
-                        i--;
+                        removelist.Add(baglist[i]);
+                        //baglist.RemoveAt(i);
+                        //i--;
                     }
                 }
                 
@@ -145,6 +147,10 @@ public class offect_refined : Base_Mono
                 }
                 SumSave.crt_refined.MysqlData();
                 show_info();
+                for (int i = 0; i < removelist.Count; i++)
+                {
+                    baglist.Remove(removelist[i]);
+                }
                 SumSave.crt_bags.Set_Bag_List(baglist);
                 Alert.Show("洗炼强化", "消耗 " + currency_unit.元宝 + " * " + (number * price) + "\n获得 强化点" + exp);
             }
@@ -169,7 +175,10 @@ public class offect_refined : Base_Mono
     private void show_info()
     {
         string dec = "",decs="";
-        int num = 0, surplus = -1;
+        db_vip vip = Tool_Battle.Obtain_Vip();
+        int vip_number = 0;
+        if (vip != null) vip_number = vip.whippingCorpses;
+        int num = 0, surplus = -1, max = 0; ;
         for (int k = 0; k < Enum.GetNames(typeof(refined_btn_list)).Length; k++)
         {
             num = 0; surplus = -1;
@@ -178,9 +187,10 @@ public class offect_refined : Base_Mono
                 case refined_btn_list.幸运强化:
                     if (SumSave.crt_refined.refined_numbers.Count > 0)
                     {
-                        num = SumSave.crt_refined.refined_numbers[0] / Enum.GetNames(typeof(redined_lucky_type)).Length;
-                        surplus = SumSave.crt_refined.refined_numbers[0] > 0 ? SumSave.crt_refined.refined_numbers[0] % Enum.GetNames(typeof(redined_lucky_type)).Length : -1;
-                        dec += Show_Color.Set_String(refined_btn_list.幸运强化 + " Lv." + SumSave.crt_refined.refined_numbers[0] + "", GameColors.Heal) + "\n";
+                        max = SumSave.crt_refined.refined_numbers[0] * (100 + vip_number) / 100;
+                        num = max / Enum.GetNames(typeof(redined_lucky_type)).Length;
+                        surplus = max > 0 ? max % Enum.GetNames(typeof(redined_lucky_type)).Length : -1;
+                        dec += Show_Color.Set_String(refined_btn_list.幸运强化 + " Lv." + max + ("[+" + vip_number + "%]"), GameColors.Heal) + "\n";
                     }
                     else
                         dec += Show_Color.Set_String(refined_btn_list.幸运强化+" Lv." + 0 + "", GameColors.Heal) + "\n";
@@ -242,9 +252,10 @@ public class offect_refined : Base_Mono
                 case refined_btn_list.转生强化:
                     if (SumSave.crt_refined.refined_numbers.Count > 1)
                     {
-                        num = SumSave.crt_refined.refined_numbers[1] / Enum.GetNames(typeof(redined_type)).Length;
-                        surplus = SumSave.crt_refined.refined_numbers[1] > 0 ? SumSave.crt_refined.refined_numbers[1] % Enum.GetNames(typeof(redined_type)).Length : -1;
-                        decs += Show_Color.Set_String(refined_btn_list.转生强化 + " Lv." + SumSave.crt_refined.refined_numbers[1] + "", GameColors.PhysicalDamage) + "\n";
+                        max = SumSave.crt_refined.refined_numbers[1] * (100 + vip_number) / 100; 
+                        num = max / Enum.GetNames(typeof(redined_type)).Length;
+                        surplus = max > 0 ? max % Enum.GetNames(typeof(redined_type)).Length : -1;
+                        decs += Show_Color.Set_String(refined_btn_list.转生强化 + " Lv." + max + ("[+" + vip_number + "%]"), GameColors.PhysicalDamage) + "\n";
                     }
                     else
                         decs += Show_Color.Set_String(refined_btn_list.转生强化 + " Lv." + 0 + "", GameColors.PhysicalDamage) + "\n";

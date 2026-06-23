@@ -133,7 +133,7 @@ public class show_drop_list : Base_Mono
         moeny = (moeny * (100 + SumSave.crtMaxBattle.gold_bonus)) / 100;
         if (SumSave.map_Lv > 1) moeny *= 5;
         dic.Add("获得 " + currency_unit.金币 + " * " + moeny);
-        Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny)); 
+        Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
         switch (data.Item1)
         {
             case 0:
@@ -147,6 +147,7 @@ public class show_drop_list : Base_Mono
                 if (!drop_list.ContainsKey(index))
                 {
                     drop_list.Add(index, (data.Item2.map_boss[data.Item1-1] + "\n" + Show_Color.Red("击杀时刻:" + DateTime.Now), new List<Bag_Base_VO>()));
+                    if (data.Item2.map_type == 1) is_will_definitely_drop = true;//必定掉金
                 }
                 if (data.Item2.map_intensity_drop.Count > 0)
                 {
@@ -174,7 +175,6 @@ public class show_drop_list : Base_Mono
                             }
                         }
                     }
-
                 }
                 if (!gameObject.activeSelf)
                 {
@@ -219,6 +219,10 @@ public class show_drop_list : Base_Mono
         }
         return 0;
     }
+    /// <summary>
+    /// 必定掉金
+    /// </summary>
+    private bool is_will_definitely_drop = false;
     private void Show_Bag(string value, Drop_Type type,db_map_vo crt_map)
     {
         string[] values = value.Split(';');
@@ -303,6 +307,11 @@ public class show_drop_list : Base_Mono
             case Stditem_StdMode_List.遗物_钳:
             case Stditem_StdMode_List.遗物_足:
                 quality = Tool_Battle.Quality();
+                if (is_will_definitely_drop)
+                {
+                    quality = 7;
+                    is_will_definitely_drop = false;
+                }
                 break;
             case Stditem_StdMode_List.消耗品:
             case Stditem_StdMode_List.材料:
@@ -365,6 +374,9 @@ public class show_drop_list : Base_Mono
                     case currency_unit.试炼积分:
                         break;
                     case currency_unit.灵气:
+                        break;
+                    case currency_unit.荣耀积分:
+                        SumSave.crt_global_gift.SetGiftPoints(1);
                         break;
                     default:
                         break;
