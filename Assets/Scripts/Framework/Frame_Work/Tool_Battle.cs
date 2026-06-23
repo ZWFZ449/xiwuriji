@@ -1240,7 +1240,7 @@ public static class Tool_Battle
         maxmp = 1000000;
         battle_mp = 1000000;
         mpRegen = 1000000;
-        maxhp = 1;
+        //maxhp = 1;
 #elif UNITY_ANDROID
         //验证图鉴
 #elif UNITY_IPHONE

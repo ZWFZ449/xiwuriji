@@ -266,7 +266,6 @@ public class show_drop_list : Base_Mono
     {
         Bag_Base_VO data;
         string[] drop_value_info = value.Split(' ');
-        Debug.Log("掉落物品:" + value);
         if (drop_value_info.Length > 1)
         {
             string[] probability = drop_value_info[0].Split('/');
