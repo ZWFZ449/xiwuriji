@@ -977,7 +977,7 @@ public static class Battle_Tool
     /// </summary>
     public static void tool_map()
     {
-        for (ObscuredInt i = 0; i < SumSave.db_maps.Count; i++)
+        for (int i = 0; i < SumSave.db_maps.Count; i++)
         {
             db_map_vo map = SumSave.db_maps[i];
             List<string> drop_value = new List<string>();
@@ -988,9 +988,16 @@ public static class Battle_Tool
                     drop_value.Add(map.map_intensity_drop[item]);
                 }
             }
+            if (map.map_lv_intensity_drop.Count > 0)
+            {
+                foreach (var item in map.map_lv_intensity_drop.Keys)
+                {
+                    drop_value.Add(map.map_lv_intensity_drop[item]);
+                }
+            }
             drop_value.Add(map.drop_value);
             drop_value.Add(map.map_drop);
-            for (ObscuredInt j = drop_value.Count - 1; j >= 0; j--)
+            for (int j = drop_value.Count - 1; j >= 0; j--)
             {
                 Show_Bag(drop_value[j]);
             }

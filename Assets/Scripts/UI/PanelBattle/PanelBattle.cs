@@ -412,7 +412,7 @@ public class PanelBattle : PanelBase
     private void Init()
     {
         open_crate_monster = true;
-        if (crt_map.map_type != 0 && limited_time <= 0)
+        if (crt_map.map_type != 0)// && limited_time <= 0
         {
             limited_time = 60f;//限时地图
         }
