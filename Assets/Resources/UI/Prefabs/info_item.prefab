@@ -157,8 +157,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u653B\u51FB"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 64326124d7d83c54187ac0c4eddf9947, type: 2}
-  m_sharedMaterial: {fileID: 1416327242766780365, guid: 64326124d7d83c54187ac0c4eddf9947, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 167c141eafa024144955af8aeca56a3d, type: 2}
+  m_sharedMaterial: {fileID: 4750625436433554668, guid: 167c141eafa024144955af8aeca56a3d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -188,7 +188,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 10
   m_fontSizeMax: 45
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
