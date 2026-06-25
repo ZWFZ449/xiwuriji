@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class db_artifact_vo : Base_VO
+public class db_artifact_voold : Base_VO
 {
     /// <summary>
     /// 神器名称
@@ -34,7 +34,7 @@ public class db_artifact_vo : Base_VO
     /// </summary>
     public readonly int Artifact_MaxLv;
 
-    public db_artifact_vo(string arrifact_name, string[] artifact_open_needs, string[] arrifact_needs, string[] arrifact_effects, int arrifact_type, string artifact_dec, int artifact_MaxLv)
+    public db_artifact_voold(string arrifact_name, string[] artifact_open_needs, string[] arrifact_needs, string[] arrifact_effects, int arrifact_type, string artifact_dec, int artifact_MaxLv)
     {
         this.arrifact_name = arrifact_name;
         Artifact_open_needs = artifact_open_needs;

@@ -198,7 +198,7 @@ namespace Common
         /// <summary>
         /// 神器列表
         /// </summary>
-        public static List<db_artifact_vo> db_Artifacts;
+        public static List<db_artifact_voold> db_Artifacts_old;
         
         /// <summary>
         /// 全服玩家的boss伤害
@@ -350,6 +350,10 @@ namespace Common
         /// 图鉴信息
         /// </summary>
         public static Dictionary<int, List<db_illustrated_vo>> db_illustrateds;
+        /// <summary>
+        /// 神器列表
+        /// </summary>
+        public static List<db_artifact_vo> db_artifacts;
         /// <summary>
         /// 自身图鉴
         /// </summary>

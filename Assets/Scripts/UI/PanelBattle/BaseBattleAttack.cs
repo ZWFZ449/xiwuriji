@@ -569,6 +569,7 @@ namespace MVC
                     {
                         switch (skill.MoveType)
                         {
+                            case 0:
                             case 3:
                                 if (Vector3.Distance(monster.transform.position, base_monster.transform.position) < skill.scope) monsterList.Add(monster);
                                 break;

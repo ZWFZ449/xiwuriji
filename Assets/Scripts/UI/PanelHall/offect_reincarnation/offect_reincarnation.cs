@@ -616,16 +616,40 @@ public class offect_reincarnation : Base_Mono
     /// </summary>
     private void confirm_refinement()
     {
-        int max = 0;
+        int max = 0,basemax = 0;
         for (int i = 0; i < SumSave.crt_zs.crt_Refinement.Count; i++) max += SumSave.crt_zs.crt_Refinement[i];
         string dec = "";
-        max = (int)MathF.Min(150 * ((SumSave.crtHero.zs_lvs - 1)), max);
+        for (int i = 0; i < SumSave.db_reincarnation_list.Count; i++)
+        {
+            if (SumSave.crtHero.zs_lvs > SumSave.db_reincarnation_list[i].reincarnation_lv)
+            {
+                basemax += SumSave.db_reincarnation_list[i].result_maxRefinement;
+            }
+        }
+        if (SumSave.crt_zs.zs_Refinement_max > basemax)
+        {
+            if (max > (SumSave.crt_zs.zs_Refinement_max - basemax))
+            {
+                if (max > basemax)//大于基准值 维持在基准值
+                {
+                    max -= (SumSave.crt_zs.zs_Refinement_max - basemax);
+                    max = (int)MathF.Max(basemax, max);
+                }
+                else//小于基准值 维持在当前值
+                {
+                    max -= (SumSave.crt_zs.zs_Refinement_max - basemax);
+                    max = (int)MathF.Max((SumSave.crt_zs.zs_Refinement_max - basemax), max);
+                }
+            }
+        }
+        max = (int)MathF.Max(0, max);
+        //max = (int)MathF.Min(150 * ((SumSave.crtHero.zs_lvs - 1)), max);
         int number = (max / 20 + 1) * 10;
         if(SumSave.crtHero.zs_lvs ==2)
         dec += "强化锻体需要\n" + number + "黑铁矿石" + "\n" + (number * 2) + "金条";
         else
         if (SumSave.crtHero.zs_lvs == 3)
-        dec += "强化锻体需要\n" + number + common_items_list.黑铁精矿 + "\n" + (number * 2) + common_items_list.转生石;
+        dec += "强化锻体需要\n" + (number/2) + common_items_list.转生石 + "\n" + number + common_items_list.黑铁精矿 + "\n" + (number * 2) + common_items_list.金条;
         if (max < SumSave.crt_zs.zs_Refinement_max)
         {
             Alert.Show(crt_zs_unit.ToString(), dec, Confirm_refinement, number); 
@@ -650,9 +674,9 @@ public class offect_reincarnation : Base_Mono
                 //Need_Condition(common_items_list.黑铁矿石, number);
                 break;
             case 3:
-                VIP_Need_Condition(common_items_list.转生石, number * 2);
+                VIP_Need_Condition(common_items_list.转生石, number / 2);
                 VIP_Need_Condition(common_items_list.黑铁精矿, number);
-                //Need_Condition(common_items_list.金条, number * 2);
+                Need_Condition(common_items_list.金条, number * 2);
                 //Need_Condition(common_items_list.黑铁精矿, number);
                 break;
             default:

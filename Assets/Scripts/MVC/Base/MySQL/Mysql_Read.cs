@@ -316,6 +316,15 @@ public static class Mysql_Read
         return new db_skill_vo(id, show_name, EffectType, Effect, spellvalues, Power, defpowers, skill_damages_list, skill_offect_value_list, Job, Delay, skill_up_lv, needlv, Weighted, MoveType, list,scope, needlvitemlist);
     }
 
+    public static db_artifact_vo Read_artifact(MySqlDataReader mysqlReader)
+    {
+        db_artifact_vo item = new db_artifact_vo();
+        item.artifact_name = mysqlReader.GetString(mysqlReader.GetOrdinal("artifact_name"));
+        item.artifact_type = mysqlReader.GetInt32(mysqlReader.GetOrdinal("artifact_type"));
+        item.artifact_offect = mysqlReader.GetString(mysqlReader.GetOrdinal("artifact_offect"));
+        return item;
+    }
+
     public static dream_user_skill_vo ReadUserSkill(MySqlDataReader reader, dream_user_skill_vo item)
     {
         item.Init(

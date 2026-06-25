@@ -134,9 +134,9 @@ public class PanelMap : PanelBase
                     case Map_Btn_list.野外地图:
                         break;
                     case Map_Btn_list.每日副本:
-                        if (SumSave.crtHero.lv < 30)
+                        if (SumSave.crtHero.lv < 20)
                         { 
-                            Alert_Dec.Show("等级不足30级");
+                            Alert_Dec.Show("等级不足20级");
                             return;
                         }
                         break;

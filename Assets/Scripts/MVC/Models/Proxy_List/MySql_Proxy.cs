@@ -47,11 +47,12 @@ namespace MVC
             Read_db_vip();
             Read_Db_Setting_Aoption();
             Read_Db_Reincarnation();
+            Read_Db_artifact();
             //Read_Db_Magic();
             //
             //Read_Db_Hero();
             //Read_Db_Setting_Aoption();
-            //Read_Db_artifact();
+            //
             //Read_Db_Pass();
             //Read_Db_Panlt();
             //
@@ -521,13 +522,13 @@ namespace MVC
         {
             mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_artifact);
 
-            SumSave.db_Artifacts = new List<db_artifact_vo>();
+            SumSave.db_artifacts = new List<db_artifact_vo>();
 
             if (mysqlReader.HasRows)
             {
                 while (mysqlReader.Read())
                 {
-                    SumSave.db_Artifacts.Add(ReadDb.Read_artifact_vo(mysqlReader));
+                    SumSave.db_artifacts.Add(Mysql_Read.Read_artifact(mysqlReader));
                 }
             }
         }

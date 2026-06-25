@@ -44,4 +44,5 @@ public enum  Panel_List
     Dream_Panel_Hero,//角色面板
     Dream_Panel_Skill,//技能面板
     Dream_Panel_Setting,//设置面板
+    Dream_Panel_artifact,//神器面板
 }

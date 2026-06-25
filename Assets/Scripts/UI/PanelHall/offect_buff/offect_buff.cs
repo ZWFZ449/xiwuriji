@@ -102,7 +102,7 @@ public class offect_buff : Base_Mono
                 if (Return_Condition())
                 {
                     // 激活buff
-                    SumSave.crt_user_unit.AddBuff(crt_buff.ToString(), Tool_UI.ToStandardFormat(SumSave.nowtime), number);
+                    SumSave.crt_user_unit.AddBuff(crt_buff.ToString(), Tool_UI.ToStandardFormat(SumSave.nowtime > DateTime.Now ? SumSave.nowtime : DateTime.Now), number);
                     SendNotification(NotiList.Refresh_Max_Hero_Attribute);
                     Alert_Dec.Show("激活成功");
                     Init();

@@ -231,14 +231,14 @@ public static class Tool_Battle
                 {
                     if (equiplucky <= 3)
                     {
-                        if (equiplucky == 3)
-                        {
-                            int sum = (SumSave.crt_global_gift.GetGiftPoints);
-                            if (sum < 5000)
-                            { 
-                                Game_Omphalos.i.Delete("项链幸运3级需要定制皇权");
-                            }
-                        }
+                        //if (equiplucky == 3)
+                        //{
+                        //    int sum = (SumSave.crt_global_gift.GetGiftPoints);
+                        //    if (sum < 5000)
+                        //    { 
+                        //        Game_Omphalos.i.Delete("项链幸运3级需要定制皇权");
+                        //    }
+                        //}
                         lucky += equiplucky - 1;
                     } 
                     else Game_Omphalos.i.Delete("项链幸运超标");

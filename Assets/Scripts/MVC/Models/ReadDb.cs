@@ -396,7 +396,7 @@ public static class ReadDb
         return item;
     }
 
-    public static db_artifact_vo Read_artifact_vo(MySqlDataReader reader)
+    public static db_artifact_voold Read_artifact_vo(MySqlDataReader reader)
     {
         string arrifact_name = reader.GetString(reader.GetOrdinal("Artifact_name"));
         string[] Artifact_open_needs = reader.GetString(reader.GetOrdinal("Artifact_open_need")).Split('&');
@@ -405,7 +405,7 @@ public static class ReadDb
         ObscuredInt arrifact_type = reader.GetInt32(reader.GetOrdinal("Artifact_type"));
         string Artifact_dec = reader.GetString(reader.GetOrdinal("Artifact_dec"));
         ObscuredInt Artifact_MaxLv = reader.GetInt32(reader.GetOrdinal("Artifact_MaxLv"));
-        return new db_artifact_vo(arrifact_name, Artifact_open_needs, arrifact_needs, arrifact_effects, arrifact_type, Artifact_dec, Artifact_MaxLv);
+        return new db_artifact_voold(arrifact_name, Artifact_open_needs, arrifact_needs, arrifact_effects, arrifact_type, Artifact_dec, Artifact_MaxLv);
     }
 
      
