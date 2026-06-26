@@ -8,6 +8,13 @@ using UnityEngine.UI;
 
 public class Dream_Panel_artifact : Panel_Base
 {
+
+    private enum artifact_btn_list
+    { 
+        填充,
+        升级,
+        激活,
+    }
     private Transform m_proms;
 
     private artifact_item artifact_item_prefab;
@@ -41,7 +48,7 @@ public class Dream_Panel_artifact : Panel_Base
         Hide();
     }
     /// <summary>
-    /// �����Ʒ
+    /// 点击物品
     /// </summary>
     /// <param name="item"></param>
     private void OnClickItem(artifact_item item)
