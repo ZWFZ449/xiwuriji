@@ -322,9 +322,12 @@ public static class Mysql_Read
         item.artifact_name = mysqlReader.GetString(mysqlReader.GetOrdinal("artifact_name"));
         item.artifact_type = mysqlReader.GetInt32(mysqlReader.GetOrdinal("artifact_type"));
         item.artifact_offect = mysqlReader.GetString(mysqlReader.GetOrdinal("artifact_offect"));
+        item.artifact_btn = ArrayHelper.Get_Split<int>(mysqlReader.GetString(mysqlReader.GetOrdinal("artifact_btn")), ' ');
+        item.artifact_need= mysqlReader.GetString(mysqlReader.GetOrdinal("artifact_need"));
+        item.artifact_max = mysqlReader.GetInt32(mysqlReader.GetOrdinal("artifact_max"));
         return item;
     }
-
+   
     public static dream_user_skill_vo ReadUserSkill(MySqlDataReader reader, dream_user_skill_vo item)
     {
         item.Init(

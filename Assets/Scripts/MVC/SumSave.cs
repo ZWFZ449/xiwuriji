@@ -100,7 +100,7 @@ namespace Common
         /// 自身神器
         /// 
         /// </summary>
-        public static user_artifact_vo crt_artifact;
+        public static user_artifact_vo_old crt_artifact;
         /// <summary>
         /// 设置类型
         /// </summary>
@@ -421,5 +421,9 @@ namespace Common
         /// 地图难度
         /// </summary>
         public static int map_Lv = 1;
+        /// <summary>
+        /// 神器数据
+        /// </summary>
+        public static user_artifact_vo crt_user_artifact;
     }
 }

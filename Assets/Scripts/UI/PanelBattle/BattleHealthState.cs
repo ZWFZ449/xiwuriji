@@ -1,3 +1,5 @@
+using Common;
+using Components;
 using MVC;
 using System;
 using System.Collections;
@@ -60,14 +62,6 @@ public class BattleHealthState : Base_Mono
     }
     public void Clear()
     {
-        //for (int i = transform.childCount - 1; i >= 2; i--)//清空区域内按钮
-        //{
-        //    if (transform.GetChild(i).GetComponent<Skill_Hit>() != null)
-        //    {
-        //        //Debug.Log("删除技能");
-        //        transform.GetChild(i).GetComponent<Skill_Hit>().On_Destroy();
-        //    }
-        //} 
         PushObjectToPool(GetComponent<BaseBattleAttack>().Data.crt_name);
     }
     /// <summary>
@@ -83,7 +77,9 @@ public class BattleHealthState : Base_Mono
         CurrentHP = maxHP;
         CurrentMP = maxMP;
         base_name = _base_name;
-        circularHealthBar.Init(_maxHP + 1);
+        circularHealthBar.Init(_maxHP);
+        is_protect = true;
+        StopAllCoroutines();
     }
     private void Awake()
     {
@@ -109,12 +105,49 @@ public class BattleHealthState : Base_Mono
         circularHealthBar.ChangeHealth(CurrentHP);
         if (CurrentHP <= 0)
         {
-            is_Dead = false;
-            //StartCoroutine(WaitAndDestory(base_name));
-            transform.parent.parent.parent.parent.SendMessage("clearSumhealth", this);
-            Clear();
-            //PushObjectToPool(base_name);
+            if (protect())
+            {
+                is_Dead = false;
+                transform.parent.parent.parent.parent.SendMessage("clearSumhealth", this);
+                Clear();
+            }
+            
         }
+    }
+    /// <summary>
+    /// 是否保护cd
+    /// </summary>
+    private bool is_protect = true;
+    private bool protect()
+    {
+        bool exist = true;
+        switch (GetComponent<BaseBattleAttack>().Data.type)
+        { 
+           case Battle_Game_Type.player:
+                if (!is_protect) return exist;
+                if (SumSave.crt_setting.user_data_settings.Count >= 11 && SumSave.crt_setting.user_data_settings[10] == 1)//开启血瓶
+                {
+                    List<(int, int, long)> list = SumSave.crt_user_artifact.Get;
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        if (list[i].Item1 == 1)
+                        {
+                            if (list[i].Item3 >= maxHP)
+                            {
+                                list[i] = (list[i].Item1, list[i].Item2, list[i].Item3 - maxHP);
+                                Use_Medicine((int)maxHP, 0);
+                                SumSave.crt_user_artifact.MysqlData();
+                                Alert_Dec.Show("血瓶使用成功");
+                                StartCoroutine(time(30));
+                                return false;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+        return exist;
+
     }
     /// <summary>
     /// 监控自身血量变化百分比
@@ -135,6 +168,15 @@ public class BattleHealthState : Base_Mono
             PushObjectToPool(healthname);
         }
     }
+
+    public virtual IEnumerator time(int time)
+    {
+        is_protect = false;
+        yield return new WaitForSeconds(time);
+        is_protect = true;
+        
+    }
+
     /// <summary>
     /// 回收
     /// </summary>
@@ -149,7 +191,11 @@ public class BattleHealthState : Base_Mono
     /// </summary>
     public bool isDead { get { return CurrentHP <= 0 && is_Dead; } }
 
-    public int Get_MP { get { return (int)CurrentMP; } } 
+    public int Get_MP { get { return (int)CurrentMP; } }
+    /// <summary>
+    /// 补满需要蓝量
+    /// </summary>
+    public int fill_Mp { get { return (int)(maxMP - CurrentMP); } }
 
     public int Get_hp { get { return (int)CurrentHP; } }
     /// <summary>
@@ -165,8 +211,8 @@ public class BattleHealthState : Base_Mono
     {
         CurrentHP = CurrentHP + hp > maxHP ? maxHP : CurrentHP + hp;
         CurrentMP = CurrentMP + mp > maxMP ? maxMP : CurrentMP + mp;
+        circularHealthBar.ChangeHealth(CurrentHP);
     }
-
 
 
 }

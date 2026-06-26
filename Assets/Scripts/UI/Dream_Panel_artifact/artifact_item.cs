@@ -8,7 +8,10 @@ using UnityEngine.UI;
 public class artifact_item : Base_Mono
 {
 
-    private db_artifact_vo crt_artifact;
+    public db_artifact_vo crt_artifact;
+
+    private (int, int, long) crt_data;
+    public (int, int, long) crt_Data { set { crt_data = value; } get { return crt_data; } }
 
     private Image icon;
 
@@ -20,14 +23,15 @@ public class artifact_item : Base_Mono
     {
         icon = GetComponent<Image>();
 
-        framge = Find<Image>("7");
+        framge = Find<Image>("artifact_frame");
     }
 
 
-    public void Set()
+    public void Set((int,int,long) data)
     {
         alpha(100);
         framge.gameObject.SetActive(true);
+        crt_data = data;
     }
     public void Initialize(db_artifact_vo db_artifact_vo)
     {

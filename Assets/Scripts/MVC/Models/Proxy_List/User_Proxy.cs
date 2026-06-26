@@ -126,9 +126,29 @@ namespace MVC
             read_global_promotion();
             Read_User_zs();
             Read_User_refined();
+            Read_User_Artifact();
             refresh_Max_Hero_Attribute();
             Read_global_battle_info();
         }
+
+        private void Read_User_Artifact()
+        {
+            mysqlReader = MysqlDb.Select(Mysql_Table_Name.dream_user_artifact, "uid", GetStr(SumSave.uid));
+            if (mysqlReader == null) return;
+            SumSave.crt_user_artifact = new user_artifact_vo();
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    SumSave.crt_user_artifact = ReadDb.Read(mysqlReader, new user_artifact_vo());
+                }
+            }
+            else
+            {
+                Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.dream_user_artifact, SumSave.crt_user_artifact.Set_Instace_String());
+            }
+        }
+
         /// <summary>
         /// 读取推广数据
         /// </summary>

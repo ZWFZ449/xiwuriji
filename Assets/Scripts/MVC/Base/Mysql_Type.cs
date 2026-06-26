@@ -116,4 +116,5 @@ public enum Mysql_Table_Name
     db_reincarnation,//转生信息
     dream_user_zs,//用户转生信息
     dream_user_refineds,//用户精炼信息
+    dream_user_artifact,//用户神器信息
 }

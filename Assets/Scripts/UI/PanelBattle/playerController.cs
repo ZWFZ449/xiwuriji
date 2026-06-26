@@ -104,7 +104,31 @@ public class playerController : BaseBattleAttack
                 }
             }
             return mp;
-        }else return -1;
+        }
+        else
+        {
+            if (SumSave.crt_setting.user_data_settings.Count >= 12 && SumSave.crt_setting.user_data_settings[11] == 1)//开启魔瓶
+            {
+                List<(int, int, long)> list = SumSave.crt_user_artifact.Get;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (list[i].Item1 == 2)
+                    {
+                        int maxmp = oneselfHealthState.fill_Mp;
+                        if (list[i].Item3 >= oneselfHealthState.fill_Mp)
+                        {
+                            oneselfHealthState.Use_Medicine(0, maxmp);
+                            list[i] = (list[i].Item1, list[i].Item2, list[i].Item3 - maxmp);
+                            SumSave.crt_user_artifact.MysqlData();
+                            Alert_Dec.Show("魔瓶使用成功");
+                            return mp;
+                        }
+                    }
+                }
+
+            }
+            return -1;
+        } 
     }
     /// <summary>
     /// 判断技能效果
@@ -115,7 +139,7 @@ public class playerController : BaseBattleAttack
     {
         int number = 1;
 #if UNITY_EDITOR
-        number = 30;
+        //number = 30;
 #elif UNITY_ANDROID
 #elif UNITY_IPHONE
 #endif
@@ -151,7 +175,10 @@ public class playerController : BaseBattleAttack
 
     private void On_Skill(db_skill_vo skill,int mp)
     {
-        if (oneselfHealthState.Get_MP < mp) return;//蓝量不足
+        if (oneselfHealthState.Get_MP < mp)
+        {
+            return;//蓝量不足
+        } 
         oneselfHealthState.Set_Mp = mp;
         if (Terget == null) { Find_Terget(); return; }
         

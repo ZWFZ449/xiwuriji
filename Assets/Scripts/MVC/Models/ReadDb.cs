@@ -72,8 +72,12 @@ public static class ReadDb
         item.par= reader.GetInt32(reader.GetOrdinal("par"));
         item.isdownloadable = reader.GetInt32(reader.GetOrdinal("isdownloadable"));
         return item;
-    } 
- 
+    }
+    public static user_artifact_vo Read(MySqlDataReader reader, user_artifact_vo item)
+    {
+        item.Init(reader.GetString(reader.GetOrdinal("artifact_value")));
+        return item;
+    }
     public static global_promotion_vo Read(MySqlDataReader reader, global_promotion_vo item,string uid)
     {
         string value = reader.GetString(reader.GetOrdinal("promotion_value"));
@@ -389,7 +393,7 @@ public static class ReadDb
         //item.Init(DateTime.Now,value);
         return item;
     }
-    public static user_artifact_vo Read(MySqlDataReader reader, user_artifact_vo item)
+    public static user_artifact_vo_old Read(MySqlDataReader reader, user_artifact_vo_old item)
     {
         item.artifact_value = reader.GetString(reader.GetOrdinal("artifact_value"));
         item.Init();

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class user_artifact_vo : Base_VO
+public class user_artifact_vo_old : Base_VO
 {
     public string artifact_value;
     private List<(string,int)> artifact_list;

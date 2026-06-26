@@ -997,10 +997,13 @@ public class PanelBattle : PanelBase
         db_skill_vo skill = SumSave.db_skills.Find((db_skill_vo skill) => skill.id == index);
         if (skill != null)
         {
-            skill.activate_skill();//激活0级
-            skill.ClearBuff();
-            skill.AddBuff(enum_talent_offect_list.弹道, number);
-            list_skill.Add(skill);
+            //db_skill_vo base_skill = new db_skill_vo(skill);
+            db_skill_vo newskill = new db_skill_vo(skill.id, skill.show_name, skill.EffectType, skill.Effect, skill.spells, skill.Power, skill.DefPowers, skill.skill_damages,
+    skill.skill_offect_value_list, skill.Job, skill.Delay, skill.skill_up_lv, skill.need_lv, skill.Weighted, skill.MoveType, skill.offset, skill.scope, skill.needLvitem);
+            newskill.activate_skill();//激活0级
+            newskill.ClearBuff();
+            newskill.AddBuff(enum_talent_offect_list.弹道, number);
+            list_skill.Add(newskill);
         }
         return list_skill;
     }

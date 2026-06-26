@@ -20,4 +20,10 @@ public class db_artifact_vo
     /// 神器属性
     /// </summary>
     public string artifact_offect;
+
+    public List<int> artifact_btn;
+
+    public string artifact_need;
+
+    public int artifact_max;
 }

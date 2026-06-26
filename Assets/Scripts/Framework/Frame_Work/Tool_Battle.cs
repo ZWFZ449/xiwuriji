@@ -1152,10 +1152,67 @@ public static class Tool_Battle
             }
         }
         List<(string, string, int)> buffs = SumSave.crt_user_unit.GetBuff;
+
+        List<(int, int, long)> artifacts = SumSave.crt_user_artifact.Get;
+        //神器
+        for (int i = 0; i < SumSave.db_artifacts.Count; i++)
+        {
+            for (int j= 0; j < artifacts.Count; j++) 
+            {
+                if (SumSave.db_artifacts[i].artifact_type == artifacts[j].Item1)
+                {
+                    if (artifacts[j].Item2 > 0)
+                    {
+                        List<string> list = ArrayHelper.Get_Split<string>(SumSave.db_artifacts[i].artifact_offect, ',');
+                        for (int k = 0; k < list.Count; k++)
+                        {
+                            List<string> list2 = ArrayHelper.Get_Split<string>(list[k], ' ');
+                            if (list2.Count == 3)
+                            {
+
+                                int value = ((artifacts[j].Item2 / int.Parse(list2[1])) + 1) * (int.Parse(list2[2]));
+                                switch ((artifact_offect_list)(int.Parse(list2[0])))
+                                {
+                                    case artifact_offect_list.生命:
+                                        battle_hp+= value;break;
+                                    case artifact_offect_list.魔法:
+                                        battle_mp += value; break;
+                                        break;
+                                    case artifact_offect_list.回血:
+                                        hpRegen += value; break;
+                                    case artifact_offect_list.回蓝:
+                                        mpRegen += value; break;
+
+                                        break;
+                                    case artifact_offect_list.命中:
+                                        hit += value; break;
+                                    case artifact_offect_list.闪避:
+                                        dodge+= value; break;
+                                        break;
+                                    case artifact_offect_list.技能等级上限:
+                                        break;
+                                    case artifact_offect_list.鞭尸概率:
+                                        break;
+                                    case artifact_offect_list.灵宠转生加成:
+                                        break;
+                                    case artifact_offect_list.角色转生加成:
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                  
+
+                }
+            }
+
+        }
         for (int i = 0; i < buffs.Count; i++)
         {
-            ObscuredInt spanSeconds = Battle_Tool.SettlementTransport(buffs[i].Item2, 3);
-            ObscuredInt time = buffs[i].Item3 - spanSeconds;//剩余时间
+            int spanSeconds = Battle_Tool.SettlementTransport(buffs[i].Item2, 3);
+            int time = buffs[i].Item3 - spanSeconds;//剩余时间
             if (time > 0|| buffs[i].Item3>=99999)
             {
                 if (buffs[i].Item1 == common_Buff.狂欢.ToString())
@@ -1227,19 +1284,20 @@ public static class Tool_Battle
             }else
             battle_speed = Mathf.Max(50, battle_speed);
         }
+        crit = Mathf.Min(80, crit);
 
 #if UNITY_EDITOR
         lucky = 9;
-        dc2 = 1500;
-        ac2 = 5000;
-        ac = 5000;
-        mac= 5000;
-        mac2 = 1500;
-        battle_speed = 30;
-        battle_range = 300;
-        maxmp = 1000000;
-        battle_mp = 1000000;
-        mpRegen = 1000000;
+        //dc2 = 1500;
+        //ac2 = 5000;
+        //ac = 5000;
+        //mac= 5000;
+        //mac2 = 1500;
+        //battle_speed = 30;
+        //battle_range = 300;
+        //maxmp = 1000000;
+        //battle_mp = 1000000;
+        //mpRegen = 1000000;
         //maxhp = 1;
 #elif UNITY_ANDROID
         //验证图鉴
