@@ -1235,7 +1235,7 @@ public class PanelBattle : PanelBase
     /// <summary>
     /// 生成怪物
     /// </summary>
-    private void Generate_Monster()
+    private void Generate_Monster() 
     {
         //return;//测试关闭
         crtMaxBattleVO monster = monster_battle_list[Random.Range(0, monster_battle_list.Count)];

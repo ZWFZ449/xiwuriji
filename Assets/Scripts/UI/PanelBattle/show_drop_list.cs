@@ -143,6 +143,7 @@ public class show_drop_list : Base_Mono
             case 1:
             case 2:
             case 3:
+            case 4:
                 index++;
                 if (!drop_list.ContainsKey(index))
                 {

@@ -1288,17 +1288,17 @@ public static class Tool_Battle
 
 #if UNITY_EDITOR
         lucky = 9;
-        //dc2 = 1500;
-        //ac2 = 5000;
-        //ac = 5000;
-        //mac= 5000;
-        //mac2 = 1500;
-        //battle_speed = 30;
-        //battle_range = 300;
-        //maxmp = 1000000;
-        //battle_mp = 1000000;
-        //mpRegen = 1000000;
-        //maxhp = 1;
+        dc2 = 1500;
+        ac2 = 5000;
+        ac = 5000;
+        mac = 5000;
+        mac2 = 1500;
+        battle_speed = 30;
+        battle_range = 300;
+        maxmp = 1000000;
+        battle_mp = 1000000;
+        mpRegen = 1000000;
+        maxhp = 1;
 #elif UNITY_ANDROID
         //验证图鉴
 #elif UNITY_IPHONE
