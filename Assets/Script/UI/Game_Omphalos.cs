@@ -119,7 +119,7 @@ namespace MVC
             opentime();
             performTime+=1;
             if (SumSave.crt_setting.user_data_settings.Count >= 10 && SumSave.crt_setting.user_data_settings[9] == 1)
-            {
+             {
                 show_Screensaver_time_state++;
                 if (show_Screensaver_time_state >= 300)
                 {

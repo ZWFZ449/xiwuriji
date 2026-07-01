@@ -383,7 +383,7 @@ public static class Tool_Battle
                     }
                 }
             }
-            if (maxvalue >= equip_lv * 3)
+            if (maxvalue >= 40)
             {
                 Game_Omphalos.i.Delete(crt_euqip[i].Name + "附加值" + maxvalue);
             }
