@@ -631,6 +631,15 @@ public static class Tool_Battle
                                                         case Suit_Type.伤害吸收:
                                                             battle_def += effect_value[1];
                                                             break;
+                                                        case Suit_Type.魔法:
+                                                            mp += effect_value[1];
+                                                            break;
+                                                        case Suit_Type.经验加成:
+                                                            exp_bonus += effect_value[1];
+                                                            break;
+                                                        case Suit_Type.金币加成:
+                                                            gold_bonus += effect_value[1];
+                                                            break;
                                                     }
 
                                                 }
@@ -716,7 +725,7 @@ public static class Tool_Battle
                 }
             }
         }
-       
+
         foreach (var item in skill_list)
         {
             ObscuredInt skill_lv = item.Value.SetLv(); 
