@@ -967,13 +967,10 @@ namespace MVC
             { 
                 value = 100;
             }
+
+            if (lucky == 10) return (int)(max * 1.2f);//运10是1.2倍伤害
+
             return Random.Range(min + ((max - min) * value / 100), max);
-            //value = Random.Range(min + (max - min) * lucky / 10, max);
-            //if (lucky > 10)
-            //{
-            //    value = value * (100 + (lucky * 10)) / 100;
-            //}
-            //return value;
         }
     }
 }

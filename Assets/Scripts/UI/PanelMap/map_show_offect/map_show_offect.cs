@@ -76,7 +76,7 @@ public class map_show_offect : Base_Mono
             int lv= SumSave.crtHero.lv;
             if (SumSave.crtHero.zs_lvs > 1)
             {
-                lv = (int)MathF.Max(60, SumSave.crtHero.lv);
+                lv = (int)MathF.Max((60+(SumSave.crtHero.zs_lvs - 2) * 5), SumSave.crtHero.lv);
             }
             if (lv < crt_map.GetMap().map_lv)
             { 
@@ -96,7 +96,7 @@ public class map_show_offect : Base_Mono
         int lv = SumSave.crtHero.lv;
         if (SumSave.crtHero.zs_lvs > 1)
         {
-            lv = (int)MathF.Max(60, SumSave.crtHero.lv);
+            lv = (int)MathF.Max(60 + (SumSave.crtHero.zs_lvs - 2) * 5, SumSave.crtHero.lv);
         }
         if (lv < crt_map.GetMap().map_lv && !Tool_Battle.IsBuff(common_Buff.月卡))
         {

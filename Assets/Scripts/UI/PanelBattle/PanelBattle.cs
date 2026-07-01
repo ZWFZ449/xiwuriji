@@ -472,7 +472,7 @@ public class PanelBattle : PanelBase
         //判断是否生成boss
         if (map_crate_boss_condition >= crt_map.map_crate_boss_condition[crt_map.GetMapIntensityDrop - 1])
         {
-            if (Meet_maposs_criteria(crt_map.map_boss[crt_map.GetMapIntensityDrop - 1]))
+            if (Meet_maposs_criteria(crt_map.map_boss[crt_map.GetMapIntensityDrop - 1], true))
             {
                 if (IsBoss) map_crate_boss_condition = 0;
                 Generate_Boss_Monster(crt_map.map_boss[crt_map.GetMapIntensityDrop - 1]);
@@ -579,7 +579,7 @@ public class PanelBattle : PanelBase
     /// 符合刷新条件
     /// </summary>
     /// <param name="value">boss</param>
-    private bool Meet_maposs_criteria(string value)
+    private bool Meet_maposs_criteria(string value,bool isneed = false)
     {
         if (!IsBoss) return false;
         bool is_true = false;
@@ -601,20 +601,20 @@ public class PanelBattle : PanelBase
                 is_true = true;
             }
         }
-        if (is_true)
+        if (is_true)//刷新时间到了
         {
             Tool_Battle.SetBossTime(value,Tool_UI.ToStandardFormat(SumSave.nowtime >= DateTime.Now ? SumSave.nowtime : DateTime.Now)); 
         }
-        if (!is_true)
+        if ((!is_true) && isneed)//刷新时间没到
         {
-            if (value == crt_map.map_boss[crt_map.GetMapIntensityDrop - 1])
+            if (value == crt_map.map_boss[crt_map.GetMapIntensityDrop - 1])//等于当前地图
             {
                 if (SumSave.crt_setting.Boss_list.ContainsKey(value))
                 {
                     (int,int) boss = SumSave.crt_setting.Boss_list[value];
                     if (boss.Item1 > 0)
                     {
-                        SumSave.crt_setting.Boss_list[value]= (boss.Item1 - 1, boss.Item2);
+                        SumSave.crt_setting.Boss_list[value] = (boss.Item1 - 1, boss.Item2);
                         SumSave.crt_setting.MysqlData();
                         is_true = true;
                     }
@@ -694,7 +694,7 @@ public class PanelBattle : PanelBase
                 }
 
             }
-            if (baseBattleAttack.Data.type == Battle_Game_Type.Boss)
+            if (baseBattleAttack.Data.type == Battle_Game_Type.Boss &&  crt_map.map_type == 0 )
             {
                 if (Tool_Battle.Is_first_Boss_Kill(baseBattleAttack.Data.crt_name))
                 {

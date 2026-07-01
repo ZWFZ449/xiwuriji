@@ -141,8 +141,15 @@ public class offect_blacksmith : Base_Mono
                     {
                         Need_Condition(common_items_list.金条, 10);
                     }
+                   
                 }
-                Need_Condition(currency_unit.Boss积分, 100);
+                if (crt_bag.need_lv > 60)
+                {
+                    Need_Condition(common_items_list.洗练符, 1);
+                    Need_Condition(currency_unit.转生积分, 100);
+                }
+                else
+                    Need_Condition(currency_unit.Boss积分, 100);
                 if (Return_Condition())
                 {
                     refined_equip();
@@ -622,6 +629,11 @@ public class offect_blacksmith : Base_Mono
                             need_info.text += common_items_list.皇级碎片 + " * 1\n";
 
                     }
+                    if (crt_bag.need_lv > 60)
+                    { 
+                        need_info.text += common_items_list.洗练符 + " * 1\n";
+                        need_info.text += currency_unit.转生积分 + " * 100\n";
+                    }else
                     need_info.text += currency_unit.Boss积分 + " *  100";
                     break;
                 case blacksmith_type.升级装备:

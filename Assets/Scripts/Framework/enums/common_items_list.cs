@@ -13,7 +13,8 @@ public enum common_items_list
     皇级碎片,
     黑铁精矿,
     人参精华,
-    转生石
+    转生石,
+    洗练符
 }
 
 public enum common_Buff

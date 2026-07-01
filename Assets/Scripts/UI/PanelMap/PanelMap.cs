@@ -173,9 +173,7 @@ public class PanelMap : PanelBase
             default:
                 break;
         }
-
     }
-
     private bool satisfy_Need(base_map_item item,int index)
     {
         bool exist = false;
@@ -184,7 +182,7 @@ public class PanelMap : PanelBase
             int lv = SumSave.crtHero.lv;
             if (SumSave.crtHero.zs_lvs > 1)
             {
-                lv = (int)MathF.Max(60, SumSave.crtHero.lv);
+                lv = (int)MathF.Max(60 + ((SumSave.crtHero.zs_lvs - 2) * 5), SumSave.crtHero.lv);
             }
             if (item.GetMap().map_lv <= lv || Tool_Battle.IsBuff(common_Buff.月卡))
             { 

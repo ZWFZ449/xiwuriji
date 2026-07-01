@@ -15,8 +15,11 @@ public enum artifact_offect_list
 魔法,
 回血,
 回蓝,
+生命值,
+魔法值,
 命中,
 闪避,
+幸运,
 技能等级上限,
 鞭尸概率,
 灵宠转生加成,
@@ -135,7 +138,15 @@ public class Dream_Panel_artifact : Panel_Base
             List<string> list2 = ArrayHelper.Get_Split<string>(list[i], ' ');
             if (list2.Count == 3)
             {
-                dec += (artifact_offect_list)(int.Parse(list2[0])) + ": " + (((item.crt_Data.Item2 / int.Parse(list2[1])) + 1) * (int.Parse(list2[2])));
+                int value = (((item.crt_Data.Item2 / int.Parse(list2[1])) + 1) * (int.Parse(list2[2])));
+                if (item.crt_artifact.artifact_type == 3)
+                {
+                    if ((artifact_offect_list)(int.Parse(list2[0])) == artifact_offect_list.幸运)
+                    {
+                        value -= 1;
+                    }
+                }
+                dec += (artifact_offect_list)(int.Parse(list2[0])) + ": " + value;
 
                 switch ((artifact_offect_list)(int.Parse(list2[0])))
                 {
@@ -163,6 +174,15 @@ public class Dream_Panel_artifact : Panel_Base
                         break;
                     case artifact_offect_list.角色转生加成:
                         dec += " % \n";
+                        break;
+                    case artifact_offect_list.生命值:
+                        dec += " \n";
+                        break;
+                    case artifact_offect_list.魔法值:
+                        dec += " \n";
+                        break;
+                    case artifact_offect_list.幸运:
+                        dec += " \n";
                         break;
                     default:
                         break;
@@ -282,16 +302,25 @@ public class Dream_Panel_artifact : Panel_Base
         }
         if (Return_Condition())
         { 
+            bool exist= true;
             List<(int, int, long)> data = SumSave.crt_user_artifact.Get;
             for (int i = 0; i < data.Count; i++)
             {
                 if (data[i].Item1 == crt_item.crt_Data.Item1)
-                { 
+                {
+                    exist = false;
                     data[i] = (data[i].Item1, data[i].Item2 + 1, data[i].Item3);
                 }
             }
+            if (exist)
+            { 
+                data.Add((crt_item.crt_artifact.artifact_type, 1, 0)); 
+                Alert_Dec.Show("激活成功");
+            }
+            else
             Alert_Dec.Show("升级成功");
             SumSave.crt_user_artifact.MysqlData();//更新数据库
+            SendNotification(NotiList.Refresh_Max_Hero_Attribute);
             baseShow();
         }
     }

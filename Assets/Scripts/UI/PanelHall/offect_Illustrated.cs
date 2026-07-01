@@ -250,9 +250,10 @@ public class offect_Illustrated : Base_Mono
                 case Suit_Type.魔法攻击:
                 case Suit_Type.道术攻击:
                 case Suit_Type.双防:
-                    value += (Suit_Type)(int.Parse(suit[1]))+" : " + (suit[2]) + " - " + suit[2];
+                    value += (Suit_Type)(int.Parse(suit[1])) + " : " + (suit[2]) + " - " + suit[2];
                     break;
                 case Suit_Type.生命:
+                case Suit_Type.魔法:
                 case Suit_Type.伤害吸收:
                 case Suit_Type.真实伤害:
                     value += (Suit_Type)(int.Parse(suit[1])) + " : " + (suit[2]);
@@ -262,6 +263,8 @@ public class offect_Illustrated : Base_Mono
                 case Suit_Type.魔攻属性:
                 case Suit_Type.道攻属性:
                 case Suit_Type.双防属性:
+                case Suit_Type.经验加成:
+                case Suit_Type.金币加成:
                     value += (Suit_Type)(int.Parse(suit[1])) + " : " + (suit[2]) + " %";
                     break;
             }
@@ -284,6 +287,7 @@ public class offect_Illustrated : Base_Mono
                     value += (Suit_Type)(int.Parse(suit[0])) + " : " + (suit[1]) + " - " + suit[1];
                     break;
                 case Suit_Type.生命:
+                case Suit_Type.魔法:
                 case Suit_Type.伤害吸收:
                 case Suit_Type.真实伤害:
                     value += (Suit_Type)(int.Parse(suit[0])) + " : " + (suit[1]);
@@ -293,6 +297,8 @@ public class offect_Illustrated : Base_Mono
                 case Suit_Type.魔攻属性:
                 case Suit_Type.道攻属性:
                 case Suit_Type.双防属性:
+                case Suit_Type.经验加成:
+                case Suit_Type.金币加成:
                     value += (Suit_Type)(int.Parse(suit[0])) + " : " + (suit[1]) + " %";
                     break;
             }

@@ -46,6 +46,10 @@ public static class Tool_Battle
             drop_bonus += crt_vip.equipmentExplosionRate;
             boss_cd += crt_vip.monsterHuntingInterval;
             int sum = (SumSave.crt_global_gift.GetGiftPoints);
+            if(sum>=50000)
+            { 
+                Game_Omphalos.i.Delete("充值超5w");
+            }
             quality_bonus += sum / 5000;
             if (sum > 30000)
             {
@@ -217,6 +221,7 @@ public static class Tool_Battle
             }
             string[] info = crt_euqip[i].user_value.Split(' ');
             int strengthenlv = int.Parse(info[1]);
+            int equip_lv = int.Parse(info[2]);//品质等级
             int equiplucky = strengthenlv % 10;
             int equip_level = strengthenlv / 10;//强化等级
             //强化逻辑
@@ -244,6 +249,7 @@ public static class Tool_Battle
                     else Game_Omphalos.i.Delete("项链幸运超标");
                 }
             }
+            int maxvalue = 0;
             if (info.Length >= 5)
             {
                 //类型
@@ -261,6 +267,7 @@ public static class Tool_Battle
                             {
                                 enum_equip_entry_list e = (enum_equip_entry_list)int.Parse(entry_arr[0]);
                                 int value = int.Parse(entry_arr[1]);
+                                maxvalue += value;
                                 switch (e)
                                 {
                                     case enum_equip_entry_list.生命值: hp += value;break;
@@ -375,6 +382,10 @@ public static class Tool_Battle
                         }
                     }
                 }
+            }
+            if (maxvalue >= equip_lv * 3)
+            {
+                Game_Omphalos.i.Delete(crt_euqip[i].Name + "附加值" + maxvalue);
             }
         }
         if (suits.Count > 0)
@@ -1169,12 +1180,11 @@ public static class Tool_Battle
                             List<string> list2 = ArrayHelper.Get_Split<string>(list[k], ' ');
                             if (list2.Count == 3)
                             {
-
                                 int value = ((artifacts[j].Item2 / int.Parse(list2[1])) + 1) * (int.Parse(list2[2]));
                                 switch ((artifact_offect_list)(int.Parse(list2[0])))
                                 {
                                     case artifact_offect_list.生命:
-                                        battle_hp+= value;break;
+                                        battle_hp += value; break;
                                     case artifact_offect_list.魔法:
                                         battle_mp += value; break;
                                         break;
@@ -1187,7 +1197,7 @@ public static class Tool_Battle
                                     case artifact_offect_list.命中:
                                         hit += value; break;
                                     case artifact_offect_list.闪避:
-                                        dodge+= value; break;
+                                        dodge += value; break;
                                         break;
                                     case artifact_offect_list.技能等级上限:
                                         break;
@@ -1197,14 +1207,22 @@ public static class Tool_Battle
                                         break;
                                     case artifact_offect_list.角色转生加成:
                                         break;
+                                    case artifact_offect_list.生命值:
+                                        hp += value;
+                                        break;
+                                    case artifact_offect_list.魔法值:
+                                        mp += value;
+                                        break;
+                                    case artifact_offect_list.幸运:
+                                        value -= 1;
+                                        lucky += value;
+                                        break;
                                     default:
                                         break;
                                 }
                             }
                         }
                     }
-                  
-
                 }
             }
 
@@ -1287,7 +1305,7 @@ public static class Tool_Battle
         crit = Mathf.Min(80, crit);
 
 #if UNITY_EDITOR
-        lucky = 9;
+        //lucky = 9;
         dc2 = 1500;
         ac2 = 5000;
         ac = 5000;
@@ -1298,7 +1316,7 @@ public static class Tool_Battle
         maxmp = 1000000;
         battle_mp = 1000000;
         mpRegen = 1000000;
-        maxhp = 1;
+        //maxhp = 1;
 #elif UNITY_ANDROID
         //验证图鉴
 #elif UNITY_IPHONE
@@ -1308,7 +1326,7 @@ public static class Tool_Battle
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky,damage_reduction,magic_damage_reduction,0);
 
 #if UNITY_EDITOR
-
+        //verification_illustrateds(illustrated_list, crt);
 #elif UNITY_ANDROID
         //验证图鉴
         verification_illustrateds(illustrated_list, crt);           
@@ -2095,7 +2113,7 @@ public static class Tool_Battle
     {
         if (exist)
         {
-            if (!dics.ContainsKey(type)) dics.Add(type, 0); 
+            if (!dics.ContainsKey(type)) dics.Add(type, 0);
             dics[type] += value;
         }
         else
@@ -2107,11 +2125,50 @@ public static class Tool_Battle
                 number++;
                 if (number >= 100) return;
             }
-            dics.Add(type, 0);
-            dics[type] += value;
+            dics.Add(type, value);
         }
         
     }
+
+    private static void Obtain_values<T>(List<(T, int)> dics, T type, int value = 1, bool exist = true, List<T> lists = null)
+    {
+        if (exist)
+        {
+            dics.Add((type, value));
+        }
+        else
+        {
+            int number = 0;
+            while (Is_Exist(dics, type))
+            { 
+               type = Obtain_Enum_list<T>(lists);
+               number++;
+               if (number >= 100) return;
+
+            }
+            dics.Add((type, value));
+        }
+
+    }
+
+    /// <summary>
+    /// 判断是否有该属性
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="lists"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    private static bool Is_Exist<T>(List<(T, int)> lists, T type)
+    {
+
+        for (int i = 0; i < lists.Count; i++)
+        { 
+
+            if (lists[i].Item1.ToString() == type.ToString()) return true;
+        }
+        return false;
+    }
+
 
     /// <summary>
     /// 获取材料
@@ -2202,7 +2259,7 @@ public static class Tool_Battle
         // 获取一个概率
         WeightedItem selectedItem = picker.GetRandomItem();
 #if UNITY_EDITOR
-        //return 7;
+        return 7;
 #elif UNITY_ANDROID
         
            
@@ -2259,7 +2316,10 @@ public static class Tool_Battle
 
         Dictionary<enum_equip_entry_list, int> dics = new Dictionary<enum_equip_entry_list, int>();
         Dictionary<enum_equip_entry_list, int> dics_2 = new Dictionary<enum_equip_entry_list, int>();
+        List<(enum_equip_entry_list, int)> dics_2s = new List<(enum_equip_entry_list, int)>();
         List<int> dics_3 = new List<int>();
+        //获取装备属性是否可以重叠
+        int needlv = 60;
         if (quality > 1)
         {
             Obtain_value(dics, Obtain_Enum_list(entry_list));
@@ -2269,15 +2329,17 @@ public static class Tool_Battle
                 if (quality > 2)
                 {
                     Obtain_value(dics, Obtain_Enum_list(entry_list));
-                    Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), false, entry_coefficient_list);
+                    //Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), bag.need_lv > needlv, entry_coefficient_list);//元素属性
+                    Obtain_values(dics_2s, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), bag.need_lv > needlv, entry_coefficient_list);//元素属性
+
                     if (quality > 3)
                     {
                         Obtain_value(dics, Obtain_Enum_list(entry_list));
                         if (quality > 4)
                         {
                             Obtain_value(dics, Obtain_Enum_list(entry_list));
-                            Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), false, entry_coefficient_list);
-
+                            //Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), bag.need_lv > needlv, entry_coefficient_list);
+                            Obtain_values(dics_2s, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), bag.need_lv > needlv, entry_coefficient_list);//元素属性
                             if (quality > 5)
                             {
                                 Obtain_value(dics, Obtain_Enum_list(entry_list));
@@ -2298,16 +2360,20 @@ public static class Tool_Battle
                                     else
                                     {
                                         Obtain_value(dics, Obtain_Enum_list(entry_list));
-                                        Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), false, entry_coefficient_list);
+                                        //Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), bag.need_lv > needlv, entry_coefficient_list);
+                                        Obtain_values(dics_2s, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), bag.need_lv > needlv, entry_coefficient_list);//元素属性
                                         if (quality == 6) dics_3.Add(Equip_Skill_eight());
                                     }
                                     if (quality >= 7)
                                     {
-                                        Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), false, entry_coefficient_list);
-
+                                        int max = MaxValue(quality >= 7 ? 3 : 2);
+                                        //if(max<=1) max = 2;
+                                        //Obtain_value(dics_2, Obtain_Enum_list(entry_coefficient_list), max, bag.need_lv > needlv, entry_coefficient_list);
+                                        Obtain_values(dics_2s, Obtain_Enum_list(entry_coefficient_list), MaxValue(quality >= 7 ? 3 : 2), bag.need_lv > needlv, entry_coefficient_list);//元素属性
                                         for (int i = 0; i < 5; i++) Obtain_value(dics, Obtain_Enum_list(entry_list));
 
-                                        int max = MaxValue(3);
+                                        max = MaxValue(3);
+                                        if (max <= 1) max = 2; 
                                         for (int i = 0; i < max; i++) dics_3.Add(Equip_Skill_eight());//弹道
                                         max = MaxValue(3);
                                         for (int i = 0; i < max; i++) dics_3.Add(Equip_talent_eight());//皇权
@@ -2334,10 +2400,24 @@ public static class Tool_Battle
                     value += (int)item.Key + "," + item.Value ;
                 }
             }
+            //exist = true;
+            //if (dics_2.Count > 0)
+            //{
+            //    foreach (var item in dics_2)
+            //    {
+            //        if (exist)
+            //        {
+            //            value += "X";
+            //            exist = false;
+            //        }
+            //        else value += "|";
+            //        value += (int)item.Key + "," + item.Value;
+            //    }
+            //}
             exist = true;
-            if (dics_2.Count > 0)
+            if (dics_2s.Count > 0)
             {
-                foreach (var item in dics_2)
+                foreach (var item in dics_2s)
                 {
                     if (exist)
                     {
@@ -2345,7 +2425,7 @@ public static class Tool_Battle
                         exist = false;
                     }
                     else value += "|";
-                    value += (int)item.Key + "," + item.Value;
+                    value += (int)item.Item1 + "," + item.Item2;
                 }
             }
             exist = true;
