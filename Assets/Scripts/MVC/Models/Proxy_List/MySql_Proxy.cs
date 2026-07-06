@@ -601,6 +601,8 @@ namespace MVC
                     SumSave.db_skills.Add(Mysql_Read.ReadSkill(mysqlReader));
                 }
             }
+            //初始化弹道
+            Tool_Battle.Obtain_Init_Entry_Inscription_list();
         }
         /// <summary>
         /// 读取怪物数据库

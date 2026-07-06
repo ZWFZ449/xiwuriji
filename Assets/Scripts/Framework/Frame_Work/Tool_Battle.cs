@@ -16,7 +16,7 @@ public static class Tool_Battle
     /// <summary>
     /// 元素属性
     /// </summary>
-    private static List<enum_equip_entry_list> entry_coefficient_list; 
+    private static List<enum_equip_entry_list> entry_coefficient_list;
     /// <summary>
     /// 附魔属性
     /// </summary>
@@ -711,6 +711,15 @@ public static class Tool_Battle
                                                 break;
                                             case Suit_Type.伤害吸收:
                                                 battle_def += effect_value[2];
+                                                break;
+                                            case Suit_Type.魔法:
+                                                mp += effect_value[2];
+                                                break;
+                                            case Suit_Type.经验加成:
+                                                exp_bonus += effect_value[2];
+                                                break;
+                                            case Suit_Type.金币加成:
+                                                gold_bonus += effect_value[2];
                                                 break;
                                         }
 
@@ -2050,8 +2059,10 @@ public static class Tool_Battle
         entry_coefficient_list.Add(enum_equip_entry_list.金币掉落);
 
     }
-
-    private static void Obtain_Init_Entry_Inscription_list()
+    /// <summary>
+    /// 初始化弹道
+    /// </summary>
+    public static void Obtain_Init_Entry_Inscription_list()
     {
         for (int i = 0; i < SumSave.db_skills.Count; i++)
         {
@@ -2067,13 +2078,13 @@ public static class Tool_Battle
     /// <returns></returns>
     public static int Equip_Skill_eight()
     {
-        if (equip_eighteditems.Count == 0) Obtain_Init_Entry_Inscription_list();
+        if (equip_eighteditems.Count <= 1) Obtain_Init_Entry_Inscription_list();
         WeightedRandomPicker picker = new WeightedRandomPicker(equip_eighteditems);
         // 获取一个概率
         WeightedItem selectedItem = picker.GetRandomItem();
         return int.Parse(selectedItem.prizedraw.ToString());
     }
-    public static ObscuredInt Equip_talent_eight()
+    public static int Equip_talent_eight()
     {
         if (talent_eighteditems.Count == 0) Obtain_Init_Entry_talent_eighteditems_list();
         WeightedRandomPicker picker = new WeightedRandomPicker(talent_eighteditems);
@@ -2096,10 +2107,10 @@ public static class Tool_Battle
         }
     }
 
-    private static void Obtain_Weight(object seed_name, ObscuredInt weight,List<WeightedItem> eighteditems )
+    private static void Obtain_Weight(object seed_name, int weight,List<WeightedItem> _eighteditems )
     {
         WeightedItem weightedItem = new WeightedItem(seed_name,weight);
-        eighteditems.Add(weightedItem);
+        _eighteditems.Add(weightedItem);
     }
 
     /// <summary>
@@ -2299,7 +2310,7 @@ public static class Tool_Battle
         //获取可以被抽取的列表
         if (entry_list == null) Obtain_Init_Entry_list(); 
         if (entry_coefficient_list == null) Obtain_Init_Entry_Coefficient_list();
-        if (entry_inscription_list == null) Obtain_Init_Entry_Inscription_list();
+        //if (entry_inscription_list == null) Obtain_Init_Entry_Inscription_list();
         string user_value = bag.Name;
         if (bag.StdMode == Stditem_StdMode_List.项链.ToString())
         {

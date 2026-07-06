@@ -618,6 +618,11 @@ public class offect_reincarnation : Base_Mono
     {
         int max = 0,basemax = 0;
         for (int i = 0; i < SumSave.crt_zs.crt_Refinement.Count; i++) max += SumSave.crt_zs.crt_Refinement[i];
+        if (max >= SumSave.crt_zs.zs_Refinement_max)
+        {
+            Alert_Dec.Show("当前属性已满");
+            return;
+        }
         string dec = "";
         for (int i = 0; i < SumSave.db_reincarnation_list.Count; i++)
         {
@@ -650,12 +655,9 @@ public class offect_reincarnation : Base_Mono
         else
         if (SumSave.crtHero.zs_lvs == 3)
         dec += "强化锻体需要\n" + (number/2) + common_items_list.转生石 + "\n" + number + common_items_list.黑铁精矿 + "\n" + (number * 2) + common_items_list.金条;
-        if (max < SumSave.crt_zs.zs_Refinement_max)
-        {
-            Alert.Show(crt_zs_unit.ToString(), dec, Confirm_refinement, number); 
-
-        }
-        else { Alert_Dec.Show("当前属性已满"); };
+        if (SumSave.crtHero.zs_lvs == 4)
+            dec += "强化锻体需要\n" + (number) + common_items_list.转生石 + "\n" + (number * 2) + common_items_list.黑铁精矿 + "\n" + (number * 4) + common_items_list.金条;
+        Alert.Show(crt_zs_unit.ToString(), dec, Confirm_refinement, number);
     }
     /// <summary>
     /// 确认强化锻体
@@ -670,14 +672,16 @@ public class offect_reincarnation : Base_Mono
             case 2:
                 VIP_Need_Condition(common_items_list.金条, number * 2);
                 VIP_Need_Condition(common_items_list.黑铁矿石, number);
-                //Need_Condition(common_items_list.金条, number * 2);
-                //Need_Condition(common_items_list.黑铁矿石, number);
                 break;
             case 3:
                 VIP_Need_Condition(common_items_list.转生石, number / 2);
                 VIP_Need_Condition(common_items_list.黑铁精矿, number);
                 Need_Condition(common_items_list.金条, number * 2);
-                //Need_Condition(common_items_list.黑铁精矿, number);
+                break;
+            case 4:
+                VIP_Need_Condition(common_items_list.转生石, number);
+                VIP_Need_Condition(common_items_list.黑铁精矿, number * 2);
+                Need_Condition(common_items_list.金条, number * 4);
                 break;
             default:
                 Need_Condition("未开放", 99999);
@@ -718,6 +722,9 @@ public class offect_reincarnation : Base_Mono
                 break;
             case 3:
                 dec += "炼药需要" + common_items_list.人参精华 + " * 1" + "\n" + common_items_list.金条 + " * 10";
+                break;
+            case 4:
+                dec += "炼药需要" + common_items_list.人参精华 + " * 5" + "\n" + common_items_list.金条 + " * 30";
                 break;
             default:
                 break;
@@ -779,6 +786,10 @@ public class offect_reincarnation : Base_Mono
                 VIP_Need_Condition(common_items_list.金条, 10);
                 //Need_Condition(common_items_list.人参精华, 1);
                 //Need_Condition(common_items_list.金条, 10);
+                break;
+            case 4:
+                VIP_Need_Condition(common_items_list.人参精华, 5);
+                VIP_Need_Condition(common_items_list.金条, 30);
                 break;
             default:
                 Need_Condition("未开放", 99999);

@@ -98,6 +98,7 @@ public class db_map_vo
             if (map_lv_intensity_drop_arr[i].Length > 0)
             { 
                 string[] map_lv_intensity_drop_arr1 = map_lv_intensity_drop_arr[i].Split(',');
+                //Debug.Log("map_lv_intensity_drop_arr1:" + map_name + " " + map_lv_intensity_drop_arr1[0]);
                 if (map_lv_intensity_drop_arr1.Length == 2)
                 { 
                     dic1.Add(int.Parse(map_lv_intensity_drop_arr1[0]), map_lv_intensity_drop_arr1[1]);

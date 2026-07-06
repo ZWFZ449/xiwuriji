@@ -139,6 +139,7 @@ public class show_drop_list : Base_Mono
             case 0:
                 Show_Bag(data.Item2.map_drop, Drop_Type.随机掉落, data.Item2);
                 if (SumSave.map_Lv > 1) Show_Bag(data.Item2.map_lv_drop, Drop_Type.随机掉落, data.Item2);
+                //for (int i = 0; i < 1000; i++) Show_Bag(data.Item2.map_lv_drop, Drop_Type.随机掉落, data.Item2);
                 break;
             case 1:
             case 2:
@@ -259,6 +260,7 @@ public class show_drop_list : Base_Mono
         }
     }
     /// <summary>
+    /// 
     /// 掉落物品
     /// </summary>
     /// <param name="value"></param>
