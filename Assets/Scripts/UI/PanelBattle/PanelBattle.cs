@@ -1032,7 +1032,8 @@ public class PanelBattle : PanelBase
     private void crate_player()
     {
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(SumSave.crtMaxBattle.crt_name, battle_player_prefab,
-            GetRandomUVPosition(10), Quaternion.identity, battle_borm.transform);
+        GetRandomUVPosition(10), Quaternion.identity, battle_borm.transform);
+        //GetRandomUVPosition(battle_borm, 10, 20), Quaternion.identity, battle_borm.transform);
         item.GetComponent<BaseBattleAttack>().Data = SumSave.crtMaxBattle;
         item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill());
         Dictionary<int, db_skill_vo> dic = SumSave.crt_skill.Set_Current_skill();
@@ -1175,7 +1176,8 @@ public class PanelBattle : PanelBase
         if (SumSave.crt_setting.user_data_settings.Count >= 2 && SumSave.crt_setting.user_data_settings[1] == 0) return;
         crtMaxBattleVO monster = ArrayHelper.Find(monster_Bossbattle_list, e => e.crt_name == specify);
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(monster.crt_name, battle_Boss_monster_prefab,
-            GetRandomUVPosition(2000), Quaternion.identity, battle_borm.transform);
+            //GetRandomUVPosition(2000), Quaternion.identity, battle_borm.transform);
+            GetRandomUVPosition(600, 2000), Quaternion.identity, battle_borm.transform);
         item.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Monster(monster);
         item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Monster(monster));
         item.transform.SetAsFirstSibling();
@@ -1253,7 +1255,7 @@ public class PanelBattle : PanelBase
         //return;//测试关闭
         crtMaxBattleVO monster = monster_battle_list[Random.Range(0, monster_battle_list.Count)];
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(monster.crt_name, battle_monster_prefab,
-            GetRandomUVPosition(2000), Quaternion.identity, battle_borm.transform);
+            GetRandomUVPosition(600, 2000), Quaternion.identity, battle_borm.transform);
         item.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Monster(monster);
         item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Monster(monster));
         item.transform.SetAsFirstSibling();
@@ -1306,5 +1308,39 @@ public class PanelBattle : PanelBase
         float y = center.y + adjustedRadius * Mathf.Sin(angle);
 
         return new Vector2(x, y);
+    }
+    /// <summary>
+    /// 生成半径内随机坐标
+    /// </summary>
+    /// <param name="center"></param>
+    /// <returns></returns>
+    public static Vector3 GetRandomUVPosition(float minRadius, float maxRadius, float yOffset = 0f)
+    {
+        Vector3 center = new Vector3(Screen.width / 2, Screen.height / 2, 0f);
+        // 1. 安全检查
+        if (center == null)
+        {
+            Debug.LogError("GetRandomRingPosition: Center Transform is null!");
+            return Vector3.zero;
+        }
+
+        // 2. 参数修正（防止策划填错）
+        if (minRadius < 0) minRadius = 0;
+        if (maxRadius < minRadius) (minRadius, maxRadius) = (maxRadius, minRadius); // 交换值
+
+        // 3. 随机角度 (0 ~ 2PI)
+        float randomAngle = Random.Range(0f, Mathf.PI * 2f);
+
+        // 4. 随机半径（平方根保证环形区域均匀分布）
+        float minRadiusSqr = minRadius * minRadius;
+        float maxRadiusSqr = maxRadius * maxRadius;
+        float randomRadius = Mathf.Sqrt(Random.Range(minRadiusSqr, maxRadiusSqr));
+
+        // 5. 计算坐标
+        float x = center.x + randomRadius * Mathf.Cos(randomAngle);
+        float z = center.z;
+        float y = center.y + randomRadius * Mathf.Sin(randomAngle); // 使用传入的Y轴偏移
+
+        return new Vector3(x, y, z);
     }
 }

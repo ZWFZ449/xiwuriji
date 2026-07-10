@@ -648,7 +648,6 @@ public class offect_reincarnation : Base_Mono
             }
         }
         max = (int)MathF.Max(0, max);
-        //max = (int)MathF.Min(150 * ((SumSave.crtHero.zs_lvs - 1)), max);
         int number = (max / 20 + 1) * 10;
         if(SumSave.crtHero.zs_lvs ==2)
         dec += "强化锻体需要\n" + number + "黑铁矿石" + "\n" + (number * 2) + "金条";

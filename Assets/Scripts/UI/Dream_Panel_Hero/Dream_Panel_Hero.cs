@@ -657,7 +657,8 @@ public class Dream_Panel_Hero : Panel_Base
     private void upLvTalent(object arg0)
     {
         db_player_talent_vo data = (db_player_talent_vo)arg0;
-        if (SumSave.crtHero.lv < data.talent_need_lv) { Alert.Show("升级失败", "等级不足"); return; }
+        int base_lv = (int)MathF.Max(SumSave.crtHero.lv, SumSave.crtHero.zs_lvs >= 2 ? 50 + ((SumSave.crtHero.zs_lvs) * 5) : SumSave.crtHero.lv);
+        if (base_lv < data.talent_need_lv) { Alert.Show("升级失败", "等级不足"); return; }
         int lv = Obtain_Talent_Lv(data.talent_name);
         int index = lv;
         if (index <= 0) index = 0;
