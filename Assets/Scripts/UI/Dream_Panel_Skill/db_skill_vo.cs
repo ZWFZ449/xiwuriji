@@ -109,6 +109,8 @@ public class db_skill_vo : Base_VO
     public readonly int scope;
 
     public readonly List<int> needLvitem;
+
+    public readonly int probability;
     /// <summary>
     /// 技能消耗魔法
     /// </summary>
@@ -116,7 +118,7 @@ public class db_skill_vo : Base_VO
 
     public db_skill_vo(int id, string show_name, int EffectType, int Effect, List<int> spells, int Power,
         List<int> DefPowers, List<int> skill_damages, Dictionary<enum_equip_entry_list, List<int>> skill_offect_value, int Job, int Delay,List<int> skill_up_lv,int need_lv,int Weighted,int MoveType,
-        List<int> offset,int scope,List<int> needLvitem)
+        List<int> offset,int scope,List<int> needLvitem,int probability)
     { 
         this.id = id;
         this.show_name = show_name;
@@ -136,6 +138,7 @@ public class db_skill_vo : Base_VO
         this.offset = offset;
         this.scope = scope;
         this.needLvitem = needLvitem;
+        this.probability = probability;
         lv = -1;
         exp = 0;
         select_pos = -1;

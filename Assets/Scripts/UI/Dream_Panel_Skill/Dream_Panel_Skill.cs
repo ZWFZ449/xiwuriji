@@ -135,7 +135,12 @@ public class Dream_Panel_Skill : Panel_Base
             case Skill_Btn_Type.进阶:
                 if (crt_skill.SetLv() < crt_skill.skill_damages.Count - 1)
                 {
-                    Alert.Show("进阶技能", "需要" + Show_Color.Red("\n天赋书页 * " + crt_skill.needLvitem[crt_skill.SetLv()]+ "\n转生石 * " + crt_skill.needLvitem[crt_skill.SetLv()]), advancedskill);
+                    string dec= "\n天赋书页 * " + crt_skill.needLvitem[crt_skill.SetLv()] + "\n转生石 * " + crt_skill.needLvitem[crt_skill.SetLv()];
+                    if (crt_skill.need_lv >= 60)
+                    {
+                        dec += "\n天赋精华 * " + (crt_skill.needLvitem[crt_skill.SetLv()] / 2);
+                    }
+                    Alert.Show("进阶技能", "需要" + Show_Color.Red(dec), advancedskill);
                 }else Alert_Dec.Show("技能已满级");
                 break;
         }
@@ -146,6 +151,10 @@ public class Dream_Panel_Skill : Panel_Base
         Clear_Condition();
         Need_Condition("转生石", crt_skill.needLvitem[crt_skill.SetLv()]);
         Need_Condition("天赋书页", crt_skill.needLvitem[crt_skill.SetLv()]);
+        if (crt_skill.need_lv >= 60)
+        {
+            Need_Condition("天赋精华", crt_skill.needLvitem[crt_skill.SetLv()] / 2);
+        }
         if (Return_Condition())
         {
             crt_skill.monster_lv(crt_skill.SetLv() + 1);
@@ -497,9 +506,25 @@ public class Dream_Panel_Skill : Panel_Base
         switch ((Skill_Effect_Type)crt_skill.EffectType)
         {
             case Skill_Effect_Type.单体:
-            case Skill_Effect_Type.群体:
                 str += "造成 " + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + " %" + (Skill_Effect_Type)crt_skill.EffectType + " 伤害" + ";", color_list);
+                if (crt_skill.Effect == 2)
+                {
+                    str += "\n " + Show_Color.Set_String(5 + "%概率造成 10倍 伤害" + ";", color_list);
+                    if (crt_skill.skill_damages.Count > 0) str += "\n[物攻] + " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
+                }else
                 if (crt_skill.skill_damages.Count > 0) str += "\n[真实伤害] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
+                break;
+            case Skill_Effect_Type.群体:
+                if (crt_skill.Effect == 1)
+                {
+                    str += "造成 " + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + " %" + (Skill_Effect_Type)crt_skill.EffectType + " 伤害" + ";", color_list);
+                    if (crt_skill.skill_damages.Count > 0) str += "\n[真实伤害] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
+                }
+                else
+                {
+                    str += "对 " + Show_Color.Set_String(crt_skill.Effect, color_list) + " 个目标,分别造成 " + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + " %" + (Skill_Effect_Type)crt_skill.EffectType + " 伤害" + ";", color_list);
+                    if (crt_skill.skill_damages.Count > 0) str += "\n[魔攻] +" + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
+                }
                 break;
             case Skill_Effect_Type.回复:
                 str += "回复" + Show_Color.Set_String(crt_skill.Effect + (crt_skill.Power + crt_skill.DefPowers[i]) + "%", color_list) + "生命值" + ";";
@@ -515,8 +540,18 @@ public class Dream_Panel_Skill : Panel_Base
                 if (crt_skill.skill_damages.Count > 0) str += "\n[召唤兽伤害] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
                 break;
             case Skill_Effect_Type.护盾:
-                str += "生成 " + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + (crt_skill.Effect == 1 ? " 双防御" : "% 双免伤") + " ", color_list);
-                if (crt_skill.skill_damages.Count > 0) str += "\n[免伤] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
+                if (crt_skill.Effect == 3)
+                {
+                    str += "生成 " + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + ("% 道术加持") + " ", color_list);
+                    if (crt_skill.skill_damages.Count > 0) str += "\n[道术] + " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
+                    str += "\n[特效] " + Show_Color.Set_String("反弹道术*200%无视防御伤害", color_list) + ";";
+
+                }
+                else
+                {
+                    str += "生成 " + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + (crt_skill.Effect == 1 ? " 双防御" : "% 双免伤") + " ", color_list);
+                    if (crt_skill.skill_damages.Count > 0) str += "\n[免伤] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
+                }
                 break;
         }
         if (SumSave.crtHero.zs_lvs > 1)
@@ -603,7 +638,102 @@ public class Dream_Panel_Skill : Panel_Base
         }
         foreach (var item1 in crt_skill.GetBuff.Keys)
         {
-            str += "\n[天赋效果] " + Show_Color.Set_String(item1.ToString(), color_list) + " " + Show_Color.Set_String(crt_skill.GetBuff[item1].ToString(), color_list);
+            string dec="";
+            switch (item1)
+            {
+                case enum_talent_offect_list.生命:
+                    break;
+                case enum_talent_offect_list.攻击:
+                    break;
+                case enum_talent_offect_list.魔法:
+                    break;
+                case enum_talent_offect_list.道术:
+                    break;
+                case enum_talent_offect_list.防御:
+                    break;
+                case enum_talent_offect_list.攻击速度:
+                    break;
+                case enum_talent_offect_list.物理攻击:
+                    break;
+                case enum_talent_offect_list.魔法攻击:
+                    break;
+                case enum_talent_offect_list.道术攻击:
+                    break;
+                case enum_talent_offect_list.防御值:
+                    break;
+                case enum_talent_offect_list.躲避:
+                    break;
+                case enum_talent_offect_list.命中:
+                    break;
+                case enum_talent_offect_list.技能:
+                    break;
+                case enum_talent_offect_list.附加攻击:
+                    break;
+                case enum_talent_offect_list.附加魔法:
+                    break;
+                case enum_talent_offect_list.附加道术:
+                    break;
+                case enum_talent_offect_list.附加双防:
+                    break;
+                case enum_talent_offect_list.附加伤害:
+                    break;
+                case enum_talent_offect_list.附加回血:
+                    break;
+                case enum_talent_offect_list.附加攻击范围:
+                    break;
+                case enum_talent_offect_list.无视防御:
+                    break;
+                case enum_talent_offect_list.召唤兽:
+                    break;
+                case enum_talent_offect_list.召唤兽攻击:
+                    break;
+                case enum_talent_offect_list.召唤兽生命:
+                    break;
+                case enum_talent_offect_list.召唤兽防御:
+                    break;
+                case enum_talent_offect_list.召唤兽速度:
+                    break;
+                case enum_talent_offect_list.召唤兽死亡爆炸:
+                    break;
+                case enum_talent_offect_list.召唤数量:
+                    break;
+                case enum_talent_offect_list.特殊效果:
+                    break;
+                case enum_talent_offect_list.临时伤害:
+                    break;
+                case enum_talent_offect_list.临时防御:
+                    break;
+                case enum_talent_offect_list.临时速度:
+                    break;
+                case enum_talent_offect_list.单体改群体:
+                    break;
+                case enum_talent_offect_list.技能攻击个数:
+                    break;
+                case enum_talent_offect_list.技能概率不消耗蓝:
+                    break;
+                case enum_talent_offect_list.技能全体伤害:
+                    break;
+                case enum_talent_offect_list.群体技能攻击范围:
+                    break;
+                case enum_talent_offect_list.每秒回复全体血量百分比:
+                    break;
+                case enum_talent_offect_list.攻击击退敌人概率:
+                    break;
+                case enum_talent_offect_list.技能伤害:
+                    dec = "%";
+                    break;
+                case enum_talent_offect_list.技能触发概率:
+                    dec = "%";
+                    break;
+                case enum_talent_offect_list.溅射数量:
+                    break;
+                case enum_talent_offect_list.爆炸伤害:
+                    dec = "%";
+                    break;
+                case enum_talent_offect_list.弹道:
+                    break;
+            }
+            str += "\n[天赋效果] " + Show_Color.Set_String(item1.ToString(), color_list) + " " + Show_Color.Set_String(crt_skill.GetBuff[item1] + dec, color_list);
             str += "\n";
         }
         return str;

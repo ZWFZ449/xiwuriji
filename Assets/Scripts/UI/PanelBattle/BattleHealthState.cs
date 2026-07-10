@@ -97,7 +97,7 @@ public class BattleHealthState : Base_Mono
         if (offset < -2) offset = 1;
         DamageTextManager.Instance.ShowDamageText(type, _dec, this.transform, offset);
     }
-    public void TakeDamage(int damage,DamageEnum type = DamageEnum.普通伤害)
+    public void TakeDamage(long damage,DamageEnum type = DamageEnum.普通伤害)
     {
         if (CurrentHP <= 0) return;
         CurrentHP -= damage;

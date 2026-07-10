@@ -120,6 +120,11 @@ public class PanelBattle : PanelBase
     /// 最新状态
     /// </summary>
     private TMP_Text state_monster_info;
+    /// <summary>
+    /// 默认地图
+    /// </summary>
+    private Image basebg;
+
     protected override void Awake()
     {
         closeButton = Find<Button>("info/info/close_button");
@@ -169,6 +174,7 @@ public class PanelBattle : PanelBase
         btn_bag= Find<Button>("info/info/btn_bag");
         btn_bag.onClick.AddListener(() => { UI_Manager.I.GetPanel<Dream_Panel_Bag>().Show(); });
         state_monster_info = Find<TMP_Text>("info/state_monster/info");
+        basebg = Find<Image>("BaseMap/Viewport/Content");
         InitMedicine();
         InitSlider();
         InitBoss();
@@ -395,6 +401,7 @@ public class PanelBattle : PanelBase
     {
         transform.SetAsLastSibling();
         base.Show();
+        basebg.sprite = UI.UI_Manager.I.GetEquipSprite("UI/base_bg/demo/", SumSave.map_Lv);
     }
     /// <summary>
     /// 开启地图
@@ -718,7 +725,7 @@ public class PanelBattle : PanelBase
                     break;
                 case Battle_Game_Type.call:
                     player_list.Remove(health.gameObject);
-                    Resurrection_Call(baseBattleAttack.Data.crt_name);
+                    Resurrection_Call(baseBattleAttack);
                     break;
                 case Battle_Game_Type.monster:
                 case Battle_Game_Type.Boss:
@@ -831,8 +838,7 @@ public class PanelBattle : PanelBase
     /// <param name="monster"></param>
     private void Drop(BaseBattleAttack monster)
     {
-        int exp = (int)monster.Data.exp * (100 + SumSave.crtMaxBattle.exp_bonus) / 100;
-        //exp = (int)(exp * MathF.Pow(10, SumSave.crtHero.zs_lvs - 1));
+        int exp = (int)monster.Data.exp * (100 + SumSave.crtMaxBattle.exp_bonus + (Tool_Battle.IsBuff(common_Buff.双倍经验卷轴) ? 100 : 0)) / 100;
         if (SumSave.map_Lv > 1) exp *= 5;
         Show_Info("击杀 " + monster.Data.crt_name + " 获得经验 " + exp);
         //掉落收益
@@ -842,7 +848,10 @@ public class PanelBattle : PanelBase
         {
             case Battle_Game_Type.Boss://boss掉落
                 Battle_Tool.Dream_Obtain_Unit(currency_unit.Boss积分, 1, Obtain_Int.Add_unit(1));
-                if (SumSave.map_Lv > 1) Battle_Tool.Dream_Obtain_Unit(currency_unit.转生积分, 1, Obtain_Int.Add_unit(1));
+                int value = 1;
+                db_vip vip = Tool_Battle.Obtain_Vip();
+                if (vip != null) if (vip.vip_lv >= 13) value = 2;
+                if (SumSave.map_Lv > 1) Battle_Tool.Dream_Obtain_Unit(currency_unit.转生积分, value, Obtain_Int.Add_unit(value));
                 AddSkill();
                 Close_BossSlider();
                 break;
@@ -856,7 +865,7 @@ public class PanelBattle : PanelBase
         Dictionary<int, db_skill_vo> keyValues = SumSave.crt_skill.Set_Current_skill();
         foreach (var item in keyValues)
         {
-            if (item.Value.Job != -1)
+            if (item.Value.Job != -1&&item.Value.need_lv < 60 )
             {
                 item.Value.GetExp(1); 
             }
@@ -999,7 +1008,7 @@ public class PanelBattle : PanelBase
         {
             //db_skill_vo base_skill = new db_skill_vo(skill);
             db_skill_vo newskill = new db_skill_vo(skill.id, skill.show_name, skill.EffectType, skill.Effect, skill.spells, skill.Power, skill.DefPowers, skill.skill_damages,
-    skill.skill_offect_value_list, skill.Job, skill.Delay, skill.skill_up_lv, skill.need_lv, skill.Weighted, skill.MoveType, skill.offset, skill.scope, skill.needLvitem);
+    skill.skill_offect_value_list, skill.Job, skill.Delay, skill.skill_up_lv, skill.need_lv, skill.Weighted, skill.MoveType, skill.offset, skill.scope, skill.needLvitem, skill.probability);
             newskill.activate_skill();//激活0级
             newskill.ClearBuff();
             newskill.AddBuff(enum_talent_offect_list.弹道, number);
@@ -1025,7 +1034,6 @@ public class PanelBattle : PanelBase
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(SumSave.crtMaxBattle.crt_name, battle_player_prefab,
             GetRandomUVPosition(10), Quaternion.identity, battle_borm.transform);
         item.GetComponent<BaseBattleAttack>().Data = SumSave.crtMaxBattle;
-        //item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(m_skill_borm));
         item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill());
         Dictionary<int, db_skill_vo> dic = SumSave.crt_skill.Set_Current_skill();
         crt_pos = item.transform;
@@ -1056,10 +1064,22 @@ public class PanelBattle : PanelBase
                 int number = 2;//召唤多个
                 if (skill.SetLv() >= 4) number++;
                 if (skill.SetLv() >= 9) number++;
-                for (int i = 0; i < number; i++)
+                foreach (var item1 in skill.GetBuff)
+                {
+                    switch (item1.Key)
+                    {
+                        case enum_talent_offect_list.召唤数量:
+                            number += item1.Value;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                List<Vector3> positions = GetRingPositions(crt_pos.position, 400, number);
+                for (int i = 0; i < positions.Count; i++)
                 {
                     GameObject call = ObjectPoolManager.instance.GetObjectFormPool("召" + skill.show_name, battle_player_prefab,
-               Call_Pos(), Quaternion.identity, battle_borm.transform);
+               positions[i], Quaternion.identity, battle_borm.transform);
                     call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(skill);
                     call.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(skill.show_name));
                     call.GetComponent<BaseBattleAttack>().Radius(crt_pos);
@@ -1070,17 +1090,30 @@ public class PanelBattle : PanelBase
         player_list.Add(item);
     }
 
-    private void Resurrection_Call(string name)
+    public static List<Vector3> GetRingPositions(Vector3 center, float radius, int count, float startAngleDeg = 0)
+    {
+        List<Vector3> points = new List<Vector3>();
+        float angleStep = 360f / count;
+        for (int i = 0; i < count; i++)
+        {
+            float totalDeg = startAngleDeg + i * angleStep;
+            float rad = totalDeg * Mathf.PI / 180f;
+            float x = center.x + radius * Mathf.Cos(rad);
+            float y = center.y + radius * Mathf.Sin(rad); // 水平面用Z
+            points.Add(new Vector3(x, y, center.z));
+        }
+        return points;
+    }
+
+    private void Resurrection_Call(BaseBattleAttack crt_call)
     {
         Dictionary<int, db_skill_vo> dic = SumSave.crt_skill.Set_Current_skill();
         foreach (var id in dic)
         {
-            if ("召"+id.Value.show_name == name)
+            if ("召"+id.Value.show_name == crt_call.Data.crt_name)
             {
-               // GameObject call = ObjectPoolManager.instance.GetObjectFormPool("召" + id.Value.show_name, battle_player_prefab,
-               //GetRandomUVPosition(800), Quaternion.identity, battle_borm.transform);
                 GameObject call = ObjectPoolManager.instance.GetObjectFormPool("召" + id.Value.show_name, battle_player_prefab,
-                Call_Pos(), Quaternion.identity, battle_borm.transform);
+                new Vector3(crt_call.transform.position.x, crt_call.transform.position.y, crt_call.transform.position.z), Quaternion.identity, battle_borm.transform);
                 call.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Call(id.Value);
                 call.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill(id.Value.show_name));
                 call.GetComponent<BaseBattleAttack>().Radius(crt_pos);
@@ -1097,26 +1130,6 @@ public class PanelBattle : PanelBase
         }
     }
 
-    int call_index = 0;
-    private Vector3 Call_Pos()
-    {
-        call_index++;
-        if (call_index > 3) call_index = 0;
-        switch (call_index)
-        {
-            case 0:
-                return new Vector3(transform.position.x + 300, transform.position.y + 300, transform.position.z);
-            case 1:
-                return new Vector3(transform.position.x - 300, transform.position.y + 300, transform.position.z);
-            case 2:
-                return new Vector3(transform.position.x + 300, transform.position.y - 300, transform.position.z);
-            case 3:
-                return new Vector3(transform.position.x - 300, transform.position.y - 300, transform.position.z);
-            default:
-                return new Vector3(transform.position.x + 300, transform.position.y + 300, transform.position.z);
-        }
-         
-    }
     bool open_crate_monster = false;
     private IEnumerator Game_WaitTime(float time)
     {
@@ -1197,7 +1210,7 @@ public class PanelBattle : PanelBase
             if (skill != null)
             {
                 db_skill_vo newskill = new db_skill_vo(skill.id, skill.show_name, skill.EffectType, skill.Effect, skill.spells, skill.Power, skill.DefPowers, skill.skill_damages,
-                    skill.skill_offect_value_list, skill.Job, skill.Delay, skill.skill_up_lv, skill.need_lv, skill.Weighted, skill.MoveType, skill.offset, skill.scope, skill.needLvitem);
+                    skill.skill_offect_value_list, skill.Job, skill.Delay, skill.skill_up_lv, skill.need_lv, skill.Weighted, skill.MoveType, skill.offset, skill.scope, skill.needLvitem, skill.probability);
                 newskill.monster_lv(monster.skill_level + 1);
                 newskill.AddBuff(enum_talent_offect_list.弹道, monster.skill_number);
                 skill_list.Add(newskill);

@@ -251,7 +251,7 @@ public class offect_reincarnation : Base_Mono
                 dec += "\n转生收益\n";
                 dec += Show_Color.Set_String("炼体 + " + vo.result_minRefinement + " - " + vo.result_maxRefinement, GameColors.RageBar);
                 dec += "\n" + Show_Color.Set_String("炼药 + " + vo.result_minmedicine + " - " + vo.result_maxmedicine, GameColors.RageBar);
-                dec += "\n转生加成\n";
+                dec += "\n转生总加成\n";
                 for (int j = 0; j < vo.reincarnation_cost.Count; j++)
                 {
                     enum_equip_entry_list e = vo.reincarnation_cost[j].Item1;

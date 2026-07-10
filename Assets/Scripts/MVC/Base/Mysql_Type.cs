@@ -20,6 +20,7 @@ public enum Mysql_Table_Name
     db_monster,
     db_stditems,
     db_magic,
+    db_magics,
     db_map,
     db_heros,//标准参数
     db_setting,//标准设置信息
@@ -90,6 +91,7 @@ public enum Mysql_Table_Name
 
 
     db_hero_type,//英雄类型
+    db_player_talent,//玩家天赋
     db_player_talents,//玩家天赋
     db_player_talent_type,//玩家天赋类型
     db_pet_talent,//宠物天赋

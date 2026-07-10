@@ -106,7 +106,7 @@ public static class Tool_Battle
                 case enum_talent_offect_list.魔法: battle_mc += tool_talent_value(talent, skill_list); break;
                 case enum_talent_offect_list.道术: battle_sc += tool_talent_value(talent, skill_list); break;
                 case enum_talent_offect_list.防御: battle_ac += tool_talent_value(talent, skill_list); battle_mac += tool_talent_value(talent, skill_list); break;
-                    
+
                 case enum_talent_offect_list.攻击速度:
                     battle_speed -= tool_talent_value(talent, skill_list) * speed_bonus; break;
                 case enum_talent_offect_list.物理攻击:
@@ -127,7 +127,7 @@ public static class Tool_Battle
                 case enum_talent_offect_list.附加魔法: battle_mc += tool_talent_value(talent, skill_list); break;
                 case enum_talent_offect_list.附加道术: battle_sc += tool_talent_value(talent, skill_list); break;
                 case enum_talent_offect_list.附加双防: battle_ac += tool_talent_value(talent, skill_list); battle_mac += tool_talent_value(talent, skill_list); break;
-                case enum_talent_offect_list.附加回血: 
+                case enum_talent_offect_list.附加回血:
                 case enum_talent_offect_list.附加伤害:
                 case enum_talent_offect_list.附加攻击范围:
                 case enum_talent_offect_list.无视防御:
@@ -171,7 +171,22 @@ public static class Tool_Battle
                 case enum_talent_offect_list.攻击击退敌人概率:
                     AddSkillBuff(talent, skill_list);
                     break;
-               case enum_talent_offect_list.弹道:
+                case enum_talent_offect_list.弹道:
+                    AddSkillBuff(talent, skill_list);
+                    break;
+                case enum_talent_offect_list.召唤数量:
+                    AddSkillBuff(talent, skill_list);
+                    break;
+                case enum_talent_offect_list.技能伤害:
+                    AddSkillBuff(talent, skill_list);
+                    break;
+                case enum_talent_offect_list.技能触发概率:
+                    AddSkillBuff(talent, skill_list);
+                    break;
+                case enum_talent_offect_list.溅射数量:
+                    AddSkillBuff(talent, skill_list);
+                    break;
+                case enum_talent_offect_list.爆炸伤害:
                     AddSkillBuff(talent, skill_list);
                     break;
             }
@@ -737,7 +752,7 @@ public static class Tool_Battle
 
         foreach (var item in skill_list)
         {
-            ObscuredInt skill_lv = item.Value.SetLv(); 
+            int skill_lv = item.Value.SetLv(); 
             if (skill_lv >= 0 && item.Value.Job != -1)
             {
                 switch ((Skill_Effect_Type)item.Value.EffectType)
@@ -750,13 +765,19 @@ public static class Tool_Battle
                             mac += item.Value.Power + item.Value.DefPowers[skill_lv];
                             mac2 += item.Value.Power + item.Value.DefPowers[skill_lv];
                         }
-                        else 
+                        else
+                        if (item.Value.Effect == 2)
                         {
                             damage_reduction += item.Value.Power + item.Value.DefPowers[skill_lv];
                             //魔法免伤
                             magic_damage_reduction += item.Value.Power + item.Value.DefPowers[skill_lv];
                         }
-                        if(item.Value.skill_damages.Count>0) battle_def+= item.Value.skill_damages[skill_lv];
+                        else
+                        if (item.Value.Effect == 3)//道术系数
+                        {
+                            battle_sc += item.Value.Power + item.Value.DefPowers[skill_lv];
+                        }
+                        if (item.Value.skill_damages.Count>0) battle_def+= item.Value.skill_damages[skill_lv];
                         break;
                 }
 
@@ -1256,10 +1277,10 @@ public static class Tool_Battle
                     exp_bonus += 10;
                     gold_bonus += 10;
                 }
-                if (buffs[i].Item1 == common_Buff.双倍经验卷轴.ToString())
-                {
-                    exp_bonus += 100;
-                }
+                //if (buffs[i].Item1 == common_Buff.双倍经验卷轴.ToString())
+                //{
+                //    exp_bonus += 100;
+                //}
                 if (buffs[i].Item1 == common_Buff.月卡.ToString())
                 {
                     exp_bonus += 20;
@@ -1323,17 +1344,19 @@ public static class Tool_Battle
         crit = Mathf.Min(80, crit);
 
 #if UNITY_EDITOR
-        //lucky = 9;
-        dc2 = 1500;
-        ac2 = 5000;
-        ac = 5000;
-        mac = 5000;
-        mac2 = 1500;
-        battle_speed = 30;
-        battle_range = 300;
-        maxmp = 1000000;
-        battle_mp = 1000000;
-        mpRegen = 1000000;
+        lucky = 9;
+        //dc2 = 1500;
+        //sc2 = 1500;
+        //mc2 = 1500;
+        //ac2 = 5000;
+        //ac = 5000;
+        //mac = 5000;
+        //mac2 = 5000;
+        //battle_speed = 30;
+        ////battle_range = 300;
+        ////maxmp = 1000000;
+        ////battle_mp = 1000000;
+        //mpRegen = 1000000;
         //maxhp = 1;
 #elif UNITY_ANDROID
         //验证图鉴
@@ -1646,15 +1669,16 @@ public static class Tool_Battle
         List<(string, string, int)> buffs = SumSave.crt_user_unit.GetBuff;
         for (int i = 0; i < buffs.Count; i++)
         {
-            int spanSeconds = Battle_Tool.SettlementTransport(buffs[i].Item2, 3);
-            int time = buffs[i].Item3 - spanSeconds;//剩余时间
-            if (time > 0 || buffs[i].Item3 >= 99999)
+            if (buff.ToString() == buffs[i].Item1)
             {
-                if (buff.ToString() == buffs[i].Item1)
+                int spanSeconds = Battle_Tool.SettlementTransport(buffs[i].Item2, 3);
+                int time = buffs[i].Item3 - spanSeconds;//剩余时间
+                if (time > 0 || buffs[i].Item3 >= 99999)
                 {
                     return true;
                 }
-            }
+                else return false;
+            } 
         }
         return false;
 
@@ -2082,6 +2106,7 @@ public static class Tool_Battle
         WeightedRandomPicker picker = new WeightedRandomPicker(equip_eighteditems);
         // 获取一个概率
         WeightedItem selectedItem = picker.GetRandomItem();
+        //Debug.Log("selectedItem.prizedraw.ToString():" + selectedItem.prizedraw.ToString());
         return int.Parse(selectedItem.prizedraw.ToString());
     }
     public static int Equip_talent_eight()
@@ -2272,14 +2297,14 @@ public static class Tool_Battle
     /// </summary>
     /// <param name="boss"></param>
     /// <returns></returns>
-    public static ObscuredInt Quality()
+    public static int Quality()
     {
         if (eighteditems.Count == 0) InitEighted();
         WeightedRandomPicker picker = new WeightedRandomPicker(eighteditems);
         // 获取一个概率
         WeightedItem selectedItem = picker.GetRandomItem();
 #if UNITY_EDITOR
-        return 7;
+        //return 7;
 #elif UNITY_ANDROID
         
            

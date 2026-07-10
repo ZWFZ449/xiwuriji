@@ -30,11 +30,11 @@ public class playerController : BaseBattleAttack
             if (skill_index >= battle_skills.Count) skill_index = 0;
             for (int i = skill_index; i < battle_skills.Count; i++)
             {
-                if (Select_Skill(battle_skills[i], i)) return;//往后看技能释放
+                if (Select_Skill(battle_skills[i])) return;//往后看技能释放
             }
             for (int i = 0; i < skill_index; i++)
             { 
-                if (Select_Skill(battle_skills[i], i)) return;//往前看技能释放
+                if (Select_Skill(battle_skills[i])) return;//往前看技能释放
             }
         }
         //平a
@@ -46,7 +46,7 @@ public class playerController : BaseBattleAttack
     /// <param name="item"></param>
     /// <param name="index"></param>
     /// <returns></returns>
-    private bool Select_Skill(db_skill_vo skill,int index)
+    private bool Select_Skill(db_skill_vo skill)
     {
         int mp = IsRelease(skill);
         if (mp == -1)
@@ -54,33 +54,11 @@ public class playerController : BaseBattleAttack
             Alert_Dec.Show("MP不足,释放" + skill.show_name + "失败");
             return false;
         }
+        int number = skill.EffectType == 2 ? skill.Effect : 1;
+        for (int i = 0; i < number; i++)
         StartCoroutine(On_Attack(skill, mp));
         skill_index++;
         return true;
-        //if (oneselfHealthState.Get_MP >= skill.Get_Mp)
-        //{
-        //    foreach (var item in data.data.buffList)
-        //    {
-        //        switch (item.Item1)
-        //        {
-        //            case enum_battle_pet_talent_list.任意门:
-        //                break;
-        //            case enum_battle_pet_talent_list.嗜血追击:
-        //                break;
-        //            case enum_battle_pet_talent_list.慧根:
-        //                mp = (int)(mp * (100 - item.Item3) / 100);
-        //                break;
-        //            default:
-        //                break;
-        //        }
-        //    }
-        //    oneselfHealthState.Set_Mp = mp;
-        //    StartCoroutine(On_Attack(skill));
-        //    skill_index++;
-        //    return true;
-        //}
-        //else Alert_Dec.Show("MP不足,释放" + skill.show_name + "失败");
-        //return false;
     }
 
     private int IsRelease(db_skill_vo skill)
@@ -139,7 +117,7 @@ public class playerController : BaseBattleAttack
     {
         int number = 1;
 #if UNITY_EDITOR
-        number = 30;
+        number = 10;
 #elif UNITY_ANDROID
 #elif UNITY_IPHONE
 #endif

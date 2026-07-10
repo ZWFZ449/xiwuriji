@@ -59,8 +59,13 @@ namespace MVC
         private float attack_speed = 0;
         private void Update()
         {
+            
             if (data != null)
             {
+                if (data.type == Battle_Game_Type.player)
+                { 
+                
+                }
                 if (Terget != null)//判断是否有怪物
                 {
                     if (Terget.isDead ||!Terget.gameObject.activeInHierarchy) Find_Terget();
@@ -92,6 +97,10 @@ namespace MVC
                 yield return new WaitForSeconds(0.05f);
                 if (Terget != null)
                 {
+                    if (data.type == Battle_Game_Type.player)
+                    {
+
+                    }
                     if (Vector3.Distance(Terget.transform.position, transform.position) < data.data.battle_range * 2) attack_speed += 5;
                     if (attack_speed >= data.data.battle_speed) { attack_speed = 0; OnAuto(); }
                 }
@@ -138,9 +147,6 @@ namespace MVC
                     //消失或者死亡
                     if (!monster.gameObject.activeInHierarchy || monster.isDead) continue;
                     monsterList.Add(monster);
-                    //int distance = (int)Vector3.Distance(monster.transform.position, transform.position);
-                    ////Debug.Log("距离"+distance);
-                    //if (Vector3.Distance(monster.transform.position, transform.position) < data.data.battle_range * 4) monsterList.Add(monster);
                 }
             }
             if (monsterList.Count > 0)
@@ -208,7 +214,6 @@ namespace MVC
                     base_icon.sprite = UI.UI_Manager.I.GetEquipSprite("monster/", data.crt_name);
                     break;
             }
-            //base_icon.sprite = UI.UI_Manager.I.GetEquipSprite("monster/", Random.Range(1,5));
             oneselfHealthState.Init(data.data.battle_maxhp, data.data.battle_maxmp, data.crt_name);
             StopAllCoroutines();
             StartCoroutine(timer());
@@ -232,6 +237,7 @@ namespace MVC
             if (Terget == null) return;
             BaseBattleAttack monster = Terget.GetComponent<BaseBattleAttack>();
             if (monster.oneselfHealthState.isDead) return;//结战斗
+            is_skill_probability = false;
             int battle_Damage = 0;//真实伤害
             Dictionary<int, db_skill_vo> skill_list = SumSave.crt_skill.Set_Current_skill();
             int skilldamage = 0;
@@ -322,7 +328,7 @@ namespace MVC
                     case enum_talent_offect_list.附加双防:
                         break;
                     case enum_talent_offect_list.附加伤害:
-                        skilldamage += skill.GetBuff[item1];
+                        battle_Damage += skill.GetBuff[item1];
                         break;
                     case enum_talent_offect_list.附加回血:
                         break;
@@ -366,9 +372,21 @@ namespace MVC
                         break;
                     case enum_talent_offect_list.弹道:
                         break;
+                    case enum_talent_offect_list.召唤数量:
+                        break;
+                    case enum_talent_offect_list.技能伤害:
+                        skilldamage += skill.GetBuff[item1];
+                        break;
+                    case enum_talent_offect_list.技能触发概率:
+                        break;
+                    case enum_talent_offect_list.溅射数量:
+                        break;
+                    case enum_talent_offect_list.爆炸伤害:
+                        break;
                 }
             }
-            float damage = Base_Damage(monster, skilldamage);
+            long damage = Base_Damage(monster, skilldamage);
+            if (skill_probability(skill)) damage = damage * 10;
             switch ((Skill_Effect_Type)skill.EffectType)
             {
                 case Skill_Effect_Type.单体:
@@ -440,6 +458,7 @@ namespace MVC
                             case enum_talent_offect_list.临时速度:
                                 break;
                             case enum_talent_offect_list.单体改群体:
+                            case enum_talent_offect_list.爆炸伤害:
                                 exist = false;
                                 Buff_rangeold(skill, monster, skilldamage * item1.Value / 100, battle_Damage * item1.Value / 100);
                                 break;
@@ -460,12 +479,22 @@ namespace MVC
                                 break;
                             case enum_talent_offect_list.弹道:
                                 break;
-                                default:
+                            case enum_talent_offect_list.召唤数量:
+                                break;
+                            case enum_talent_offect_list.技能伤害:
+                                break;
+                            case enum_talent_offect_list.技能触发概率:
+                                if (skill_probability(skill)) damage = damage * 10;
+                                break;
+                            case enum_talent_offect_list.溅射数量:
+                                Buff_range(skill, monster, skilldamage, battle_Damage, item1.Value, 50);
+                                break;
+                            default:
                                 break;
                         }
                     }
 
-                    if(exist) TakeDamage((int)damage, monster, battle_Damage);
+                    if (exist) TakeDamage(damage, monster, battle_Damage);
 
                     break;
                 case Skill_Effect_Type.群体:
@@ -476,11 +505,23 @@ namespace MVC
                         BaseBattleAttack base_monster = monsterList[i].gameObject.GetComponent<BaseBattleAttack>(); 
                         if (base_monster != null)
                         {
-                            int base_damage = Base_Damage(base_monster, skilldamage);
+                            long base_damage = Base_Damage(base_monster, skilldamage);
                             if (base_damage < 0) base_damage = 1;
                             TakeDamage(base_damage, base_monster, battle_Damage);
                         }
                     }
+                    foreach (var item1 in skill.GetBuff)
+                    {
+                        switch (item1.Key)
+                        {
+                            case enum_talent_offect_list.溅射数量:
+                                Buff_range(skill, monster, skilldamage, battle_Damage, item1.Value, 50);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
                     break;
                 case Skill_Effect_Type.回复:
                     List<BattleHealthState> player = FindTheTarget();
@@ -519,7 +560,7 @@ namespace MVC
                 BaseBattleAttack base_monster = monsterList[i].gameObject.GetComponent<BaseBattleAttack>();
                 if (base_monster != null)
                 {
-                    int base_damage = Base_Damage(base_monster, skilldamage);
+                    long base_damage = Base_Damage(base_monster, skilldamage);
                     if (base_damage < 0) base_damage = 1;
                     TakeDamage(base_damage, base_monster, battle_Damage);
                 }
@@ -534,11 +575,48 @@ namespace MVC
                 BaseBattleAttack base_monster = monsterList[i].gameObject.GetComponent<BaseBattleAttack>();
                 if (base_monster != null)
                 {
-                    int base_damage = Base_Damage(base_monster, skilldamage);
+                    long base_damage = Base_Damage(base_monster, skilldamage);
                     if (base_damage < 0) base_damage = 1;
                     TakeDamage(base_damage, base_monster, battle_Damage);
                 }
             }
+        }
+        private void Buff_range(db_skill_vo skill, BaseBattleAttack monster, int skilldamage, int battle_Damage, int number,int coefficient)
+        {
+
+            List<BattleHealthState> monsterList = FindTheTarget(skill, monster, true);
+            int max = Mathf.Min(monsterList.Count, number);
+            for (int i = 0; i < max; i++)
+            {
+                BaseBattleAttack base_monster = monsterList[i].gameObject.GetComponent<BaseBattleAttack>();
+                if (base_monster != null)
+                {
+                    long base_damage = Base_Damage(base_monster, skilldamage);
+                    base_damage= base_damage * coefficient / 100;
+                    if (skill_probability(skill)) base_damage = base_damage * 10;
+                    if (base_damage < 0) base_damage = 1;
+                    TakeDamage(base_damage, base_monster, battle_Damage);
+                }
+            }
+        }
+
+        private bool is_skill_probability = false;
+        /// <summary>
+        /// 技能概率
+        /// </summary>
+        /// <param name="skill"></param>
+        /// <returns></returns>
+        private bool skill_probability(db_skill_vo skill)
+        {
+            if (is_skill_probability) return false;
+            if (skill.probability == 0) return false;
+            if (Random.Range(0, 100) < skill.probability)
+            {
+                is_skill_probability = true;
+                return true;
+            }
+            return false;
+
         }
         /// <summary>
         /// 自动回复
@@ -629,7 +707,7 @@ namespace MVC
             AudioManager.Instance.playAudio(ClipEnum.攻击敌人);
             BaseBattleAttack monster = Terget.GetComponent<BaseBattleAttack>();
             if (monster.oneselfHealthState.isDead) return;//结战斗
-            int damage = Base_Damage(monster);
+            long damage = Base_Damage(monster);
             TakeDamage(damage, monster);
         }
         /// <summary>
@@ -638,7 +716,7 @@ namespace MVC
         /// <param name="damage"></param>
         /// <param name="monster"></param>
         /// /// <param name="battle_Damage">真实伤害</param>
-        private void TakeDamage(int damage, BaseBattleAttack monster, int battle_Damage=0)
+        private void TakeDamage(long damage, BaseBattleAttack monster, int battle_Damage=0)
         {
             if (iSnHit(monster))
             {
@@ -724,9 +802,9 @@ namespace MVC
                         {
                             if (Random.Range(0, 100) < item.Item2)
                             {
-                                int value = (int)(damage * item.Item3 / 100);
-                                value = (int)MathF.Max(1, value);
-                                monster.oneselfHealthState.TakeDamage((int)value, DamageEnum.普通伤害);
+                                long value = (long)(damage * item.Item3 / 100);
+                                value = (long)MathF.Max(1, value);
+                                monster.oneselfHealthState.TakeDamage(value, DamageEnum.普通伤害);
                             }
                         }
                         break;
@@ -736,9 +814,9 @@ namespace MVC
             }
         }
 
-        private int Base_Damage(BaseBattleAttack monster,int skilldamage=100)
+        private long Base_Damage(BaseBattleAttack monster,int skilldamage=100)
         {
-            int damage = 0;
+            long damage = 0;
             switch (data.type)
             {
                 case Battle_Game_Type.player:
@@ -761,9 +839,9 @@ namespace MVC
         /// <param name="type">类型</param>
         /// <param name="isBackstab">是否背刺</param>
         /// <returns></returns>
-        private int defense(BaseBattleAttack monster, Hero_Type type, int skilldamage = 100)
+        private long defense(BaseBattleAttack monster, Hero_Type type, int skilldamage = 100)
         {
-            int damage = 0;
+            long damage = 0;
             int def = 0;
             switch (type)
             {
@@ -807,6 +885,7 @@ namespace MVC
                     case enum_battle_pet_talent_list.华山斩:
                         if (Random.Range(0, 100) < item.Item2)
                         {
+                            is_skill_probability = true;
                             damage = (int)(damage * item.Item3);
                         }
                         break;

@@ -313,7 +313,8 @@ public static class Mysql_Read
         int scope = reader.GetInt32(reader.GetOrdinal("scope"));
         string needlvitem = reader.GetString(reader.GetOrdinal("up_need"));
         List<int> needlvitemlist = ArrayHelper.Get_Split<int>(needlvitem, ' ');
-        return new db_skill_vo(id, show_name, EffectType, Effect, spellvalues, Power, defpowers, skill_damages_list, skill_offect_value_list, Job, Delay, skill_up_lv, needlv, Weighted, MoveType, list,scope, needlvitemlist);
+        int probability = reader.GetInt32(reader.GetOrdinal("probability"));
+        return new db_skill_vo(id, show_name, EffectType, Effect, spellvalues, Power, defpowers, skill_damages_list, skill_offect_value_list, Job, Delay, skill_up_lv, needlv, Weighted, MoveType, list, scope, needlvitemlist, probability);
     }
 
     public static db_artifact_vo Read_artifact(MySqlDataReader mysqlReader)

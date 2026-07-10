@@ -193,8 +193,14 @@ namespace MVC
         }
         private void Read_Db_Player_Talent()
         {
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_player_talents);
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_player_talent);
+#if UNITY_EDITOR
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_player_talent); 
+#elif UNITY_ANDROID
 
+#elif UNITY_IPHONE
+            
+#endif
             SumSave.db_player_talents = new List<db_player_talent_vo>();
             if (mysqlReader.HasRows)
             {
@@ -592,7 +598,14 @@ namespace MVC
         /// </summary>
         private void Read_Db_Magic()
         {
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_magic);
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_magics);
+#if UNITY_EDITOR
+            //mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_magics);
+#elif UNITY_ANDROID
+
+#elif UNITY_IPHONE
+            
+#endif
             SumSave.db_skills = new List<db_skill_vo>();
             if (mysqlReader.HasRows)
             {

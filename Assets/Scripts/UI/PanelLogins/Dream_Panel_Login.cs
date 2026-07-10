@@ -73,7 +73,7 @@ public class Dream_Panel_Login : PanelBase
         {
             yield return new WaitForSeconds(1f);
             SendNotification(NotiList.Read_Instace);
-            Alert_Dec.Show("网络链接中断，请重试");
+            Alert_Dec.Show("网络链接中断,请重试");
         }
     }
     public override void Initialize()
@@ -115,7 +115,7 @@ public class Dream_Panel_Login : PanelBase
     {
         if (SumSave.db_pars == null)
         {
-            Alert_Dec.Show("网络链接中断，请重试");
+            Alert_Dec.Show("网络链接中断,请重试");
             return;
         }
         TheServerObg.gameObject.SetActive(true);

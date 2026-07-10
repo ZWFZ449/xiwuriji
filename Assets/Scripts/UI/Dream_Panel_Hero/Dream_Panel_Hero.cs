@@ -601,13 +601,51 @@ public class Dream_Panel_Hero : Panel_Base
             case enum_talent_offect_list.弹道:
                 if (data.correlation_skill == -1)
                 {
-                    dec += "[战斗效果]\n" + enum_talent_offect_list.弹道+" * "+ data.talent_offect_value[index];
+                    dec += "[战斗效果]\n" + enum_talent_offect_list.弹道 + " * " + data.talent_offect_value[index];
+                }
+                else
+                {
+
+                    skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+                    dec += "[战斗效果]\n" + "技能 " + Show_Color.Yellow(skill_name) + " " + enum_talent_offect_list.弹道 + " * " + data.talent_offect_value[index];
+                }
+                break;
+            case enum_talent_offect_list.技能伤害:
+                if (data.correlation_skill != -1)
+                {
+                    skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+                    dec += "[战斗效果]\n" + "技能 " + Show_Color.Yellow(skill_name) + " " + enum_talent_offect_list.技能伤害 + " + " + data.talent_offect_value[index] + "%";
+                }
+                break;
+            case enum_talent_offect_list.召唤数量:
+                if (data.correlation_skill == -1)
+                {
+                    dec += "[战斗效果]\n" + enum_talent_offect_list.召唤数量 + " + " + data.talent_offect_value[index];
                 }
                 else
                 {
                     skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
                     dec += "[战斗效果]\n" + "技能 " + Show_Color.Yellow(skill_name) + " " + enum_talent_offect_list.弹道 + " * " + data.talent_offect_value[index];
                 }
+                break;
+            case enum_talent_offect_list.技能触发概率:
+                if (data.correlation_skill != -1)
+                {
+                    skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+                    dec += "[战斗效果]\n" + "技能 " + Show_Color.Yellow(skill_name) + " 特效触发概率 "  + " + " + data.talent_offect_value[index] + "%";
+                }
+                break;
+            case enum_talent_offect_list.溅射数量:
+                if (data.correlation_skill != -1)
+                {
+                    skill_name = SumSave.db_skills.Find(x => x.id == data.correlation_skill).show_name;
+                    dec += "[战斗效果]\n" + "技能 " + Show_Color.Yellow(skill_name) + " " + enum_talent_offect_list.溅射数量 + " + " + data.talent_offect_value[index] + "";
+                }
+                break;
+            case enum_talent_offect_list.爆炸伤害:
+                dec += "[战斗效果]\n" + "技能 命中目标后 产生" + data.talent_offect_value[index] + "%" + enum_talent_offect_list.爆炸伤害 + "";
+                break;
+            default:
                 break;
         }
         return dec;
