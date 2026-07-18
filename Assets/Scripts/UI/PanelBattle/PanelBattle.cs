@@ -850,7 +850,7 @@ public class PanelBattle : PanelBase
                 Battle_Tool.Dream_Obtain_Unit(currency_unit.Boss积分, 1, Obtain_Int.Add_unit(1));
                 int value = 1;
                 db_vip vip = Tool_Battle.Obtain_Vip();
-                if (vip != null) if (vip.vip_lv >= 13) value = 2;
+                if (vip != null) { if (vip.vip_lv >= 12) value = 2; }
                 if (SumSave.map_Lv > 1) Battle_Tool.Dream_Obtain_Unit(currency_unit.转生积分, value, Obtain_Int.Add_unit(value));
                 AddSkill();
                 Close_BossSlider();

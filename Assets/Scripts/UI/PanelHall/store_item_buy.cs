@@ -33,6 +33,7 @@ public class store_item_buy : Base_Mono
     {
         int number= int.Parse(inputField.text);
         if (number <= 0) return;
+        if (number >= 9999) number = 9999;
         if (buy_title.ItemMaxQuantity != -1)
         { 
             int maxnumber = SumSave.crt_signin.GetIsValue(buy_title.ItemName);
@@ -131,7 +132,7 @@ public class store_item_buy : Base_Mono
         if (title.ItemMaxQuantity != -1)
         { 
             buy_text.text += "\n购买数量: " + title.ItemMaxQuantity;
-        }
+        }else buy_text.text += "\n单次购买最大数量:9999";
 
 
     }

@@ -686,6 +686,7 @@ public class Dream_Panel_Hero : Panel_Base
                 return;
             }
         }
+
         else
         {
             if (lv >= data.ralent_need_uplv_value.Count)
