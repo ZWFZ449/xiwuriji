@@ -67,8 +67,27 @@ public class map_show_offect : Base_Mono
             }
             else
             {
-                Alert_Dec.Show("今日进入次数已满");
-                return;
+                if (Tool_Battle.IsBuff(common_Buff.月卡))
+                {
+                    if (crt_map.GetMap().map_type == 2 || crt_map.GetMap().map_type == 3)
+                    {
+                        if (SumSave.crt_signin.GetIsValue(crt_map.GetMap().map_name) == 1)
+                        {
+                            SumSave.crt_signin.SetIsValue(crt_map.GetMap().map_name, 2);
+                        }
+                        else
+                        {
+                            Alert_Dec.Show("今日进入次数已满");
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    Alert_Dec.Show("今日进入次数已满");
+                    return;
+                }
+               
             }
         }
         else

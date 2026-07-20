@@ -485,6 +485,7 @@ public class hero_equip_item : Base_Mono
                 c = GameColors.Legendary;
                 Get().Init(("[幸运] + " + (lucky - 1)), c);
             }
+            int refined_number = 0;
             if (info.Length >= 5)
             {
                 //类型
@@ -601,6 +602,10 @@ public class hero_equip_item : Base_Mono
                                     case enum_equip_entry_list.瑶光文:
                                         itemValue.Init((enum_equip_basetype_list)i, e, "Lv." + value, c);
                                         break;
+                                    case enum_equip_entry_list.洗炼次数:
+                                        itemValue.gameObject.SetActive(false);
+                                        refined_number = value;
+                                        break;
                                     default:
                                         if ((int)e >= 1000)//附加技能
                                         {
@@ -613,11 +618,13 @@ public class hero_equip_item : Base_Mono
                                             }
                                             else
                                             {
-                                                string skill_name = "";
-                                                skill_name = ArrayHelper.Find(SumSave.db_skills, x => x.id == (((int)e) - 1000)).show_name;
-                                                itemValue.Init(skill_name, value);
+                                                if (e != enum_equip_entry_list.洗炼次数)
+                                                {
+                                                    string skill_name = "";
+                                                    skill_name = ArrayHelper.Find(SumSave.db_skills, x => x.id == (((int)e) - 1000)).show_name;
+                                                    itemValue.Init(skill_name, value);
+                                                }
                                             }
-                                           
                                         }
                                         break;
                                 }
@@ -627,6 +634,15 @@ public class hero_equip_item : Base_Mono
 
                     }
                 }
+
+                if (quilty >= 7)
+                {
+                    refined_number = 5 - refined_number;
+                    if (refined_number <= 0) refined_number = 0;
+                    c = HexToColor("#FFFFFF");
+                    Get().Init(("[可洗炼次数+ " + (refined_number)+ "]"), c);
+                }
+                //宝石
                 if (info.Length >= 6)
                 {
                     c= GameColors.PhysicalDamage;
@@ -662,6 +678,7 @@ public class hero_equip_item : Base_Mono
                         }
                     }
                 }
+                //皇权
                 if (talents.Count > 0)
                 {
                     c = HexToColor("#fa5151");
@@ -672,6 +689,7 @@ public class hero_equip_item : Base_Mono
                     }
                 }
             }
+          
         }
         if (data.Data.suit > 0)
         {

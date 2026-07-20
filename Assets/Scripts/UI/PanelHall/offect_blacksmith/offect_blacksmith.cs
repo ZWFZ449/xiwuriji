@@ -21,6 +21,7 @@ public class offect_blacksmith : Base_Mono
     幸运转移,
     洗炼装备,
     升级装备,
+    洗炼弹道,
     }
 
     private TMP_Text info, need_info;
@@ -117,7 +118,7 @@ public class offect_blacksmith : Base_Mono
                         Update_Info(true);
                         SelectBagluckyItem(crt_bag);
                     }
-                    else Alert_Dec.Show("资源不足"); 
+                    else Alert_Dec.Show("资源不足");
                 }
                 else
                 {
@@ -141,7 +142,7 @@ public class offect_blacksmith : Base_Mono
                     {
                         Need_Condition(common_items_list.金条, 10);
                     }
-                   
+
                 }
                 if (crt_bag.need_lv > 60)
                 {
@@ -156,21 +157,92 @@ public class offect_blacksmith : Base_Mono
                     Update_Info(true);
                     SelectBagItem(crt_bag);
                     Game_Omphalos.i.archive();
-                }else Alert_Dec.Show("资源不足");
+                }
+                else Alert_Dec.Show("资源不足");
                 break;
             case blacksmith_type.升级装备:
                 Need_Condition(common_items_list.皇级碎片, 100);
                 Need_Condition(currency_unit.元宝, 10000);
                 if (Return_Condition())
-                { 
+                {
                     Upgrade_Equip();
                     Update_Info(true);
                     SelectBagItem(crt_bag);
                     Game_Omphalos.i.archive();
                 }
                 break;
+            case blacksmith_type.洗炼弹道:
+                Need_Condition(currency_unit.元宝, 2000);
+                Need_Condition(currency_unit.Boss积分, 2000);
+                if (Return_Condition())
+                {
+                    int refined_num = Switch_Refined_Equip();
+                    Update_Info(true);
+                    SelectBagItem(crt_bag);
+                    Game_Omphalos.i.archive();
+                    if (refined_num >= 5) crt_bag = null;
+                }
+                break;
+            default:
+                break;
         }
     }
+    /// <summary>
+    /// 洗炼弹道
+    /// </summary>
+    private int Switch_Refined_Equip()
+    {
+        string[] info = crt_bag.user_value.Split(' ');
+        string user_value = Tool_Battle.Obtain_Equip(crt_bag, 1, 7);
+        string[] user_values = user_value.Split(' ');
+        string[] info_list = info[4].Split('X');
+        string[] user_value_list = user_values[4].Split('X');
+        string result = "";
+        int refined_num = 0;
+        for (int i = 0; i < info_list.Length; i++)
+        {
+            result += (result == "" ? "" : "X");
+            string[] entry = info_list[i].Split('|');
+            for (int j = 0; j < entry.Length; j++)
+            {
+                string[] entry_arr = entry[j].Split(',');
+                if (entry_arr.Length > 1)
+                {
+                    if (int.Parse(entry_arr[0]) >= 1000 && int.Parse(entry_arr[0]) < 2000)
+                    {
+                        if (int.Parse(entry_arr[0]) == (int)enum_equip_entry_list.洗炼次数)
+                        { 
+                            refined_num = int.Parse(entry_arr[1]);
+                        }
+                    }
+                    else result += (result == "" ? "" : "|") + entry[j];
+                }
+            }
+        }
+        //更新弹道
+        for (int i = 0; i < user_value_list.Length; i++)
+        {
+            string[] entry = user_value_list[i].Split('|');
+            for (int j = 0; j < entry.Length; j++)
+            {
+                string[] entry_arr = entry[j].Split(',');
+                if (entry_arr.Length > 1)
+                {
+                    if (int.Parse(entry_arr[0]) >= 1000 && int.Parse(entry_arr[0]) < 2000)
+                    {
+                        result += (result == "" ? "" : "|") + entry[j];
+                    }
+                }
+            }
+        }
+        refined_num++;
+        result += (result == "" ? "" : "|") + ((int)enum_equip_entry_list.洗炼次数) + "," + (refined_num);
+        info[4] = result;
+        crt_bag.user_value = Battle_Tool.Equip_User_Value(info);
+        Alert_Dec.Show("装备弹道洗炼成功");
+        return refined_num;
+    }
+
     private void Upgrade_Equip()
     {
         string[] info = crt_bag.user_value.Split(' ');
@@ -424,7 +496,7 @@ public class offect_blacksmith : Base_Mono
             case blacksmith_type.升级装备:
                 for (int i = 0; i < baglist.Count; i++)
                 {
-                    if (baglist[i].need_lv >= 30) 
+                    if (baglist[i].need_lv >= 30)
                     {
                         if (baglist[i].user_value != null)
                         {
@@ -474,11 +546,11 @@ public class offect_blacksmith : Base_Mono
             case blacksmith_type.幸运转移:
                 need_info.text = "幸运转移消耗2000元宝";
                 List<Bag_Base_VO> equips = SumSave.crt_equips.Get(Dream_User_Equip_Type.装备);
-                for (int i= 0; i < equips.Count; i++)
+                for (int i = 0; i < equips.Count; i++)
                 {
                     if (equips[i].StdMode == equip_type_list.武器.ToString())
                     {
-                        for (int j= 0; j < baglist.Count; j++) 
+                        for (int j = 0; j < baglist.Count; j++)
                         {
                             if (baglist[j].StdMode == equips[i].StdMode && baglist[j].need_lv == equips[i].need_lv)
                             {
@@ -500,8 +572,62 @@ public class offect_blacksmith : Base_Mono
                 }
                 Alert_Dec.Show("当前没有可以幸运转移的装备");
                 break;
+            case blacksmith_type.洗炼弹道:
+                need_info.text = "弹道洗炼消耗" + 2000 + currency_unit.元宝 + 2000 + currency_unit.Boss积分;
+                for (int i = 0; i < baglist.Count; i++)
+                {
+                    if (baglist[i].need_lv >= 30)
+                    {
+                        if (baglist[i].user_value != null)
+                        {
+                            string[] info = baglist[i].user_value.Split(' ');
+                            int lv = int.Parse(info[2]);
+                            if (lv >= 7)
+                            {
+                                if (Is_refined(info))
+                                {
+                                    dream_BagItem bagItem = Instantiate(dream_BagItem_prefab, m_bags_brom);
+                                    bagItem.Data = baglist[i];
+                                    bagItem.GetComponent<Button>().onClick.AddListener(() => SelectBagItem(bagItem.Data));
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
         }
-    } 
+    }
+
+    private bool Is_refined(string[] info)
+    {
+        string[] arr2 = info[4].Split('X');
+        List<equip_show_info_item> talents = new List<equip_show_info_item>();
+        for (int i = 0; i < arr2.Length; i++)
+        {
+            if (arr2[i].Length > 0)
+            {
+                string[] entry = arr2[i].Split('|');
+                for (int j = 0; j < entry.Length; j++)
+                {
+                    string[] entry_arr = entry[j].Split(',');
+                    if (entry_arr.Length > 1)
+                    {
+                        enum_equip_entry_list e = (enum_equip_entry_list)int.Parse(entry_arr[0]);
+                        int value = int.Parse(entry_arr[1]);
+                        switch (e)
+                        {
+                            case enum_equip_entry_list.洗炼次数:
+                                if (value >= 5) return false;
+                                else return true;
+                        }
+
+                    }
+                }
+
+            }
+        }
+        return true;
+    }
     /// <summary>
     /// 幸运转移
     /// </summary>
@@ -604,7 +730,7 @@ public class offect_blacksmith : Base_Mono
                                     }
                                     else
                                     {
-                                       
+
                                     }
                                 }
                             }
@@ -630,19 +756,25 @@ public class offect_blacksmith : Base_Mono
 
                     }
                     if (crt_bag.need_lv > 60)
-                    { 
+                    {
                         need_info.text += common_items_list.洗练符 + " * 1\n";
                         need_info.text += currency_unit.转生积分 + " * 100\n";
-                    }else
-                    need_info.text += currency_unit.Boss积分 + " *  100";
+                    }
+                    else
+                        need_info.text += currency_unit.Boss积分 + " *  100";
                     break;
                 case blacksmith_type.升级装备:
                     need_info.text = "需求";
                     need_info.text += common_items_list.皇级碎片 + " * 100\n";
                     need_info.text += currency_unit.元宝 + " *  10000";
                     break;
+
+                    break;
+                case blacksmith_type.洗炼弹道:
+                    need_info.text = currency_unit.元宝 + " *  2000\n";
+                    need_info.text += currency_unit.Boss积分 + " *  2000";
+                    break;
             }
-           
         }
     }
 

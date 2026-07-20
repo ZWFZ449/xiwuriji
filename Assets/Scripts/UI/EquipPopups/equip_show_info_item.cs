@@ -70,6 +70,7 @@ public enum enum_equip_entry_list
     极品爆率=8,
     经验加成=9,
     金币掉落=6,
+    洗炼次数=1888,
 
 }
 public enum medicine_type

@@ -421,7 +421,13 @@ public class PanelBattle : PanelBase
         open_crate_monster = true;
         if (crt_map.map_type != 0)// && limited_time <= 0
         {
-            limited_time = 60f;//限时地图
+            db_vip vip = Tool_Battle.Obtain_Vip();
+            float time = 60;
+            if (vip != null)
+            {
+                time += vip.offlineInterval;
+            }
+            limited_time = time;//限时地图
         }
         map_crate_boss_condition = 0;
         boss_slider.gameObject.SetActive(false);
@@ -682,6 +688,7 @@ public class PanelBattle : PanelBase
         crtMaxBattleVO monster = ArrayHelper.Find(SumSave.db_monsters, e => e.crt_name == value);
         return monster;
     }
+
     /// <summary>
     /// 清除怪物
     /// </summary>
@@ -750,6 +757,7 @@ public class PanelBattle : PanelBase
         } 
         else Debug.Log("丢失脚本");
     }
+
     /// <summary> 
     /// 首次击杀后写入可以召唤列表
     /// </summary>
@@ -762,6 +770,7 @@ public class PanelBattle : PanelBase
             SumSave.crt_setting.MysqlData();
         }
     }
+
     /// <summary>
     /// 获取额外收益
     /// </summary>
@@ -784,11 +793,32 @@ public class PanelBattle : PanelBase
     private void gameover()
     {
         if (crt_map.map_type != 0)
-        { 
+        {
+            exp_copy();
             Alert.Show("战斗失败", "请重新选择战斗地图");
         }
         else
         StartCoroutine(Game_InitMap(5));
+    }
+
+    /// <summary>
+    /// 经验副本
+    /// </summary>
+    private void exp_copy()
+    {
+        if (crt_map.map_name == "经验副本")
+        {
+            if (SumSave.crt_signin.GetIsValue(crt_map.map_name) == 1)
+            {
+                int value = 5;//最低获得5%的经验
+                value += kill_monster / (SumSave.crtHero.zs_lvs * 50);
+                if (value >= 15) value = 15;
+                long values = (long)(SumSave.db_lvs[SumSave.crtMaxBattle.lv + ((SumSave.crtHero.zs_lvs - 1) * 5)].exp);
+                long exp = (long)(values * value / 100);
+                Add_Exp(exp);
+                Alert.Show("经验副本", "获得经验值" + Battle_Tool.FormatNumberToChineseUnit(exp));
+            }
+        }
     }
     /// <summary>
     /// 战斗失败
@@ -911,7 +941,7 @@ public class PanelBattle : PanelBase
     /// 增加经验
     /// </summary>
     /// <param name="exp"></param>
-    private void Add_Exp(int exp)
+    private void Add_Exp(long exp)
     {
         Battle_Tool.Obtain_Exp(exp);
         Show_Exp();
@@ -1150,7 +1180,8 @@ public class PanelBattle : PanelBase
             if (limited_time <= 0)
             {
                 open_crate_monster = false;
-                 Alert.Show(crt_map.map_name,crt_map.map_name+"地图已关闭,请切换地图");
+                exp_copy();
+                Alert.Show(crt_map.map_name,crt_map.map_name+"地图已关闭,请切换地图");
             }
         }
         if (open_crate_monster)
