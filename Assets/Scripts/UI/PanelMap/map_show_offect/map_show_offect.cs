@@ -81,6 +81,11 @@ public class map_show_offect : Base_Mono
                             return;
                         }
                     }
+                    else
+                    {
+                        Alert_Dec.Show("今日进入次数已满");
+                        return;
+                    }
                 }
                 else
                 {

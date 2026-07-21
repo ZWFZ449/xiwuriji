@@ -116,6 +116,7 @@ public class offect_signin : Base_Mono
         dec += Colorize(enum_equip_entry_list.金币掉落 + "+20%\n", c);
         dec += Colorize(enum_equip_entry_list.经验加成 + "+20%\n", c);
         dec += Colorize(enum_equip_entry_list.怪物爆率 + "+5%\n", c);
+        dec += Colorize("副本次数增加\n", c);
         dec += Colorize("Boss刷新时间" + "-5%\n", c);
         dec += Colorize("提前查阅物品掉落属性\n", c);
         if (crt_vip != null)

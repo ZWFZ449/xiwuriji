@@ -811,7 +811,7 @@ public class PanelBattle : PanelBase
             if (SumSave.crt_signin.GetIsValue(crt_map.map_name) == 1)
             {
                 int value = 5;//最低获得5%的经验
-                value += kill_monster / (SumSave.crtHero.zs_lvs * 50);
+                value += kill_monster * SumSave.map_Lv / (SumSave.crtHero.zs_lvs * 50);
                 if (value >= 15) value = 15;
                 long values = (long)(SumSave.db_lvs[SumSave.crtMaxBattle.lv + ((SumSave.crtHero.zs_lvs - 1) * 5)].exp);
                 long exp = (long)(values * value / 100);
