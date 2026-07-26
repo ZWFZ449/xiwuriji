@@ -748,6 +748,10 @@ namespace MVC
                         if (Random.Range(0, 100) < item.Item2)
                         {
                             int value = (int)(damage * item.Item3 / 100);
+                            if (item.Item2 == 150)
+                            {
+                                value = (int)item.Item3;
+                            }
                             value = (int)MathF.Max(1, value);
                             oneselfHealthState.TakeDamage(value, DamageEnum.普通伤害);
                         }

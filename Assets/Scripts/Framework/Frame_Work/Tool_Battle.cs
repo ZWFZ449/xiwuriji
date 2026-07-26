@@ -749,7 +749,7 @@ public static class Tool_Battle
                 }
             }
         }
-
+        bool is_wuji = false;
         foreach (var item in skill_list)
         {
             int skill_lv = item.Value.SetLv(); 
@@ -775,9 +775,10 @@ public static class Tool_Battle
                         else
                         if (item.Value.Effect == 3)//道术系数
                         {
+                            is_wuji = true;
                             battle_sc += item.Value.Power + item.Value.DefPowers[skill_lv];
                         }
-                        if (item.Value.skill_damages.Count>0) battle_def+= item.Value.skill_damages[skill_lv];
+                        if (item.Value.skill_damages.Count > 0) battle_def += item.Value.skill_damages[skill_lv];
                         break;
                 }
 
@@ -1302,6 +1303,11 @@ public static class Tool_Battle
         sc2 = sc2 * (100 + battle_sc) / 100;
         mc = mc * (100 + battle_mc) / 100;
         mc2 = mc2 * (100 + battle_mc) / 100;
+        if (is_wuji)
+        {
+            (enum_battle_pet_talent_list, float, float) D = (enum_battle_pet_talent_list.反弹, 150, sc2);
+            talentList.Add(D);
+        }
         crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus, boss_cd);
         crt.crt_name = SumSave.crtHero.hero_name;
         crt.lv = SumSave.crtHero.lv;
@@ -1342,6 +1348,7 @@ public static class Tool_Battle
             battle_speed = Mathf.Max(50, battle_speed);
         }
         crit = Mathf.Min(80, crit);
+        
 
 #if UNITY_EDITOR
         lucky = 9;

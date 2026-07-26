@@ -275,7 +275,7 @@ public class Dream_Panel_Login : PanelBase
         List<string> keys = new List<string>(SumSave.crt_setting.Boss_list.Keys);
         if (crt_vip != null)
         {
-            moeny = spanSeconds * (100 + crt_vip.characterExperience) / 100;
+            moeny = moeny * (100 + crt_vip.characterExperience) / 100;
             for (int i = 0; i < keys.Count; i++)
             {
                 string key = keys[i];
@@ -298,25 +298,6 @@ public class Dream_Panel_Login : PanelBase
                         (val.Item1 + number, val.Item2);
                 }
             }
-            //for (int i = 0; i < SumSave.crt_setting.battle_Boss_list.Count; i++)
-            //{
-            //    (string, int) boss = SumSave.crt_setting.battle_Boss_list[i];
-            //    List<string> list = ArrayHelper.Get_Split<string>(boss.Item1, '+');
-            //    if (list.Count == 2)
-            //    {
-            //        (int,int, string) bossid = Tool_Battle.GetBossTime(list[0]);
-            //        if (bossid.Item3 == "no" || bossid.Item1 != 0) continue;
-            //        int base_time = bossid.Item2 * (100 - crt_vip.monsterHuntingInterval - (Tool_Battle.IsBuff(common_Buff.月卡) ? 5 : 0)) / 100;
-            //        if (base_time <= 0) base_time = 999999999;
-            //        int number = spanSeconds / base_time;
-            //        if (number > 0)
-            //        {
-            //            dec += "离线获得 " + list[0] + " * " + number + "\n";
-            //            SumSave.crt_setting.battle_Boss_list[i] = (list[0] + "+" + (int.Parse(list[1]) + number),
-            //                         boss.Item2);
-            //        }
-            //    }
-            //}
         }
         else
         {
