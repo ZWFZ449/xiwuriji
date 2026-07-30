@@ -72,8 +72,8 @@ public class BattleHealthState : Base_Mono
     public void Init(long _maxHP, int _maxMP,string _base_name)
     {
         is_Dead = true;
-        maxHP = _maxHP + 1;
-        maxMP = _maxMP + 1;
+        maxHP = _maxHP;
+        maxMP = _maxMP;
         CurrentHP = maxHP;
         CurrentMP = maxMP;
         base_name = _base_name;

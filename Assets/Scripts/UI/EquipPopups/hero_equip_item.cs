@@ -96,8 +96,7 @@ public class hero_equip_item : Base_Mono
         Init_btn(btn_list);
         int lv = 1;// int.Parse(data.Data.user_value.Split(' ')[2]);
         if(data.Data.user_value != null)lv= int.Parse(data.Data.user_value.Split(' ')[2]);
-        title_name.text = "[" + (enum_equip_quality_list)(lv) + "]" + data.Data.Name;
-        //title_name.color = Show_Color.Set_Color((Color_list)lv);
+        title_name.text = "[" + (enum_equip_quality_list)(lv) + "]" + data.Data.show_name;
         show_base_need.text = "装备类型 " + data.Data.StdMode + "\n职业限定 " + (equip_job)data.Data.job + "\n需要等级 " + data.Data.need_lv;
         baseInfo();
     }

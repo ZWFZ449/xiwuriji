@@ -99,10 +99,6 @@ namespace MVC
                         Instantiate(Resources.Load<GameObject>("UI/frame/frame/" + lv), item_frame.transform);
                         if (info_str.Length >= 6)
                         {
-                            //RectTransform rectTransform = GetComponent<RectTransform>();
-                            //float width = rectTransform.rect.width;
-                            //Debug.Log("width:" + width);
-                            //gridLayoutGroup.cellSize = new Vector2(width / 3, width / 3);
                             List<string> gem = ArrayHelper.Get_Split<string>(info_str[5], 'X');
                             for (int i = 0; i < gem.Count; i++)
                             {

@@ -1377,9 +1377,9 @@ public static class Tool_Battle
         //verification_illustrateds(illustrated_list, crt);
 #elif UNITY_ANDROID
         //验证图鉴
-        verification_illustrateds(illustrated_list, crt);           
+        //verification_illustrateds(illustrated_list, crt);           
 #elif UNITY_IPHONE
-        verification_illustrateds(illustrated_list, crt);       
+        //verification_illustrateds(illustrated_list, crt);       
 #endif
         return crt;
     }
@@ -1403,7 +1403,6 @@ public static class Tool_Battle
                 }
             }
         }
-        //Debug.Log("验证图鉴 " + exp);
         int lv = 1;
         while (exp >= SumSave.db_lvs[lv].exp)
         {
@@ -1499,6 +1498,133 @@ public static class Tool_Battle
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky, damage_reduction, magic_damage_reduction, monster.data.move_speed);
         return crt;
     }
+
+    public static crtMaxBattleVO Crate_MaxMonster(crtMaxBattleVO monster,int number)
+    {
+        int exp_bonus = 0, gold_bonus = 0, drop_bonus = 0, quality_bonus = 0;
+        long maxhp = 0, maxmp = 0;
+        int battle_hp = 0, battle_mp = 0, battle_ac = 0, battle_mac = 0, battle_dc = 0, battle_sc = 0, battle_mc = 0, battle_speed = 0, battle_range = 0, battle_Damage = 0, battle_def = 0;
+        long hp = 0, mp = 0;
+        int dc = 0, dc2 = 0, mac = 0, mac2 = 0, ac = 0, ac2 = 0, sc = 0, sc2 = 0, mc = 0, mc2 = 0;
+        int hit = 0, dodge = 0, crit = 0, critDmg = 100;
+        int hpRegen = 0, mpRegen = 0;
+        int lucky = 0, damage_reduction = 0, magic_damage_reduction = 0;
+        List<(enum_battle_pet_talent_list, float, float)> talentList = new List<(enum_battle_pet_talent_list, float, float)>();
+        maxhp = 10000 * (number / 10 + 1);
+        maxmp = 10000;
+        hp = maxhp;
+        mp = maxmp;
+        bool isType = number % 2 == 0;//物理魔法
+        if (isType)
+        {
+            ac = 100 * (number / 10 + 1);
+            ac2 = 200 * (number / 10 + 1);
+            dc = 50 * (number / 10 + 1);
+            dc2 = 100 * (number / 10 + 1);
+        }
+        else
+        { 
+            mac = 100 * (number / 10 + 1);
+            mac2 = 200 * (number / 10 + 1);
+            mc = 50 * (number / 10 + 1);
+            mc2 = 100 * (number / 10 + 1);
+        }
+        hit = 100 + (number / 10 + 1);
+        dodge = 10 + (number / 50);
+        crit = 10 + (number / 100);
+        critDmg = 200 + (number / 10);
+        hpRegen = (int)(maxhp / 10);
+        if(hpRegen<0) hpRegen = 10000;
+        mpRegen = 10000;
+        battle_hp = 0;
+        battle_mp = 0;
+        battle_ac = 0;
+        battle_mac = 0;
+        battle_dc = 0;
+        battle_sc = 0;
+        battle_mc = 0;
+        battle_speed = 50-(number / 30);
+        if (battle_speed <= 10) battle_speed = 10;
+        battle_range = Random.Range(200, 600);
+        battle_Damage = 50 + number/10;//真实伤害
+        battle_def = monster.data.battle_def;
+        damage_reduction = 0;
+        magic_damage_reduction = 0;
+        crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus, 0);
+        crt.crt_name = monster.crt_name;
+        crt.lv = monster.lv;
+        crt.exp = monster.exp;
+        crt.hero_type = isType ? Hero_Type.战士 : Hero_Type.法师;
+        crt.type = monster.type;
+        //maxhp = 1; hp = 1; maxmp = 1; mp = 1; //测试
+        crt.data = new FinalBattleValueVO(maxhp, (int)maxmp, hp, (int)mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
+            mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky, damage_reduction, magic_damage_reduction, monster.data.move_speed);
+        return crt;
+    }
+
+    public static crtMaxBattleVO Crate_MaxBossMonster(crtMaxBattleVO monster, int number)
+    {
+        int exp_bonus = 0, gold_bonus = 0, drop_bonus = 0, quality_bonus = 0;
+        long maxhp = 0, maxmp = 0;
+        int battle_hp = 0, battle_mp = 0, battle_ac = 0, battle_mac = 0, battle_dc = 0, battle_sc = 0, battle_mc = 0, battle_speed = 0, battle_range = 0, battle_Damage = 0, battle_def = 0;
+        long hp = 0, mp = 0;
+        int dc = 0, dc2 = 0, mac = 0, mac2 = 0, ac = 0, ac2 = 0, sc = 0, sc2 = 0, mc = 0, mc2 = 0;
+        int hit = 0, dodge = 0, crit = 0, critDmg = 100;
+        int hpRegen = 0, mpRegen = 0;
+        int lucky = 0, damage_reduction = 0, magic_damage_reduction = 0;
+        List<(enum_battle_pet_talent_list, float, float)> talentList = new List<(enum_battle_pet_talent_list, float, float)>();
+        maxhp = 1000000 + (number * 500000);
+        maxmp = 10000;
+        hp = maxhp;
+        mp = maxmp;
+        bool isType = number % 2 == 0;//物理魔法
+        if (isType)
+        {
+            ac = 300 + (number * 30);
+            ac2 = 600 + (number * 60);
+            dc = 400 + (number * 40);
+            dc2 = 500 + (number * 50);
+        }
+        else
+        {
+            mac = 300 + (number * 30);
+            mac2 = 600 + (number * 60);
+            mc = 400 + (number * 40);
+            mc2 = 500 + (number * 50);
+        }
+        hit = 100 + number;
+        dodge = 30 + (number / 2);
+        crit = 30 + (number / 5);
+        critDmg = 300 + (number * 2);
+        hpRegen = (int)(maxhp / 10);
+        if (hpRegen < 0) hpRegen = 10000;
+        mpRegen = 10000;
+        battle_hp = 0;
+        battle_mp = 0;
+        battle_ac = 0;
+        battle_mac = 0;
+        battle_dc = 0;
+        battle_sc = 0;
+        battle_mc = 0;
+        battle_speed = 30 - (number * 2);
+        if (battle_speed <= 5) battle_speed = 5;
+        battle_range = Random.Range(200, 600);
+        battle_Damage = 50 + number / 10;//真实伤害
+        battle_def = monster.data.battle_def;
+        damage_reduction = 0;
+        magic_damage_reduction = 0;
+        crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus, 0);
+        crt.crt_name = monster.crt_name;
+        crt.lv = monster.lv;
+        crt.exp = monster.exp;
+        crt.hero_type = isType ? Hero_Type.战士 : Hero_Type.法师;
+        crt.type = monster.type;
+        //maxhp = 1; hp = 1; maxmp = 1; mp = 1; //测试
+        crt.data = new FinalBattleValueVO(maxhp, (int)maxmp, hp, (int)mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
+            mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky, damage_reduction, magic_damage_reduction, monster.data.move_speed);
+        return crt;
+    }
+
 
     public static string show_Talent(pet_talent_item item)
     {
@@ -1796,8 +1922,6 @@ public static class Tool_Battle
         int hpRegen = 0, mpRegen = 0;
         int lucky = 0, damage_reduction = 0, magic_damage_reduction = 0;
         List<(enum_battle_pet_talent_list, float, float)> talentList = new List<(enum_battle_pet_talent_list, float, float)>();
-        //str += "召唤 " + Show_Color.Set_String(crt_skill.show_name, color_list) + "\n继承" + Show_Color.Set_String((crt_skill.Power + crt_skill.DefPowers[i]) + " %属性" + " ", color_list);
-        //if (crt_skill.skill_damages.Count > 0) str += "[召唤兽伤害] " + Show_Color.Set_String(crt_skill.skill_damages[i], color_list) + ";";
         int lv = Mathf.Min(skill.DefPowers.Count - 1, skill.SetLv());
         int power = (skill.Power + skill.DefPowers[lv]);
         maxhp = (int)SumSave.crtMaxBattle.data.battle_maxhp * (power) / 100;

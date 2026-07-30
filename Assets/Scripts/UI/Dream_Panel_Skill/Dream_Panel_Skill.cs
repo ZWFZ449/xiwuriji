@@ -319,6 +319,7 @@ public class Dream_Panel_Skill : Panel_Base
             {
                 case Skill_Type.职业技能:
                     if ((SumSave.db_skills[i].Job == SumSave.crtHero.job || SumSave.crtHero.job == 0) && SumSave.db_skills[i].Job != -1) exist = true;
+                    if (SumSave.db_skills[i].id >= 30 && SumSave.crtHero.zs_lvs <= 1) exist = false;
                     break;
                 case Skill_Type.被动技能:
                     if (SumSave.db_skills[i].Job == -1) exist = true;

@@ -400,7 +400,7 @@ public class show_drop_list : Base_Mono
         bool exist = false;
         if (SumSave.crt_bags.Get_Bag_List().Count >= SumSave.crt_bags.Get_Page)
         {
-            dic.Add("获取 "  + data.Name + " 失败,背包已满;");
+            dic.Add("获取 "  + data.show_name + " 失败,背包已满;");
             return false;
         }
         if (data.StdMode == Stditem_StdMode_List.项链.ToString())
@@ -412,7 +412,7 @@ public class show_drop_list : Base_Mono
                 lucky = int.Parse(infos[1]);
                 if (lucky > 1)
                 {
-                    dic.Add(Show_Color.Red("获取 " + (enum_equip_quality_list)(int.Parse(infos[2])) + " " + data.Name + ""));
+                    dic.Add(Show_Color.Red("获取 " + (enum_equip_quality_list)(int.Parse(infos[2])) + " " + data.show_name + ""));
                     return true;
                 }
             }
@@ -450,7 +450,7 @@ public class show_drop_list : Base_Mono
             //Game_Omphalos.global_battle_info("击杀 " + monster_name + " 获得 " + (enum_equip_quality_list)lv + " " + data.Name, data);
             if (lv >= 6)//上传公共消息
             {
-                Game_Omphalos.global_battle_info("击杀 " + monster_name + " 获得 " + (enum_equip_quality_list)lv + " " + data.Name, data);
+                Game_Omphalos.global_battle_info("击杀 " + monster_name + " 获得 " + (enum_equip_quality_list)lv + " " + data.show_name, data);
             }
             foreach (var item in SumSave.crt_setting.battle_base_list)
             {
@@ -459,7 +459,7 @@ public class show_drop_list : Base_Mono
                     if (data.need_lv >= item.Item2)
                     {
                         exist = true;
-                        dic.Add("获得 " + (enum_equip_quality_list)lv + " " + data.Name );
+                        dic.Add("获得 " + (enum_equip_quality_list)lv + " " + data.show_name);
                         return exist;
                     }
                     else
@@ -480,13 +480,13 @@ public class show_drop_list : Base_Mono
         int lv = 1;
         if (info_str.Length > 2) lv = int.Parse(info_str[2]);
         moeny = moeny * lv / Enum.GetValues(typeof(enum_equip_quality_list)).Cast<int>().Max();
-        dic.Add( (exist?"职业回收" :"回收 ") + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.金币 + " * " + moeny);
+        dic.Add( (exist?"职业回收" :"回收 ") + (enum_equip_quality_list)lv + data.show_name + " 获得 " + currency_unit.金币 + " * " + moeny);
         Battle_Tool.Dream_Obtain_Unit(currency_unit.金币, moeny, Obtain_Int.Add_unit(moeny));
         if (lv >= 5)
         {
             int sycee = 0;
             sycee += data.need_lv / 7 * (lv - 5) + 1;
-            dic.Add((exist ? "职业回收" : "回收 ") + (enum_equip_quality_list)lv + data.Name + " 获得 " + currency_unit.元宝 + " * " + sycee); 
+            dic.Add((exist ? "职业回收" : "回收 ") + (enum_equip_quality_list)lv + data.show_name + " 获得 " + currency_unit.元宝 + " * " + sycee); 
             Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, sycee, Obtain_Int.Add_unit(sycee));
             if (lv == 7)
             {
@@ -494,7 +494,7 @@ public class show_drop_list : Base_Mono
                 ObscuredInt random = Random.Range(1, 1000);
                 ObscuredInt maxnumber = number + Random.Range(1, 1000);
                 Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, common_items_list.皇级碎片, new ObscuredInt[] { number + random, random }), maxnumber);
-                dic.Add((exist ? "职业回收" : "回收 ") + (enum_equip_quality_list)lv + data.Name + " 获得 " + common_items_list.皇级碎片 + " * " + 1);
+                dic.Add((exist ? "职业回收" : "回收 ") + (enum_equip_quality_list)lv + data.show_name + " 获得 " + common_items_list.皇级碎片 + " * " + 1);
 
             }
 

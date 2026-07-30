@@ -35,6 +35,7 @@ public class input_offect : Base_Mono
     /// 返回按键
     /// </summary>
     public Button GetConfirm { get { return confirm; } }
+
     /// <summary>
     /// 输入内容
     /// </summary>

@@ -188,6 +188,7 @@ public class PanelMian : PanelBase
         {
             item.gameObject.SetActive(false);
         }
+        if (SumSave.crtHero.lv < 15) return;
         for (int i = SumSave.global_battle_info.Count; i > 0; i--)
         {
             global_info_item global_info_item = dec_items[0];

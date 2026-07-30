@@ -246,6 +246,21 @@ public class map_show_offect : Base_Mono
     {
         ClearObject(m_drop_borm);
         drop_dic.Clear();
+        if (!Tool_Battle.IsBuff(common_Buff.月卡))
+        {
+            Bag_Base_VO bag = ArrayHelper.Find(SumSave.db_stditems, e => e.Name == "神秘物品");
+            if (bag != null)
+            {
+                if (!drop_dic.ContainsKey(bag.Name))
+                {
+                    dream_BagItem item = Instantiate(dream_BagItem_Prefabs, m_drop_borm);
+                    item.Data = bag;
+                    item.GetComponent<Button>().onClick.AddListener(() => { OnClick(item); });
+                    drop_dic.Add(bag.Name, 1);
+                }
+            }
+            return;
+        }
         db_map_vo map = crt_map.GetMap();
         if (map.map_intensity_drop.Count > 0)
         {

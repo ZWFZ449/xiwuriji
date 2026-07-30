@@ -18,6 +18,8 @@ namespace MVC
         /// 物品名称
         /// </summary>
         public string Name;
+
+        public string show_name;
         /// <summary>
         /// 物品类型
         /// </summary>

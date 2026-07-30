@@ -69,6 +69,7 @@ public class Read_Mysql
             reader.GetInt32(reader.GetOrdinal("mc2"))  
             );
         item.Name = reader.GetString(reader.GetOrdinal("Name"));
+        item.show_name = reader.GetString(reader.GetOrdinal("show_name"));
         item.StdMode = reader.GetString(reader.GetOrdinal("StdMode"));
         item.Shape= reader.GetInt32(reader.GetOrdinal("Shape"));
         item.need_lv = reader.GetInt32(reader.GetOrdinal("need_lv"));

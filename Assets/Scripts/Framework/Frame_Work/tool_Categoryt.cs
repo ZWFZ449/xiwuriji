@@ -30,10 +30,11 @@ public class tool_Categoryt : MonoBehaviour
         {
             foreach (var item in SumSave.db_stditems)
             {
-                if (item.Name == splits[0])
+                if (item.Name == splits[0]||item.show_name == splits[0])
                 {
                     Bag_Base_VO bag_base = new Bag_Base_VO(item.hp, item.mp, item.ac, item.ac2, item.mac, item.mac2, item.dc, item.dc2, item.sc, item.sc2, item.mc, item.mc2);
                     bag_base.Name = item.Name;
+                    bag_base.show_name = item.show_name;
                     bag_base.StdMode = item.StdMode;
                     bag_base.Shape = item.Shape;
                     bag_base.job = item.job;

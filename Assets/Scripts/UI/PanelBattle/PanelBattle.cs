@@ -78,9 +78,9 @@ public class PanelBattle : PanelBase
     /// </summary>
     private int map_crate_boss_condition = 0;
     /// <summary>
-    /// 击杀总数量
+    /// 击杀总数量 一共刷新的个数
     /// </summary>
-    private int kill_monster = 0;
+    private int kill_monster = 0, max_map_number = 0;
     /// <summary>
     /// 限时地图f
     /// </summary>
@@ -416,13 +416,23 @@ public class PanelBattle : PanelBase
         Init();
     }
 
+    public void GoMaxMap(db_map_vo map, int number)
+    {
+        crt_map = map;
+        max_map_number = number;
+        crt_map.SetMapIntensity(1);
+        map_name.text = map.map_name;
+        time_info.text = "";
+        Init();
+    }
+
     private void Init()
     {
         open_crate_monster = true;
         if (crt_map.map_type != 0)// && limited_time <= 0
         {
             db_vip vip = Tool_Battle.Obtain_Vip();
-            float time = 60;
+            float time = crt_map.map_type == 10 ? 600 : 60;
             if (vip != null)
             {
                 time += vip.offlineInterval;
@@ -504,8 +514,6 @@ public class PanelBattle : PanelBase
         if (Tool_Battle.IsBuff(common_Buff.增量卷轴))
         {
             if (max <= 0) max = 0;
-            //Alert_Dec.Show("增量刷新个数 + " + crt_map.map_add_number_monster[crt_map.GetMapIntensityDrop - 1] / 2);
-            //max += crt_map.map_add_number_monster[crt_map.GetMapIntensityDrop - 1] / 2;
             max += 6;
             Alert_Dec.Show("增量刷新个数 + 6");
         }
@@ -546,7 +554,6 @@ public class PanelBattle : PanelBase
         if (!IsBoss) return;
         if (SumSave.crt_setting.user_data_settings.Count >= 2 && SumSave.crt_setting.user_data_settings[1] == 0) return;
         if (crt_map.map_type != 0) return;
-      
         //调整召唤模式
         if (boss_index >= SumSave.crt_setting.Boss_list.Count) boss_index = 0;
         List<string> keys = new List<string>( SumSave.crt_setting.Boss_list.Keys);
@@ -733,6 +740,18 @@ public class PanelBattle : PanelBase
                 case Battle_Game_Type.call:
                     player_list.Remove(health.gameObject);
                     Resurrection_Call(baseBattleAttack);
+                    bool exist = true;
+                    for (int i = 0; i < player_list.Count; i++)
+                    {
+                        if (player_list[i].GetComponent<BaseBattleAttack>() != null)
+                        {
+                            if (player_list[i].GetComponent<BaseBattleAttack>().Data.type == Battle_Game_Type.player)
+                            {
+                                exist = false;
+                            }
+                        }
+                    }
+                    if (exist) gameover();
                     break;
                 case Battle_Game_Type.monster:
                 case Battle_Game_Type.Boss:
@@ -1135,7 +1154,6 @@ public class PanelBattle : PanelBase
         }
         return points;
     }
-
     private void Resurrection_Call(BaseBattleAttack crt_call)
     {
         Dictionary<int, db_skill_vo> dic = SumSave.crt_skill.Set_Current_skill();
@@ -1207,8 +1225,9 @@ public class PanelBattle : PanelBase
         if (SumSave.crt_setting.user_data_settings.Count >= 2 && SumSave.crt_setting.user_data_settings[1] == 0) return;
         crtMaxBattleVO monster = ArrayHelper.Find(monster_Bossbattle_list, e => e.crt_name == specify);
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(monster.crt_name, battle_Boss_monster_prefab,
-            //GetRandomUVPosition(2000), Quaternion.identity, battle_borm.transform);
             GetRandomUVPosition(600, 2000), Quaternion.identity, battle_borm.transform);
+        if(crt_map.map_type==10) item.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_MaxBossMonster(monster,max_map_number);
+        else
         item.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Monster(monster);
         item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Monster(monster));
         item.transform.SetAsFirstSibling();
@@ -1225,6 +1244,7 @@ public class PanelBattle : PanelBase
                 player.GetComponent<BaseBattleAttack>().Set_Target(item.GetComponent<BattleHealthState>());
             }
         }
+        max_map_number++;
         boss_index++;
         InitBossSlider(item.GetComponent<BaseBattleAttack>().Data);
 
@@ -1287,16 +1307,16 @@ public class PanelBattle : PanelBase
         crtMaxBattleVO monster = monster_battle_list[Random.Range(0, monster_battle_list.Count)];
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(monster.crt_name, battle_monster_prefab,
             GetRandomUVPosition(600, 2000), Quaternion.identity, battle_borm.transform);
-        item.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Monster(monster);
+        if (crt_map.map_type == 10) item.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_MaxMonster(monster, max_map_number);
+        else
+            item.GetComponent<BaseBattleAttack>().Data = Tool_Battle.Crate_Monster(monster);
         item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Monster(monster));
         item.transform.SetAsFirstSibling();
         item.GetComponent<Button>().onClick.RemoveAllListeners();
         item.GetComponent<Button>().onClick.AddListener(() => { lock_target(item); });
         monster_list.Add(item);
         Show_State_Monster();
-        //测试掉落
-        //show_drop_list.Init(crt_map, monster.type);
-
+        max_map_number++;
     }
     /// <summary>
     /// 锁定目标

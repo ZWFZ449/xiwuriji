@@ -123,7 +123,13 @@ public class offect_Fame : Base_Mono
     private void init()
     {
         ObscuredInt sum = (SumSave.crt_global_gift.GetGiftPoints);
-        for (int i = 0; i < 10; i++)
+        int max = 10;
+#if UNITY_EDITOR
+        max = SumSave.db_vip_list.Count;
+#elif UNITY_ANDROID
+#elif UNITY_IPHONE
+#endif
+        for (int i = 0; i < max; i++)
         { 
             btn_item btn = Instantiate(btn_item_prefab, m_btn_brom);
             btn.Show(SumSave.db_vip_list[i].vip_lv, SumSave.db_vip_list[i].vip_name);
