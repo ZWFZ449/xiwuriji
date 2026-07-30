@@ -67,10 +67,10 @@ public class offect_TowerBabel : Base_Mono
     public override void Show()
     {
         base.Show();
-        if (SumSave.crtHero.zs_lvs <= 1)
+        if (SumSave.crtHero.zs_lvs <= 1||true)
         {
             Alert_Dec.Show("1转后开启");
-            gameObject.SetActive(false);
+            Hide();
             return;
         }
     }
@@ -89,4 +89,11 @@ public class offect_TowerBabel : Base_Mono
                 break;
         }
     }
+
+    private void Hide()
+    {
+        gameObject.SetActive(false);
+        transform.parent.gameObject.SetActive(false);
+    }
+
 }
