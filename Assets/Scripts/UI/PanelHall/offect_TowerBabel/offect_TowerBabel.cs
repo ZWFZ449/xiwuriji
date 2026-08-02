@@ -31,6 +31,10 @@ public class offect_TowerBabel : Base_Mono
 
     private TowerBabel_map m_towerBabel_map;
 
+    private TowerBabel_skill m_towerBabel_skill;
+
+    private TowerBabel_artifact m_towerBabel_artifact;
+
     private Button close_btn;
 
     private void Awake()
@@ -41,6 +45,8 @@ public class offect_TowerBabel : Base_Mono
         m_btn_brom = Find<Transform>("Scroll View/Viewport/Content");
         btn_item_prefab = Tool_UI.Find_Prefabs<btn_item>("btn_item");
         m_towerBabel_map = Find<TowerBabel_map>("offect/TowerBabel_map"); 
+        m_towerBabel_skill = Find<TowerBabel_skill>("offect/TowerBabel_skill");
+        m_towerBabel_artifact = Find<TowerBabel_artifact>("offect/TowerBabel_artifact");
         Init();
     }
 
@@ -49,6 +55,14 @@ public class offect_TowerBabel : Base_Mono
         if (m_towerBabel_map.gameObject.activeSelf)
         {
             m_towerBabel_map.gameObject.SetActive(false);
+        }
+        else if (m_towerBabel_skill.gameObject.activeSelf)
+        { 
+            m_towerBabel_skill.gameObject.SetActive(false);
+        }
+        else if (m_towerBabel_artifact.gameObject.activeSelf)
+        {
+            m_towerBabel_artifact.gameObject.SetActive(false);
         }
         bg_offect.gameObject.SetActive(false);
     }
@@ -67,7 +81,7 @@ public class offect_TowerBabel : Base_Mono
     public override void Show()
     {
         base.Show();
-        if (SumSave.crtHero.zs_lvs <= 1||true)
+        if (SumSave.crtHero.zs_lvs <= 1)
         {
             Alert_Dec.Show("1转后开启");
             Hide();
@@ -84,8 +98,12 @@ public class offect_TowerBabel : Base_Mono
                 m_towerBabel_map.InitShow();
                 break;
             case TowerType.通天秘笈:
+                m_towerBabel_skill.gameObject.SetActive(true);
+                m_towerBabel_skill.InitShow();
                 break;
             case TowerType.通天秘宝:
+                m_towerBabel_artifact.gameObject.SetActive(true);
+                m_towerBabel_artifact.InitShow();
                 break;
         }
     }

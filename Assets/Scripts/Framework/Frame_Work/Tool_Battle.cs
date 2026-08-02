@@ -38,6 +38,7 @@ public static class Tool_Battle
         int hit = 0, dodge = 0, crit = 0, critDmg = 100;
         int hpRegen = 0, mpRegen = 0;
         int lucky = 0, damage_reduction=0,magic_damage_reduction=0;
+        int numbness = 0;
         if (crt_vip == null) Obtain_Vip();
         if (crt_vip != null)
         {
@@ -46,6 +47,13 @@ public static class Tool_Battle
             drop_bonus += crt_vip.equipmentExplosionRate;
             boss_cd += crt_vip.monsterHuntingInterval;
             int sum = (SumSave.crt_global_gift.GetGiftPoints);
+            if (sum >= 2000)
+            {
+                if (!IsBuff(common_Buff.月卡))
+                {
+                    Game_Omphalos.i.Delete("月卡都没开");
+                }
+            }
             if(sum>=50000)
             { 
                 Game_Omphalos.i.Delete("充值超5w");
@@ -61,7 +69,6 @@ public static class Tool_Battle
                 {
                     drop_bonus += (int)((sum - 20000) / 1000);
                 }
-
             }
         }
         Dictionary<enum_battle_pet_talent_list, int> buffList = new Dictionary<enum_battle_pet_talent_list, int>();
@@ -251,14 +258,6 @@ public static class Tool_Battle
                 {
                     if (equiplucky <= 3)
                     {
-                        //if (equiplucky == 3)
-                        //{
-                        //    int sum = (SumSave.crt_global_gift.GetGiftPoints);
-                        //    if (sum < 5000)
-                        //    { 
-                        //        Game_Omphalos.i.Delete("项链幸运3级需要定制皇权");
-                        //    }
-                        //}
                         lucky += equiplucky - 1;
                     } 
                     else Game_Omphalos.i.Delete("项链幸运超标");
@@ -1291,6 +1290,192 @@ public static class Tool_Battle
                 }
             }
         }
+        //无限塔
+        Dictionary<string, db_towerbabel_vo> TowerBabel_skill_dic = SumSave.crt_user_towerbabel.GetSkill;
+        Dictionary<string, db_towerbabel_vo> TowerBabel_artifact_dic = SumSave.crt_user_towerbabel.GetArtifact;
+        Dictionary<int, Dictionary<int, int>> TowerBabel_dic = new Dictionary<int, Dictionary<int, int>>();
+        foreach (db_towerbabel_vo skill in TowerBabel_skill_dic.Values)
+        {
+            if (skill.user_lv > 0 && skill.user_lv <= skill.max_lv)
+            {
+                if (!TowerBabel_dic.ContainsKey(skill.TowerBabel_type))
+                { 
+                    TowerBabel_dic.Add(skill.TowerBabel_type, new Dictionary<int, int>());
+                }
+                List<string> list = ArrayHelper.Get_Split<string>(skill.activate_offect, '|');
+
+                foreach (var item in list)
+                {
+                    List<string> list2 = ArrayHelper.Get_Split<string>(item, ' ');
+                    if (list2.Count == 2)
+                    {
+                        if (!TowerBabel_dic[skill.TowerBabel_type].ContainsKey(int.Parse(list2[0])))
+                        { 
+                            TowerBabel_dic[skill.TowerBabel_type].Add(int.Parse(list2[0]), 0);
+                        }
+                        TowerBabel_dic[skill.TowerBabel_type][int.Parse(list2[0])] += int.Parse(list2[1]);
+                    }
+                }
+                list = ArrayHelper.Get_Split<string>(skill.up_offect, '|');
+                foreach (var item in list)
+                { 
+                    List<string> list2 = ArrayHelper.Get_Split<string>(item, ' ');
+                    if (list2.Count == 3)
+                    {
+                        if (!TowerBabel_dic[skill.TowerBabel_type].ContainsKey(int.Parse(list2[0])))
+                        { 
+                            TowerBabel_dic[skill.TowerBabel_type].Add(int.Parse(list2[0]), 0);
+                        }
+                        TowerBabel_dic[skill.TowerBabel_type][int.Parse(list2[0])] += (skill.user_lv - 1) / int.Parse(list2[1]) * int.Parse(list2[2]);
+                    }
+                }
+            }
+        }
+        List<int> list3 = new List<int>();
+        foreach (db_towerbabel_vo skill in TowerBabel_artifact_dic.Values)
+        {
+            if (skill.user_lv > 0 && skill.user_lv <= skill.max_lv)
+            {
+                list3.Add(skill.user_lv);
+                if (!TowerBabel_dic.ContainsKey(skill.TowerBabel_type))
+                {
+                    TowerBabel_dic.Add(skill.TowerBabel_type, new Dictionary<int, int>());
+                }
+                List<string> list = ArrayHelper.Get_Split<string>(skill.activate_offect, '|');
+                foreach (var item in list)
+                {
+                    List<string> list2 = ArrayHelper.Get_Split<string>(item, ' ');
+                    if (list2.Count == 2)
+                    {
+                        if (!TowerBabel_dic[skill.TowerBabel_type].ContainsKey(int.Parse(list2[0])))
+                        {
+                            TowerBabel_dic[skill.TowerBabel_type].Add(int.Parse(list2[0]), 0);
+                        }
+                        TowerBabel_dic[skill.TowerBabel_type][int.Parse(list2[0])] += int.Parse(list2[1]);
+                    }
+                }
+                list = ArrayHelper.Get_Split<string>(skill.up_offect, '|');
+                foreach (var item in list)
+                {
+                    List<string> list2 = ArrayHelper.Get_Split<string>(item, ' ');
+                    if (list2.Count == 3)
+                    {
+                        if (!TowerBabel_dic[skill.TowerBabel_type].ContainsKey(int.Parse(list2[0])))
+                        {
+                            TowerBabel_dic[skill.TowerBabel_type].Add(int.Parse(list2[0]), 0);
+                        }
+                        TowerBabel_dic[skill.TowerBabel_type][int.Parse(list2[0])] += (skill.user_lv - 1) / int.Parse(list2[1]) * int.Parse(list2[2]);
+                    }
+                }
+            }
+        }
+        if (list3.Count == SumSave.db_towerbabel_artifacts.Count)
+        {
+            int min = ArrayHelper.GetMin(list3, (int i) => i);
+            if (min >= 5)
+            {
+                min = min / 5 * 5;
+                for (int i = 0; i < SumSave.db_skills.Count; i++)
+                {
+                    if (!TowerBabel_dic[2].ContainsKey(SumSave.db_skills[i].id))
+                    {
+                        TowerBabel_dic[2].Add(SumSave.db_skills[i].id, 0);
+                    }
+                    TowerBabel_dic[2][SumSave.db_skills[i].id] += min;
+                }
+            }
+        }
+
+        foreach (var item in TowerBabel_dic)
+        {
+            switch (item.Key)
+            {
+                case 1:
+                case 3:
+                case 4:
+                    foreach (var skill in item.Value)
+                    {
+                        enum_equip_entry_list e = (enum_equip_entry_list)(skill.Key);
+                        int value = skill.Value;
+                        switch (e)
+                        {
+                            case enum_equip_entry_list.生命值: hp += value; break;
+                            case enum_equip_entry_list.魔法值: mp += value; break;
+                            case enum_equip_entry_list.物理防御: ac2 += value; break;
+                            case enum_equip_entry_list.魔法防御: mac2 += value; break;
+                            case enum_equip_entry_list.物理攻击: dc2 += value; break;
+                            case enum_equip_entry_list.魔法攻击: mc2 += value; break;
+                            case enum_equip_entry_list.道术攻击: sc2 += value; break;
+
+                            case enum_equip_entry_list.每秒回血: hpRegen += value; break;
+                            case enum_equip_entry_list.每秒回蓝: mpRegen += value; break;
+                            case enum_equip_entry_list.真实伤害: battle_Damage += value; break;
+                            case enum_equip_entry_list.吸收伤害: battle_def += value; break;
+                            case enum_equip_entry_list.物理下防: ac += value; break;
+                            case enum_equip_entry_list.魔法下防: mac += value; break;
+                            case enum_equip_entry_list.物理下攻: dc += value; break;
+                            case enum_equip_entry_list.魔法下攻: mc += value; break;
+                            case enum_equip_entry_list.道术下攻: sc += value; break;
+
+                            case enum_equip_entry_list.生命属性: battle_hp += value; break;
+                            case enum_equip_entry_list.魔法属性: battle_mp += value; break;
+                            case enum_equip_entry_list.防御属性: battle_ac += value; break;
+                            case enum_equip_entry_list.魔防属性: battle_mac += value; break;
+                            case enum_equip_entry_list.物攻属性: battle_dc += value; break;
+                            case enum_equip_entry_list.魔攻属性: battle_mc += value; break;
+                            case enum_equip_entry_list.道攻属性: battle_sc += value; break;
+                            case enum_equip_entry_list.攻击速度: battle_speed -= (value * speed_bonus); break;
+                            case enum_equip_entry_list.攻击范围: battle_range += value; break;
+                            case enum_equip_entry_list.暴击属性: crit += value; break;
+                            case enum_equip_entry_list.暴击伤害: critDmg += value; break;
+                            //case enum_equip_entry_list.幸运: lucky += value; break;
+                            case enum_equip_entry_list.闪避: dodge += value; break;
+                            case enum_equip_entry_list.命中: hit += value; break;
+                            case enum_equip_entry_list.物伤减免: damage_reduction += value; break;
+                            case enum_equip_entry_list.魔伤减免: magic_damage_reduction += value; break;
+                            case enum_equip_entry_list.怪物爆率: drop_bonus += value; break;
+                            case enum_equip_entry_list.极品爆率: quality_bonus += value; break;
+                            case enum_equip_entry_list.经验加成: exp_bonus += value; break;
+                            case enum_equip_entry_list.金币掉落: gold_bonus += value; break;
+                            case enum_equip_entry_list.幸运:
+                                break;
+                            case enum_equip_entry_list.麻痹概率:
+                                numbness = value;
+                                break;
+                            case enum_equip_entry_list.神佑护体:
+                                hp += mp * (value) / 100;
+                                break;
+                            
+                            
+                            default:
+
+                                break;
+                        }
+                    }
+
+                    break;
+                case 2:
+                    foreach (var skill in item.Value)
+                    {
+                        if (skill_list.ContainsKey(skill.Key))
+                        {
+                            if (!skill_list[skill.Key].GetBuff.ContainsKey(enum_talent_offect_list.技能伤害))
+                            {
+                                skill_list[skill.Key].GetBuff.Add(enum_talent_offect_list.技能伤害, skill.Value);
+                            }
+                            else
+                            { 
+                                skill_list[skill.Key].GetBuff[enum_talent_offect_list.技能伤害] += skill.Value;
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
         maxhp = hp * (100 + battle_hp) / 100;
         maxmp = mp * (100 + battle_mp) / 100;
         ac= ac * (100 + battle_ac) / 100;
@@ -1315,6 +1500,7 @@ public static class Tool_Battle
         crt.hero_type = (Hero_Type)SumSave.crtHero.job;
         crt.type = Battle_Game_Type.player;
         crt.hero_talentList = hero_talentList;
+        crt.numbness = numbness;
         if (crt.hero_type == Hero_Type.战士)
         {
             if (SumSave.crtHero.SelectPos == 3)//暴君 极限25点
@@ -1372,7 +1558,6 @@ public static class Tool_Battle
         //
         crt.data = new FinalBattleValueVO(maxhp, maxmp, hp, mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky,damage_reduction,magic_damage_reduction,0);
-
 #if UNITY_EDITOR
         //verification_illustrateds(illustrated_list, crt);
 #elif UNITY_ANDROID
@@ -1383,6 +1568,8 @@ public static class Tool_Battle
 #endif
         return crt;
     }
+
+
     /// <summary>
     /// 验证图鉴
     /// </summary>
@@ -1553,9 +1740,10 @@ public static class Tool_Battle
         crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus, 0);
         crt.crt_name = monster.crt_name;
         crt.lv = monster.lv;
-        crt.exp = monster.exp;
+        crt.exp = 500000 * (number / 10 + 1);
         crt.hero_type = isType ? Hero_Type.战士 : Hero_Type.法师;
         crt.type = monster.type;
+        crt.numbness = 1 + (number / 50);
         //maxhp = 1; hp = 1; maxmp = 1; mp = 1; //测试
         crt.data = new FinalBattleValueVO(maxhp, (int)maxmp, hp, (int)mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky, damage_reduction, magic_damage_reduction, monster.data.move_speed);
@@ -1616,9 +1804,10 @@ public static class Tool_Battle
         crtMaxBattleVO crt = new crtMaxBattleVO(exp_bonus, gold_bonus, drop_bonus, quality_bonus, 0);
         crt.crt_name = monster.crt_name;
         crt.lv = monster.lv;
-        crt.exp = monster.exp;
+        crt.exp = 5000000 * (number);
         crt.hero_type = isType ? Hero_Type.战士 : Hero_Type.法师;
         crt.type = monster.type;
+        crt.numbness = 5 + (number / 5);
         //maxhp = 1; hp = 1; maxmp = 1; mp = 1; //测试
         crt.data = new FinalBattleValueVO(maxhp, (int)maxmp, hp, (int)mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky, damage_reduction, magic_damage_reduction, monster.data.move_speed);

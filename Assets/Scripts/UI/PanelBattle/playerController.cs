@@ -23,8 +23,21 @@ public class playerController : BaseBattleAttack
     public override void OnAuto()
     {
         base.OnAuto();
+        if (data.numbness_IsState)
+        {
+            data.numbness_IsState = false;
+            Alert_Dec.Show("麻痹中");
+            return;
+        }
         if (Terget == null || !Terget.gameObject.activeSelf || Terget.isDead) Find_Terget();
         if (Terget == null) return;
+        if (data.numbness > 0)
+        {
+            if (Random.Range(0, 100) < data.numbness)
+            {
+                Terget.GetComponent<BaseBattleAttack>().Data.numbness_IsState = true;
+            }
+        }
         if (battle_skills != null && battle_skills.Count > 0)
         {
             if (skill_index >= battle_skills.Count) skill_index = 0;

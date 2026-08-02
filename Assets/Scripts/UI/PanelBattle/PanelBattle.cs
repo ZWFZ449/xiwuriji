@@ -435,7 +435,7 @@ public class PanelBattle : PanelBase
             float time = crt_map.map_type == 10 ? 600 : 60;
             if (vip != null)
             {
-                time += vip.offlineInterval;
+                time += crt_map.map_type == 10 ? vip.offlineInterval * 2 : vip.offlineInterval;
             }
             limited_time = time;//限时地图
         }
@@ -721,8 +721,8 @@ public class PanelBattle : PanelBase
                 {
                     if (Random.Range(0, 100) < 2)
                     {
+                        if (SumSave.crt_setting.user_data_settings.Count >= 13 && SumSave.crt_setting.user_data_settings[12] == 1)
                         Alert.Show("梦想", baseBattleAttack.Data.crt_name + "\n要去追逐梦想啦,跑路咯\n接受我的买路钱吧\n" + currency_unit.元宝+" * 10");
-
                         ObscuredLong moeny = 10;
                         Battle_Tool.Dream_Obtain_Unit(currency_unit.元宝, moeny, Obtain_Int.Add_unit(moeny));
                         monster_list.Remove(health.gameObject);
@@ -814,10 +814,79 @@ public class PanelBattle : PanelBase
         if (crt_map.map_type != 0)
         {
             exp_copy();
+            TowerBabel_reward();
+            InitMap();
             Alert.Show("战斗失败", "请重新选择战斗地图");
         }
         else
         StartCoroutine(Game_InitMap(5));
+    }
+    /// <summary>
+    /// 通天塔奖励
+    /// </summary>
+    private void TowerBabel_reward()
+    {
+        if (crt_map.map_type == 10)
+        {
+            SumSave.crt_user_towerbabel.SetMax(crt_map.map_id - 31, kill_monster);
+            if (SumSave.crt_signin.GetIsValue(crt_map.map_name) == 1)//每日首杀奖励
+            {
+                List<(object,int)>  list = new List<(object, int)>();
+                string value = "本次战斗击杀" + kill_monster + "\n";
+                int basenumber = 1;
+                int max = kill_monster + 1;
+                switch (crt_map.map_id)
+                {
+                    case 31:
+                        while (max > 0)
+                        {
+                            max -= basenumber * 5;
+                            basenumber++;
+                        }
+                        value += "获得通天塔奖励" + (basenumber) * 100 + " " + currency_unit.试炼积分;
+                        value += "\n获得" + common_items_list.强者证明 + " * " + (basenumber * 2);
+                        value += "\n获得" + common_items_list.被动精华 + " * " + (basenumber);
+                        value += "\n获得" + common_items_list.无根泉水 + " * " + (basenumber);
+                        value += "\n获得" + common_items_list.麻痹碎片 + " * " + (basenumber);
+                        Alert.Show("通天塔奖励", value);
+                        ObscuredLong moeny = (basenumber) * 100;
+                        Battle_Tool.Dream_Obtain_Unit(currency_unit.试炼积分, moeny, Obtain_Int.Add_unit(moeny));
+                        list.Add((common_items_list.强者证明, basenumber * 2));
+                        list.Add((common_items_list.被动精华, basenumber));
+                        list.Add((common_items_list.无根泉水, basenumber));
+                        list.Add((common_items_list.麻痹碎片, basenumber));
+                        break;
+                    case 32:
+                        while (max > 0)
+                        {
+                            max -= basenumber * 2;
+                            basenumber++;
+                        }
+                        value += "获得通天塔奖励" + (basenumber) * 200 + " " + currency_unit.转生积分;
+                        value += "\n获得" + common_items_list.强者证明 + " * " + (basenumber * 2);
+                        value += "\n获得" + common_items_list.被动精华 + " * " + (basenumber);
+                        value += "\n获得" + common_items_list.无尽粉尘 + " * " + (basenumber);
+                        value += "\n获得" + common_items_list.护体碎片 + " * " + (basenumber);
+                        Alert.Show("通天塔奖励", value);
+                        ObscuredLong moeny1 = (basenumber) * 200;
+                        Battle_Tool.Dream_Obtain_Unit(currency_unit.转生积分, moeny1, Obtain_Int.Add_unit(moeny1));
+                        list.Add((common_items_list.强者证明, basenumber * 2));
+                        list.Add((common_items_list.被动精华, basenumber));
+                        list.Add((common_items_list.无尽粉尘, basenumber));
+                        list.Add((common_items_list.护体碎片, basenumber));
+                        break;
+                    default:
+                        break;
+                }
+                for (int i= 0; i < list.Count; i++)
+                {
+                    ObscuredInt number = list[i].Item2;
+                    ObscuredInt random = Random.Range(1, 1000);
+                    ObscuredInt maxnumber = number + Random.Range(1, 1000);
+                    Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, list[i].Item1, new ObscuredInt[] { number + random, random }), maxnumber);
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -887,20 +956,50 @@ public class PanelBattle : PanelBase
     /// <param name="monster"></param>
     private void Drop(BaseBattleAttack monster)
     {
-        int exp = (int)monster.Data.exp * (100 + SumSave.crtMaxBattle.exp_bonus + (Tool_Battle.IsBuff(common_Buff.双倍经验卷轴) ? 100 : 0)) / 100;
-        if (SumSave.map_Lv > 1) exp *= 5;
+        long exp = (long)monster.Data.exp * (100 + SumSave.crtMaxBattle.exp_bonus + (Tool_Battle.IsBuff(common_Buff.双倍经验卷轴) ? 100 : 0)) / 100;
+        if (SumSave.map_Lv > 1 && crt_map.map_type != 10) exp *= 5;
         Show_Info("击杀 " + monster.Data.crt_name + " 获得经验 " + exp);
         //掉落收益
         Add_Exp(exp); 
         Show_Info( show_drop_list.Init(monster));
+        db_vip vip = Tool_Battle.Obtain_Vip();
+        int value = 1;
+        if (vip != null) { if (vip.vip_lv >= 12) value = 2; }
         switch (monster.Data.type)
         {
+            case Battle_Game_Type.monster://普通掉落
+                if (crt_map.map_type == 10)
+                {
+                    if (SumSave.crt_signin.GetIsValue("无限塔") == 1)
+                    {
+                        value *= 3;
+                        //Alert_Dec.Show("获得转生积分" + value);
+                        Battle_Tool.Dream_Obtain_Unit(currency_unit.转生积分, value, Obtain_Int.Add_unit(value));
+                    }
+                    else
+                    {
+                        //Alert_Dec.Show("获得转生积分" + value);
+                        Battle_Tool.Dream_Obtain_Unit(currency_unit.转生积分, value, Obtain_Int.Add_unit(value));
+                    }
+                }
+                break;
             case Battle_Game_Type.Boss://boss掉落
-                Battle_Tool.Dream_Obtain_Unit(currency_unit.Boss积分, 1, Obtain_Int.Add_unit(1));
-                int value = 1;
-                db_vip vip = Tool_Battle.Obtain_Vip();
-                if (vip != null) { if (vip.vip_lv >= 12) value = 2; }
-                if (SumSave.map_Lv > 1) Battle_Tool.Dream_Obtain_Unit(currency_unit.转生积分, value, Obtain_Int.Add_unit(value));
+                if (crt_map.map_type == 10)
+                {
+                    if (SumSave.crt_signin.GetIsValue("无尽塔") == 1)
+                    {
+                        value *= 50;
+                        //Alert_Dec.Show("获得转生积分" + value);
+                    }
+                    else
+                    {
+                        value *= 20;
+                        //Alert_Dec.Show("获得转生积分" + value);
+                    }
+                }
+                if (SumSave.map_Lv > 1|| crt_map.map_type == 10) Battle_Tool.Dream_Obtain_Unit(currency_unit.转生积分, value, Obtain_Int.Add_unit(value));
+                //Alert_Dec.Show("获得Boss积分" + value);
+                Battle_Tool.Dream_Obtain_Unit(currency_unit.Boss积分, value, Obtain_Int.Add_unit(value));
                 AddSkill();
                 Close_BossSlider();
                 break;
@@ -1082,7 +1181,6 @@ public class PanelBattle : PanelBase
     {
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(SumSave.crtMaxBattle.crt_name, battle_player_prefab,
         GetRandomUVPosition(10), Quaternion.identity, battle_borm.transform);
-        //GetRandomUVPosition(battle_borm, 10, 20), Quaternion.identity, battle_borm.transform);
         item.GetComponent<BaseBattleAttack>().Data = SumSave.crtMaxBattle;
         item.GetComponent<BaseBattleAttack>().Refresh_Skill(Show_Battle_Skill());
         Dictionary<int, db_skill_vo> dic = SumSave.crt_skill.Set_Current_skill();
@@ -1139,7 +1237,6 @@ public class PanelBattle : PanelBase
         }
         player_list.Add(item);
     }
-
     public static List<Vector3> GetRingPositions(Vector3 center, float radius, int count, float startAngleDeg = 0)
     {
         List<Vector3> points = new List<Vector3>();
@@ -1257,7 +1354,7 @@ public class PanelBattle : PanelBase
     private List<db_skill_vo> Show_Battle_Monster(crtMaxBattleVO monster)
     {
         List<db_skill_vo> skill_list = new List<db_skill_vo>();//第一地图难度
-        if (SumSave.map_Lv > 1)
+        if (SumSave.map_Lv > 1&& crt_map.map_type != 10)
         {
             db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, e => e.id == monster.skill_id);
             if (skill != null)
@@ -1268,6 +1365,64 @@ public class PanelBattle : PanelBase
                 newskill.AddBuff(enum_talent_offect_list.弹道, monster.skill_number);
                 skill_list.Add(newskill);
             }
+        }
+        if (crt_map.map_type == 10)
+        {
+            int id = 2;int lv = 1;int number = 1;
+            switch (monster.type)
+            {
+                case Battle_Game_Type.player:
+                    break;
+                case Battle_Game_Type.call:
+                    break;
+                case Battle_Game_Type.monster:
+                    lv = kill_monster / 100;
+                    number = max_map_number / 100;
+                    switch (monster.hero_type)
+                    {
+                        case Hero_Type.平民:
+                            break;
+                        case Hero_Type.战士:
+                            id = 2;
+                            break;
+                        case Hero_Type.法师:
+                            id = 8;
+                            break;
+                        case Hero_Type.道士:
+                            break;
+                    }
+                    break;
+                case Battle_Game_Type.Boss:
+                    lv = kill_monster / 10;
+                    number = max_map_number / 5;
+                    switch (monster.hero_type)
+                    {
+                        case Hero_Type.平民:
+                            break;
+                        case Hero_Type.战士:
+                            id = 5;
+                            break;
+                        case Hero_Type.法师:
+                            id = 9;
+                            break;
+                        case Hero_Type.道士:
+                            break;
+                    }
+                    break;
+                case Battle_Game_Type.Activity_Monster:
+                    break;
+            }
+            db_skill_vo skill = ArrayHelper.Find(SumSave.db_skills, e => e.id == id);
+            if (skill != null)
+            {
+                db_skill_vo newskill = new db_skill_vo(skill.id, skill.show_name, skill.EffectType, skill.Effect, skill.spells, skill.Power, skill.DefPowers, skill.skill_damages,
+                   skill.skill_offect_value_list, skill.Job, skill.Delay, skill.skill_up_lv, skill.need_lv, skill.Weighted, skill.MoveType, skill.offset, skill.scope, skill.needLvitem, skill.probability);
+                newskill.monster_lv(lv);
+                newskill.AddBuff(enum_talent_offect_list.弹道, number);
+                skill_list.Add(newskill);
+
+            }
+
         }
         return skill_list;
     }

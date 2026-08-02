@@ -2,7 +2,6 @@ using Common;
 using Components;
 using MVC;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UI;
@@ -10,7 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class TowerBabel_map : offect_TowerBabel
+public class TowerBabel_map : Base_Mono
 {
     enum map_type
     { 
@@ -38,6 +37,8 @@ public class TowerBabel_map : offect_TowerBabel
     private PanelBattle panelBattle;
 
     private btn_item select_btn;
+
+    private int max_value = 0;
     private void Awake()
     {
         info = Find<Text>("title_name/info");
@@ -68,7 +69,6 @@ public class TowerBabel_map : offect_TowerBabel
             }
         }
     }
-
     private void SelectBtn(btn_item btn_item)
     {
         string dec = "";
@@ -82,7 +82,14 @@ public class TowerBabel_map : offect_TowerBabel
             bg_offects.gameObject.SetActive(true);
             if (map.map_lv != -1)
             {
-                dec = "当前击杀数量" + Random.Range(0, 10000);
+                List<int> lv_list = SumSave.crt_user_towerbabel.GetListNumber;
+                max_value = 0;
+                int index = map.map_id - 31;
+                if (index < lv_list.Count)
+                {
+                    max_value = lv_list[index];
+                }
+                dec = "当前击杀数量" + max_value;
                 btn_list.Add(map_type.挑战);
                 btn_list.Add(map_type.重置);
                 //btn_list.Add(map_type.扫荡);
@@ -114,7 +121,7 @@ public class TowerBabel_map : offect_TowerBabel
         switch ((map_type)btn_item.index)
         {
             case map_type.挑战:
-                Confirm(1);
+                Confirm(max_value);
                 break;
             case map_type.重置:
                 Alert.Show("是否重置", "重置后将直接开始从0挑战,请确认是否从0开始进行挑战", Confirm,0);
@@ -126,13 +133,40 @@ public class TowerBabel_map : offect_TowerBabel
 
     private void Confirm(object arg0)
     {
-        panelBattle.Show();
-        panelBattle.GoMaxMap(base_map_item_dic[select_btn], 0);
-        bg_offects.gameObject.SetActive(false);
+        int maplv = (int)arg0;
+        if (SumSave.crt_signin.GetIsValue(base_map_item_dic[select_btn].map_name) == 0)
+        {
+            SumSave.crt_signin.SetIsValue(base_map_item_dic[select_btn].map_name, 1);
+            panelBattle.Show();
+            panelBattle.GoMaxMap(base_map_item_dic[select_btn], maplv);
+            bg_offects.gameObject.SetActive(false);
+        }
+        else
+        { 
+            int number= SumSave.crt_signin.GetIsValue(base_map_item_dic[select_btn].map_name);
+            number = (int)MathF.Min(10, number);
+            Alert.Show("付费模式", "消耗" + (number * 10000) + "*" + currency_unit.元宝 + "\n" + (number * 100) + "*" + common_items_list.金条, GoMap, maplv);
+        }
     }
 
+    private void GoMap(object arg0)
+    {
+        int maplv = (int)arg0;
+        int number = SumSave.crt_signin.GetIsValue(base_map_item_dic[select_btn].map_name);
+        number = (int)MathF.Min(10, number);
+        Clear_Condition();
+        Need_Condition(currency_unit.元宝, number * 10000);
+        Need_Condition(common_items_list.金条, number * 100);
+        if (Return_Condition())
+        {
+            SumSave.crt_signin.SetIsValue(base_map_item_dic[select_btn].map_name, SumSave.crt_signin.GetIsValue(base_map_item_dic[select_btn].map_name) + 1);
+            panelBattle.Show();
+            panelBattle.GoMaxMap(base_map_item_dic[select_btn], maplv);
+            bg_offects.gameObject.SetActive(false);
+        }
+    }
     public  void InitShow()
     {
-        info.text = TowerType.通天之路 + "";
+        info.text = "通天之路";
     }
 }

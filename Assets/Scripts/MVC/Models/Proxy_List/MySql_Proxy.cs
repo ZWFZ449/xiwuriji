@@ -48,6 +48,7 @@ namespace MVC
             Read_Db_Setting_Aoption();
             Read_Db_Reincarnation();
             Read_Db_artifact();
+            Read_Db_towerbabel();
             //Read_Db_Magic();
             //
             //Read_Db_Hero();
@@ -79,6 +80,30 @@ namespace MVC
             //ReadDb_Endless();
             CloseMySqlDB();
         }
+
+        private void Read_Db_towerbabel()
+        {
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_towerbabel);
+            SumSave.db_towerbabels = new List<db_towerbabel_vo>();
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    SumSave.db_towerbabels.Add(ReadDb.Read_towerbabel(mysqlReader)); 
+                }
+            }
+
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_towerbabel_artifact);
+            SumSave.db_towerbabel_artifacts = new List<db_towerbabel_vo>();
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    SumSave.db_towerbabel_artifacts.Add(ReadDb.Read_towerbabel(mysqlReader));
+                }
+            }
+        }
+
         /// <summary>
         /// 读取转生
         /// </summary>

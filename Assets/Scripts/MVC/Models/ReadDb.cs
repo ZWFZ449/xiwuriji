@@ -78,6 +78,16 @@ public static class ReadDb
         item.Init(reader.GetString(reader.GetOrdinal("artifact_value")));
         return item;
     }
+
+    public static dream_user_towerbabel_vo Read(MySqlDataReader reader, dream_user_towerbabel_vo item)
+    { 
+        item.towerbabel_skill= reader.GetString(reader.GetOrdinal("towerbabel_skill"));
+        item.towerbabel_max = reader.GetString(reader.GetOrdinal("towerbabel_max"));
+        item.towerbabel_artifact = reader.GetString(reader.GetOrdinal("towerbabel_artifact"));
+        item.towerbabel_value = reader.GetString(reader.GetOrdinal("towerbabel_value"));
+        item.Init();
+        return item;
+    }
     public static global_promotion_vo Read(MySqlDataReader reader, global_promotion_vo item,string uid)
     {
         string value = reader.GetString(reader.GetOrdinal("promotion_value"));
@@ -328,6 +338,20 @@ public static class ReadDb
         return item;
     }
 
+    public static db_towerbabel_vo Read_towerbabel(MySqlDataReader reader)
+    {
+        db_towerbabel_vo item = new db_towerbabel_vo();
+        item.id = reader.GetInt32(reader.GetOrdinal("id"));
+        item.towerbabel_index = reader.GetInt32(reader.GetOrdinal("towerbabel_index"));
+        item.TowerBabel_name = reader.GetString(reader.GetOrdinal("TowerBabel_name"));
+        item.TowerBabel_type = reader.GetInt32(reader.GetOrdinal("TowerBabel_type"));
+        item.activate_offect = reader.GetString(reader.GetOrdinal("activate_offect"));
+        item.up_offect = reader.GetString(reader.GetOrdinal("up_offect"));
+        item.max_lv = reader.GetInt32(reader.GetOrdinal("max_lv"));
+        item.need_offect = reader.GetString(reader.GetOrdinal("need_offect"));
+        item.need_activate = reader.GetString(reader.GetOrdinal("need_activate"));
+        return item;
+    }
     public static db_reincarnation_vo Read_Reincarnation(MySqlDataReader reader)
     {
         return new db_reincarnation_vo(

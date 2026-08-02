@@ -425,5 +425,15 @@ namespace Common
         /// 神器数据
         /// </summary>
         public static user_artifact_vo crt_user_artifact;
+        /// <summary>
+        /// 秘笈
+        /// </summary>
+        public static List<db_towerbabel_vo> db_towerbabels;
+        /// <summary>
+        /// 秘宝
+        /// </summary>
+        public static List<db_towerbabel_vo> db_towerbabel_artifacts;
+
+        public static dream_user_towerbabel_vo crt_user_towerbabel;
     }
 }

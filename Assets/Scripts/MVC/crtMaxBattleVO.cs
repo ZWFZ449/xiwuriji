@@ -63,6 +63,14 @@ public class crtMaxBattleVO
     /// ¼õÉÙ·ÀÓù
     /// </summary>
     public int def_buff;
+    /// <summary>
+    /// Âé±Ô
+    /// </summary>
+    public int numbness;
+    /// <summary>
+    /// Âé±Ô×´Ì¬
+    /// </summary>
+    public bool numbness_IsState = false;
     public crtMaxBattleVO(ObscuredInt  exp_bonus, ObscuredInt  gold_bonus, ObscuredInt  drop_bonus ,ObscuredInt  quality_bonus ,ObscuredInt  boss_cd)
     { 
         this.exp_bonus= exp_bonus;

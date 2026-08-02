@@ -119,4 +119,7 @@ public enum Mysql_Table_Name
     dream_user_zs,//用户转生信息
     dream_user_refineds,//用户精炼信息
     dream_user_artifact,//用户神器信息
+    db_towerbabel,//通天塔秘笈
+    db_towerbabel_artifact,//通天塔秘笈神器
+    dream_user_towerbabel,//用户通天塔秘笈
 }

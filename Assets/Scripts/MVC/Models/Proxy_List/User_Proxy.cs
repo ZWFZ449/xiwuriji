@@ -127,8 +127,27 @@ namespace MVC
             Read_User_zs();
             Read_User_refined();
             Read_User_Artifact();
+            Read_User_Towerbabel();
             refresh_Max_Hero_Attribute();
             Read_global_battle_info();
+        }
+
+        private void Read_User_Towerbabel()
+        {
+            mysqlReader = MysqlDb.Select(Mysql_Table_Name.dream_user_towerbabel, "uid", GetStr(SumSave.uid));
+            if (mysqlReader == null) return;
+            SumSave.crt_user_towerbabel = new dream_user_towerbabel_vo();
+            if (mysqlReader.HasRows)
+            {
+                while (mysqlReader.Read())
+                {
+                    SumSave.crt_user_towerbabel = ReadDb.Read(mysqlReader, new dream_user_towerbabel_vo());
+                }
+            }
+            else
+            {
+                Game_Omphalos.i.GetQueue(Mysql_Type.InsertInto, Mysql_Table_Name.dream_user_towerbabel, SumSave.crt_user_towerbabel.Set_Instace_String());
+            }
         }
 
         private void Read_User_Artifact()

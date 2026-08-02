@@ -44,6 +44,8 @@ public enum enum_equip_entry_list
     暴击伤害=43,
     命中=87,
     闪避=77,
+    麻痹概率= 78,
+    神佑护体= 79,
     烈阳文=44,
     盾护文,
     守月文,
@@ -148,7 +150,18 @@ public class equip_show_info_item : Base_Mono
         info.text = "   弹道 " + value + " + " + lv;
         info.color = UnityColorPresets.HexToColor("#ffff00");
     }
-
+    public void towerbabel_Init(string value, int lv)
+    {
+        icon.sprite = UI.UI_Manager.I.GetEquipSprite("skill/base_icon/", value);
+        info.text = "   " + value + " 技能效果 + " + lv + "%";
+        info.color = UnityColorPresets.HexToColor("#ffff00");
+    }
+    public void towerbabel_Init(object value, string number)
+    {
+        icon.sprite = UI.UI_Manager.I.GetEquipSprite("icon/", value);
+        info.text = "   " + value + "   " + number;
+        info.color = UnityColorPresets.HexToColor("#ffff00");
+    }
     public void Init_7(string value, int lv)
     {
         icon.sprite = UI.UI_Manager.I.GetEquipSprite("UI/pet/pet_talent/", value);
@@ -162,4 +175,5 @@ public class equip_show_info_item : Base_Mono
         info.text = "   " + value;
         info.color = color;
     }
+
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Common;
+using Components;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -623,6 +624,11 @@ namespace MVC
         /// </summary>
         public void autoreply()
         {
+            if (data.numbness_IsState)
+            {
+                Alert_Dec.Show(data.crt_name + "麻痹中回复无效");
+                return;
+            }
             if (data.data.hpRegen > 0 || data.data.mpRegen>0)
             {
                 //Debug.Log("huifu"+data.data.hpRegen + " " + data.data.mpRegen);
