@@ -1743,7 +1743,7 @@ public static class Tool_Battle
         crt.exp = 500000 * (number / 10 + 1);
         crt.hero_type = isType ? Hero_Type.战士 : Hero_Type.法师;
         crt.type = monster.type;
-        crt.numbness = (number / 100);
+        crt.numbness = (Random.Range(0, 100) <= 10 + (number / 10)) ? 1 + (number / 500) : 0;
         //maxhp = 1; hp = 1; maxmp = 1; mp = 1; //测试
         crt.data = new FinalBattleValueVO(maxhp, (int)maxmp, hp, (int)mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky, damage_reduction, magic_damage_reduction, monster.data.move_speed);
