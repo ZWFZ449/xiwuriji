@@ -240,7 +240,7 @@ public class TowerBabel_skill : Base_Mono
                     switch (need[0])
                     {
                         case "0":
-                            Need_Condition(need[1], long.Parse(need[2]));
+                            Need_Condition((currency_unit)(int.Parse(need[1])), long.Parse(need[2]));
                             break;
                         case "1":
                         case "3":
