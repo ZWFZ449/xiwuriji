@@ -136,8 +136,18 @@ public class PanelBattle : PanelBase
     /// </summary>
     public override void Hide()
     {
+        if (crt_map.map_type != 0)
+        {
+            Alert.Show("中断副本", "请问是否要中断当前副本返回主界面?", Interruption);
+        }else
         this.transform.SetAsFirstSibling();
     }
+
+    private void Interruption(object arg0)
+    {
+        Close();
+    }
+
     public void Close()
     { 
         gameObject.SetActive(false);

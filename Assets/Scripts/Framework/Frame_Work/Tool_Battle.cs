@@ -1715,6 +1715,8 @@ public static class Tool_Battle
             mac2 = 200 * (number / 10 + 1);
             mc = 50 * (number / 10 + 1);
             mc2 = 100 * (number / 10 + 1);
+            sc = 50 * (number / 10 + 1);
+            sc2 = 100 * (number / 10 + 1);
         }
         hit = 100 + (number / 10 + 1);
         dodge = 10 + (number / 50);
@@ -1743,7 +1745,7 @@ public static class Tool_Battle
         crt.exp = 500000 * (number / 10 + 1);
         crt.hero_type = isType ? Hero_Type.战士 : Hero_Type.法师;
         crt.type = monster.type;
-        crt.numbness = (Random.Range(0, 100) <= 10 + (number / 10)) ? 1 + (number / 500) : 0;
+        crt.numbness = (Random.Range(0, 100) <= 10) ? 1 + (number / 500) : 0;
         //maxhp = 1; hp = 1; maxmp = 1; mp = 1; //测试
         crt.data = new FinalBattleValueVO(maxhp, (int)maxmp, hp, (int)mp, dc, dc2, mac, mac2, ac, ac2, sc, sc2, mc, mc2, hit, dodge, crit, critDmg, hpRegen,
             mpRegen, battle_hp, battle_mp, battle_ac, battle_mac, battle_dc, battle_sc, battle_mc, battle_speed, battle_range, battle_Damage, battle_def, talentList, lucky, damage_reduction, magic_damage_reduction, monster.data.move_speed);
@@ -1796,7 +1798,7 @@ public static class Tool_Battle
         battle_mc = 0;
         battle_speed = 30 - (number * 2);
         if (battle_speed <= 5) battle_speed = 5;
-        battle_range = Random.Range(200, 600);
+        battle_range = Random.Range(200, 300);
         battle_Damage = 50 + number / 10;//真实伤害
         battle_def = monster.data.battle_def;
         damage_reduction = 0;
