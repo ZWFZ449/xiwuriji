@@ -145,6 +145,7 @@ public class PanelBattle : PanelBase
 
     private void Interruption(object arg0)
     {
+        obtain_reward();
         Close();
     }
 
@@ -823,13 +824,21 @@ public class PanelBattle : PanelBase
     {
         if (crt_map.map_type != 0)
         {
-            exp_copy();
-            TowerBabel_reward();
+            obtain_reward();
             InitMap();
             Alert.Show("战斗失败", "请重新选择战斗地图");
         }
         else
         StartCoroutine(Game_InitMap(5));
+    }
+    /// <summary>
+    /// '战斗收益
+    /// </summary>
+    private void obtain_reward()
+    {
+        exp_copy();
+        TowerBabel_reward();
+
     }
     /// <summary>
     /// 通天塔奖励
@@ -1305,7 +1314,7 @@ public class PanelBattle : PanelBase
             if (limited_time <= 0)
             {
                 open_crate_monster = false;
-                exp_copy();
+                obtain_reward();
                 Alert.Show(crt_map.map_name,crt_map.map_name+"地图已关闭,请切换地图");
             }
         }

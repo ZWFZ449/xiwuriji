@@ -1708,9 +1708,19 @@ public static class Tool_Battle
             ac2 = 200 * (number / 10 + 1);
             dc = 50 * (number / 10 + 1);
             dc2 = 100 * (number / 10 + 1);
+            mac = 50 * (number / 10 + 1);
+            mac2 = 100 * (number / 10 + 1);
+            mc = 40 * (number / 10 + 1);
+            mc2 = 80 * (number / 10 + 1);
+            sc = 40 * (number / 10 + 1);
+            sc2 = 80 * (number / 10 + 1);
         }
         else
         { 
+            ac = 50 * (number / 10 + 1);
+            ac2 = 100 * (number / 10 + 1);
+            dc = 40 * (number / 10 + 1);
+            dc2 = 80 * (number / 10 + 1);
             mac = 100 * (number / 10 + 1);
             mac2 = 200 * (number / 10 + 1);
             mc = 50 * (number / 10 + 1);
@@ -1774,9 +1784,19 @@ public static class Tool_Battle
             ac2 = 600 + (number * 60);
             dc = 400 + (number * 40);
             dc2 = 500 + (number * 50);
+            sc = 300 + (number * 40);
+            sc2 = 400 + (number * 50);
+            mc = 300 + (number * 30);
+            mc2 = 400 + (number * 40);
+            mac = 400 + (number * 40);
+            mac2 = 500 + (number * 50);
         }
         else
         {
+            ac = 400 + (number * 40);
+            ac2 = 500 + (number * 50);
+            dc = 300 + (number * 30);
+            dc2 = 400 + (number * 40);
             mac = 300 + (number * 30);
             mac2 = 600 + (number * 60);
             mc = 400 + (number * 40);

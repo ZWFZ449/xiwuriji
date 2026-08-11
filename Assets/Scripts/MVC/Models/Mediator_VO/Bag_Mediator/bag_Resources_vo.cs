@@ -17,13 +17,17 @@ public class bag_Resources_vo : Base_VO
         string[] artifact_value_array = value.Split(',');
         if (artifact_value_array.Length >= 1)
         {
-            for (ObscuredInt i = 0; i < artifact_value_array.Length; i++)
+            for (int i = 0; i < artifact_value_array.Length; i++)
             {
                 string[] artifact_array = artifact_value_array[i].Split(' ');
                 if (artifact_array.Length > 1)
                 {
-                    list.Add((artifact_array[0], int.Parse(artifact_array[1])));
-                    verify_list.Add((artifact_array[0], int.Parse(artifact_array[1]) + index));
+                    Bag_Base_VO bag_base_vo = ArrayHelper.Find(SumSave.db_stditems,e=> e.Name== artifact_array[0]);
+                    if (bag_base_vo != null)
+                    {
+                        list.Add((artifact_array[0], int.Parse(artifact_array[1])));
+                        verify_list.Add((artifact_array[0], int.Parse(artifact_array[1]) + index));
+                    }
                 }
             }
         }
