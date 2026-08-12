@@ -21,7 +21,7 @@ public enum Mysql_Table_Name
     db_stditems,
     db_magic,
     db_magics,
-    db_map,
+    db_maps,
     db_heros,//标准参数
     db_setting,//标准设置信息
     db_artifact,//标准神器

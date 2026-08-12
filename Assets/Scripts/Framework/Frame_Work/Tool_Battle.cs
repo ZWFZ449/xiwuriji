@@ -1817,7 +1817,7 @@ public static class Tool_Battle
         battle_sc = 0;
         battle_mc = 0;
         battle_speed = 30 - (number * 2);
-        if (battle_speed <= 5) battle_speed = 5;
+        if (battle_speed <= 10) battle_speed = 10;
         battle_range = Random.Range(200, 300);
         battle_Damage = 50 + number / 10;//真实伤害
         battle_def = monster.data.battle_def;

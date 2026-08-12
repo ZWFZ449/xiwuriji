@@ -76,7 +76,7 @@ public static class Program
                 break;
             case Mysql_Table_Name.db_magic:
                 break;
-            case Mysql_Table_Name.db_map:
+            case Mysql_Table_Name.db_maps:
                 break;
             case Mysql_Table_Name.db_heros:
                 break;

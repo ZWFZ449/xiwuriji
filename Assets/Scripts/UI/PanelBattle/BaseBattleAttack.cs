@@ -155,6 +155,23 @@ namespace MVC
                 Terget = ArrayHelper.GetMin(monsterList, (x) => Vector3.Distance(x.transform.position, transform.position));
                 //是否移动
                 OnCShase();
+                if (TergetTag == "Player")
+                {
+                    if (monsterList.Count > 1&& data.type !=  Battle_Game_Type.monster)
+                    {
+                        for (int i = 0; i < monsterList.Count; i++)
+                        {
+                            if (monsterList[i].GetComponent<BaseBattleAttack>() != null)
+                            {
+                                if (monsterList[i].GetComponent<BaseBattleAttack>().Data.type == Battle_Game_Type.player)
+                                { 
+                                    Terget= monsterList[i];
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         /// <summary>

@@ -146,7 +146,6 @@ public class PanelBattle : PanelBase
     private void Interruption(object arg0)
     {
         obtain_reward();
-        Close();
     }
 
     public void Close()
@@ -717,15 +716,6 @@ public class PanelBattle : PanelBase
         {
             BaseBattleAttack baseBattleAttack = health.GetComponent<BaseBattleAttack>();
             SumSave.crt_illustrated.Add_illustrated_list(baseBattleAttack.Data.crt_name);
-            if (SumSave.crtHero.zs_lvs > 1)
-            {
-                if (Random.Range(0, 100) < 1)
-                {
-                    Battle_Tool.Dream_Obtain_Unit(currency_unit.Boss积分, 1, Obtain_Int.Add_unit(1));
-                    Alert_Dec.Show("获得Boss积分 * 1");
-                }
-
-            }
             if (baseBattleAttack.Data.type == Battle_Game_Type.Boss &&  crt_map.map_type == 0 )
             {
                 if (Tool_Battle.Is_first_Boss_Kill(baseBattleAttack.Data.crt_name))
@@ -767,6 +757,15 @@ public class PanelBattle : PanelBase
                 case Battle_Game_Type.monster:
                 case Battle_Game_Type.Boss:
                 case Battle_Game_Type.Activity_Monster:
+                    if (SumSave.crtHero.zs_lvs > 1)
+                    {
+                        if (Random.Range(0, 100) < 1)
+                        {
+                            Battle_Tool.Dream_Obtain_Unit(currency_unit.Boss积分, 1, Obtain_Int.Add_unit(1));
+                            Alert_Dec.Show("获得Boss积分 * 1");
+                        }
+
+                    }
                     monster_list.Remove(health.gameObject);
                     Show_State_Monster();
                     map_crate_boss_condition++;
@@ -838,6 +837,7 @@ public class PanelBattle : PanelBase
     {
         exp_copy();
         TowerBabel_reward();
+        Close();
 
     }
     /// <summary>
@@ -850,7 +850,7 @@ public class PanelBattle : PanelBase
             SumSave.crt_user_towerbabel.SetMax(crt_map.map_id - 31, kill_monster);
             if (SumSave.crt_signin.GetIsValue(crt_map.map_name) == 1)//每日首杀奖励
             {
-                List<(object,int)>  list = new List<(object, int)>();
+                List<(object, int)> list = new List<(object, int)>();
                 string value = "本次战斗击杀" + kill_monster + "\n";
                 int basenumber = 1;
                 int max = kill_monster + 1;
@@ -897,7 +897,7 @@ public class PanelBattle : PanelBase
                     default:
                         break;
                 }
-                for (int i= 0; i < list.Count; i++)
+                for (int i = 0; i < list.Count; i++)
                 {
                     ObscuredInt number = list[i].Item2;
                     ObscuredInt random = Random.Range(1, 1000);
@@ -905,13 +905,17 @@ public class PanelBattle : PanelBase
                     Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, list[i].Item1, new ObscuredInt[] { number + random, random }), maxnumber);
                 }
             }
+            else
+            { 
+                Alert_Dec.Show("每日首次奖励已领取");
+            }
         }
     }
 
     /// <summary>
     /// 经验副本
     /// </summary>
-    private void exp_copy()
+    private void exp_copy() 
     {
         if (crt_map.map_name == "经验副本")
         {
@@ -1351,6 +1355,16 @@ public class PanelBattle : PanelBase
         item.GetComponent<Button>().onClick.AddListener(() => { lock_target(item); });
         monster_list.Add(item);
         Show_State_Monster();
+        //if (player_list.Count > 1)
+        //{
+        //    foreach (var player in player_list)
+        //    {
+        //        if (player.GetComponent<BaseBattleAttack>().Data.type == Battle_Game_Type.player)
+        //        {
+        //            item.GetComponent<BaseBattleAttack>().Set_Target(player.GetComponent<BattleHealthState>());
+        //        }
+        //    }
+        //}
         if (SumSave.crt_setting.user_data_settings.Count >= 3 && SumSave.crt_setting.user_data_settings[2] == 1)
         {
             Alert_Dec.Show("集火模式开启");

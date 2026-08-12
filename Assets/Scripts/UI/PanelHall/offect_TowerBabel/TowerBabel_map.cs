@@ -39,6 +39,8 @@ public class TowerBabel_map : Base_Mono
     private btn_item select_btn;
 
     private int max_value = 0;
+
+    private List<int> number_list = new List<int>();
     private void Awake()
     {
         info = Find<Text>("title_name/info");
@@ -73,6 +75,7 @@ public class TowerBabel_map : Base_Mono
     {
         string dec = "";
         db_map_vo map = base_map_item_dic[btn_item];
+        ClearObject(map_btn_brom);
         if (map != null)
         {
             bg_show_map.gameObject.SetActive(true);
@@ -159,7 +162,7 @@ public class TowerBabel_map : Base_Mono
         Need_Condition(common_items_list.金条, number * 100);
         if (Return_Condition())
         {
-            SumSave.crt_signin.SetIsValue(base_map_item_dic[select_btn].map_name, SumSave.crt_signin.GetIsValue(base_map_item_dic[select_btn].map_name) + 1);
+            SumSave.crt_signin.SetIsValue(base_map_item_dic[select_btn].map_name, 1);
             panelBattle.Show();
             panelBattle.GoMaxMap(base_map_item_dic[select_btn], maplv);
             bg_offects.gameObject.SetActive(false);

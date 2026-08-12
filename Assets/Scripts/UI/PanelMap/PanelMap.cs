@@ -163,7 +163,7 @@ public class PanelMap : PanelBase
                 }
                 break;
             case Map_Btn_list.返回战斗:
-                if (open_return_battle||panelBattle.gameObject.activeSelf)
+                if (panelBattle.gameObject.activeSelf)
                     panelBattle.Show();
                 else Alert_Dec.Show("请先开始战斗");
                 break;
