@@ -170,7 +170,7 @@ namespace MVC
             }
         } 
 
-        private string[] versions = new string[] {"0.2026.19", "0.2026.18", "0.2026.15" }; //"0.2026.09", "0.2026.16", "0.2026.15" 
+        private string[] versions = new string[] {"0.2026.19", "0.2026.20", "0.2026.15" }; //"0.2026.09", "0.2026.16", "0.2026.15" 
         /// <summary>
         /// 检测次数
         /// </summary>

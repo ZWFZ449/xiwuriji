@@ -153,8 +153,8 @@ public class db_skill_vo : Base_VO
     /// </summary>
     /// <returns></returns>
     public int SetLv()
-    { 
-        return lv;
+    {
+        return Mathf.Min(lv, DefPowers.Count - 1);
     }
     public int SetExp()
     { 

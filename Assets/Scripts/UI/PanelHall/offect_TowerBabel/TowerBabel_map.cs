@@ -94,7 +94,7 @@ public class TowerBabel_map : Base_Mono
                 }
                 dec = "当前击杀数量" + max_value;
                 btn_list.Add(map_type.挑战);
-                btn_list.Add(map_type.重置);
+                //btn_list.Add(map_type.重置);
                 //btn_list.Add(map_type.扫荡);
 
             }
@@ -137,6 +137,7 @@ public class TowerBabel_map : Base_Mono
     private void Confirm(object arg0)
     {
         int maplv = (int)arg0;
+        maplv = 0;
         if (SumSave.crt_signin.GetIsValue(base_map_item_dic[select_btn].map_name) == 0)
         {
             SumSave.crt_signin.SetIsValue(base_map_item_dic[select_btn].map_name, 1);

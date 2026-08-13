@@ -677,6 +677,7 @@ public class PanelBattle : PanelBase
         monster_list.Clear();
         player_list.Clear();
         Close_BossSlider();
+        kill_monster = 0;
         monster_battle_list.Add(Obtain_Monster_MaxBattle(crt_map.map_monster[crt_map.GetMapIntensityDrop - 1]));
         Show_State_Monster();
 
