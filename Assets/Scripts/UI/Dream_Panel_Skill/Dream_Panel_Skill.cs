@@ -192,6 +192,7 @@ public class Dream_Panel_Skill : Panel_Base
             {
                 crt_skill.GetExp(number * 10);
                 SumSave.crt_skill.UpLv_skill();
+                SendNotification(NotiList.Refresh_Max_Hero_Attribute);
                 Alert_Dec.Show(crt_skill.show_name + "升级成功");
             }
         }

@@ -1806,7 +1806,7 @@ public static class Tool_Battle
         dodge = 30 + (number / 2);
         crit = 30 + (number / 5);
         critDmg = 300 + (number * 2);
-        hpRegen = (int)(maxhp / 10);
+        if (number >= 5) hpRegen = (int)(maxhp / 10);
         if (hpRegen < 0) hpRegen = 10000;
         mpRegen = 10000;
         battle_hp = 0;

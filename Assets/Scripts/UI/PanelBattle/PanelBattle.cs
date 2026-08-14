@@ -146,6 +146,7 @@ public class PanelBattle : PanelBase
     private void Interruption(object arg0)
     {
         obtain_reward();
+        Close();
     }
 
     public void Close()
@@ -838,7 +839,7 @@ public class PanelBattle : PanelBase
     {
         exp_copy();
         TowerBabel_reward();
-        Close();
+        
 
     }
     /// <summary>
@@ -905,6 +906,7 @@ public class PanelBattle : PanelBase
                     ObscuredInt maxnumber = number + Random.Range(1, 1000);
                     Battle_Tool.Dream_Obtain_Resources(Obtain_Int.Add(1, list[i].Item1, new ObscuredInt[] { number + random, random }), maxnumber);
                 }
+                Close();
             }
             else
             { 
@@ -929,6 +931,7 @@ public class PanelBattle : PanelBase
                 long exp = (long)(values * value / 100);
                 Add_Exp(exp);
                 Alert.Show("经验副本", "获得经验值" + Battle_Tool.FormatNumberToChineseUnit(exp));
+                Close();
             }
         }
     }
