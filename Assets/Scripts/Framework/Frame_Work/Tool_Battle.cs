@@ -1414,9 +1414,23 @@ public static class Tool_Battle
         {
             switch (item.Key)
             {
-                case 1:
-                case 3:
-                case 4:
+                case 2:
+                    foreach (var skill in item.Value)
+                    {
+                        if (skill_list.ContainsKey(skill.Key))
+                        {
+                            if (!skill_list[skill.Key].GetBuff.ContainsKey(enum_talent_offect_list.技能伤害))
+                            {
+                                skill_list[skill.Key].GetBuff.Add(enum_talent_offect_list.技能伤害, skill.Value);
+                            }
+                            else
+                            { 
+                                skill_list[skill.Key].GetBuff[enum_talent_offect_list.技能伤害] += skill.Value;
+                            }
+                        }
+                    }
+                    break;
+                default:
                     foreach (var skill in item.Value)
                     {
                         enum_equip_entry_list e = (enum_equip_entry_list)(skill.Key);
@@ -1430,7 +1444,7 @@ public static class Tool_Battle
                             case enum_equip_entry_list.物理攻击: dc2 += value; break;
                             case enum_equip_entry_list.魔法攻击: mc2 += value; break;
                             case enum_equip_entry_list.道术攻击: sc2 += value; break;
-                            case enum_equip_entry_list.每秒回血: hpRegen += value; break; 
+                            case enum_equip_entry_list.每秒回血: hpRegen += value; break;
                             case enum_equip_entry_list.每秒回蓝: mpRegen += value; break;
                             case enum_equip_entry_list.真实伤害: battle_Damage += value; break;
                             case enum_equip_entry_list.吸收伤害: battle_def += value; break;
@@ -1468,32 +1482,14 @@ public static class Tool_Battle
                             case enum_equip_entry_list.神佑护体:
                                 hp += mp * (value) / 100;
                                 break;
-                            
-                            
+
+
                             default:
 
                                 break;
                         }
                     }
 
-                    break;
-                case 2:
-                    foreach (var skill in item.Value)
-                    {
-                        if (skill_list.ContainsKey(skill.Key))
-                        {
-                            if (!skill_list[skill.Key].GetBuff.ContainsKey(enum_talent_offect_list.技能伤害))
-                            {
-                                skill_list[skill.Key].GetBuff.Add(enum_talent_offect_list.技能伤害, skill.Value);
-                            }
-                            else
-                            { 
-                                skill_list[skill.Key].GetBuff[enum_talent_offect_list.技能伤害] += skill.Value;
-                            }
-                        }
-                    }
-                    break;
-                default:
                     break;
             }
         }
