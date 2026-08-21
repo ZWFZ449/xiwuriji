@@ -856,7 +856,7 @@ public class Dream_Panel_Hero : Panel_Base
                case enum_equip_entry_list.道攻属性:
                    info_Dic[item].SetInfo(item, data.battle_sc+" %",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.攻击速度:
-                   info_Dic[item].SetInfo(item, (data.battle_speed / 60f).ToString("F2") + "s/次",HexToColor("bbfdff"));break;
+                   info_Dic[item].SetInfo(item, (data.battle_speed / 120f).ToString("F2") + "s/次",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.攻击范围:
                    info_Dic[item].SetInfo(item, data.battle_range+"",HexToColor("bbfdff"));break;
                case enum_equip_entry_list.暴击属性:

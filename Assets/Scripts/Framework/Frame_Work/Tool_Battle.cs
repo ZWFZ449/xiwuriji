@@ -1430,8 +1430,7 @@ public static class Tool_Battle
                             case enum_equip_entry_list.物理攻击: dc2 += value; break;
                             case enum_equip_entry_list.魔法攻击: mc2 += value; break;
                             case enum_equip_entry_list.道术攻击: sc2 += value; break;
-
-                            case enum_equip_entry_list.每秒回血: hpRegen += value; break;
+                            case enum_equip_entry_list.每秒回血: hpRegen += value; break; 
                             case enum_equip_entry_list.每秒回蓝: mpRegen += value; break;
                             case enum_equip_entry_list.真实伤害: battle_Damage += value; break;
                             case enum_equip_entry_list.吸收伤害: battle_def += value; break;

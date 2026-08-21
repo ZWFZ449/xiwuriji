@@ -124,7 +124,7 @@ public class Dream_Panel_artifact : Panel_Base
     /// <param name="item"></param>
     private void OnClickItem(artifact_item item)
     {
-        if (item.crt_artifact.artifact_type > 4)
+        if (item.crt_artifact.artifact_type > 6)
         {
             Alert_Dec.Show("该神器尚未激活");
             return;
