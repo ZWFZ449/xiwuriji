@@ -49,6 +49,16 @@ public class dream_user_towerbabel_vo : Base_VO
                     if (!dict.ContainsKey(vo.TowerBabel_name))
                         dict.Add(vo.TowerBabel_name, vo);
                 }
+                else
+                { 
+                    vo= ArrayHelper.Find(SumSave.db_towerbabel_artifacts, e => e.id == int.Parse(list2[0]));
+                    if (vo != null)
+                    {
+                        vo.user_lv = int.Parse(list2[1]);
+                        if (!dict.ContainsKey(vo.TowerBabel_name))
+                            dict.Add(vo.TowerBabel_name, vo);
+                    }
+                }
             }
         }
     }

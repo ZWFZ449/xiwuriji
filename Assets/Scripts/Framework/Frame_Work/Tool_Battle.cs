@@ -1256,6 +1256,30 @@ public static class Tool_Battle
                                         value -= 1;
                                         lucky += value;
                                         break;
+                                    case artifact_offect_list.物攻:
+                                        dc2+= value;
+                                        break;
+                                    case artifact_offect_list.防御:
+                                        ac2 += value;
+                                        ac += value;
+                                        mac += value;
+                                        mac2 += value;
+                                        break;
+                                    case artifact_offect_list.免伤:
+                                        battle_def+= value;
+                                        break;
+                                    case artifact_offect_list.战系主动技能等级上限:
+                                        break;
+                                    case artifact_offect_list.法系主动技能等级上限:
+                                        break;
+                                    case artifact_offect_list.道士主动技能等级上限:
+                                        break;
+                                    case artifact_offect_list.魔攻:
+                                        mc2 += value;
+                                        break;
+                                    case artifact_offect_list.道术:
+                                        sc2 += value;
+                                        break;
                                     default:
                                         break;
                                 }

@@ -24,6 +24,14 @@ public enum artifact_offect_list
 鞭尸概率,
 灵宠转生加成,
 角色转生加成,
+物攻,
+防御,
+免伤,
+战系主动技能等级上限,
+法系主动技能等级上限,
+道士主动技能等级上限,
+魔攻,
+道术,
 }
 public class Dream_Panel_artifact : Panel_Base
 {
@@ -116,7 +124,7 @@ public class Dream_Panel_artifact : Panel_Base
     /// <param name="item"></param>
     private void OnClickItem(artifact_item item)
     {
-        if (item.crt_artifact.artifact_type > 3)
+        if (item.crt_artifact.artifact_type > 4)
         {
             Alert_Dec.Show("该神器尚未激活");
             return;
@@ -126,9 +134,7 @@ public class Dream_Panel_artifact : Panel_Base
         crt_item = item;
 
         ClearObject(m_icon_proms);
-
-        Instantiate(artifact_item_prefab, m_proms).Initialize(item.crt_artifact);
-
+        //Instantiate(artifact_item_prefab, m_proms).Initialize(item.crt_artifact);
         string dec = item.crt_artifact.artifact_name + "Lv." + item.crt_Data.Item2 + "\n";
         //info.text = item.crt_artifact.artifact_name + "Lv." + item.crt_Data.Item2;
         List<string> list = ArrayHelper.Get_Split<string>(item.crt_artifact.artifact_offect, ',');
@@ -184,6 +190,19 @@ public class Dream_Panel_artifact : Panel_Base
                     case artifact_offect_list.幸运:
                         dec += " \n";
                         break;
+                    case artifact_offect_list.物攻:
+                    case artifact_offect_list.防御:
+                    case artifact_offect_list.免伤:
+                    case artifact_offect_list.魔攻:
+                    case artifact_offect_list.道术:
+                        dec += " \n";
+                        break;
+                    case artifact_offect_list.战系主动技能等级上限:
+                    case artifact_offect_list.法系主动技能等级上限:
+                    case artifact_offect_list.道士主动技能等级上限:
+                        dec += "级\n";
+                        break;
+
                     default:
                         break;
                 }
@@ -231,7 +250,6 @@ public class Dream_Panel_artifact : Panel_Base
 
         }
         ClearObject(m_ptn_proms);
-
         info.text = dec;
 
         for (int i = 0; i < item.crt_artifact.artifact_btn.Count; i++)
@@ -301,8 +319,8 @@ public class Dream_Panel_artifact : Panel_Base
             }
         }
         if (Return_Condition())
-        { 
-            bool exist= true;
+        {
+            bool exist = true;
             List<(int, int, long)> data = SumSave.crt_user_artifact.Get;
             for (int i = 0; i < data.Count; i++)
             {
@@ -313,16 +331,17 @@ public class Dream_Panel_artifact : Panel_Base
                 }
             }
             if (exist)
-            { 
-                data.Add((crt_item.crt_artifact.artifact_type, 1, 0)); 
+            {
+                data.Add((crt_item.crt_artifact.artifact_type, 1, 0));
                 Alert_Dec.Show("激活成功");
             }
             else
-            Alert_Dec.Show("升级成功");
+                Alert_Dec.Show("升级成功");
             SumSave.crt_user_artifact.MysqlData();//更新数据库
             SendNotification(NotiList.Refresh_Max_Hero_Attribute);
             baseShow();
         }
+        else Alert_Dec.Show("升级失败,材料不足");
     }
 
     private void confirm(object arg0)
