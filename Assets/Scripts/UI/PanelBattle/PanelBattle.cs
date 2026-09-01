@@ -522,28 +522,32 @@ public class PanelBattle : PanelBase
             max = (int)MathF.Min(crt_map.map_add_number_monster[crt_map.GetMapIntensityDrop - 1],
                     crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] - monster_list.Count);
         }
-        if (Tool_Battle.IsBuff(common_Buff.增量卷轴))
+        if (SumSave.crt_setting.user_data_settings.Count >= 14 && SumSave.crt_setting.user_data_settings[13] == 1)
         {
-            if (max <= 0) max = 0;
-            max += 6;
-            Alert_Dec.Show("增量刷新个数 + 6");
+            if (Tool_Battle.IsBuff(common_Buff.增量卷轴))
+            {
+                if (max <= 0) max = 0;
+                max += 6;
+                Alert_Dec.Show("增量刷新个数 + 6");
+            }
+            int sum = SumSave.crt_global_gift.GetGiftPoints;
+            if (sum > 5000)
+            {
+                max += 2;
+                if (sum > 10000) max += 4;
+                if (sum > 20000) max += 6;
+            }
+            if (SumSave.crt_zs.crt_medicine.Count > (int)medicine_type.怪物刷新个数)
+            {
+                max += SumSave.crt_zs.crt_medicine[(int)medicine_type.怪物刷新个数];
+            }
+            if (Tool_Battle.IsBuff(common_Buff.减量卷轴))
+            { 
+                max /= 2;
+            }
         }
-        int sum = SumSave.crt_global_gift.GetGiftPoints;
-        if (sum > 5000)
-        {
-            max += 2;
-            if(sum > 10000) max += 4;
-            if (sum > 20000) max += 6;
-        }
-        if (SumSave.crt_zs.crt_medicine.Count > (int)medicine_type.怪物刷新个数)
-        { 
-            max += SumSave.crt_zs.crt_medicine[(int)medicine_type.怪物刷新个数];
-        }
-        max = (int)MathF.Min(max,crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] - monster_list.Count);
-        if (Tool_Battle.IsBuff(common_Buff.减量卷轴))
-        {
-            max /= 2;
-        }
+        max = (int)MathF.Min(max, crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] - monster_list.Count);
+
         if (max > 0)
         { 
             for (int i = 0; i < max; i++) Generate_Monster();
@@ -876,6 +880,7 @@ public class PanelBattle : PanelBase
                         list.Add((common_items_list.被动精华, basenumber));
                         list.Add((common_items_list.无根泉水, basenumber));
                         list.Add((common_items_list.麻痹碎片, basenumber));
+                        list.Add((common_items_list.金色传说, 5));
                         break;
                     case 32:
                         while (max > 0)
@@ -895,6 +900,7 @@ public class PanelBattle : PanelBase
                         list.Add((common_items_list.被动精华, basenumber));
                         list.Add((common_items_list.无尽粉尘, basenumber));
                         list.Add((common_items_list.护体碎片, basenumber));
+                        list.Add((common_items_list.金色传说, 5));
                         break;
                     default:
                         break;
@@ -1346,7 +1352,7 @@ public class PanelBattle : PanelBase
     {
         //每次只刷新一个boss
         if (!IsBoss) return;
-        if (SumSave.crt_setting.user_data_settings.Count >= 2 && SumSave.crt_setting.user_data_settings[1] == 0) return;
+        if (SumSave.crt_setting.user_data_settings.Count >= 2 && SumSave.crt_setting.user_data_settings[1] == 0 && crt_map.map_type == 0) return;
         crtMaxBattleVO monster = ArrayHelper.Find(monster_Bossbattle_list, e => e.crt_name == specify);
         GameObject item = ObjectPoolManager.instance.GetObjectFormPool(monster.crt_name, battle_Boss_monster_prefab,
             GetRandomUVPosition(600, 2000), Quaternion.identity, battle_borm.transform);

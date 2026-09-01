@@ -1395,6 +1395,10 @@ public static class Tool_Battle
         }
         if (list3.Count == SumSave.db_towerbabel_artifacts.Count)
         {
+            if (!TowerBabel_dic.ContainsKey(2))
+            { 
+                TowerBabel_dic.Add(2, new Dictionary<int, int>());
+            }
             int min = ArrayHelper.GetMin(list3, (int i) => i);
             if (min >= 5)
             {
@@ -1763,7 +1767,7 @@ public static class Tool_Battle
         battle_mc = 0;
         battle_speed = 50-(number / 30);
         if (battle_speed <= 10) battle_speed = 10;
-        battle_range = Random.Range(200, 600);
+        battle_range = Random.Range(200, 500);
         battle_Damage = 50 + number/10;//真实伤害
         battle_def = monster.data.battle_def;
         damage_reduction = 0;

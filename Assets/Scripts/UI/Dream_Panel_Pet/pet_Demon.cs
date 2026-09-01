@@ -84,11 +84,14 @@ public class pet_Demon : Base_Mono
         List<db_pet_vo> pet_list = SumSave.crt_pet.GetPets;
         for (int i = 0; i < pet_list.Count; i++)
         {
-            if (pet_list[i].crt_name == pet_list[i].pet_name)
+            if (pet_list[i] != crt_pet)
             {
-                dream_BagItem bagItem = Instantiate(p_bagItem_prefab, m_BagItem_brom);
-                bagItem.Pet_Data = pet_list[i];
-                bagItem.GetComponent<Button>().onClick.AddListener(() => SelectPetItem(bagItem));
+                if (pet_list[i].crt_name == pet_list[i].pet_name)
+                {
+                    dream_BagItem bagItem = Instantiate(p_bagItem_prefab, m_BagItem_brom);
+                    bagItem.Pet_Data = pet_list[i];
+                    bagItem.GetComponent<Button>().onClick.AddListener(() => SelectPetItem(bagItem));
+                }
             }
         }
     }
@@ -102,10 +105,6 @@ public class pet_Demon : Base_Mono
         offect.gameObject.SetActive(true);
         Show_Talent(crt_pet, moffect_Talent_brom);
         Show_Talent(select_pet, moffect_auxiliaryTalent_brom);
-        //string dec = "请确认是否选中的灵宠?";
-        //int number= pet.GetCrtTalent.Count+crt_pet.GetCrtTalent.Count;
-        //dec += "\n炼妖可重置天赋数量 " + Show_Color.Red(number / 2) + "---" + Show_Color.Red((number) / 2 + 2);
-        //Alert.Show("炼妖", dec, devour_Pet, bagItem);
     }
     private void Select_Talent_Confirm()
     {

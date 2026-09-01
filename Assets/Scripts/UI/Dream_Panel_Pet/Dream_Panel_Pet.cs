@@ -132,6 +132,7 @@ public class Dream_Panel_Pet : Panel_Base
                 btn_list.Add(replace_state.上阵);
                 btn_list.Add(replace_state.改名);
                 btn_list.Add(replace_state.放生);
+                btn_list.Add(replace_state.炼妖);
                 btn_list.Add(replace_state.一键学习);
                 break;
             case Panel_BagType.已装备:
@@ -331,6 +332,10 @@ public class Dream_Panel_Pet : Panel_Base
     protected void update_pet()
     {
         ShowInfo();
+        if (dream_Panel_Bag.gameObject.activeInHierarchy)
+        {
+            dream_Panel_Bag.Show();
+        }
     }
     /// <summary>
     /// 显示信息
