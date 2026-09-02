@@ -1841,7 +1841,7 @@ public static class Tool_Battle
         battle_mc = 0;
         battle_speed = 30 - (number * 2);
         if (battle_speed <= 10) battle_speed = 10;
-        battle_range = Random.Range(200, 300);
+        battle_range = 500;
         battle_Damage = 50 + number / 10;//真实伤害
         battle_def = monster.data.battle_def;
         damage_reduction = 0;
@@ -1859,7 +1859,7 @@ public static class Tool_Battle
         return crt;
     }
 
-
+     
     public static string show_Talent(pet_talent_item item)
     {
         db_pet_talent_vo talent = item.GetTalentValue;
@@ -2185,7 +2185,7 @@ public static class Tool_Battle
         battle_dc = (int)SumSave.crtMaxBattle.data.battle_sc * (power) / 100;
         battle_sc = (int)SumSave.crtMaxBattle.data.battle_sc * (power) / 100;
         battle_mc = (int)SumSave.crtMaxBattle.data.battle_sc * (power) / 100;
-        battle_speed = (int)SumSave.crtMaxBattle.data.battle_speed;
+        battle_speed = 500;// (int)SumSave.crtMaxBattle.data.battle_speed;
         battle_range = (int)SumSave.crtMaxBattle.data.battle_range * (power) / 100;
         battle_Damage = (int)SumSave.crtMaxBattle.data.battle_Damage * (power) / 100 + skill.skill_damages[lv];//真实伤害
         battle_def = (int)SumSave.crtMaxBattle.data.battle_def * (power) / 100;

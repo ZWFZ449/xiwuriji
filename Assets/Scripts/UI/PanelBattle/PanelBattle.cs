@@ -336,6 +336,13 @@ public class PanelBattle : PanelBase
     /// <param name="type"></param>
     protected void Use_Medicine(medicineType type)
     {
+        //if (crt_map.map_type == 10 || crt_map.map_type == 11)
+        //{
+        //    if (type == medicineType.随机)
+        //    {
+        //        return;
+        //    }
+        //}
         Clear_Condition();
         Need_Condition(medicine_list[type].GetBag.Name, 1);
         if (Return_Condition())

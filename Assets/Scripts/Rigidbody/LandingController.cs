@@ -1,3 +1,4 @@
+using Common;
 using UnityEngine;
 
 public class LandingController : MonoBehaviour
@@ -41,7 +42,10 @@ public class LandingController : MonoBehaviour
     {
         if(!Terget) return;
         float range = Vector3.Distance(Terget.position, transform.position);
-        if (Vector3.Distance(Terget.position, transform.position) > battle_range)
+        int maxRange = (int)Mathf.Min(SumSave.map_Lv * 100 + 200, battle_range);
+        if (Vector3.Distance(Terget.position, transform.position) >= maxRange)//保证战士可以打的到
+
+         //   if (Vector3.Distance(Terget.position, transform.position) > battle_range)
         {
             transform.position = Vector2.MoveTowards(transform.position, Terget.position, move_speed * Time.deltaTime);
         }
