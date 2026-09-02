@@ -522,7 +522,7 @@ public class PanelBattle : PanelBase
             max = (int)MathF.Min(crt_map.map_add_number_monster[crt_map.GetMapIntensityDrop - 1],
                     crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] - monster_list.Count);
         }
-        if (SumSave.crt_setting.user_data_settings.Count >= 14 && SumSave.crt_setting.user_data_settings[13] == 1)
+        if (Is_Add_Number_Monster())
         {
             if (Tool_Battle.IsBuff(common_Buff.增量卷轴))
             {
@@ -530,6 +530,7 @@ public class PanelBattle : PanelBase
                 max += 6;
                 Alert_Dec.Show("增量刷新个数 + 6");
             }
+            max = (int)MathF.Min(max, crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] - monster_list.Count);
             int sum = SumSave.crt_global_gift.GetGiftPoints;
             if (sum > 5000)
             {
@@ -546,7 +547,6 @@ public class PanelBattle : PanelBase
                 max /= 2;
             }
         }
-        max = (int)MathF.Min(max, crt_map.map_max_number_monster[crt_map.GetMapIntensityDrop - 1] - monster_list.Count);
 
         if (max > 0)
         { 
@@ -556,6 +556,15 @@ public class PanelBattle : PanelBase
         //判断自动boss
         Auto_Generate_Boss();
 
+    }
+
+    private bool Is_Add_Number_Monster()
+    {
+        if (SumSave.crt_setting.user_data_settings.Count >= 14)
+        { 
+        return SumSave.crt_setting.user_data_settings[13] == 1;
+        }
+        else return true;
     }
 
     /// <summary>
