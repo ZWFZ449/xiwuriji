@@ -336,13 +336,13 @@ public class PanelBattle : PanelBase
     /// <param name="type"></param>
     protected void Use_Medicine(medicineType type)
     {
-        //if (crt_map.map_type == 10 || crt_map.map_type == 11)
-        //{
-        //    if (type == medicineType.随机)
-        //    {
-        //        return;
-        //    }
-        //}
+        if (crt_map.map_type == 10 || crt_map.map_type == 11)
+        {
+            if (type == medicineType.随机)
+            {
+                return;
+            }
+        }
         Clear_Condition();
         Need_Condition(medicine_list[type].GetBag.Name, 1);
         if (Return_Condition())
@@ -567,6 +567,7 @@ public class PanelBattle : PanelBase
 
     private bool Is_Add_Number_Monster()
     {
+        if (crt_map.map_id == 32) return false;//通天塔禁用增量
         if (SumSave.crt_setting.user_data_settings.Count >= 14)
         { 
         return SumSave.crt_setting.user_data_settings[13] == 1;

@@ -1692,7 +1692,7 @@ public static class Tool_Battle
         battle_mc = monster.data.battle_sc * (power) / 100;
         battle_speed = monster.data.battle_speed;
         battle_range = monster.data.battle_range;
-        if (lv > 1) battle_range = Random.Range(monster.data.battle_range - 30, monster.data.battle_range + 30);
+        //if (lv > 1) battle_range = Random.Range(monster.data.battle_range - 30, monster.data.battle_range + 30);
          battle_Damage = monster.data.battle_Damage;//真实伤害
         battle_def = monster.data.battle_def ;
         damage_reduction = monster.data.damage_reduction * (power) / 100;
@@ -2185,7 +2185,7 @@ public static class Tool_Battle
         battle_dc = (int)SumSave.crtMaxBattle.data.battle_sc * (power) / 100;
         battle_sc = (int)SumSave.crtMaxBattle.data.battle_sc * (power) / 100;
         battle_mc = (int)SumSave.crtMaxBattle.data.battle_sc * (power) / 100;
-        battle_speed = 500;// (int)SumSave.crtMaxBattle.data.battle_speed;
+        battle_speed = (int)SumSave.crtMaxBattle.data.battle_speed;
         battle_range = (int)SumSave.crtMaxBattle.data.battle_range * (power) / 100;
         battle_Damage = (int)SumSave.crtMaxBattle.data.battle_Damage * (power) / 100 + skill.skill_damages[lv];//真实伤害
         battle_def = (int)SumSave.crtMaxBattle.data.battle_def * (power) / 100;
