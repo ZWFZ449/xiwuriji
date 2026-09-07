@@ -31,13 +31,6 @@ public class playerController : BaseBattleAttack
         }
         if (Terget == null || !Terget.gameObject.activeSelf || Terget.isDead) Find_Terget();
         if (Terget == null) return;
-        if (data.numbness > 0)
-        {
-            if (Random.Range(0, 100) < data.numbness)
-            {
-                Terget.GetComponent<BaseBattleAttack>().Data.numbness_IsState = true;
-            }
-        }
         if (battle_skills != null && battle_skills.Count > 0)
         {
             if (skill_index >= battle_skills.Count) skill_index = 0;
@@ -189,7 +182,13 @@ public class playerController : BaseBattleAttack
             go.AddComponent<Skill_Hit>();
         }
         go.GetComponent<Skill_Hit>().SetTargetPosition(this, skill, Terget);
-
+        if (data.numbness > 0)
+        {
+            if (Random.Range(0, 100) < data.numbness)
+            {
+                Terget.GetComponent<BaseBattleAttack>().Data.numbness_IsState = true;
+            }
+        }
         if (skill.MoveType == 0)//剑气类技能
         {
             skill_damage(skill);  

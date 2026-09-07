@@ -42,7 +42,6 @@ public enum skill_Lv_Type
   大师二重,
   大师三重,
   大师四重,
-  大师五重,
   宗师一重,
   宗师二重,
   宗师三重,
@@ -57,7 +56,8 @@ public class Dream_Panel_Skill : Panel_Base
       上阵,
       升级,
       激活,
-      进阶
+      进阶,
+      宗师
     };
     private enum Skill_Type
     { 
@@ -133,7 +133,7 @@ public class Dream_Panel_Skill : Panel_Base
                 Alert.Show("激活技能", "需要" + Show_Color.Red(crt_skill.show_name), activate_skill);
                 break;
             case Skill_Btn_Type.进阶:
-                if (crt_skill.SetLv() < crt_skill.skill_damages.Count - 1)
+                if (crt_skill.SetLv() < crt_skill.skill_damages.Count - 1 && crt_skill.SetLv()<=10)
                 {
                     string dec= "\n天赋书页 * " + crt_skill.needLvitem[crt_skill.SetLv()] + "\n转生石 * " + crt_skill.needLvitem[crt_skill.SetLv()];
                     if (crt_skill.need_lv >= 60)
@@ -143,9 +143,117 @@ public class Dream_Panel_Skill : Panel_Base
                     Alert.Show("进阶技能", "需要" + Show_Color.Red(dec), advancedskill);
                 }else Alert_Dec.Show("技能已满级");
                 break;
+            case Skill_Btn_Type.宗师:
+                int max = 9 + MaxLv();
+                if (crt_skill.Job == -1) max = 12;
+                if (IsNeed(max))
+                {
+                    string dec = "";
+                    if (crt_skill.Job == -1)//被动技能
+                    {
+                        dec = "\n" + common_items_list.被动精华 + " * " + ((crt_skill.SetLv() - 8) * 50);
+                        dec += "\n" + common_items_list.强者证明 + " * " + ((crt_skill.SetLv() - 8) * 10);
+                        dec += "\n" + common_items_list.天赋精华 + " * " + ((crt_skill.SetLv() - 8) * 100);
+                    }
+                    else
+                    {
+                        dec = "\n" + common_items_list.天赋精华 + " * " + ((crt_skill.SetLv() - 8) * 500);
+                        dec += "\n" + common_items_list.强者证明 + " * " + ((crt_skill.SetLv() - 8) * 100);
+                        dec += "\n" + common_items_list.金色传说 + " * " + ((crt_skill.SetLv() - 8) * 10);
+                    }
+                    Alert.Show("宗师技能", "需要" + Show_Color.Red(dec), advanced_Maxskill);
+                }
+                else Alert_Dec.Show("技能已满级");
+                break;
         }
     }
 
+    private bool IsNeed(int max)
+    {
+        if (crt_skill.SetLv() >= 9 && crt_skill.SetLv() <= max)
+        {
+            if (crt_skill.Job == -1) return true;
+            else
+            {
+
+                return crt_skill.SetLv() < crt_skill.skill_damages.Count - 1;
+            }
+        }
+        return false;
+    }
+    private void advanced_Maxskill(object arg0)
+    {
+        Clear_Condition();
+        if (crt_skill.Job == -1)//被动技能
+        {
+            Need_Condition(common_items_list.被动精华, (crt_skill.SetLv() - 8) * 50);
+            Need_Condition(common_items_list.强者证明, (crt_skill.SetLv() - 8) * 10);
+            Need_Condition(common_items_list.天赋精华, (crt_skill.SetLv() - 8) * 100);
+        }
+        else
+        {
+            Need_Condition(common_items_list.天赋精华, (crt_skill.SetLv() - 8) * 500);
+            Need_Condition(common_items_list.强者证明, (crt_skill.SetLv() - 8) * 100);
+            Need_Condition(common_items_list.金色传说, (crt_skill.SetLv() - 8) * 10);
+        }
+        if (Return_Condition())
+        {
+            crt_skill.monster_lv(crt_skill.SetLv() + 1);
+            SumSave.crt_skill.UpLv_skill();
+            Alert_Dec.Show(crt_skill.show_name + "升级成功");
+            SendNotification(NotiList.Refresh_Max_Hero_Attribute);
+        }
+        else Alert_Dec.Show("材料不足");
+    }
+
+    /// <summary>
+    /// 技能最大效果
+    /// </summary>
+    /// <returns></returns>
+    private int MaxLv()
+    {
+        int lv = 1;
+        List<(int, int, long)> artifacts = SumSave.crt_user_artifact.Get;
+        //神器
+        for (int i = 0; i < SumSave.db_artifacts.Count; i++)
+        {
+            for (int j = 0; j < artifacts.Count; j++)
+            {
+                if (SumSave.db_artifacts[i].artifact_type == artifacts[j].Item1)
+                {
+                    if (artifacts[j].Item2 > 0)
+                    {
+                        List<string> list = ArrayHelper.Get_Split<string>(SumSave.db_artifacts[i].artifact_offect, ',');
+                        for (int k = 0; k < list.Count; k++)
+                        {
+                            List<string> list2 = ArrayHelper.Get_Split<string>(list[k], ' ');
+                            if (list2.Count == 3)
+                            {
+                                int value = ((artifacts[j].Item2 / int.Parse(list2[1])) + 1) * (int.Parse(list2[2]));
+                                switch ((artifact_offect_list)(int.Parse(list2[0])))
+                                {
+                                    
+                                    case artifact_offect_list.战系主动技能等级上限:
+                                        if (crt_skill.Job == 1) lv = value;
+                                        break;
+                                    case artifact_offect_list.法系主动技能等级上限:
+                                        if (crt_skill.Job == 2) lv = value;
+                                        break;
+                                    case artifact_offect_list.道士主动技能等级上限:
+                                        if (crt_skill.Job == 3) lv = value;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        return lv;
+    }
     private void advancedskill(object arg0)
     {
         Clear_Condition();
@@ -238,7 +346,10 @@ public class Dream_Panel_Skill : Panel_Base
                     exist = lv < 0;
                     break;
                 case Skill_Btn_Type.进阶:
-                    exist = lv >= 0 && (crt_skill.SetLv() >= crt_skill.skill_up_lv.Count - 1);
+                    exist = lv >= 0 && (crt_skill.SetLv() >= crt_skill.skill_up_lv.Count - 1) && lv < 9;
+                    break;
+                case Skill_Btn_Type.宗师:
+                    exist = lv >= 9 && (crt_skill.EffectType <= 4);
                     break;
             }
             if (exist)
@@ -368,7 +479,16 @@ public class Dream_Panel_Skill : Panel_Base
                         break;
                 }
             }
-            str += "[技能等级]:" + (skill_Lv_Type)(lv) + (talent_lv == 0 ? "" : Show_Color.Red("(+" + talent_lv + ")")) + "(" + crt_skill.SetExp() + "/" + crt_skill.skill_up_lv[lv] + ")" + "\n";
+            if (crt_skill.Job != -1)
+            {
+                
+                str += "[技能等级]:" + (skill_Lv_Type)(lv) + (talent_lv == 0 ? "" : Show_Color.Red("(+" + talent_lv + ")")) + "(" + crt_skill.SetExp() + "/" + crt_skill.skill_up_lv[lv] + ")" + "\n";
+            }
+            else
+            {
+                 str += "[技能等级]:" + (skill_Lv_Type)(lv+ talent_lv) + "(" + crt_skill.SetExp() + "/" + "\n";
+            }
+            
         }
         str += "[被动效果] ";
         if (crt_skill.skill_offect_value_list.Count > 0)

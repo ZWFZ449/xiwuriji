@@ -1,6 +1,7 @@
 
 using CodeStage.AntiCheat.ObscuredTypes;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class crtMaxBattleVO
 {
@@ -68,9 +69,39 @@ public class crtMaxBattleVO
     /// </summary>
     public int numbness;
     /// <summary>
+    /// Âé±Ô¿¹ÐÔ
+    /// </summary>
+    private int bness_resistance = 100,crt_bness_resistance=0;
+
+    private bool bness_IsState = false;
+    /// <summary>
     /// Âé±Ô×´Ì¬
     /// </summary>
-    public bool numbness_IsState = false;
+    public bool numbness_IsState  {
+        get { return bness_IsState; } 
+        set 
+        {
+            if (type != Battle_Game_Type.player)
+            {
+                if (crt_bness_resistance >= bness_resistance)
+                {
+                    bness_IsState = false;
+                    bness_resistance -= 10;
+                    crt_bness_resistance = 0;
+                    bness_resistance = Mathf.Max(10, bness_resistance);
+                }
+                else
+                {
+                    crt_bness_resistance++;
+                    bness_IsState = value;
+                }
+            }
+            else
+            { 
+                bness_IsState = value;
+            }
+            
+        } }
     public crtMaxBattleVO(ObscuredInt  exp_bonus, ObscuredInt  gold_bonus, ObscuredInt  drop_bonus ,ObscuredInt  quality_bonus ,ObscuredInt  boss_cd)
     { 
         this.exp_bonus= exp_bonus;

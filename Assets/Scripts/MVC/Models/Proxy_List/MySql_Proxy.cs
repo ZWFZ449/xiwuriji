@@ -623,7 +623,7 @@ namespace MVC
         /// </summary>
         private void Read_Db_Magic()
         {
-            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_magics);
+            mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_magic);
 #if UNITY_EDITOR
             //mysqlReader = MysqlDb.ReadFullTable(Mysql_Table_Name.db_magics);
 #elif UNITY_ANDROID

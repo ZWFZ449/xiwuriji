@@ -22,7 +22,8 @@ public enum common_items_list
     被动精华,
     无尽粉尘,
     无根泉水,
-    金色传说
+    金色传说,
+    天赋精华
 
 }
 
